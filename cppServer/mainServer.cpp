@@ -10,7 +10,8 @@
 
 int main()
 {
-	// 0. 데이터베이스 초기화
+
+
 	cout << "[Server] MySQL 연결 시도 중... (localhost:33060)" << endl;
 	if (!DBManager::GetInstance().Initialize("localhost", 33060, "chat_server", "hoje1095", "chat_server"))
 	{
@@ -19,6 +20,8 @@ int main()
 		return 1;
 	}
 	wcout << L"[Server] Database connected successfully" << endl;
+
+
 
 	// 1. Winsock 초기화
 	WSADATA wsa;
