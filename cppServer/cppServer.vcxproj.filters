@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Main">
+      <UniqueIdentifier>{c6ff91be-5895-4f7c-a050-6ed2942e2791}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Protocol">
+      <UniqueIdentifier>{0dc89b75-b5d6-47e5-a250-83a4abc9c843}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DB">
+      <UniqueIdentifier>{da92c203-9d74-4223-8438-e651088031de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Service">
+      <UniqueIdentifier>{641ee5d1-c0e1-49fd-b8ae-7c6f00a75ecf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Cloud">
+      <UniqueIdentifier>{179f29ac-7bb2-4991-9a80-e063512bc984}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerSession.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="mainServer.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="protocol.pb.cc">
+      <Filter>Protocol</Filter>
+    </ClCompile>
+    <ClCompile Include="PacketDispatcher.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="CoreGlobal.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="DB\FriendRepository.cpp">
+      <Filter>DB</Filter>
+    </ClCompile>
+    <ClCompile Include="DB\MessageRepository.cpp">
+      <Filter>DB</Filter>
+    </ClCompile>
+    <ClCompile Include="DB\DBManager.cpp">
+      <Filter>DB</Filter>
+    </ClCompile>
+    <ClCompile Include="Service\ChatService.cpp">
+      <Filter>Service</Filter>
+    </ClCompile>
+    <ClCompile Include="Service\UserManager.cpp">
+      <Filter>Service</Filter>
+    </ClCompile>
+    <ClCompile Include="Service\FriendService.cpp">
+      <Filter>Service</Filter>
+    </ClCompile>
+    <ClCompile Include="DB\UserRepository.cpp">
+      <Filter>DB</Filter>
+    </ClCompile>
+    <ClCompile Include="Service\AuthService.cpp">
+      <Filter>Service</Filter>
+    </ClCompile>
+    <ClCompile Include="Service\FileService.cpp">
+      <Filter>Service</Filter>
+    </ClCompile>
+    <ClCompile Include="DB\FileRepository.cpp">
+      <Filter>DB</Filter>
+    </ClCompile>
+    <ClCompile Include="Cloud\CloudStorageGCS.cpp">
+      <Filter>Cloud</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerSession.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="protocol.pb.h">
+      <Filter>Protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketDispatcher.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="CoreGlobal.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="DB\FriendRepository.h">
+      <Filter>DB</Filter>
+    </ClInclude>
+    <ClInclude Include="DB\MessageRepository.h">
+      <Filter>DB</Filter>
+    </ClInclude>
+    <ClInclude Include="DB\DBManager.h">
+      <Filter>DB</Filter>
+    </ClInclude>
+    <ClInclude Include="Service\ChatService.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="Service\UserManager.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="Service\FriendService.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="DB\UserRepository.h">
+      <Filter>DB</Filter>
+    </ClInclude>
+    <ClInclude Include="Service\AuthService.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="Service\FileService.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="DB\FileRepository.h">
+      <Filter>DB</Filter>
+    </ClInclude>
+    <ClInclude Include="Cloud\CloudStorageGCS.h">
+      <Filter>Cloud</Filter>
+    </ClInclude>
+    <ClInclude Include="Cloud\CloudStorage.h">
+      <Filter>Cloud</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Protobuf\protocol.proto">
+      <Filter>Protocol</Filter>
+    </None>
+    <None Include="..\Protobuf\GenPackets.bat">
+      <Filter>Protocol</Filter>
+    </None>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,42 @@
+﻿#pragma once
+
+
+
+class UserManager;
+class ChatService;
+class FriendService;
+class AuthService;
+class FileService;
+class CloudStorage;
+
+
+extern const int32 GProtoVersion;
+
+int64 Nowts();
+
+extern UserManager* GUserManager;
+extern ChatService* GChatService;
+extern FriendService* GFriendService;
+extern AuthService* GAuthService;
+extern FileService* GFileService;
+
+
+class CoreGlobal
+{
+public:
+    CoreGlobal();
+    ~CoreGlobal();
+
+    void Reset();
+
+private:
+    unique_ptr<UserManager> _userManager;
+    unique_ptr<ChatService> _chatService;
+    unique_ptr<FriendService> _friendService;
+    unique_ptr<AuthService> _authService;
+    unique_ptr<CloudStorage> _cloudStorage;
+    unique_ptr<FileService> _fileService;
+};
+
+
+extern CoreGlobal GCoreGlobal;
