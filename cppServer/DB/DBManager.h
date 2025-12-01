@@ -14,14 +14,14 @@ public:
     
     mysqlx::Session& GetSession() {
         if (!_session) {
-            throw std::runtime_error("Database not initialized");
+            throw std::runtime_error("[DBManager] Database not initialized");
         }
         return *_session;
     }
     
     mysqlx::Schema GetSchema() {
         if (_database.empty()) {
-            throw runtime_error("Database name not set");
+            throw runtime_error("[DBManager] Database name not set");
         }
         return GetSession().getSchema(_database);
     }

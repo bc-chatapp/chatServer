@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #define WIN32_LEAN_AND_MEAN
+#define _CRT_SECURE_NO_WARNINGS
 
 #ifdef _DEBUG
 #pragma comment(lib, "ServerCore\\Debug\\ServerCore.lib")
@@ -10,8 +11,7 @@
 #pragma comment(lib, "Protobuf\\Release\\libprotobuf.lib")
 #endif
 
-// CorePch.h를 먼저 include (Types.h 등 기본 타입 정의 포함)
+
 #include "CorePch.h"
-// CoreGlobal.h는 CorePch.h 이후에 include (int32, int64 등 타입 사용)
 #include "CoreGlobal.h"
 
