@@ -38,9 +38,12 @@ private:
     // GCS Signed URL 헬퍼 함수
     void GetTimestamp(string& timestamp, string& dateStr);  // 타임스탬프와 날짜 생성
     string CreateCanonicalPath(const string& path);  // Canonical 경로 생성
-    string CreateCanonicalRequest(const string& method, const string& canonicalPath, 
-                                  const string& queryParams, const string& signedHeaders);  // Canonical Request 생성
+    string CreateCanonicalRequest(const string& method, const string& canonicalPath,
+        const string& queryParams, const string& canonicalHeaders, const string& signedHeaders);
+    string BuildCredentialScope(const string& dateStr) const;   // date -> credential scope
+    string NormalizeObjectPath(const string& path) const;       // 버킷명 + 정리된 object path
 
+    string SignStringHex(const string& data);
 
     inline void HandleErr(const string& err) {
         cerr << "[CloudStorageGCS] " << err << " Failed " << endl;

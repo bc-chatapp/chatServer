@@ -17,8 +17,6 @@
 using json = nlohmann::json; 
 
 
-
-
 CloudStorageGCS::CloudStorageGCS(const string& projectId, const string& bucketName, const string& credentialsPath)
     : _projectId(projectId), _bucketName(bucketName), _credentialsPath(credentialsPath)
 {
@@ -26,6 +24,7 @@ CloudStorageGCS::CloudStorageGCS(const string& projectId, const string& bucketNa
     _httpClient->set_connection_timeout(10, 0);  // 10초 타임아웃
     _httpClient->set_read_timeout(30, 0);        // 30초 읽기 타임아웃
 }
+
 
 bool CloudStorageGCS::Initialize() 
 {
@@ -65,71 +64,64 @@ bool CloudStorageGCS::Initialize()
     }
 }
 
+
 string CloudStorageGCS::GenerateUploadUrl(const string& fileId, const string& path, const string& mimeType, int64 expiresInSeconds)
 {
     try {
+        // 1. 입력값 정리 (공백/슬래시 제거)
+        string cleanMimeType = mimeType;
+        cleanMimeType.erase(remove_if(cleanMimeType.begin(), cleanMimeType.end(), ::isspace), cleanMimeType.end());
+
+        string cleanPath = path;
+        if (!cleanPath.empty() && cleanPath.front() == '/') cleanPath.erase(0, 1);
+
         string timestamp, dateStr;
         GetTimestamp(timestamp, dateStr);
-        
-        // 2. Credential Scope
-        string credentialScope = dateStr + "/auto/storage/goog4_request";
-        
-        // 3. Query Parameters 구성
-        string queryParams = "X-Goog-Algorithm=GOOG4-RSA-SHA256"
-            "&X-Goog-Credential=" + UrlEncode(_serviceAccountEmail + "/" + credentialScope)
-            + "&X-Goog-Date=" + timestamp
-            + "&X-Goog-Expires=" + to_string(expiresInSeconds)
-            + "&X-Goog-SignedHeaders=host";
-        
-        // Content-Type이 있으면 추가
-        if (!mimeType.empty()) {
-            queryParams += "&Content-Type=" + UrlEncode(mimeType);
-        }
-        
-        // 4. Canonical Request 생성 (헬퍼 함수 사용)
-        string canonicalPath = CreateCanonicalPath(path);
-        string signedHeaders = "host";
-        if (!mimeType.empty()) {
-            signedHeaders += ";content-type";
-        }
-        string canonicalRequest = CreateCanonicalRequest("PUT", canonicalPath, queryParams, signedHeaders);
-        
-        // 5. String to Sign 생성
+        string credentialScope = BuildCredentialScope(dateStr);
+
+        // 2. Canonical Path & Headers
+        // Path-Style: /버킷명/경로
+        string objectPath = NormalizeObjectPath(cleanPath);
+        string canonicalPath = CreateCanonicalPath(objectPath);
+
+        // 헤더: content-type과 host를 포함 (알파벳 순서)
+        string h_ContentType = "content-type:" + cleanMimeType + "\n";
+        string h_Host = "host:storage.googleapis.com\n";
+
+        string canonicalHeaders = h_ContentType + h_Host;
+        string signedHeaders = "content-type;host";
+
+        // 3. Query Parameters (Canonical Query String)
+        string q_Algo = "X-Goog-Algorithm=GOOG4-RSA-SHA256";
+        string q_Cred = "X-Goog-Credential=" + UrlEncode(_serviceAccountEmail + "/" + credentialScope);
+        string q_Date = "X-Goog-Date=" + timestamp;
+        string q_Exp = "X-Goog-Expires=" + to_string(expiresInSeconds);
+        string q_Head = "X-Goog-SignedHeaders=" + UrlEncode(signedHeaders);
+
+        string canonicalQueryString = q_Algo + "&" + q_Cred + "&" + q_Date + "&" + q_Exp + "&" + q_Head;
+
+        // 4. Canonical Request 조립 (페이로드는 UNSIGNED-PAYLOAD)
+        string canonicalRequest = CreateCanonicalRequest(
+            "PUT",
+            canonicalPath,
+            canonicalQueryString,
+            canonicalHeaders,
+            signedHeaders);
+
+        // 5. 서명 생성
         string canonicalRequestHash = Sha256Hash(canonicalRequest);
-        string stringToSign = "GOOG4-RSA-SHA256\n"
-            + string(timestamp) + "\n"
-            + credentialScope + "\n"
-            + canonicalRequestHash;
-        
-        // 6. 서명 생성
-        string signature = SignString(stringToSign);
-        if (signature.empty()) {
-            HandleErr("GenerateUploadUrl", "Failed to sign");
-            return "";
-        }
-        
-        // Base64 URL-safe 변환
-        replace(signature.begin(), signature.end(), '+', '-');
-        replace(signature.begin(), signature.end(), '/', '_');
-        signature.erase(remove(signature.begin(), signature.end(), '='), signature.end());
-        
-        // 7. 최종 URL 조합 (경로는 URL 인코딩)
-        string urlEncodedPath = UrlEncode(path);
-        // 슬래시는 인코딩하지 않음
-        for (size_t i = 0; i < urlEncodedPath.length(); ) {
-            if (urlEncodedPath.substr(i, 3) == "%2F") {
-                urlEncodedPath.replace(i, 3, "/");
-                i += 1;
-            } else {
-                i += 1;
-            }
-        }
-        
-        string signedUrl = "https://" + _bucketName + ".storage.googleapis.com/"
-            + urlEncodedPath + "?" + queryParams
-            + "&X-Goog-Signature=" + signature;
-        
-        cout << "[CloudStorageGCS] Upload URL generated: path=" << path << endl;
+        string stringToSign = "GOOG4-RSA-SHA256\n" + string(timestamp) + "\n" + credentialScope + "\n" + canonicalRequestHash;
+
+        // [수정] Hex 서명 함수 사용
+        string signature = SignStringHex(stringToSign);
+
+        if (signature.empty()) return "";
+
+        // 6. 최종 URL 조합
+        // 서명(signature)이 이제 Hex 문자열이므로 URL 인코딩이나 Base64 처리가 필요 없습니다.
+        string signedUrl = "https://storage.googleapis.com/" + objectPath + "?" + canonicalQueryString + "&X-Goog-Signature=" + signature;
+
+        cout << "[CloudStorageGCS] Upload URL generated." << endl;
         return signedUrl;
     }
     catch (const exception& e) {
@@ -138,65 +130,57 @@ string CloudStorageGCS::GenerateUploadUrl(const string& fileId, const string& pa
     }
 }
 
-string CloudStorageGCS::GenerateDownloadUrl(
-    const string& path,
-    int64 expiresInSeconds) {
-    
+
+string CloudStorageGCS::GenerateDownloadUrl(const string& path, int64 expiresInSeconds)
+{
     try {
-        // 1. 타임스탬프 생성 (Nowts() 사용)
         string timestamp, dateStr;
         GetTimestamp(timestamp, dateStr);
-        
-        // 2. Credential Scope
-        string credentialScope = dateStr + "/auto/storage/goog4_request";
-        
-        // 3. Query Parameters 구성
-        string queryParams = "X-Goog-Algorithm=GOOG4-RSA-SHA256"
-            "&X-Goog-Credential=" + UrlEncode(_serviceAccountEmail + "/" + credentialScope)
-            + "&X-Goog-Date=" + timestamp
-            + "&X-Goog-Expires=" + to_string(expiresInSeconds)
-            + "&X-Goog-SignedHeaders=host";
-        
-        // 4. Canonical Request 생성 (헬퍼 함수 사용)
-        string canonicalPath = CreateCanonicalPath(path);
-        string canonicalRequest = CreateCanonicalRequest("GET", canonicalPath, queryParams, "host");
-        
-        // 5. String to Sign 생성
-        string canonicalRequestHash = Sha256Hash(canonicalRequest);
-        string stringToSign = "GOOG4-RSA-SHA256\n"
-            + string(timestamp) + "\n"
-            + credentialScope + "\n"
-            + canonicalRequestHash;
-        
+
+        string credentialScope = BuildCredentialScope(dateStr);
+
+        // 1. Canonical Path (Path-Style)
+        // 형식: /버킷명/파일경로
+        string objectPath = NormalizeObjectPath(path);
+        string canonicalPath = CreateCanonicalPath(objectPath);
+
+        // 3. Canonical Headers
+        // GET 요청은 보통 'host'만 서명하면 충분합니다.
+        string canonicalHeaders = "host:storage.googleapis.com\n";
+        string signedHeaders = "host";
+
+        // 4. Query Parameters (Canonical Query String)
+        // 알파벳 순서 정렬
+        string q_Algo = "X-Goog-Algorithm=GOOG4-RSA-SHA256";
+        string q_Cred = "X-Goog-Credential=" + UrlEncode(_serviceAccountEmail + "/" + credentialScope);
+        string q_Date = "X-Goog-Date=" + timestamp;
+        string q_Exp = "X-Goog-Expires=" + to_string(expiresInSeconds);
+        string q_Head = "X-Goog-SignedHeaders=" + UrlEncode(signedHeaders);
+
+        string canonicalQueryString = q_Algo + "&" + q_Cred + "&" + q_Date + "&" + q_Exp + "&" + q_Head;
+
+        // 5. Canonical Request 조립
+        string canonicalRequest = CreateCanonicalRequest(
+            "GET",
+            canonicalPath,
+            canonicalQueryString,
+            canonicalHeaders,
+            signedHeaders);
+
         // 6. 서명 생성
-        string signature = SignString(stringToSign);
-        if (signature.empty()) {
-            HandleErr("GenerateDownloadUrl", "Failed to sign");
-            return "";
-        }
-        
-        // Base64 URL-safe 변환
-        replace(signature.begin(), signature.end(), '+', '-');
-        replace(signature.begin(), signature.end(), '/', '_');
-        signature.erase(remove(signature.begin(), signature.end(), '='), signature.end());
-        
-        // 7. 최종 URL 조합 (경로는 URL 인코딩)
-        string urlEncodedPath = UrlEncode(path);
-        // 슬래시는 인코딩하지 않음
-        for (size_t i = 0; i < urlEncodedPath.length(); ) {
-            if (urlEncodedPath.substr(i, 3) == "%2F") {
-                urlEncodedPath.replace(i, 3, "/");
-                i += 1;
-            } else {
-                i += 1;
-            }
-        }
-        
-        string signedUrl = "https://" + _bucketName + ".storage.googleapis.com/"
-            + urlEncodedPath + "?" + queryParams
-            + "&X-Goog-Signature=" + signature;
-        
-        cout << "[CloudStorageGCS] Download URL generated: path=" << path << endl;
+        string canonicalRequestHash = Sha256Hash(canonicalRequest);
+        string stringToSign = "GOOG4-RSA-SHA256\n" + string(timestamp) + "\n" + credentialScope + "\n" + canonicalRequestHash;
+
+        // [필수] Hex 서명 함수 사용 (업로드와 동일)
+        string signature = SignStringHex(stringToSign);
+
+        if (signature.empty()) return "";
+
+        // 7. 최종 URL 조합 (Path-Style)
+        // https://storage.googleapis.com/버킷명/파일경로?...
+        string signedUrl = "https://storage.googleapis.com/" + objectPath + "?" + canonicalQueryString + "&X-Goog-Signature=" + signature;
+
+        cout << "[CloudStorageGCS] Download URL generated." << endl;
         return signedUrl;
     }
     catch (const exception& e) {
@@ -204,7 +188,6 @@ string CloudStorageGCS::GenerateDownloadUrl(
         return "";
     }
 }
-
 bool CloudStorageGCS::UploadFile(const string& path, const vector<uint8>& data, const string& mimeType)
 {
     if (!CheckValidToken()) {
@@ -500,7 +483,9 @@ string CloudStorageGCS::UrlEncode(const string& str)
 {
     ostringstream encoded;
     encoded.fill('0');
-    encoded << hex;
+
+    // uppercase를 추가하여 대문자(A-F)로 출력하게 변경
+    encoded << hex << uppercase;
 
     for (char c : str) {
         if (isalnum(c) || c == '-' || c == '_' || c == '.' || c == '~') {
@@ -597,8 +582,9 @@ void CloudStorageGCS::GetTimestamp(string& timestamp, string& dateStr)
 
 string CloudStorageGCS::CreateCanonicalPath(const string& path)
 {
+    // Virtual-hosted style URL의 경우 Canonical Request 경로는 버킷 이름 없이 object path만 사용
     // 경로는 URL 인코딩 (슬래시는 그대로 유지)
-    string canonicalPath = "/" + _bucketName + "/";
+    string canonicalPath = "/";
     for (char c : path) {
         if (c == '/') {
             canonicalPath += '/';
@@ -614,16 +600,58 @@ string CloudStorageGCS::CreateCanonicalPath(const string& path)
     return canonicalPath;
 }
 
-string CloudStorageGCS::CreateCanonicalRequest(const string& method, const string& canonicalPath, 
-                                               const string& queryParams, const string& signedHeaders)
+string CloudStorageGCS::CreateCanonicalRequest(const string& method, const string& canonicalPath,
+    const string& queryParams, const string& canonicalHeaders, const string& signedHeaders)
 {
-    return method + "\n"  // HTTP 메서드
-        + canonicalPath + "\n"  // 리소스 경로
-        + queryParams + "\n"  // 쿼리 문자열
-        + "host:" + _bucketName + ".storage.googleapis.com\n"  // 헤더
-        + "\n"  // 빈 줄 (signed headers 전)
-        + signedHeaders + "\n"  // signed headers
-        + "UNSIGNED-PAYLOAD";  // payload hash
+    return method + "\n"
+        + canonicalPath + "\n"
+        + queryParams + "\n"
+        + canonicalHeaders + "\n" // ⭐️ 여기서 하드코딩된 host 제거하고 인자 사용
+        + signedHeaders + "\n"
+        + "UNSIGNED-PAYLOAD";
+}
+
+string CloudStorageGCS::BuildCredentialScope(const string& dateStr) const
+{
+    // GCS v4 서명에서 credential scope는 고정 패턴: {date}/auto/storage/goog4_request
+    return dateStr + "/auto/storage/goog4_request";
+}
+
+string CloudStorageGCS::NormalizeObjectPath(const string& path) const
+{
+    // 맨 앞의 '/'를 제거한 뒤, "bucketName/objectPath" 형태로 조합
+    string cleanPath = path;
+    if (!cleanPath.empty() && cleanPath.front() == '/') {
+        cleanPath.erase(0, 1);
+    }
+    return _bucketName + "/" + cleanPath;
 }
 
 
+string CloudStorageGCS::SignStringHex(const string& data)
+{
+    BIO* bio = BIO_new_mem_buf(_privateKey.c_str(), static_cast<int>(_privateKey.length()));
+    EVP_PKEY* pkey = PEM_read_bio_PrivateKey(bio, nullptr, nullptr, nullptr);
+    BIO_free(bio);
+
+    if (!pkey) {
+        HandleErr("SignStringHex", "Failed to load private key");
+        return "";
+    }
+
+    EVP_MD_CTX* mdctx = EVP_MD_CTX_new();
+    EVP_DigestSignInit(mdctx, nullptr, EVP_sha256(), nullptr, pkey);
+    EVP_DigestSignUpdate(mdctx, data.c_str(), data.length());
+
+    size_t sigLen = 0;
+    EVP_DigestSignFinal(mdctx, nullptr, &sigLen);
+
+    vector<uint8> signature(sigLen);
+    EVP_DigestSignFinal(mdctx, signature.data(), &sigLen);
+
+    EVP_MD_CTX_free(mdctx);
+    EVP_PKEY_free(pkey);
+
+    // ⭐️ [중요] Base64가 아니라 Hex 문자열로 반환해야 합니다.
+    return HexEncode(signature);
+}

@@ -1,2 +1,2 @@
 chatapp-479906
-chatapp_bucket
+chat-direct-bucket
