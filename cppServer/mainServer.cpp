@@ -10,6 +10,9 @@
 
 int main()
 {
+	SetConsoleOutputCP(65001);
+
+
 	// 0. 데이터베이스 초기화
 	cout << "[Server] MySQL 연결 시도 중... (localhost:33060)" << endl;
 	if (!DBManager::GetInstance().Initialize("localhost", 33060, "chat_server", "hoje1095", "chat_server"))
