@@ -34,8 +34,8 @@ bool ChatService::SendDirect(sessionPtr& senderSession, uint64 reqId, const stri
         pkt_s_chat.set_server_msg_id(msgSeq);
     }
 
-    /* Ack to self */
-    PushEnvelope(senderSession, reqId, pkt_s_chat);
+    
+    PushEnvelope(senderSession, reqId, pkt_s_chat); /* Ack to self */
 
     /* To receiver*/
     if (msgSeq >= 0) {  // 메시지 저장 성공한 경우만
@@ -69,8 +69,7 @@ bool ChatService::SendGroup(sessionPtr& senderSession, uint64 reqId, const strin
     
     auto pkt_s_chat = Build_S_Chat(convId, senderId, pkt);
 
-    /* Ack to self */
-    PushEnvelope(senderSession, reqId, pkt_s_chat);
+    PushEnvelope(senderSession, reqId, pkt_s_chat); /* Ack to self */
 
     /* To Group */
     auto members = _userManager.Members(groupId);

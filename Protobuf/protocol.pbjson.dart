@@ -130,8 +130,26 @@ const Envelope$json = {
       '10': 'cJoinGroup'
     },
     {
-      '1': 'c_ack',
+      '1': 'c_create_group',
       '3': 24,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.C_CreateGroup',
+      '9': 0,
+      '10': 'cCreateGroup'
+    },
+    {
+      '1': 's_create_group',
+      '3': 25,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.S_CreateGroup',
+      '9': 0,
+      '10': 'sCreateGroup'
+    },
+    {
+      '1': 'c_ack',
+      '3': 26,
       '4': 1,
       '5': 11,
       '6': '.Protocol.C_Ack',
@@ -140,7 +158,7 @@ const Envelope$json = {
     },
     {
       '1': 's_error',
-      '3': 25,
+      '3': 27,
       '4': 1,
       '5': 11,
       '6': '.Protocol.S_Error',
@@ -149,7 +167,7 @@ const Envelope$json = {
     },
     {
       '1': 'c_heartbeat',
-      '3': 26,
+      '3': 28,
       '4': 1,
       '5': 11,
       '6': '.Protocol.C_Heartbeat',
@@ -158,7 +176,7 @@ const Envelope$json = {
     },
     {
       '1': 's_heartbeat',
-      '3': 27,
+      '3': 29,
       '4': 1,
       '5': 11,
       '6': '.Protocol.S_Heartbeat',
@@ -236,6 +254,78 @@ const Envelope$json = {
       '6': '.Protocol.S_FriendList',
       '9': 0,
       '10': 'sFriendList'
+    },
+    {
+      '1': 'c_group_list',
+      '3': 42,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.C_GroupList',
+      '9': 0,
+      '10': 'cGroupList'
+    },
+    {
+      '1': 's_group_list',
+      '3': 43,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.S_GroupList',
+      '9': 0,
+      '10': 'sGroupList'
+    },
+    {
+      '1': 'c_group_join_request',
+      '3': 44,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.C_GroupJoinRequest',
+      '9': 0,
+      '10': 'cGroupJoinRequest'
+    },
+    {
+      '1': 's_group_join_request',
+      '3': 45,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.S_GroupJoinRequest',
+      '9': 0,
+      '10': 'sGroupJoinRequest'
+    },
+    {
+      '1': 'c_group_join_response',
+      '3': 46,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.C_GroupJoinResponse',
+      '9': 0,
+      '10': 'cGroupJoinResponse'
+    },
+    {
+      '1': 's_group_join_response',
+      '3': 47,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.S_GroupJoinResponse',
+      '9': 0,
+      '10': 'sGroupJoinResponse'
+    },
+    {
+      '1': 'c_group_join_request_list',
+      '3': 48,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.C_GroupJoinRequestList',
+      '9': 0,
+      '10': 'cGroupJoinRequestList'
+    },
+    {
+      '1': 's_group_join_request_list',
+      '3': 49,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.S_GroupJoinRequestList',
+      '9': 0,
+      '10': 'sGroupJoinRequestList'
     },
     {
       '1': 'c_frient_request_find',
@@ -369,40 +459,53 @@ final $typed_data.Uint8List envelopeDescriptor = $convert.base64Decode(
     'b2wuQ19Mb2dpbkgAUgZjTG9naW4SLAoHc19sb2dpbhgVIAEoCzIRLlByb3RvY29sLlNfTG9naW'
     '5IAFIGc0xvZ2luEjwKDWNfam9pbl9kaXJlY3QYFiABKAsyFi5Qcm90b2NvbC5DX0pvaW5EaXJl'
     'Y3RIAFILY0pvaW5EaXJlY3QSOQoMY19qb2luX2dyb3VwGBcgASgLMhUuUHJvdG9jb2wuQ19Kb2'
-    'luR3JvdXBIAFIKY0pvaW5Hcm91cBImCgVjX2FjaxgYIAEoCzIPLlByb3RvY29sLkNfQWNrSABS'
-    'BGNBY2sSLAoHc19lcnJvchgZIAEoCzIRLlByb3RvY29sLlNfRXJyb3JIAFIGc0Vycm9yEjgKC2'
-    'NfaGVhcnRiZWF0GBogASgLMhUuUHJvdG9jb2wuQ19IZWFydGJlYXRIAFIKY0hlYXJ0YmVhdBI4'
-    'CgtzX2hlYXJ0YmVhdBgbIAEoCzIVLlByb3RvY29sLlNfSGVhcnRiZWF0SABSCnNIZWFydGJlYX'
-    'QSKQoGY19jaGF0GB4gASgLMhAuUHJvdG9jb2wuQ19DaGF0SABSBWNDaGF0EikKBnNfY2hhdBgf'
-    'IAEoCzIQLlByb3RvY29sLlNfQ2hhdEgAUgVzQ2hhdBJCCg9jX2ZldGNoX29mZmxpbmUYICABKA'
-    'syGC5Qcm90b2NvbC5DX0ZldGNoT2ZmbGluZUgAUg1jRmV0Y2hPZmZsaW5lEkIKD3NfbWVzc2Fn'
-    'ZV9iYXRjaBghIAEoCzIYLlByb3RvY29sLlNfTWVzc2FnZUJhdGNoSABSDXNNZXNzYWdlQmF0Y2'
-    'gSPAoNY191cGxvYWRfZmlsZRgiIAEoCzIWLlByb3RvY29sLkNfVXBsb2FkRmlsZUgAUgtjVXBs'
-    'b2FkRmlsZRI8Cg1zX3VwbG9hZF9maWxlGCMgASgLMhYuUHJvdG9jb2wuU19VcGxvYWRGaWxlSA'
-    'BSC3NVcGxvYWRGaWxlEjwKDWNfZnJpZW5kX2xpc3QYKCABKAsyFi5Qcm90b2NvbC5DX0ZyaWVu'
-    'ZExpc3RIAFILY0ZyaWVuZExpc3QSPAoNc19mcmllbmRfbGlzdBgpIAEoCzIWLlByb3RvY29sLl'
-    'NfRnJpZW5kTGlzdEgAUgtzRnJpZW5kTGlzdBJTChVjX2ZyaWVudF9yZXF1ZXN0X2ZpbmQYMiAB'
-    'KAsyHi5Qcm90b2NvbC5DX0ZyaWVuZFJlcXVlc3RfRmluZEgAUhJjRnJpZW50UmVxdWVzdEZpbm'
-    'QSUwoVc19mcmllbnRfcmVxdWVzdF9maW5kGDMgASgLMh4uUHJvdG9jb2wuU19GcmllbmRSZXF1'
-    'ZXN0X0ZpbmRIAFISc0ZyaWVudFJlcXVlc3RGaW5kElAKFGNfZnJpZW5kX3JlcXVlc3RfYWRkGD'
-    'QgASgLMh0uUHJvdG9jb2wuQ19GcmllbmRSZXF1ZXN0X0FkZEgAUhFjRnJpZW5kUmVxdWVzdEFk'
-    'ZBJQChRzX2ZyaWVuZF9yZXF1ZXN0X2FkZBg1IAEoCzIdLlByb3RvY29sLlNfRnJpZW5kUmVxdW'
-    'VzdF9BZGRIAFIRc0ZyaWVuZFJlcXVlc3RBZGQSWQoXY19mcmllbmRfcmVxdWVzdF9jYW5jZWwY'
-    'NiABKAsyIC5Qcm90b2NvbC5DX0ZyaWVuZFJlcXVlc3RfQ2FuY2VsSABSFGNGcmllbmRSZXF1ZX'
-    'N0Q2FuY2VsElkKF3NfZnJpZW5kX3JlcXVlc3RfY2FuY2VsGDcgASgLMiAuUHJvdG9jb2wuU19G'
-    'cmllbmRSZXF1ZXN0X0NhbmNlbEgAUhRzRnJpZW5kUmVxdWVzdENhbmNlbBJZChdjX2ZyaWVuZF'
-    '9yZXF1ZXN0X3JlbW92ZRg4IAEoCzIgLlByb3RvY29sLkNfRnJpZW5kUmVxdWVzdF9SZW1vdmVI'
-    'AFIUY0ZyaWVuZFJlcXVlc3RSZW1vdmUSWQoXc19mcmllbmRfcmVxdWVzdF9yZW1vdmUYOSABKA'
-    'syIC5Qcm90b2NvbC5TX0ZyaWVuZFJlcXVlc3RfUmVtb3ZlSABSFHNGcmllbmRSZXF1ZXN0UmVt'
-    'b3ZlElMKFWNfZnJpZW5kX3JlcXVlc3RfbGlzdBg6IAEoCzIeLlByb3RvY29sLkNfRnJpZW5kUm'
-    'VxdWVzdF9MaXN0SABSEmNGcmllbmRSZXF1ZXN0TGlzdBJTChVzX2ZyaWVuZF9yZXF1ZXN0X2xp'
-    'c3QYOyABKAsyHi5Qcm90b2NvbC5TX0ZyaWVuZFJlcXVlc3RfTGlzdEgAUhJzRnJpZW5kUmVxdW'
-    'VzdExpc3QSXAoYY19mcmllbmRfcmVxdWVzdF9yZXNwb25kGDwgASgLMiEuUHJvdG9jb2wuQ19G'
-    'cmllbmRSZXF1ZXN0X1Jlc3BvbmRIAFIVY0ZyaWVuZFJlcXVlc3RSZXNwb25kElwKGHNfZnJpZW'
-    '5kX3JlcXVlc3RfcmVzcG9uZBg9IAEoCzIhLlByb3RvY29sLlNfRnJpZW5kUmVxdWVzdF9SZXNw'
-    'b25kSABSFXNGcmllbmRSZXF1ZXN0UmVzcG9uZBJTChVzX2ZyaWVuZF9yZXF1ZXN0X3B1c2gYPi'
-    'ABKAsyHi5Qcm90b2NvbC5TX0ZyaWVuZFJlcXVlc3RfUHVzaEgAUhJzRnJpZW5kUmVxdWVzdFB1'
-    'c2hCBgoEYm9keQ==');
+    'luR3JvdXBIAFIKY0pvaW5Hcm91cBI/Cg5jX2NyZWF0ZV9ncm91cBgYIAEoCzIXLlByb3RvY29s'
+    'LkNfQ3JlYXRlR3JvdXBIAFIMY0NyZWF0ZUdyb3VwEj8KDnNfY3JlYXRlX2dyb3VwGBkgASgLMh'
+    'cuUHJvdG9jb2wuU19DcmVhdGVHcm91cEgAUgxzQ3JlYXRlR3JvdXASJgoFY19hY2sYGiABKAsy'
+    'Dy5Qcm90b2NvbC5DX0Fja0gAUgRjQWNrEiwKB3NfZXJyb3IYGyABKAsyES5Qcm90b2NvbC5TX0'
+    'Vycm9ySABSBnNFcnJvchI4CgtjX2hlYXJ0YmVhdBgcIAEoCzIVLlByb3RvY29sLkNfSGVhcnRi'
+    'ZWF0SABSCmNIZWFydGJlYXQSOAoLc19oZWFydGJlYXQYHSABKAsyFS5Qcm90b2NvbC5TX0hlYX'
+    'J0YmVhdEgAUgpzSGVhcnRiZWF0EikKBmNfY2hhdBgeIAEoCzIQLlByb3RvY29sLkNfQ2hhdEgA'
+    'UgVjQ2hhdBIpCgZzX2NoYXQYHyABKAsyEC5Qcm90b2NvbC5TX0NoYXRIAFIFc0NoYXQSQgoPY1'
+    '9mZXRjaF9vZmZsaW5lGCAgASgLMhguUHJvdG9jb2wuQ19GZXRjaE9mZmxpbmVIAFINY0ZldGNo'
+    'T2ZmbGluZRJCCg9zX21lc3NhZ2VfYmF0Y2gYISABKAsyGC5Qcm90b2NvbC5TX01lc3NhZ2VCYX'
+    'RjaEgAUg1zTWVzc2FnZUJhdGNoEjwKDWNfdXBsb2FkX2ZpbGUYIiABKAsyFi5Qcm90b2NvbC5D'
+    'X1VwbG9hZEZpbGVIAFILY1VwbG9hZEZpbGUSPAoNc191cGxvYWRfZmlsZRgjIAEoCzIWLlByb3'
+    'RvY29sLlNfVXBsb2FkRmlsZUgAUgtzVXBsb2FkRmlsZRI8Cg1jX2ZyaWVuZF9saXN0GCggASgL'
+    'MhYuUHJvdG9jb2wuQ19GcmllbmRMaXN0SABSC2NGcmllbmRMaXN0EjwKDXNfZnJpZW5kX2xpc3'
+    'QYKSABKAsyFi5Qcm90b2NvbC5TX0ZyaWVuZExpc3RIAFILc0ZyaWVuZExpc3QSOQoMY19ncm91'
+    'cF9saXN0GCogASgLMhUuUHJvdG9jb2wuQ19Hcm91cExpc3RIAFIKY0dyb3VwTGlzdBI5CgxzX2'
+    'dyb3VwX2xpc3QYKyABKAsyFS5Qcm90b2NvbC5TX0dyb3VwTGlzdEgAUgpzR3JvdXBMaXN0Ek8K'
+    'FGNfZ3JvdXBfam9pbl9yZXF1ZXN0GCwgASgLMhwuUHJvdG9jb2wuQ19Hcm91cEpvaW5SZXF1ZX'
+    'N0SABSEWNHcm91cEpvaW5SZXF1ZXN0Ek8KFHNfZ3JvdXBfam9pbl9yZXF1ZXN0GC0gASgLMhwu'
+    'UHJvdG9jb2wuU19Hcm91cEpvaW5SZXF1ZXN0SABSEXNHcm91cEpvaW5SZXF1ZXN0ElIKFWNfZ3'
+    'JvdXBfam9pbl9yZXNwb25zZRguIAEoCzIdLlByb3RvY29sLkNfR3JvdXBKb2luUmVzcG9uc2VI'
+    'AFISY0dyb3VwSm9pblJlc3BvbnNlElIKFXNfZ3JvdXBfam9pbl9yZXNwb25zZRgvIAEoCzIdLl'
+    'Byb3RvY29sLlNfR3JvdXBKb2luUmVzcG9uc2VIAFISc0dyb3VwSm9pblJlc3BvbnNlElwKGWNf'
+    'Z3JvdXBfam9pbl9yZXF1ZXN0X2xpc3QYMCABKAsyIC5Qcm90b2NvbC5DX0dyb3VwSm9pblJlcX'
+    'Vlc3RMaXN0SABSFWNHcm91cEpvaW5SZXF1ZXN0TGlzdBJcChlzX2dyb3VwX2pvaW5fcmVxdWVz'
+    'dF9saXN0GDEgASgLMiAuUHJvdG9jb2wuU19Hcm91cEpvaW5SZXF1ZXN0TGlzdEgAUhVzR3JvdX'
+    'BKb2luUmVxdWVzdExpc3QSUwoVY19mcmllbnRfcmVxdWVzdF9maW5kGDIgASgLMh4uUHJvdG9j'
+    'b2wuQ19GcmllbmRSZXF1ZXN0X0ZpbmRIAFISY0ZyaWVudFJlcXVlc3RGaW5kElMKFXNfZnJpZW'
+    '50X3JlcXVlc3RfZmluZBgzIAEoCzIeLlByb3RvY29sLlNfRnJpZW5kUmVxdWVzdF9GaW5kSABS'
+    'EnNGcmllbnRSZXF1ZXN0RmluZBJQChRjX2ZyaWVuZF9yZXF1ZXN0X2FkZBg0IAEoCzIdLlByb3'
+    'RvY29sLkNfRnJpZW5kUmVxdWVzdF9BZGRIAFIRY0ZyaWVuZFJlcXVlc3RBZGQSUAoUc19mcmll'
+    'bmRfcmVxdWVzdF9hZGQYNSABKAsyHS5Qcm90b2NvbC5TX0ZyaWVuZFJlcXVlc3RfQWRkSABSEX'
+    'NGcmllbmRSZXF1ZXN0QWRkElkKF2NfZnJpZW5kX3JlcXVlc3RfY2FuY2VsGDYgASgLMiAuUHJv'
+    'dG9jb2wuQ19GcmllbmRSZXF1ZXN0X0NhbmNlbEgAUhRjRnJpZW5kUmVxdWVzdENhbmNlbBJZCh'
+    'dzX2ZyaWVuZF9yZXF1ZXN0X2NhbmNlbBg3IAEoCzIgLlByb3RvY29sLlNfRnJpZW5kUmVxdWVz'
+    'dF9DYW5jZWxIAFIUc0ZyaWVuZFJlcXVlc3RDYW5jZWwSWQoXY19mcmllbmRfcmVxdWVzdF9yZW'
+    '1vdmUYOCABKAsyIC5Qcm90b2NvbC5DX0ZyaWVuZFJlcXVlc3RfUmVtb3ZlSABSFGNGcmllbmRS'
+    'ZXF1ZXN0UmVtb3ZlElkKF3NfZnJpZW5kX3JlcXVlc3RfcmVtb3ZlGDkgASgLMiAuUHJvdG9jb2'
+    'wuU19GcmllbmRSZXF1ZXN0X1JlbW92ZUgAUhRzRnJpZW5kUmVxdWVzdFJlbW92ZRJTChVjX2Zy'
+    'aWVuZF9yZXF1ZXN0X2xpc3QYOiABKAsyHi5Qcm90b2NvbC5DX0ZyaWVuZFJlcXVlc3RfTGlzdE'
+    'gAUhJjRnJpZW5kUmVxdWVzdExpc3QSUwoVc19mcmllbmRfcmVxdWVzdF9saXN0GDsgASgLMh4u'
+    'UHJvdG9jb2wuU19GcmllbmRSZXF1ZXN0X0xpc3RIAFISc0ZyaWVuZFJlcXVlc3RMaXN0ElwKGG'
+    'NfZnJpZW5kX3JlcXVlc3RfcmVzcG9uZBg8IAEoCzIhLlByb3RvY29sLkNfRnJpZW5kUmVxdWVz'
+    'dF9SZXNwb25kSABSFWNGcmllbmRSZXF1ZXN0UmVzcG9uZBJcChhzX2ZyaWVuZF9yZXF1ZXN0X3'
+    'Jlc3BvbmQYPSABKAsyIS5Qcm90b2NvbC5TX0ZyaWVuZFJlcXVlc3RfUmVzcG9uZEgAUhVzRnJp'
+    'ZW5kUmVxdWVzdFJlc3BvbmQSUwoVc19mcmllbmRfcmVxdWVzdF9wdXNoGD4gASgLMh4uUHJvdG'
+    '9jb2wuU19GcmllbmRSZXF1ZXN0X1B1c2hIAFISc0ZyaWVuZFJlcXVlc3RQdXNoQgYKBGJvZHk=');
 
 @$core.Deprecated('Use chatPayloadDescriptor instead')
 const ChatPayload$json = {
@@ -571,6 +674,36 @@ const C_JoinGroup$json = {
 /// Descriptor for `C_JoinGroup`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List c_JoinGroupDescriptor = $convert
     .base64Decode('CgtDX0pvaW5Hcm91cBIZCghncm91cF9pZBgBIAEoCVIHZ3JvdXBJZA==');
+
+@$core.Deprecated('Use c_CreateGroupDescriptor instead')
+const C_CreateGroup$json = {
+  '1': 'C_CreateGroup',
+  '2': [
+    {'1': 'group_name', '3': 1, '4': 1, '5': 9, '10': 'groupName'},
+  ],
+};
+
+/// Descriptor for `C_CreateGroup`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List c_CreateGroupDescriptor = $convert.base64Decode(
+    'Cg1DX0NyZWF0ZUdyb3VwEh0KCmdyb3VwX25hbWUYASABKAlSCWdyb3VwTmFtZQ==');
+
+@$core.Deprecated('Use s_CreateGroupDescriptor instead')
+const S_CreateGroup$json = {
+  '1': 'S_CreateGroup',
+  '2': [
+    {'1': 'success', '3': 1, '4': 1, '5': 8, '10': 'success'},
+    {'1': 'message', '3': 2, '4': 1, '5': 9, '10': 'message'},
+    {'1': 'group_id', '3': 3, '4': 1, '5': 9, '10': 'groupId'},
+    {'1': 'group_name', '3': 4, '4': 1, '5': 9, '10': 'groupName'},
+    {'1': 'group_code', '3': 5, '4': 1, '5': 9, '10': 'groupCode'},
+  ],
+};
+
+/// Descriptor for `S_CreateGroup`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List s_CreateGroupDescriptor = $convert.base64Decode(
+    'Cg1TX0NyZWF0ZUdyb3VwEhgKB3N1Y2Nlc3MYASABKAhSB3N1Y2Nlc3MSGAoHbWVzc2FnZRgCIA'
+    'EoCVIHbWVzc2FnZRIZCghncm91cF9pZBgDIAEoCVIHZ3JvdXBJZBIdCgpncm91cF9uYW1lGAQg'
+    'ASgJUglncm91cE5hbWUSHQoKZ3JvdXBfY29kZRgFIAEoCVIJZ3JvdXBDb2Rl');
 
 @$core.Deprecated('Use c_ChatDescriptor instead')
 const C_Chat$json = {
@@ -829,6 +962,163 @@ const S_FriendList$json = {
 final $typed_data.Uint8List s_FriendListDescriptor = $convert.base64Decode(
     'CgxTX0ZyaWVuZExpc3QSLgoHZnJpZW5kcxgBIAMoCzIULlByb3RvY29sLkZyaWVuZEluZm9SB2'
     'ZyaWVuZHM=');
+
+@$core.Deprecated('Use groupInfoDescriptor instead')
+const GroupInfo$json = {
+  '1': 'GroupInfo',
+  '2': [
+    {'1': 'group_id', '3': 1, '4': 1, '5': 9, '10': 'groupId'},
+    {'1': 'group_name', '3': 2, '4': 1, '5': 9, '10': 'groupName'},
+    {'1': 'group_code', '3': 3, '4': 1, '5': 9, '10': 'groupCode'},
+    {'1': 'creator_id', '3': 4, '4': 1, '5': 9, '10': 'creatorId'},
+    {'1': 'created_at', '3': 5, '4': 1, '5': 3, '10': 'createdAt'},
+  ],
+};
+
+/// Descriptor for `GroupInfo`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List groupInfoDescriptor = $convert.base64Decode(
+    'CglHcm91cEluZm8SGQoIZ3JvdXBfaWQYASABKAlSB2dyb3VwSWQSHQoKZ3JvdXBfbmFtZRgCIA'
+    'EoCVIJZ3JvdXBOYW1lEh0KCmdyb3VwX2NvZGUYAyABKAlSCWdyb3VwQ29kZRIdCgpjcmVhdG9y'
+    'X2lkGAQgASgJUgljcmVhdG9ySWQSHQoKY3JlYXRlZF9hdBgFIAEoA1IJY3JlYXRlZEF0');
+
+@$core.Deprecated('Use c_GroupListDescriptor instead')
+const C_GroupList$json = {
+  '1': 'C_GroupList',
+};
+
+/// Descriptor for `C_GroupList`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List c_GroupListDescriptor =
+    $convert.base64Decode('CgtDX0dyb3VwTGlzdA==');
+
+@$core.Deprecated('Use s_GroupListDescriptor instead')
+const S_GroupList$json = {
+  '1': 'S_GroupList',
+  '2': [
+    {
+      '1': 'groups',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.Protocol.GroupInfo',
+      '10': 'groups'
+    },
+  ],
+};
+
+/// Descriptor for `S_GroupList`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List s_GroupListDescriptor = $convert.base64Decode(
+    'CgtTX0dyb3VwTGlzdBIrCgZncm91cHMYASADKAsyEy5Qcm90b2NvbC5Hcm91cEluZm9SBmdyb3'
+    'Vwcw==');
+
+@$core.Deprecated('Use c_GroupJoinRequestDescriptor instead')
+const C_GroupJoinRequest$json = {
+  '1': 'C_GroupJoinRequest',
+  '2': [
+    {'1': 'group_code', '3': 1, '4': 1, '5': 9, '10': 'groupCode'},
+  ],
+};
+
+/// Descriptor for `C_GroupJoinRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List c_GroupJoinRequestDescriptor =
+    $convert.base64Decode(
+        'ChJDX0dyb3VwSm9pblJlcXVlc3QSHQoKZ3JvdXBfY29kZRgBIAEoCVIJZ3JvdXBDb2Rl');
+
+@$core.Deprecated('Use s_GroupJoinRequestDescriptor instead')
+const S_GroupJoinRequest$json = {
+  '1': 'S_GroupJoinRequest',
+  '2': [
+    {'1': 'success', '3': 1, '4': 1, '5': 8, '10': 'success'},
+    {'1': 'message', '3': 2, '4': 1, '5': 9, '10': 'message'},
+    {'1': 'group_id', '3': 3, '4': 1, '5': 9, '10': 'groupId'},
+    {'1': 'group_name', '3': 4, '4': 1, '5': 9, '10': 'groupName'},
+  ],
+};
+
+/// Descriptor for `S_GroupJoinRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List s_GroupJoinRequestDescriptor = $convert.base64Decode(
+    'ChJTX0dyb3VwSm9pblJlcXVlc3QSGAoHc3VjY2VzcxgBIAEoCFIHc3VjY2VzcxIYCgdtZXNzYW'
+    'dlGAIgASgJUgdtZXNzYWdlEhkKCGdyb3VwX2lkGAMgASgJUgdncm91cElkEh0KCmdyb3VwX25h'
+    'bWUYBCABKAlSCWdyb3VwTmFtZQ==');
+
+@$core.Deprecated('Use c_GroupJoinResponseDescriptor instead')
+const C_GroupJoinResponse$json = {
+  '1': 'C_GroupJoinResponse',
+  '2': [
+    {'1': 'group_id', '3': 1, '4': 1, '5': 9, '10': 'groupId'},
+    {'1': 'requester_user_id', '3': 2, '4': 1, '5': 9, '10': 'requesterUserId'},
+    {'1': 'accept', '3': 3, '4': 1, '5': 8, '10': 'accept'},
+  ],
+};
+
+/// Descriptor for `C_GroupJoinResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List c_GroupJoinResponseDescriptor = $convert.base64Decode(
+    'ChNDX0dyb3VwSm9pblJlc3BvbnNlEhkKCGdyb3VwX2lkGAEgASgJUgdncm91cElkEioKEXJlcX'
+    'Vlc3Rlcl91c2VyX2lkGAIgASgJUg9yZXF1ZXN0ZXJVc2VySWQSFgoGYWNjZXB0GAMgASgIUgZh'
+    'Y2NlcHQ=');
+
+@$core.Deprecated('Use s_GroupJoinResponseDescriptor instead')
+const S_GroupJoinResponse$json = {
+  '1': 'S_GroupJoinResponse',
+  '2': [
+    {'1': 'success', '3': 1, '4': 1, '5': 8, '10': 'success'},
+    {'1': 'message', '3': 2, '4': 1, '5': 9, '10': 'message'},
+  ],
+};
+
+/// Descriptor for `S_GroupJoinResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List s_GroupJoinResponseDescriptor = $convert.base64Decode(
+    'ChNTX0dyb3VwSm9pblJlc3BvbnNlEhgKB3N1Y2Nlc3MYASABKAhSB3N1Y2Nlc3MSGAoHbWVzc2'
+    'FnZRgCIAEoCVIHbWVzc2FnZQ==');
+
+@$core.Deprecated('Use c_GroupJoinRequestListDescriptor instead')
+const C_GroupJoinRequestList$json = {
+  '1': 'C_GroupJoinRequestList',
+  '2': [
+    {'1': 'group_id', '3': 1, '4': 1, '5': 9, '10': 'groupId'},
+  ],
+};
+
+/// Descriptor for `C_GroupJoinRequestList`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List c_GroupJoinRequestListDescriptor =
+    $convert.base64Decode(
+        'ChZDX0dyb3VwSm9pblJlcXVlc3RMaXN0EhkKCGdyb3VwX2lkGAEgASgJUgdncm91cElk');
+
+@$core.Deprecated('Use s_GroupJoinRequestListDescriptor instead')
+const S_GroupJoinRequestList$json = {
+  '1': 'S_GroupJoinRequestList',
+  '2': [
+    {
+      '1': 'requests',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.Protocol.GroupJoinRequestInfo',
+      '10': 'requests'
+    },
+  ],
+};
+
+/// Descriptor for `S_GroupJoinRequestList`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List s_GroupJoinRequestListDescriptor =
+    $convert.base64Decode(
+        'ChZTX0dyb3VwSm9pblJlcXVlc3RMaXN0EjoKCHJlcXVlc3RzGAEgAygLMh4uUHJvdG9jb2wuR3'
+        'JvdXBKb2luUmVxdWVzdEluZm9SCHJlcXVlc3Rz');
+
+@$core.Deprecated('Use groupJoinRequestInfoDescriptor instead')
+const GroupJoinRequestInfo$json = {
+  '1': 'GroupJoinRequestInfo',
+  '2': [
+    {'1': 'requester_user_id', '3': 1, '4': 1, '5': 9, '10': 'requesterUserId'},
+    {'1': 'requester_name', '3': 2, '4': 1, '5': 9, '10': 'requesterName'},
+    {'1': 'requested_at', '3': 3, '4': 1, '5': 3, '10': 'requestedAt'},
+  ],
+};
+
+/// Descriptor for `GroupJoinRequestInfo`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List groupJoinRequestInfoDescriptor = $convert.base64Decode(
+    'ChRHcm91cEpvaW5SZXF1ZXN0SW5mbxIqChFyZXF1ZXN0ZXJfdXNlcl9pZBgBIAEoCVIPcmVxdW'
+    'VzdGVyVXNlcklkEiUKDnJlcXVlc3Rlcl9uYW1lGAIgASgJUg1yZXF1ZXN0ZXJOYW1lEiEKDHJl'
+    'cXVlc3RlZF9hdBgDIAEoA1ILcmVxdWVzdGVkQXQ=');
 
 @$core.Deprecated('Use c_FriendRequest_FindDescriptor instead')
 const C_FriendRequest_Find$json = {

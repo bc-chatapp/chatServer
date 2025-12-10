@@ -11,6 +11,7 @@ class CloudStorage;
 
 
 extern const int32 GProtoVersion;
+extern const int64 TIMEOUT_MS;
 
 int64 Nowts();
 

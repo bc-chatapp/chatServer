@@ -5,6 +5,7 @@ message Envelope {
   uint32 version         = 1; // 1버전 고정
   uint64 request_id      = 2; // 요청-응답 매칭(0이면 서버푸시)
   string auth_token      = 3; // 로그인 인증 토큰(JWT 등)
+
   oneof body {
 
   // AUTH
@@ -15,10 +16,12 @@ message Envelope {
     S_Login              s_login              = 21;
     C_JoinDirect         c_join_direct        = 22;
     C_JoinGroup          c_join_group         = 23;
-    C_Ack                c_ack                = 24;
-    S_Error              s_error              = 25;
-    C_Heartbeat          c_heartbeat          = 26;
-    S_Heartbeat          s_heartbeat          = 27;
+    C_CreateGroup        c_create_group       = 24;
+    S_CreateGroup        s_create_group       = 25;
+    C_Ack                c_ack                = 26;
+    S_Error              s_error              = 27;
+    C_Heartbeat          c_heartbeat          = 28;
+    S_Heartbeat          s_heartbeat          = 29;
 
 
     // Chat, Data(File)
@@ -34,6 +37,14 @@ message Envelope {
 
     C_FriendList            c_friend_list           = 40;
     S_FriendList            s_friend_list           = 41;
+    C_GroupList             c_group_list            = 42;
+    S_GroupList             s_group_list            = 43;
+    C_GroupJoinRequest      c_group_join_request    = 44;
+    S_GroupJoinRequest      s_group_join_request    = 45;
+    C_GroupJoinResponse     c_group_join_response   = 46;
+    S_GroupJoinResponse     s_group_join_response   = 47;
+    C_GroupJoinRequestList  c_group_join_request_list = 48;
+    S_GroupJoinRequestList  s_group_join_request_list = 49;
 
     // Friend Request (50-)
     C_FriendRequest_Find    c_frient_request_find        = 50;
@@ -103,6 +114,8 @@ message C_Login {
     string user_id = 1; 
     string password = 2; 
 }
+
+
 message S_Login {
     string user_id = 1; 
     string auth_token = 2; 
@@ -115,6 +128,18 @@ message C_JoinDirect {
 message C_JoinGroup  {
     string group_id     = 1; 
 }         
+
+message C_CreateGroup {
+    string group_name   = 1;  // 그룹 이름
+}
+
+message S_CreateGroup {
+    bool success        = 1;
+    string message      = 2;
+    string group_id     = 3;  // 생성된 그룹 ID
+    string group_name   = 4;  // 그룹 이름
+    string group_code   = 5;  // 그룹 초대 코드
+}
 
 message C_Chat {
   string conv_id       = 1;
@@ -253,6 +278,63 @@ message C_FriendList {
 
 message S_FriendList {
     repeated FriendInfo friends = 1;
+}
+
+// 그룹 정보
+message GroupInfo {
+    string group_id = 1;
+    string group_name = 2;
+    string group_code = 3;
+    string creator_id = 4;
+    int64 created_at = 5;
+}
+
+// 그룹 목록 조회
+message C_GroupList {
+    // 빈 메시지
+}
+
+message S_GroupList {
+    repeated GroupInfo groups = 1;
+}
+
+// 그룹 가입 신청
+message C_GroupJoinRequest {
+    string group_code = 1;  // 그룹 코드
+}
+
+message S_GroupJoinRequest {
+    bool success = 1;
+    string message = 2;
+    string group_id = 3;  // 그룹 ID (성공 시)
+    string group_name = 4; // 그룹 이름 (성공 시)
+}
+
+// 그룹 가입 신청 응답 (그룹장이 수락/거절)
+message C_GroupJoinResponse {
+    string group_id = 1;
+    string requester_user_id = 2;  // 신청자 ID
+    bool accept = 3;  // true: 수락, false: 거절
+}
+
+message S_GroupJoinResponse {
+    bool success = 1;
+    string message = 2;
+}
+
+// 그룹 가입 신청 목록 조회 (그룹장용)
+message C_GroupJoinRequestList {
+    string group_id = 1;
+}
+
+message S_GroupJoinRequestList {
+    repeated GroupJoinRequestInfo requests = 1;
+}
+
+message GroupJoinRequestInfo {
+    string requester_user_id = 1;
+    string requester_name = 2;
+    int64 requested_at = 3;
 }
 
 // 친구 요청 검색

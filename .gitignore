@@ -77,3 +77,15 @@ Thumbs.db
 # *.pb.dart
 # *.pbenum.dart
 # *.pbjson.dart
+
+# ============================================
+# Config Files (Sensitive Configuration)
+# ============================================
+config/
+config/**
+
+# ============================================
+# Database Logs
+# ============================================
+database/msg_logs/
+database/msg_logs/**

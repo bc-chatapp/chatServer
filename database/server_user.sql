@@ -1,3 +1,5 @@
+
+
 CREATE USER 'chat_server'@'localhost' IDENTIFIED WITH mysql_native_password BY 'hoje1095';
 GRANT ALL PRIVILEGES ON chat_server.* TO 'chat_server'@'localhost';
 FLUSH PRIVILEGES;
@@ -14,6 +16,9 @@ FLUSH PRIVILEGES;
    SELECT * FROM conversations;
    SELECT * FROM messages;
    SELECT * FROM read_status;
+   
+	SELECT * FROM `groups`;
+	SELECT * FROM `group_members`;
    
    
    TRUNCATE TABLE read_status;
