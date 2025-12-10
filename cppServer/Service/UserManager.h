@@ -2,6 +2,10 @@
 
 #include "Session.h"
 
+
+using SessionPtr = shared_ptr<Session>;
+
+
 class UserManager {
 public:
     UserManager() = default;
@@ -22,7 +26,9 @@ public:
         return (it == _sessions.end() ? nullptr : it->second.lock());
     }
 
-    /* TODO  ACK 보내보기? 로그인 유지 중? */
+
+
+    /*  Group  */
 
     void SetGroupMembers(const string& groupId, unordered_set<string> members) {
         WRITE_LOCK_IDX(1);
@@ -45,6 +51,13 @@ public:
         auto it = _groups.find(groupId);
         return (it == _groups.end() ? unordered_set<string>{} : it->second);
     }
+
+
+
+    /*  HeartBeat  */
+    void CheckDeadSessions();
+
+
 
 private:
     USE_MANY_LOCKS(2); // 0: sessions, 1: groups

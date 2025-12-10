@@ -39,6 +39,9 @@
     <ClCompile Include="DB\FriendRepository.cpp">
       <Filter>DB</Filter>
     </ClCompile>
+    <ClCompile Include="DB\GroupRepository.cpp">
+      <Filter>DB</Filter>
+    </ClCompile>
     <ClCompile Include="DB\MessageRepository.cpp">
       <Filter>DB</Filter>
     </ClCompile>
@@ -87,6 +90,9 @@
       <Filter>Main</Filter>
     </ClInclude>
     <ClInclude Include="DB\FriendRepository.h">
+      <Filter>DB</Filter>
+    </ClInclude>
+    <ClInclude Include="DB\GroupRepository.h">
       <Filter>DB</Filter>
     </ClInclude>
     <ClInclude Include="DB\MessageRepository.h">

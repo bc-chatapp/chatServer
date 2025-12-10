@@ -39,16 +39,19 @@ public:
     static void DispatchError(sessionPtr& session, uint64 reqId, const string& errMessage);
     
     // 에러 전송 (ErrorCode 사용 - 권장)
-    // Note: cpp 파일에서 using namespace Protocol을 사용하므로 ErrorCode만 사용
     static void DispatchError(sessionPtr& session, uint64 reqId, Protocol::ErrorCode errorCode, const string& errMessage = "");
     
     // 오프라인 정보 푸시
     static void PushOfflineData(sessionPtr& session, const string& userId);
+
+
 protected:
     static bool Dispatch_C_SignUp(sessionPtr& session, uint64 reqId, const Protocol::C_SignUp& pkt);
     static bool Dispatch_C_Login(sessionPtr& session, uint64 reqId, const Protocol::C_Login& pkt);
     static bool Dispatch_C_Chat(sessionPtr& session, uint64 reqId, const Protocol::C_Chat& pkt);
     static bool Dispatch_C_Ack(sessionPtr& session, uint64 reqId, const Protocol::C_Ack& pkt);
+
+    //static bool Dispatch_C_Heartbeat(sessionPtr& session, uint64 reqId, const Protocol::C_Heartbeat& pkt);
 
     // File Upload Handler
     static bool Dispatch_C_UploadFile(sessionPtr& session, uint64 reqId, const Protocol::C_UploadFile& pkt);
@@ -63,6 +66,12 @@ protected:
     static bool Dispatch_C_FriendRequest_Remove(sessionPtr& session, uint64 reqId, const Protocol::C_FriendRequest_Remove& pkt);
     static bool Dispatch_C_FriendList(sessionPtr& session, uint64 reqId, const Protocol::C_FriendList& pkt);
 
+    // Group Handlers
+    static bool Dispatch_C_CreateGroup(sessionPtr& session, uint64 reqId, const Protocol::C_CreateGroup& pkt);
+    static bool Dispatch_C_GroupList(sessionPtr& session, uint64 reqId, const Protocol::C_GroupList& pkt);
+    static bool Dispatch_C_GroupJoinRequest(sessionPtr& session, uint64 reqId, const Protocol::C_GroupJoinRequest& pkt);
+    static bool Dispatch_C_GroupJoinResponse(sessionPtr& session, uint64 reqId, const Protocol::C_GroupJoinResponse& pkt);
+    static bool Dispatch_C_GroupJoinRequestList(sessionPtr& session, uint64 reqId, const Protocol::C_GroupJoinRequestList& pkt);
     
 public:
 

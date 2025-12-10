@@ -32,7 +32,7 @@ void ServerSession::OnRecv(BYTE* buffer, int32 len)
 		return;
 	}
 
-	// 2. Protobuf Parsing
+	// Protobuf Parsing
 	Protocol::Envelope envelope;
 	if (envelope.ParseFromArray(buffer + 4, bodyLen) == false)
 	{

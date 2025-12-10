@@ -27,11 +27,12 @@ bool Service::Start()
 	return true;
 }
 
+
 void Service::Stop()
 {
 	WRITE_LOCK;
 
-	// 모든 세션 정리
+	// 모든 세션 정리ㅌ
 	for (auto& session : _sessions)
 	{
 		if (session) session->Disconnect();
