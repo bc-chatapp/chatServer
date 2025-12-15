@@ -83,9 +83,8 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 		Dispatch_C_UploadFile(session, envelope.request_id(), envelope.c_upload_file());
 		break;
 
-	/*case Protocol::Envelope::kCHeartbeat:
-		Dispatch_C_Heartbeat(session, envelope.request_id(), envelope.c_heartbeat());
-		break;*/
+	case Protocol::Envelope::kCHeartbeat:
+		break;
 
 	// Friend Request
 	case Protocol::Envelope::kCFrientRequestFind:
@@ -240,10 +239,10 @@ bool PacketDispatcher::Dispatch_C_SignUp(sessionPtr& session, uint64 reqId, cons
 	const string userId = pkt.user_id();
 	const string password = pkt.password();
 	const string name = pkt.name();
-	const string statusMessage = pkt.status_message();
+	const string email = pkt.email();
 
 	// AuthService로 위임
-	return GAuthService->SignUp(session, reqId, userId, password, name, statusMessage);
+	return GAuthService->SignUp(session, reqId, userId, password, name, email);
 }
 
 bool PacketDispatcher::Dispatch_C_Login(sessionPtr& session, uint64 reqId, const Protocol::C_Login& pkt)

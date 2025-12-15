@@ -209,6 +209,7 @@ copy /Y "$(SolutionDir)Libraries\mysql-connector-c++-9.5.0\lib64\libcrypto-3-x64
     <ClCompile Include="DB\MessageRepository.cpp" />
     <ClCompile Include="mainServer.cpp" />
     <ClCompile Include="DB\UserRepository.cpp" />
+    <ClCompile Include="Service\TokenManager.cpp" />
     <ClCompile Include="Service\UserManager.cpp" />
     <ClCompile Include="PacketDispatcher.cpp" />
     <ClCompile Include="pch.cpp">
@@ -238,6 +239,7 @@ copy /Y "$(SolutionDir)Libraries\mysql-connector-c++-9.5.0\lib64\libcrypto-3-x64
     <ClInclude Include="DB\GroupRepository.h" />
     <ClInclude Include="Service\FriendService.h" />
     <ClInclude Include="DB\MessageRepository.h" />
+    <ClInclude Include="Service\TokenManager.h" />
     <ClInclude Include="Service\UserManager.h" />
     <ClInclude Include="DB\UserRepository.h" />
     <ClInclude Include="PacketDispatcher.h" />

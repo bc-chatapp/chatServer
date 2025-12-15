@@ -41,10 +41,8 @@ bool ChatService::SendDirect(sessionPtr& senderSession, uint64 reqId, const stri
     if (msgSeq >= 0) {  // 메시지 저장 성공한 경우만
         if (auto target = _userManager.FindSession(receiverId)) {
             // 수신자가 온라인: 즉시 전송
+            // is_delivered는 C_Ack를 받았을 때 HandleAck에서 처리됨
             PushEnvelope(target, 0, pkt_s_chat);
-            
-            // 전송 완료 처리
-            MessageRepository::MarkMessageAsDelivered(convId, msgSeq, receiverId);
             
             // 메모장 저장은 SaveMessage에서 이미 처리됨
         } else {
@@ -83,13 +81,8 @@ bool ChatService::SendGroup(sessionPtr& senderSession, uint64 reqId, const strin
         if (msgSeq >= 0) {  // 메시지 저장 성공한 경우만
             if (auto target = _userManager.FindSession(member)) {
                 // 온라인: 즉시 전송
+                // is_delivered는 C_Ack를 받았을 때 HandleAck에서 처리됨
                 PushEnvelope(target, 0, pkt_s_chat);
-                
-                // 전송 완료 처리
-                MessageRepository::MarkMessageAsDelivered(convId, msgSeq, member);
-                
-                // 읽음 상태 업데이트
-                MessageRepository::UpdateReadStatus(member, convId, msgSeq);
             } else {
                 // 오프라인: 메시지는 이미 저장됨 (is_delivered = 0)
             }
@@ -111,11 +104,17 @@ bool ChatService::HandleAck(sessionPtr& session, uint64 reqId, const string& con
     cout << "[ChatService] HandleAck: userId=" << userId 
          << ", convId=" << convId << ", serverMsgId=" << serverMsgId << endl;
     
-    // ACK는 읽음 확인용으로만 사용 (메모장 저장은 이미 SaveMessage에서 처리됨)
-    // 필요시 읽은 메시지를 DB에서 삭제할 수 있지만, 일단은 유지
-    // (최근 메시지 조회를 위해 DB에 보관)
+    // C_Ack를 받았으므로 메시지가 실제로 도착했음을 확인
+    // convId + serverMsgId + userId로 메시지를 정확히 특정하여 is_delivered 업데이트
+    if (MessageRepository::MarkMessageAsDelivered(convId, serverMsgId, userId)) {
+        cout << "[ChatService] HandleAck: 메시지 전송 확인 완료 (is_delivered=1)" << endl;
+    } else {
+        cerr << "[ChatService] HandleAck: 메시지 전송 확인 실패 (메시지를 찾을 수 없음)" << endl;
+    }
     
-    cout << "[ChatService] HandleAck 완료: 읽음 확인" << endl;
+    // 읽음 상태 업데이트
+    MessageRepository::UpdateReadStatus(userId, convId, serverMsgId);
+    
     return true;
 }
 

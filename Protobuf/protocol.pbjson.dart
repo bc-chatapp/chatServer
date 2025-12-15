@@ -598,15 +598,14 @@ const C_SignUp$json = {
     {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
     {'1': 'password', '3': 2, '4': 1, '5': 9, '10': 'password'},
     {'1': 'name', '3': 3, '4': 1, '5': 9, '10': 'name'},
-    {'1': 'status_message', '3': 4, '4': 1, '5': 9, '10': 'statusMessage'},
+    {'1': 'email', '3': 4, '4': 1, '5': 9, '10': 'email'},
   ],
 };
 
 /// Descriptor for `C_SignUp`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List c_SignUpDescriptor = $convert.base64Decode(
     'CghDX1NpZ25VcBIXCgd1c2VyX2lkGAEgASgJUgZ1c2VySWQSGgoIcGFzc3dvcmQYAiABKAlSCH'
-    'Bhc3N3b3JkEhIKBG5hbWUYAyABKAlSBG5hbWUSJQoOc3RhdHVzX21lc3NhZ2UYBCABKAlSDXN0'
-    'YXR1c01lc3NhZ2U=');
+    'Bhc3N3b3JkEhIKBG5hbWUYAyABKAlSBG5hbWUSFAoFZW1haWwYBCABKAlSBWVtYWls');
 
 @$core.Deprecated('Use s_SignUpDescriptor instead')
 const S_SignUp$json = {
@@ -643,13 +642,15 @@ const S_Login$json = {
   '2': [
     {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
     {'1': 'auth_token', '3': 2, '4': 1, '5': 9, '10': 'authToken'},
+    {'1': 'name', '3': 3, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'email', '3': 4, '4': 1, '5': 9, '10': 'email'},
   ],
 };
 
 /// Descriptor for `S_Login`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List s_LoginDescriptor = $convert.base64Decode(
     'CgdTX0xvZ2luEhcKB3VzZXJfaWQYASABKAlSBnVzZXJJZBIdCgphdXRoX3Rva2VuGAIgASgJUg'
-    'lhdXRoVG9rZW4=');
+    'lhdXRoVG9rZW4SEgoEbmFtZRgDIAEoCVIEbmFtZRIUCgVlbWFpbBgEIAEoCVIFZW1haWw=');
 
 @$core.Deprecated('Use c_JoinDirectDescriptor instead')
 const C_JoinDirect$json = {

@@ -34,7 +34,7 @@ bool FriendService::FindUser(sessionPtr& session, uint64 reqId, const string& se
 	Protocol::FriendInfo friendInfo;
 	friendInfo.set_user_id(userInfo.userId);
 	friendInfo.set_name(userInfo.name);
-	friendInfo.set_status_message(userInfo.statusMessage);
+	friendInfo.set_status_message(userInfo.email);
 	friendInfo.set_profile_image_url(userInfo.profileImageUrl);
 	friendInfo.set_last_seen(userInfo.lastSeen);
 	friendInfo.set_status(""); // 검색 결과에는 status 불필요
