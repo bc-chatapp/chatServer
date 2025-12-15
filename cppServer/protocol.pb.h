@@ -2208,7 +2208,7 @@ class C_SignUp final :
     kUserIdFieldNumber = 1,
     kPasswordFieldNumber = 2,
     kNameFieldNumber = 3,
-    kStatusMessageFieldNumber = 4,
+    kEmailFieldNumber = 4,
   };
   // string user_id = 1;
   void clear_user_id();
@@ -2252,18 +2252,18 @@ class C_SignUp final :
   std::string* _internal_mutable_name();
   public:
 
-  // string status_message = 4;
-  void clear_status_message();
-  const std::string& status_message() const;
+  // string email = 4;
+  void clear_email();
+  const std::string& email() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_status_message(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_status_message();
-  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_status_message();
-  void set_allocated_status_message(std::string* status_message);
+  void set_email(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_email();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_email();
+  void set_allocated_email(std::string* email);
   private:
-  const std::string& _internal_status_message() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_status_message(const std::string& value);
-  std::string* _internal_mutable_status_message();
+  const std::string& _internal_email() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_email(const std::string& value);
+  std::string* _internal_mutable_email();
   public:
 
   // @@protoc_insertion_point(class_scope:Protocol.C_SignUp)
@@ -2276,7 +2276,7 @@ class C_SignUp final :
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr user_id_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr password_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr status_message_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr email_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_protocol_2eproto;
 };
@@ -2709,6 +2709,8 @@ class S_Login final :
   enum : int {
     kUserIdFieldNumber = 1,
     kAuthTokenFieldNumber = 2,
+    kNameFieldNumber = 3,
+    kEmailFieldNumber = 4,
   };
   // string user_id = 1;
   void clear_user_id();
@@ -2738,6 +2740,34 @@ class S_Login final :
   std::string* _internal_mutable_auth_token();
   public:
 
+  // string name = 3;
+  void clear_name();
+  const std::string& name() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_name(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_name();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_name();
+  void set_allocated_name(std::string* name);
+  private:
+  const std::string& _internal_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_name(const std::string& value);
+  std::string* _internal_mutable_name();
+  public:
+
+  // string email = 4;
+  void clear_email();
+  const std::string& email() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_email(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_email();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_email();
+  void set_allocated_email(std::string* email);
+  private:
+  const std::string& _internal_email() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_email(const std::string& value);
+  std::string* _internal_mutable_email();
+  public:
+
   // @@protoc_insertion_point(class_scope:Protocol.S_Login)
  private:
   class _Internal;
@@ -2747,6 +2777,8 @@ class S_Login final :
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr user_id_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr auth_token_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr email_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_protocol_2eproto;
 };
@@ -12878,49 +12910,49 @@ inline void C_SignUp::set_allocated_name(std::string* name) {
   // @@protoc_insertion_point(field_set_allocated:Protocol.C_SignUp.name)
 }
 
-// string status_message = 4;
-inline void C_SignUp::clear_status_message() {
-  status_message_.ClearToEmpty();
+// string email = 4;
+inline void C_SignUp::clear_email() {
+  email_.ClearToEmpty();
 }
-inline const std::string& C_SignUp::status_message() const {
-  // @@protoc_insertion_point(field_get:Protocol.C_SignUp.status_message)
-  return _internal_status_message();
+inline const std::string& C_SignUp::email() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_SignUp.email)
+  return _internal_email();
 }
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
-void C_SignUp::set_status_message(ArgT0&& arg0, ArgT... args) {
+void C_SignUp::set_email(ArgT0&& arg0, ArgT... args) {
  
- status_message_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:Protocol.C_SignUp.status_message)
+ email_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.C_SignUp.email)
 }
-inline std::string* C_SignUp::mutable_status_message() {
-  // @@protoc_insertion_point(field_mutable:Protocol.C_SignUp.status_message)
-  return _internal_mutable_status_message();
+inline std::string* C_SignUp::mutable_email() {
+  // @@protoc_insertion_point(field_mutable:Protocol.C_SignUp.email)
+  return _internal_mutable_email();
 }
-inline const std::string& C_SignUp::_internal_status_message() const {
-  return status_message_.Get();
+inline const std::string& C_SignUp::_internal_email() const {
+  return email_.Get();
 }
-inline void C_SignUp::_internal_set_status_message(const std::string& value) {
+inline void C_SignUp::_internal_set_email(const std::string& value) {
   
-  status_message_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+  email_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
 }
-inline std::string* C_SignUp::_internal_mutable_status_message() {
+inline std::string* C_SignUp::_internal_mutable_email() {
   
-  return status_message_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+  return email_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
 }
-inline std::string* C_SignUp::release_status_message() {
-  // @@protoc_insertion_point(field_release:Protocol.C_SignUp.status_message)
-  return status_message_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+inline std::string* C_SignUp::release_email() {
+  // @@protoc_insertion_point(field_release:Protocol.C_SignUp.email)
+  return email_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
 }
-inline void C_SignUp::set_allocated_status_message(std::string* status_message) {
-  if (status_message != nullptr) {
+inline void C_SignUp::set_allocated_email(std::string* email) {
+  if (email != nullptr) {
     
   } else {
     
   }
-  status_message_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), status_message,
+  email_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), email,
       GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set_allocated:Protocol.C_SignUp.status_message)
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C_SignUp.email)
 }
 
 // -------------------------------------------------------------------
@@ -13223,6 +13255,96 @@ inline void S_Login::set_allocated_auth_token(std::string* auth_token) {
   auth_token_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), auth_token,
       GetArenaForAllocation());
   // @@protoc_insertion_point(field_set_allocated:Protocol.S_Login.auth_token)
+}
+
+// string name = 3;
+inline void S_Login::clear_name() {
+  name_.ClearToEmpty();
+}
+inline const std::string& S_Login::name() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_Login.name)
+  return _internal_name();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void S_Login::set_name(ArgT0&& arg0, ArgT... args) {
+ 
+ name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.S_Login.name)
+}
+inline std::string* S_Login::mutable_name() {
+  // @@protoc_insertion_point(field_mutable:Protocol.S_Login.name)
+  return _internal_mutable_name();
+}
+inline const std::string& S_Login::_internal_name() const {
+  return name_.Get();
+}
+inline void S_Login::_internal_set_name(const std::string& value) {
+  
+  name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* S_Login::_internal_mutable_name() {
+  
+  return name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* S_Login::release_name() {
+  // @@protoc_insertion_point(field_release:Protocol.S_Login.name)
+  return name_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void S_Login::set_allocated_name(std::string* name) {
+  if (name != nullptr) {
+    
+  } else {
+    
+  }
+  name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), name,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.S_Login.name)
+}
+
+// string email = 4;
+inline void S_Login::clear_email() {
+  email_.ClearToEmpty();
+}
+inline const std::string& S_Login::email() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_Login.email)
+  return _internal_email();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void S_Login::set_email(ArgT0&& arg0, ArgT... args) {
+ 
+ email_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.S_Login.email)
+}
+inline std::string* S_Login::mutable_email() {
+  // @@protoc_insertion_point(field_mutable:Protocol.S_Login.email)
+  return _internal_mutable_email();
+}
+inline const std::string& S_Login::_internal_email() const {
+  return email_.Get();
+}
+inline void S_Login::_internal_set_email(const std::string& value) {
+  
+  email_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* S_Login::_internal_mutable_email() {
+  
+  return email_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* S_Login::release_email() {
+  // @@protoc_insertion_point(field_release:Protocol.S_Login.email)
+  return email_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void S_Login::set_allocated_email(std::string* email) {
+  if (email != nullptr) {
+    
+  } else {
+    
+  }
+  email_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), email,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.S_Login.email)
 }
 
 // -------------------------------------------------------------------

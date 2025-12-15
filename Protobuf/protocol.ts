@@ -318,14 +318,10 @@ export interface FileMsg {
 
 /** 회원가입 */
 export interface CSignUp {
-  /** 사용자 ID (필수) */
   userId: string;
-  /** 비밀번호 (해, 향후 암호화) */
   password: string;
-  /** 사용자 이름 */
   name: string;
-  /** 상태 메시지 (선택) */
-  statusMessage: string;
+  email: string;
 }
 
 export interface SSignUp {
@@ -343,6 +339,8 @@ export interface CLogin {
 export interface SLogin {
   userId: string;
   authToken: string;
+  name: string;
+  email: string;
 }
 
 export interface CJoinDirect {
@@ -1867,7 +1865,7 @@ export const FileMsg = {
 };
 
 function createBaseCSignUp(): CSignUp {
-  return { userId: "", password: "", name: "", statusMessage: "" };
+  return { userId: "", password: "", name: "", email: "" };
 }
 
 export const CSignUp = {
@@ -1881,8 +1879,8 @@ export const CSignUp = {
     if (message.name !== "") {
       writer.uint32(26).string(message.name);
     }
-    if (message.statusMessage !== "") {
-      writer.uint32(34).string(message.statusMessage);
+    if (message.email !== "") {
+      writer.uint32(34).string(message.email);
     }
     return writer;
   },
@@ -1920,7 +1918,7 @@ export const CSignUp = {
             break;
           }
 
-          message.statusMessage = reader.string();
+          message.email = reader.string();
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -1936,7 +1934,7 @@ export const CSignUp = {
       userId: isSet(object.userId) ? globalThis.String(object.userId) : "",
       password: isSet(object.password) ? globalThis.String(object.password) : "",
       name: isSet(object.name) ? globalThis.String(object.name) : "",
-      statusMessage: isSet(object.statusMessage) ? globalThis.String(object.statusMessage) : "",
+      email: isSet(object.email) ? globalThis.String(object.email) : "",
     };
   },
 
@@ -1951,8 +1949,8 @@ export const CSignUp = {
     if (message.name !== "") {
       obj.name = message.name;
     }
-    if (message.statusMessage !== "") {
-      obj.statusMessage = message.statusMessage;
+    if (message.email !== "") {
+      obj.email = message.email;
     }
     return obj;
   },
@@ -1965,7 +1963,7 @@ export const CSignUp = {
     message.userId = object.userId ?? "";
     message.password = object.password ?? "";
     message.name = object.name ?? "";
-    message.statusMessage = object.statusMessage ?? "";
+    message.email = object.email ?? "";
     return message;
   },
 };
@@ -2134,7 +2132,7 @@ export const CLogin = {
 };
 
 function createBaseSLogin(): SLogin {
-  return { userId: "", authToken: "" };
+  return { userId: "", authToken: "", name: "", email: "" };
 }
 
 export const SLogin = {
@@ -2144,6 +2142,12 @@ export const SLogin = {
     }
     if (message.authToken !== "") {
       writer.uint32(18).string(message.authToken);
+    }
+    if (message.name !== "") {
+      writer.uint32(26).string(message.name);
+    }
+    if (message.email !== "") {
+      writer.uint32(34).string(message.email);
     }
     return writer;
   },
@@ -2169,6 +2173,20 @@ export const SLogin = {
 
           message.authToken = reader.string();
           continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.name = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.email = reader.string();
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -2182,6 +2200,8 @@ export const SLogin = {
     return {
       userId: isSet(object.userId) ? globalThis.String(object.userId) : "",
       authToken: isSet(object.authToken) ? globalThis.String(object.authToken) : "",
+      name: isSet(object.name) ? globalThis.String(object.name) : "",
+      email: isSet(object.email) ? globalThis.String(object.email) : "",
     };
   },
 
@@ -2193,6 +2213,12 @@ export const SLogin = {
     if (message.authToken !== "") {
       obj.authToken = message.authToken;
     }
+    if (message.name !== "") {
+      obj.name = message.name;
+    }
+    if (message.email !== "") {
+      obj.email = message.email;
+    }
     return obj;
   },
 
@@ -2203,6 +2229,8 @@ export const SLogin = {
     const message = createBaseSLogin();
     message.userId = object.userId ?? "";
     message.authToken = object.authToken ?? "";
+    message.name = object.name ?? "";
+    message.email = object.email ?? "";
     return message;
   },
 };

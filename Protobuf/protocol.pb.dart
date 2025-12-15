@@ -1267,13 +1267,13 @@ class C_SignUp extends $pb.GeneratedMessage {
     $core.String? userId,
     $core.String? password,
     $core.String? name,
-    $core.String? statusMessage,
+    $core.String? email,
   }) {
     final result = create();
     if (userId != null) result.userId = userId;
     if (password != null) result.password = password;
     if (name != null) result.name = name;
-    if (statusMessage != null) result.statusMessage = statusMessage;
+    if (email != null) result.email = email;
     return result;
   }
 
@@ -1293,7 +1293,7 @@ class C_SignUp extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'userId')
     ..aOS(2, _omitFieldNames ? '' : 'password')
     ..aOS(3, _omitFieldNames ? '' : 'name')
-    ..aOS(4, _omitFieldNames ? '' : 'statusMessage')
+    ..aOS(4, _omitFieldNames ? '' : 'email')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -1342,13 +1342,13 @@ class C_SignUp extends $pb.GeneratedMessage {
   void clearName() => $_clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get statusMessage => $_getSZ(3);
+  $core.String get email => $_getSZ(3);
   @$pb.TagNumber(4)
-  set statusMessage($core.String value) => $_setString(3, value);
+  set email($core.String value) => $_setString(3, value);
   @$pb.TagNumber(4)
-  $core.bool hasStatusMessage() => $_has(3);
+  $core.bool hasEmail() => $_has(3);
   @$pb.TagNumber(4)
-  void clearStatusMessage() => $_clearField(4);
+  void clearEmail() => $_clearField(4);
 }
 
 class S_SignUp extends $pb.GeneratedMessage {
@@ -1497,10 +1497,14 @@ class S_Login extends $pb.GeneratedMessage {
   factory S_Login({
     $core.String? userId,
     $core.String? authToken,
+    $core.String? name,
+    $core.String? email,
   }) {
     final result = create();
     if (userId != null) result.userId = userId;
     if (authToken != null) result.authToken = authToken;
+    if (name != null) result.name = name;
+    if (email != null) result.email = email;
     return result;
   }
 
@@ -1519,6 +1523,8 @@ class S_Login extends $pb.GeneratedMessage {
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'userId')
     ..aOS(2, _omitFieldNames ? '' : 'authToken')
+    ..aOS(3, _omitFieldNames ? '' : 'name')
+    ..aOS(4, _omitFieldNames ? '' : 'email')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -1556,6 +1562,24 @@ class S_Login extends $pb.GeneratedMessage {
   $core.bool hasAuthToken() => $_has(1);
   @$pb.TagNumber(2)
   void clearAuthToken() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get name => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set name($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasName() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearName() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get email => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set email($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasEmail() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearEmail() => $_clearField(4);
 }
 
 class C_JoinDirect extends $pb.GeneratedMessage {

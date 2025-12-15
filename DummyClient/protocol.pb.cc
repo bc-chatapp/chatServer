@@ -88,7 +88,7 @@ constexpr C_SignUp::C_SignUp(
   : user_id_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
   , password_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
   , name_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
-  , status_message_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
+  , email_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
 struct C_SignUpDefaultTypeInternal {
   constexpr C_SignUpDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -128,7 +128,9 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT C_LoginDefaultTypeInternal _C_L
 constexpr S_Login::S_Login(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : user_id_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
-  , auth_token_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
+  , auth_token_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , name_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , email_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
 struct S_LoginDefaultTypeInternal {
   constexpr S_LoginDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -779,7 +781,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_protocol_2eproto::offsets[] PR
   PROTOBUF_FIELD_OFFSET(::Protocol::C_SignUp, user_id_),
   PROTOBUF_FIELD_OFFSET(::Protocol::C_SignUp, password_),
   PROTOBUF_FIELD_OFFSET(::Protocol::C_SignUp, name_),
-  PROTOBUF_FIELD_OFFSET(::Protocol::C_SignUp, status_message_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_SignUp, email_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::S_SignUp, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -802,6 +804,8 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_protocol_2eproto::offsets[] PR
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::Protocol::S_Login, user_id_),
   PROTOBUF_FIELD_OFFSET(::Protocol::S_Login, auth_token_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_Login, name_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_Login, email_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::C_JoinDirect, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -1111,47 +1115,47 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 89, -1, sizeof(::Protocol::S_SignUp)},
   { 97, -1, sizeof(::Protocol::C_Login)},
   { 104, -1, sizeof(::Protocol::S_Login)},
-  { 111, -1, sizeof(::Protocol::C_JoinDirect)},
-  { 117, -1, sizeof(::Protocol::C_JoinGroup)},
-  { 123, -1, sizeof(::Protocol::C_CreateGroup)},
-  { 129, -1, sizeof(::Protocol::S_CreateGroup)},
-  { 139, -1, sizeof(::Protocol::C_Chat)},
-  { 148, -1, sizeof(::Protocol::S_Chat)},
-  { 159, -1, sizeof(::Protocol::C_UploadFile)},
-  { 168, -1, sizeof(::Protocol::S_UploadFile)},
-  { 181, -1, sizeof(::Protocol::C_Ack)},
-  { 188, -1, sizeof(::Protocol::C_FetchOffline)},
-  { 194, -1, sizeof(::Protocol::S_MessageBatch)},
-  { 200, -1, sizeof(::Protocol::S_Error)},
-  { 208, -1, sizeof(::Protocol::C_Heartbeat)},
-  { 213, -1, sizeof(::Protocol::S_Heartbeat)},
-  { 218, -1, sizeof(::Protocol::FriendInfo)},
-  { 229, -1, sizeof(::Protocol::FriendRequest)},
-  { 239, -1, sizeof(::Protocol::C_FriendList)},
-  { 244, -1, sizeof(::Protocol::S_FriendList)},
-  { 250, -1, sizeof(::Protocol::GroupInfo)},
-  { 260, -1, sizeof(::Protocol::C_GroupList)},
-  { 265, -1, sizeof(::Protocol::S_GroupList)},
-  { 271, -1, sizeof(::Protocol::C_GroupJoinRequest)},
-  { 277, -1, sizeof(::Protocol::S_GroupJoinRequest)},
-  { 286, -1, sizeof(::Protocol::C_GroupJoinResponse)},
-  { 294, -1, sizeof(::Protocol::S_GroupJoinResponse)},
-  { 301, -1, sizeof(::Protocol::C_GroupJoinRequestList)},
-  { 307, -1, sizeof(::Protocol::S_GroupJoinRequestList)},
-  { 313, -1, sizeof(::Protocol::GroupJoinRequestInfo)},
-  { 321, -1, sizeof(::Protocol::C_FriendRequest_Find)},
-  { 327, -1, sizeof(::Protocol::S_FriendRequest_Find)},
-  { 334, -1, sizeof(::Protocol::C_FriendRequest_Add)},
-  { 340, -1, sizeof(::Protocol::S_FriendRequest_Add)},
-  { 347, -1, sizeof(::Protocol::C_FriendRequest_Cancel)},
-  { 353, -1, sizeof(::Protocol::S_FriendRequest_Cancel)},
-  { 360, -1, sizeof(::Protocol::C_FriendRequest_Remove)},
-  { 366, -1, sizeof(::Protocol::S_FriendRequest_Remove)},
-  { 373, -1, sizeof(::Protocol::C_FriendRequest_List)},
-  { 379, -1, sizeof(::Protocol::S_FriendRequest_List)},
-  { 385, -1, sizeof(::Protocol::C_FriendRequest_Respond)},
-  { 392, -1, sizeof(::Protocol::S_FriendRequest_Respond)},
-  { 400, -1, sizeof(::Protocol::S_FriendRequest_Push)},
+  { 113, -1, sizeof(::Protocol::C_JoinDirect)},
+  { 119, -1, sizeof(::Protocol::C_JoinGroup)},
+  { 125, -1, sizeof(::Protocol::C_CreateGroup)},
+  { 131, -1, sizeof(::Protocol::S_CreateGroup)},
+  { 141, -1, sizeof(::Protocol::C_Chat)},
+  { 150, -1, sizeof(::Protocol::S_Chat)},
+  { 161, -1, sizeof(::Protocol::C_UploadFile)},
+  { 170, -1, sizeof(::Protocol::S_UploadFile)},
+  { 183, -1, sizeof(::Protocol::C_Ack)},
+  { 190, -1, sizeof(::Protocol::C_FetchOffline)},
+  { 196, -1, sizeof(::Protocol::S_MessageBatch)},
+  { 202, -1, sizeof(::Protocol::S_Error)},
+  { 210, -1, sizeof(::Protocol::C_Heartbeat)},
+  { 215, -1, sizeof(::Protocol::S_Heartbeat)},
+  { 220, -1, sizeof(::Protocol::FriendInfo)},
+  { 231, -1, sizeof(::Protocol::FriendRequest)},
+  { 241, -1, sizeof(::Protocol::C_FriendList)},
+  { 246, -1, sizeof(::Protocol::S_FriendList)},
+  { 252, -1, sizeof(::Protocol::GroupInfo)},
+  { 262, -1, sizeof(::Protocol::C_GroupList)},
+  { 267, -1, sizeof(::Protocol::S_GroupList)},
+  { 273, -1, sizeof(::Protocol::C_GroupJoinRequest)},
+  { 279, -1, sizeof(::Protocol::S_GroupJoinRequest)},
+  { 288, -1, sizeof(::Protocol::C_GroupJoinResponse)},
+  { 296, -1, sizeof(::Protocol::S_GroupJoinResponse)},
+  { 303, -1, sizeof(::Protocol::C_GroupJoinRequestList)},
+  { 309, -1, sizeof(::Protocol::S_GroupJoinRequestList)},
+  { 315, -1, sizeof(::Protocol::GroupJoinRequestInfo)},
+  { 323, -1, sizeof(::Protocol::C_FriendRequest_Find)},
+  { 329, -1, sizeof(::Protocol::S_FriendRequest_Find)},
+  { 336, -1, sizeof(::Protocol::C_FriendRequest_Add)},
+  { 342, -1, sizeof(::Protocol::S_FriendRequest_Add)},
+  { 349, -1, sizeof(::Protocol::C_FriendRequest_Cancel)},
+  { 355, -1, sizeof(::Protocol::S_FriendRequest_Cancel)},
+  { 362, -1, sizeof(::Protocol::C_FriendRequest_Remove)},
+  { 368, -1, sizeof(::Protocol::S_FriendRequest_Remove)},
+  { 375, -1, sizeof(::Protocol::C_FriendRequest_List)},
+  { 381, -1, sizeof(::Protocol::S_FriendRequest_List)},
+  { 387, -1, sizeof(::Protocol::C_FriendRequest_Respond)},
+  { 394, -1, sizeof(::Protocol::S_FriendRequest_Respond)},
+  { 402, -1, sizeof(::Protocol::S_FriendRequest_Push)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -1273,114 +1277,115 @@ const char descriptor_table_protodef_protocol_2eproto[] PROTOBUF_SECTION_VARIABL
   "data\"\032\n\007TextMsg\022\017\n\007message\030\001 \001(\t\"*\n\010Imag"
   "eMsg\022\013\n\003url\030\001 \001(\t\022\021\n\tthumbnail\030\002 \001(\t\"6\n\007"
   "FileMsg\022\013\n\003url\030\001 \001(\t\022\020\n\010filename\030\002 \001(\t\022\014"
-  "\n\004size\030\003 \001(\003\"S\n\010C_SignUp\022\017\n\007user_id\030\001 \001("
-  "\t\022\020\n\010password\030\002 \001(\t\022\014\n\004name\030\003 \001(\t\022\026\n\016sta"
-  "tus_message\030\004 \001(\t\"=\n\010S_SignUp\022\017\n\007success"
-  "\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\022\017\n\007user_id\030\003 \001(\t"
-  "\",\n\007C_Login\022\017\n\007user_id\030\001 \001(\t\022\020\n\010password"
-  "\030\002 \001(\t\".\n\007S_Login\022\017\n\007user_id\030\001 \001(\t\022\022\n\nau"
-  "th_token\030\002 \001(\t\"$\n\014C_JoinDirect\022\024\n\014peer_u"
-  "ser_id\030\001 \001(\t\"\037\n\013C_JoinGroup\022\020\n\010group_id\030"
-  "\001 \001(\t\"#\n\rC_CreateGroup\022\022\n\ngroup_name\030\001 \001"
-  "(\t\"k\n\rS_CreateGroup\022\017\n\007success\030\001 \001(\010\022\017\n\007"
-  "message\030\002 \001(\t\022\020\n\010group_id\030\003 \001(\t\022\022\n\ngroup"
-  "_name\030\004 \001(\t\022\022\n\ngroup_code\030\005 \001(\t\"k\n\006C_Cha"
-  "t\022\017\n\007conv_id\030\001 \001(\t\022\025\n\rclient_msg_id\030\002 \001("
-  "\003\022&\n\007payload\030\003 \001(\0132\025.Protocol.ChatPayloa"
-  "d\022\021\n\tts_client\030\004 \001(\003\"\225\001\n\006S_Chat\022\017\n\007conv_"
-  "id\030\001 \001(\t\022\025\n\rclient_msg_id\030\002 \001(\003\022\025\n\rserve"
-  "r_msg_id\030\003 \001(\003\022\021\n\tsender_id\030\004 \001(\t\022&\n\007pay"
-  "load\030\005 \001(\0132\025.Protocol.ChatPayload\022\021\n\tts_"
-  "server\030\006 \001(\003\"S\n\014C_UploadFile\022\020\n\010filename"
-  "\030\001 \001(\t\022\014\n\004size\030\002 \001(\003\022\021\n\tmime_type\030\003 \001(\t\022"
-  "\020\n\010is_image\030\004 \001(\010\"\244\001\n\014S_UploadFile\022\017\n\007su"
-  "ccess\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\022\017\n\007file_id\030"
-  "\003 \001(\t\022\022\n\nupload_url\030\004 \001(\t\022\024\n\014download_ur"
-  "l\030\005 \001(\t\022\025\n\rthumbnail_url\030\006 \001(\t\022\022\n\nexpire"
-  "s_at\030\007 \001(\003\022\014\n\004path\030\010 \001(\t\"/\n\005C_Ack\022\017\n\007con"
-  "v_id\030\001 \001(\t\022\025\n\rserver_msg_id\030\002 \001(\003\"\"\n\016C_F"
-  "etchOffline\022\020\n\010since_ts\030\001 \001(\003\"4\n\016S_Messa"
-  "geBatch\022\"\n\010messages\030\001 \003(\0132\020.Protocol.S_C"
-  "hat\"Q\n\007S_Error\022\'\n\nerror_code\030\001 \001(\0162\023.Pro"
-  "tocol.ErrorCode\022\014\n\004code\030\002 \001(\r\022\017\n\007message"
-  "\030\003 \001(\t\"\r\n\013C_Heartbeat\"\r\n\013S_Heartbeat\"\201\001\n"
-  "\nFriendInfo\022\017\n\007user_id\030\001 \001(\t\022\014\n\004name\030\002 \001"
-  "(\t\022\026\n\016status_message\030\003 \001(\t\022\031\n\021profile_im"
-  "age_url\030\004 \001(\t\022\021\n\tlast_seen\030\005 \001(\003\022\016\n\006stat"
-  "us\030\006 \001(\t\"\237\001\n\rFriendRequest\022\031\n\021requester_"
-  "user_id\030\001 \001(\t\022\026\n\016requester_name\030\002 \001(\t\022 \n"
-  "\030requester_status_message\030\003 \001(\t\022#\n\033reque"
-  "ster_profile_image_url\030\004 \001(\t\022\024\n\014requeste"
-  "d_at\030\005 \001(\003\"\016\n\014C_FriendList\"5\n\014S_FriendLi"
-  "st\022%\n\007friends\030\001 \003(\0132\024.Protocol.FriendInf"
-  "o\"m\n\tGroupInfo\022\020\n\010group_id\030\001 \001(\t\022\022\n\ngrou"
-  "p_name\030\002 \001(\t\022\022\n\ngroup_code\030\003 \001(\t\022\022\n\ncrea"
-  "tor_id\030\004 \001(\t\022\022\n\ncreated_at\030\005 \001(\003\"\r\n\013C_Gr"
-  "oupList\"2\n\013S_GroupList\022#\n\006groups\030\001 \003(\0132\023"
-  ".Protocol.GroupInfo\"(\n\022C_GroupJoinReques"
-  "t\022\022\n\ngroup_code\030\001 \001(\t\"\\\n\022S_GroupJoinRequ"
-  "est\022\017\n\007success\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\022\020\n"
-  "\010group_id\030\003 \001(\t\022\022\n\ngroup_name\030\004 \001(\t\"R\n\023C"
-  "_GroupJoinResponse\022\020\n\010group_id\030\001 \001(\t\022\031\n\021"
-  "requester_user_id\030\002 \001(\t\022\016\n\006accept\030\003 \001(\010\""
-  "7\n\023S_GroupJoinResponse\022\017\n\007success\030\001 \001(\010\022"
-  "\017\n\007message\030\002 \001(\t\"*\n\026C_GroupJoinRequestLi"
-  "st\022\020\n\010group_id\030\001 \001(\t\"J\n\026S_GroupJoinReque"
-  "stList\0220\n\010requests\030\001 \003(\0132\036.Protocol.Grou"
-  "pJoinRequestInfo\"_\n\024GroupJoinRequestInfo"
-  "\022\031\n\021requester_user_id\030\001 \001(\t\022\026\n\016requester"
-  "_name\030\002 \001(\t\022\024\n\014requested_at\030\003 \001(\003\"\'\n\024C_F"
-  "riendRequest_Find\022\017\n\007user_id\030\001 \001(\t\"N\n\024S_"
-  "FriendRequest_Find\022\r\n\005exist\030\001 \001(\010\022\'\n\tuse"
-  "r_info\030\002 \001(\0132\024.Protocol.FriendInfo\"-\n\023C_"
-  "FriendRequest_Add\022\026\n\016friend_user_id\030\001 \001("
-  "\t\"7\n\023S_FriendRequest_Add\022\017\n\007success\030\001 \001("
-  "\010\022\017\n\007message\030\002 \001(\t\"0\n\026C_FriendRequest_Ca"
-  "ncel\022\026\n\016friend_user_id\030\001 \001(\t\":\n\026S_Friend"
-  "Request_Cancel\022\017\n\007success\030\001 \001(\010\022\017\n\007messa"
-  "ge\030\002 \001(\t\"0\n\026C_FriendRequest_Remove\022\026\n\016fr"
-  "iend_user_id\030\001 \001(\t\":\n\026S_FriendRequest_Re"
-  "move\022\017\n\007success\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\"w"
-  "\n\024C_FriendRequest_List\0228\n\004type\030\001 \001(\0162*.P"
-  "rotocol.C_FriendRequest_List.RequestType"
-  "\"%\n\013RequestType\022\014\n\010RECEIVED\020\000\022\010\n\004SENT\020\001\""
-  "A\n\024S_FriendRequest_List\022)\n\010requests\030\001 \003("
-  "\0132\027.Protocol.FriendRequest\"D\n\027C_FriendRe"
-  "quest_Respond\022\031\n\021requester_user_id\030\001 \001(\t"
-  "\022\016\n\006accept\030\002 \001(\010\"b\n\027S_FriendRequest_Resp"
-  "ond\022\017\n\007success\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\022%\n"
-  "\007friend_\030\003 \001(\0132\024.Protocol.FriendInfo\"\217\002\n"
-  "\024S_FriendRequest_Push\022<\n\nevent_type\030\001 \001("
-  "\0162(.Protocol.S_FriendRequest_Push.EventT"
-  "ype\022(\n\007request\030\002 \001(\0132\027.Protocol.FriendRe"
-  "quest\022$\n\006friend\030\003 \001(\0132\024.Protocol.FriendI"
-  "nfo\022\031\n\021cancelled_user_id\030\004 \001(\t\"N\n\tEventT"
-  "ype\022\024\n\020REQUEST_RECEIVED\020\000\022\024\n\020REQUEST_ACC"
-  "EPTED\020\001\022\025\n\021REQUEST_CANCELLED\020\002*\222\006\n\tError"
-  "Code\022\017\n\013ERR_SUCCESS\020\000\022\017\n\013ERR_UNKNOWN\020\001\022\027"
-  "\n\023ERR_SERVER_INTERNAL\020\002\022\026\n\022ERR_INVALID_P"
-  "ACKET\020\003\022\030\n\024ERR_VERSION_MISMATCH\020\004\022\024\n\020ERR"
-  "_UNAUTHORIZED\020\005\022\025\n\021ERR_INVALID_TOKEN\020\006\022\025"
-  "\n\021ERR_USER_ID_EMPTY\020d\022\030\n\024ERR_USER_ID_REQ"
-  "UIRED\020e\022\031\n\025ERR_PASSWORD_REQUIRED\020f\022\025\n\021ER"
-  "R_NAME_REQUIRED\020g\022\026\n\022ERR_USER_NOT_FOUND\020"
-  "h\022\030\n\024ERR_INVALID_PASSWORD\020i\022\033\n\027ERR_USER_"
-  "ALREADY_EXISTS\020j\022\026\n\021ERR_PAYLOAD_EMPTY\020\310\001"
-  "\022\030\n\023ERR_INVALID_CONV_ID\020\311\001\022\034\n\027ERR_INVALI"
-  "D_RECEIVER_ID\020\312\001\022\024\n\017ERR_INVALID_ACK\020\313\001\022\037"
-  "\n\032ERR_INVALID_FRIEND_USER_ID\020\254\002\022\030\n\023ERR_C"
-  "ANNOT_ADD_SELF\020\255\002\022\025\n\020ERR_NOT_A_FRIEND\020\256\002"
-  "\022!\n\034ERR_FRIEND_REQUEST_NOT_FOUND\020\257\002\022%\n E"
-  "RR_FILE_SERVICE_NOT_INITIALIZED\020\220\003\022&\n!ER"
-  "R_CLOUD_STORAGE_NOT_INITIALIZED\020\221\003\022\032\n\025ER"
-  "R_FILENAME_REQUIRED\020\222\003\022\032\n\025ERR_INVALID_FI"
-  "LE_SIZE\020\223\003\022\033\n\026ERR_MIME_TYPE_REQUIRED\020\224\003\022"
-  "\037\n\032ERR_FAILED_TO_GENERATE_URL\020\225\003\022\031\n\024ERR_"
-  "INVALID_FILE_URL\020\226\003b\006proto3"
+  "\n\004size\030\003 \001(\003\"J\n\010C_SignUp\022\017\n\007user_id\030\001 \001("
+  "\t\022\020\n\010password\030\002 \001(\t\022\014\n\004name\030\003 \001(\t\022\r\n\005ema"
+  "il\030\004 \001(\t\"=\n\010S_SignUp\022\017\n\007success\030\001 \001(\010\022\017\n"
+  "\007message\030\002 \001(\t\022\017\n\007user_id\030\003 \001(\t\",\n\007C_Log"
+  "in\022\017\n\007user_id\030\001 \001(\t\022\020\n\010password\030\002 \001(\t\"K\n"
+  "\007S_Login\022\017\n\007user_id\030\001 \001(\t\022\022\n\nauth_token\030"
+  "\002 \001(\t\022\014\n\004name\030\003 \001(\t\022\r\n\005email\030\004 \001(\t\"$\n\014C_"
+  "JoinDirect\022\024\n\014peer_user_id\030\001 \001(\t\"\037\n\013C_Jo"
+  "inGroup\022\020\n\010group_id\030\001 \001(\t\"#\n\rC_CreateGro"
+  "up\022\022\n\ngroup_name\030\001 \001(\t\"k\n\rS_CreateGroup\022"
+  "\017\n\007success\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\022\020\n\010gro"
+  "up_id\030\003 \001(\t\022\022\n\ngroup_name\030\004 \001(\t\022\022\n\ngroup"
+  "_code\030\005 \001(\t\"k\n\006C_Chat\022\017\n\007conv_id\030\001 \001(\t\022\025"
+  "\n\rclient_msg_id\030\002 \001(\003\022&\n\007payload\030\003 \001(\0132\025"
+  ".Protocol.ChatPayload\022\021\n\tts_client\030\004 \001(\003"
+  "\"\225\001\n\006S_Chat\022\017\n\007conv_id\030\001 \001(\t\022\025\n\rclient_m"
+  "sg_id\030\002 \001(\003\022\025\n\rserver_msg_id\030\003 \001(\003\022\021\n\tse"
+  "nder_id\030\004 \001(\t\022&\n\007payload\030\005 \001(\0132\025.Protoco"
+  "l.ChatPayload\022\021\n\tts_server\030\006 \001(\003\"S\n\014C_Up"
+  "loadFile\022\020\n\010filename\030\001 \001(\t\022\014\n\004size\030\002 \001(\003"
+  "\022\021\n\tmime_type\030\003 \001(\t\022\020\n\010is_image\030\004 \001(\010\"\244\001"
+  "\n\014S_UploadFile\022\017\n\007success\030\001 \001(\010\022\017\n\007messa"
+  "ge\030\002 \001(\t\022\017\n\007file_id\030\003 \001(\t\022\022\n\nupload_url\030"
+  "\004 \001(\t\022\024\n\014download_url\030\005 \001(\t\022\025\n\rthumbnail"
+  "_url\030\006 \001(\t\022\022\n\nexpires_at\030\007 \001(\003\022\014\n\004path\030\010"
+  " \001(\t\"/\n\005C_Ack\022\017\n\007conv_id\030\001 \001(\t\022\025\n\rserver"
+  "_msg_id\030\002 \001(\003\"\"\n\016C_FetchOffline\022\020\n\010since"
+  "_ts\030\001 \001(\003\"4\n\016S_MessageBatch\022\"\n\010messages\030"
+  "\001 \003(\0132\020.Protocol.S_Chat\"Q\n\007S_Error\022\'\n\ner"
+  "ror_code\030\001 \001(\0162\023.Protocol.ErrorCode\022\014\n\004c"
+  "ode\030\002 \001(\r\022\017\n\007message\030\003 \001(\t\"\r\n\013C_Heartbea"
+  "t\"\r\n\013S_Heartbeat\"\201\001\n\nFriendInfo\022\017\n\007user_"
+  "id\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\026\n\016status_message"
+  "\030\003 \001(\t\022\031\n\021profile_image_url\030\004 \001(\t\022\021\n\tlas"
+  "t_seen\030\005 \001(\003\022\016\n\006status\030\006 \001(\t\"\237\001\n\rFriendR"
+  "equest\022\031\n\021requester_user_id\030\001 \001(\t\022\026\n\016req"
+  "uester_name\030\002 \001(\t\022 \n\030requester_status_me"
+  "ssage\030\003 \001(\t\022#\n\033requester_profile_image_u"
+  "rl\030\004 \001(\t\022\024\n\014requested_at\030\005 \001(\003\"\016\n\014C_Frie"
+  "ndList\"5\n\014S_FriendList\022%\n\007friends\030\001 \003(\0132"
+  "\024.Protocol.FriendInfo\"m\n\tGroupInfo\022\020\n\010gr"
+  "oup_id\030\001 \001(\t\022\022\n\ngroup_name\030\002 \001(\t\022\022\n\ngrou"
+  "p_code\030\003 \001(\t\022\022\n\ncreator_id\030\004 \001(\t\022\022\n\ncrea"
+  "ted_at\030\005 \001(\003\"\r\n\013C_GroupList\"2\n\013S_GroupLi"
+  "st\022#\n\006groups\030\001 \003(\0132\023.Protocol.GroupInfo\""
+  "(\n\022C_GroupJoinRequest\022\022\n\ngroup_code\030\001 \001("
+  "\t\"\\\n\022S_GroupJoinRequest\022\017\n\007success\030\001 \001(\010"
+  "\022\017\n\007message\030\002 \001(\t\022\020\n\010group_id\030\003 \001(\t\022\022\n\ng"
+  "roup_name\030\004 \001(\t\"R\n\023C_GroupJoinResponse\022\020"
+  "\n\010group_id\030\001 \001(\t\022\031\n\021requester_user_id\030\002 "
+  "\001(\t\022\016\n\006accept\030\003 \001(\010\"7\n\023S_GroupJoinRespon"
+  "se\022\017\n\007success\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\"*\n\026"
+  "C_GroupJoinRequestList\022\020\n\010group_id\030\001 \001(\t"
+  "\"J\n\026S_GroupJoinRequestList\0220\n\010requests\030\001"
+  " \003(\0132\036.Protocol.GroupJoinRequestInfo\"_\n\024"
+  "GroupJoinRequestInfo\022\031\n\021requester_user_i"
+  "d\030\001 \001(\t\022\026\n\016requester_name\030\002 \001(\t\022\024\n\014reque"
+  "sted_at\030\003 \001(\003\"\'\n\024C_FriendRequest_Find\022\017\n"
+  "\007user_id\030\001 \001(\t\"N\n\024S_FriendRequest_Find\022\r"
+  "\n\005exist\030\001 \001(\010\022\'\n\tuser_info\030\002 \001(\0132\024.Proto"
+  "col.FriendInfo\"-\n\023C_FriendRequest_Add\022\026\n"
+  "\016friend_user_id\030\001 \001(\t\"7\n\023S_FriendRequest"
+  "_Add\022\017\n\007success\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\"0"
+  "\n\026C_FriendRequest_Cancel\022\026\n\016friend_user_"
+  "id\030\001 \001(\t\":\n\026S_FriendRequest_Cancel\022\017\n\007su"
+  "ccess\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\"0\n\026C_Friend"
+  "Request_Remove\022\026\n\016friend_user_id\030\001 \001(\t\":"
+  "\n\026S_FriendRequest_Remove\022\017\n\007success\030\001 \001("
+  "\010\022\017\n\007message\030\002 \001(\t\"w\n\024C_FriendRequest_Li"
+  "st\0228\n\004type\030\001 \001(\0162*.Protocol.C_FriendRequ"
+  "est_List.RequestType\"%\n\013RequestType\022\014\n\010R"
+  "ECEIVED\020\000\022\010\n\004SENT\020\001\"A\n\024S_FriendRequest_L"
+  "ist\022)\n\010requests\030\001 \003(\0132\027.Protocol.FriendR"
+  "equest\"D\n\027C_FriendRequest_Respond\022\031\n\021req"
+  "uester_user_id\030\001 \001(\t\022\016\n\006accept\030\002 \001(\010\"b\n\027"
+  "S_FriendRequest_Respond\022\017\n\007success\030\001 \001(\010"
+  "\022\017\n\007message\030\002 \001(\t\022%\n\007friend_\030\003 \001(\0132\024.Pro"
+  "tocol.FriendInfo\"\217\002\n\024S_FriendRequest_Pus"
+  "h\022<\n\nevent_type\030\001 \001(\0162(.Protocol.S_Frien"
+  "dRequest_Push.EventType\022(\n\007request\030\002 \001(\013"
+  "2\027.Protocol.FriendRequest\022$\n\006friend\030\003 \001("
+  "\0132\024.Protocol.FriendInfo\022\031\n\021cancelled_use"
+  "r_id\030\004 \001(\t\"N\n\tEventType\022\024\n\020REQUEST_RECEI"
+  "VED\020\000\022\024\n\020REQUEST_ACCEPTED\020\001\022\025\n\021REQUEST_C"
+  "ANCELLED\020\002*\222\006\n\tErrorCode\022\017\n\013ERR_SUCCESS\020"
+  "\000\022\017\n\013ERR_UNKNOWN\020\001\022\027\n\023ERR_SERVER_INTERNA"
+  "L\020\002\022\026\n\022ERR_INVALID_PACKET\020\003\022\030\n\024ERR_VERSI"
+  "ON_MISMATCH\020\004\022\024\n\020ERR_UNAUTHORIZED\020\005\022\025\n\021E"
+  "RR_INVALID_TOKEN\020\006\022\025\n\021ERR_USER_ID_EMPTY\020"
+  "d\022\030\n\024ERR_USER_ID_REQUIRED\020e\022\031\n\025ERR_PASSW"
+  "ORD_REQUIRED\020f\022\025\n\021ERR_NAME_REQUIRED\020g\022\026\n"
+  "\022ERR_USER_NOT_FOUND\020h\022\030\n\024ERR_INVALID_PAS"
+  "SWORD\020i\022\033\n\027ERR_USER_ALREADY_EXISTS\020j\022\026\n\021"
+  "ERR_PAYLOAD_EMPTY\020\310\001\022\030\n\023ERR_INVALID_CONV"
+  "_ID\020\311\001\022\034\n\027ERR_INVALID_RECEIVER_ID\020\312\001\022\024\n\017"
+  "ERR_INVALID_ACK\020\313\001\022\037\n\032ERR_INVALID_FRIEND"
+  "_USER_ID\020\254\002\022\030\n\023ERR_CANNOT_ADD_SELF\020\255\002\022\025\n"
+  "\020ERR_NOT_A_FRIEND\020\256\002\022!\n\034ERR_FRIEND_REQUE"
+  "ST_NOT_FOUND\020\257\002\022%\n ERR_FILE_SERVICE_NOT_"
+  "INITIALIZED\020\220\003\022&\n!ERR_CLOUD_STORAGE_NOT_"
+  "INITIALIZED\020\221\003\022\032\n\025ERR_FILENAME_REQUIRED\020"
+  "\222\003\022\032\n\025ERR_INVALID_FILE_SIZE\020\223\003\022\033\n\026ERR_MI"
+  "ME_TYPE_REQUIRED\020\224\003\022\037\n\032ERR_FAILED_TO_GEN"
+  "ERATE_URL\020\225\003\022\031\n\024ERR_INVALID_FILE_URL\020\226\003b"
+  "\006proto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_protocol_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_protocol_2eproto = {
-  false, false, 6747, descriptor_table_protodef_protocol_2eproto, "protocol.proto", 
+  false, false, 6767, descriptor_table_protodef_protocol_2eproto, "protocol.proto", 
   &descriptor_table_protocol_2eproto_once, nullptr, 0, 50,
   schemas, file_default_instances, TableStruct_protocol_2eproto::offsets,
   file_level_metadata_protocol_2eproto, file_level_enum_descriptors_protocol_2eproto, file_level_service_descriptors_protocol_2eproto,
@@ -5196,9 +5201,9 @@ C_SignUp::C_SignUp(const C_SignUp& from)
     name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_name(), 
       GetArenaForAllocation());
   }
-  status_message_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  if (!from._internal_status_message().empty()) {
-    status_message_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_status_message(), 
+  email_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_email().empty()) {
+    email_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_email(), 
       GetArenaForAllocation());
   }
   // @@protoc_insertion_point(copy_constructor:Protocol.C_SignUp)
@@ -5208,7 +5213,7 @@ void C_SignUp::SharedCtor() {
 user_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 password_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-status_message_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+email_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
 C_SignUp::~C_SignUp() {
@@ -5222,7 +5227,7 @@ void C_SignUp::SharedDtor() {
   user_id_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   password_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   name_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  status_message_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  email_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
 void C_SignUp::ArenaDtor(void* object) {
@@ -5244,7 +5249,7 @@ void C_SignUp::Clear() {
   user_id_.ClearToEmpty();
   password_.ClearToEmpty();
   name_.ClearToEmpty();
-  status_message_.ClearToEmpty();
+  email_.ClearToEmpty();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -5281,12 +5286,12 @@ const char* C_SignUp::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // string status_message = 4;
+      // string email = 4;
       case 4:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
-          auto str = _internal_mutable_status_message();
+          auto str = _internal_mutable_email();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.C_SignUp.status_message"));
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.C_SignUp.email"));
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -5349,14 +5354,14 @@ failure:
         3, this->_internal_name(), target);
   }
 
-  // string status_message = 4;
-  if (!this->status_message().empty()) {
+  // string email = 4;
+  if (!this->email().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_status_message().data(), static_cast<int>(this->_internal_status_message().length()),
+      this->_internal_email().data(), static_cast<int>(this->_internal_email().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "Protocol.C_SignUp.status_message");
+      "Protocol.C_SignUp.email");
     target = stream->WriteStringMaybeAliased(
-        4, this->_internal_status_message(), target);
+        4, this->_internal_email(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -5396,11 +5401,11 @@ size_t C_SignUp::ByteSizeLong() const {
         this->_internal_name());
   }
 
-  // string status_message = 4;
-  if (!this->status_message().empty()) {
+  // string email = 4;
+  if (!this->email().empty()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_status_message());
+        this->_internal_email());
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -5443,8 +5448,8 @@ void C_SignUp::MergeFrom(const C_SignUp& from) {
   if (!from.name().empty()) {
     _internal_set_name(from._internal_name());
   }
-  if (!from.status_message().empty()) {
-    _internal_set_status_message(from._internal_status_message());
+  if (!from.email().empty()) {
+    _internal_set_email(from._internal_email());
   }
 }
 
@@ -5486,8 +5491,8 @@ void C_SignUp::InternalSwap(C_SignUp* other) {
   );
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
-      &status_message_, GetArenaForAllocation(),
-      &other->status_message_, other->GetArenaForAllocation()
+      &email_, GetArenaForAllocation(),
+      &other->email_, other->GetArenaForAllocation()
   );
 }
 
@@ -6041,12 +6046,24 @@ S_Login::S_Login(const S_Login& from)
     auth_token_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_auth_token(), 
       GetArenaForAllocation());
   }
+  name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_name().empty()) {
+    name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_name(), 
+      GetArenaForAllocation());
+  }
+  email_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_email().empty()) {
+    email_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_email(), 
+      GetArenaForAllocation());
+  }
   // @@protoc_insertion_point(copy_constructor:Protocol.S_Login)
 }
 
 void S_Login::SharedCtor() {
 user_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 auth_token_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+email_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
 S_Login::~S_Login() {
@@ -6059,6 +6076,8 @@ void S_Login::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   user_id_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   auth_token_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  name_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  email_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
 void S_Login::ArenaDtor(void* object) {
@@ -6079,6 +6098,8 @@ void S_Login::Clear() {
 
   user_id_.ClearToEmpty();
   auth_token_.ClearToEmpty();
+  name_.ClearToEmpty();
+  email_.ClearToEmpty();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -6103,6 +6124,24 @@ const char* S_Login::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::in
           auto str = _internal_mutable_auth_token();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.S_Login.auth_token"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string name = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+          auto str = _internal_mutable_name();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.S_Login.name"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string email = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
+          auto str = _internal_mutable_email();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.S_Login.email"));
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -6155,6 +6194,26 @@ failure:
         2, this->_internal_auth_token(), target);
   }
 
+  // string name = 3;
+  if (!this->name().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_name().data(), static_cast<int>(this->_internal_name().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.S_Login.name");
+    target = stream->WriteStringMaybeAliased(
+        3, this->_internal_name(), target);
+  }
+
+  // string email = 4;
+  if (!this->email().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_email().data(), static_cast<int>(this->_internal_email().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.S_Login.email");
+    target = stream->WriteStringMaybeAliased(
+        4, this->_internal_email(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -6183,6 +6242,20 @@ size_t S_Login::ByteSizeLong() const {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_auth_token());
+  }
+
+  // string name = 3;
+  if (!this->name().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_name());
+  }
+
+  // string email = 4;
+  if (!this->email().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_email());
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -6222,6 +6295,12 @@ void S_Login::MergeFrom(const S_Login& from) {
   if (!from.auth_token().empty()) {
     _internal_set_auth_token(from._internal_auth_token());
   }
+  if (!from.name().empty()) {
+    _internal_set_name(from._internal_name());
+  }
+  if (!from.email().empty()) {
+    _internal_set_email(from._internal_email());
+  }
 }
 
 void S_Login::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
@@ -6254,6 +6333,16 @@ void S_Login::InternalSwap(S_Login* other) {
       &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       &auth_token_, GetArenaForAllocation(),
       &other->auth_token_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &name_, GetArenaForAllocation(),
+      &other->name_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &email_, GetArenaForAllocation(),
+      &other->email_, other->GetArenaForAllocation()
   );
 }
 

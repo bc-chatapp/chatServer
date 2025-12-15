@@ -13,10 +13,10 @@ public:
 	explicit AuthService(UserManager& userManager) : _userManager(userManager) { }
 	~AuthService() = default;
 
-	// ?뚯썝媛???
-	bool SignUp(sessionPtr& session, uint64 reqId, const string& userId, 
-	            const string& password, const string& name, 
-	            const string& statusMessage = "");
+	// 회원가입
+	bool SignUp(sessionPtr& session, uint64 reqId, const string& userId,
+	            const string& password, const string& name,
+	            const string& email);
 
 	// 로그인 (비밀번호 확인 포함)
 	bool Login(sessionPtr& session, uint64 reqId, const string& userId, const string& password);
@@ -27,7 +27,7 @@ private:
 	// 비밀번호 해싱 (간단한 해시, 추후 bcrypt로 개선 가능)
 	static string HashPassword(const string& password);
 	
-	// Auth Token 생성
+	// Auth Token 생성 (JWT)
 	static string GenerateAuthToken(const string& userId);
 	
 	// 에러 처리

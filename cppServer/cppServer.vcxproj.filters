@@ -72,6 +72,9 @@
     <ClCompile Include="Cloud\CloudStorageGCS.cpp">
       <Filter>Cloud</Filter>
     </ClCompile>
+    <ClCompile Include="Service\TokenManager.cpp">
+      <Filter>Service</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -127,6 +130,9 @@
     </ClInclude>
     <ClInclude Include="Cloud\CloudStorage.h">
       <Filter>Cloud</Filter>
+    </ClInclude>
+    <ClInclude Include="Service\TokenManager.h">
+      <Filter>Service</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

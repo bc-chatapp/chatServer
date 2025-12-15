@@ -4,9 +4,7 @@
 #include <iostream>
 #include <ctime>
 
-// ============================================
-// ?ъ슜??愿由?愿??
-// ============================================
+
 
 bool UserRepository::CreateUser(const string& userId, const string& passwordHash,
                                 const string& name, const string& statusMessage) {
@@ -15,7 +13,7 @@ bool UserRepository::CreateUser(const string& userId, const string& passwordHash
         auto schema = db.GetSchema();
         auto users = schema.getTable("users");
         
-        // ?대? 議댁옱?섎뒗吏 ?뺤씤
+
         auto existing = users.select("user_id")
                         .where("user_id = :uid")
                         .bind("uid", userId)
@@ -57,6 +55,8 @@ bool UserRepository::UserExists(const string& userId) {
     }
 }
 
+
+
 bool UserRepository::GetUser(const string& userId, UserInfo& userInfo) {
     try {
         auto& db = DBManager::GetInstance();
@@ -82,7 +82,7 @@ bool UserRepository::GetUser(const string& userId, UserInfo& userInfo) {
             userInfo.name = row[2].get<string>();
         }
         if (!row[3].isNull()) {
-            userInfo.statusMessage = row[3].get<string>();
+            userInfo.email = row[3].get<string>();
         }
         if (!row[4].isNull()) {
             userInfo.profileImageUrl = row[4].get<string>();
@@ -151,7 +151,7 @@ bool UserRepository::GetUserWithPassword(const string& userId, UserInfo& userInf
             userInfo.name = row[3].get<string>();
         }
         if (!row[4].isNull()) {
-            userInfo.statusMessage = row[4].get<string>();
+            userInfo.email = row[4].get<string>();
         }
         if (!row[5].isNull()) {
             userInfo.profileImageUrl = row[5].get<string>();
@@ -213,6 +213,8 @@ bool UserRepository::UpdateAuthToken(const string& userId, const string& authTok
     }
 }
 
+
+
 bool UserRepository::UpdateLastSeen(const string& userId) {
     try {
         auto& db = DBManager::GetInstance();
@@ -232,6 +234,8 @@ bool UserRepository::UpdateLastSeen(const string& userId) {
         return false;
     }
 }
+
+
 
 bool UserRepository::GetUserIdByToken(const string& authToken, string& userId) {
     try {
