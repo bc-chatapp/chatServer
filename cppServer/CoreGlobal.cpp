@@ -38,31 +38,20 @@ int64 Nowts()
 static bool LoadGCPConfig(string& projectId, string& bucketName, string& credentialsPath)
 {
     try {
-        // config 폴더 경로 (cppServer/cppServer/config/)
         ::filesystem::path configDir = "config";
+
+
         ::filesystem::path adminFile = configDir / "googleCloud_admin.txt";
-        
-        // googleCloud_admin.txt 
         ifstream file(adminFile);
         if (!file.is_open()) {
             cerr << "[CoreGlobal] Failed to open: " << adminFile << endl;
             return false;
         }
         
-        // project ID
-        if (!getline(file, projectId)) {
-            cerr << "[CoreGlobal] Failed to read project ID from " << adminFile << endl;
-            file.close();
+        if (!getline(file, projectId) || !getline(file, bucketName)) {
+            cerr << "[CoreGlobal] file is lacking" << endl;
             return false;
         }
-        
-        // bucket name
-        if (!getline(file, bucketName)) {
-            cerr << "[CoreGlobal] Failed to read bucket name from " << adminFile << endl;
-            file.close();
-            return false;
-        }
-        
         file.close();
         
         // 공백 제거
@@ -77,30 +66,20 @@ static bool LoadGCPConfig(string& projectId, string& bucketName, string& credent
         }
         
         // config 폴더에서 .json 파일 찾기
-        string jsonPath;
-        try {
-            for (const auto& entry : ::filesystem::directory_iterator(configDir)) {
-                if (entry.is_regular_file() && entry.path().extension() == ".json") {
-                    jsonPath = entry.path().string();
-                    break;
-                }
-            }
-        }
-        catch (const exception& e) {
-            cerr << "[CoreGlobal] Failed to search JSON file: " << e.what() << endl;
+        ::filesystem::path keyFile = configDir / "gcp_key.json";
+
+        if (!::filesystem::exists(keyFile)) {
+            cerr << "[CoreGlobal] GCP 인증 키 파일을 찾을 수 없습니다: " << keyFile << endl;
             return false;
         }
+
+        credentialsPath = keyFile.string();
+
         
-        if (jsonPath.empty()) {
-            cerr << "[CoreGlobal] No JSON credentials file found " << endl;
-            return false;
-        }
-        
-        credentialsPath = jsonPath;
-        
-        cout << "[CoreGlobal] GCP Config loaded: projectId=" << projectId 
-             << ", bucketName=" << bucketName 
-             << ", credentialsPath=" << credentialsPath << endl;
+        cout << "[CoreGlobal] GCP Config loaded:" << endl;
+        cout << "  - Project ID: " << projectId << endl;
+        cout << "  - Bucket:     " << bucketName << endl;
+        cout << "  - Key File:   " << credentialsPath << endl;
         
         return true;
     }

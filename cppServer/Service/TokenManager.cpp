@@ -45,7 +45,7 @@ string TokenManager::GenerateToken(const string& userId)
 	// 필요 시 lazy-load
 	if (SECRET_KEY.empty())
 	{
-		LoadSecret("config/jwt_key");
+		LoadSecret("config/jwt_key.txt");
 	}
 
 	if (SECRET_KEY.empty())
@@ -72,7 +72,7 @@ bool TokenManager::ValidateToken(const string& token, string& outUserId)
 	// 필요 시 lazy-load
 	if (SECRET_KEY.empty())
 	{
-		LoadSecret("config/jwt_key");
+		LoadSecret("config/jwt_key.txt");
 	}
 
 	if (SECRET_KEY.empty())
