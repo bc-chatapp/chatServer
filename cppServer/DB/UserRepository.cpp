@@ -7,7 +7,8 @@
 
 
 bool UserRepository::CreateUser(const string& userId, const string& passwordHash,
-                                const string& name, const string& statusMessage) {
+                                const string& name, const string& email) 
+{
     try {
         auto& db = DBManager::GetInstance();
         auto schema = db.GetSchema();
@@ -25,8 +26,8 @@ bool UserRepository::CreateUser(const string& userId, const string& passwordHash
         }
         
         // 사용자 생성
-        users.insert("user_id", "password_hash", "name", "status_message")
-             .values(userId, passwordHash, name, statusMessage)
+        users.insert("user_id", "password_hash", "name", "email")
+             .values(userId, passwordHash, name, email)
              .execute();
         
         cout << "[UserRepository] 사용자 생성 성공: " << userId << endl;
@@ -63,30 +64,21 @@ bool UserRepository::GetUser(const string& userId, UserInfo& userInfo) {
         auto schema = db.GetSchema();
         auto users = schema.getTable("users");
         
-        auto result = users.select("user_id", "auth_token", "name", "status_message", 
-                                   "profile_image_url", "last_seen")
+        auto result = users.select("user_id", "auth_token", "name", "email",
+                                    "status_message", "profile_image_url", "last_seen")
                      .where("user_id = :uid")
                      .bind("uid", userId)
                      .execute();
         
         auto row = result.fetchOne();
-        if (!row) {
-            return false;
-        }
+        if (!row) return false;
         
         userInfo.userId = row[0].get<string>();
-        if (!row[1].isNull()) {
-            userInfo.authToken = row[1].get<string>();
-        }
-        if (!row[2].isNull()) {
-            userInfo.name = row[2].get<string>();
-        }
-        if (!row[3].isNull()) {
-            userInfo.email = row[3].get<string>();
-        }
-        if (!row[4].isNull()) {
-            userInfo.profileImageUrl = row[4].get<string>();
-        }
+        if (!row[1].isNull()) userInfo.authToken = row[1].get<string>();
+        if (!row[2].isNull()) userInfo.name = row[2].get<string>();
+        if (!row[3].isNull()) userInfo.email = row[3].get<string>(); 
+        if (!row[4].isNull()) userInfo.profileImageUrl = row[4].get<string>();
+        
         
         // last_seen 파싱
         if (!row[5].isNull()) {
@@ -144,18 +136,11 @@ bool UserRepository::GetUserWithPassword(const string& userId, UserInfo& userInf
         
         userInfo.userId = row[0].get<string>();
         userInfo.passwordHash = row[1].get<string>();
-        if (!row[2].isNull()) {
-            userInfo.authToken = row[2].get<string>();
-        }
-        if (!row[3].isNull()) {
-            userInfo.name = row[3].get<string>();
-        }
-        if (!row[4].isNull()) {
-            userInfo.email = row[4].get<string>();
-        }
-        if (!row[5].isNull()) {
-            userInfo.profileImageUrl = row[5].get<string>();
-        }
+        if (!row[2].isNull()) userInfo.authToken = row[2].get<string>();
+        if (!row[3].isNull()) userInfo.name = row[3].get<string>();
+        if (!row[4].isNull()) userInfo.email = row[4].get<string>(); 
+        if (!row[5].isNull()) userInfo.profileImageUrl = row[5].get<string>();
+        
         
         // last_seen 파싱
         if (!row[6].isNull()) {
