@@ -34,12 +34,16 @@ export enum ErrorCode {
   ERR_PASSWORD_REQUIRED = 102,
   /** ERR_NAME_REQUIRED - 이름이 필요함 */
   ERR_NAME_REQUIRED = 103,
+  /** ERR_EMAIL_REQUIRED - 이메일이 필요함 */
+  ERR_EMAIL_REQUIRED = 104,
   /** ERR_USER_NOT_FOUND - 사용자를 찾을 수 없음 */
-  ERR_USER_NOT_FOUND = 104,
+  ERR_USER_NOT_FOUND = 105,
   /** ERR_INVALID_PASSWORD - 비밀번호가 올바르지 않음 */
-  ERR_INVALID_PASSWORD = 105,
+  ERR_INVALID_PASSWORD = 106,
   /** ERR_USER_ALREADY_EXISTS - 사용자가 이미 존재함 */
-  ERR_USER_ALREADY_EXISTS = 106,
+  ERR_USER_ALREADY_EXISTS = 107,
+  /** ERR_EMAIL_ALREADY_EXISTS - 사용자가 이미 존재함 */
+  ERR_EMAIL_ALREADY_EXISTS = 108,
   /** ERR_PAYLOAD_EMPTY - 200~299: 채팅 관련 */
   ERR_PAYLOAD_EMPTY = 200,
   /** ERR_INVALID_CONV_ID - 대화방 ID가 유효하지 않음 */
@@ -109,14 +113,20 @@ export function errorCodeFromJSON(object: any): ErrorCode {
     case "ERR_NAME_REQUIRED":
       return ErrorCode.ERR_NAME_REQUIRED;
     case 104:
+    case "ERR_EMAIL_REQUIRED":
+      return ErrorCode.ERR_EMAIL_REQUIRED;
+    case 105:
     case "ERR_USER_NOT_FOUND":
       return ErrorCode.ERR_USER_NOT_FOUND;
-    case 105:
+    case 106:
     case "ERR_INVALID_PASSWORD":
       return ErrorCode.ERR_INVALID_PASSWORD;
-    case 106:
+    case 107:
     case "ERR_USER_ALREADY_EXISTS":
       return ErrorCode.ERR_USER_ALREADY_EXISTS;
+    case 108:
+    case "ERR_EMAIL_ALREADY_EXISTS":
+      return ErrorCode.ERR_EMAIL_ALREADY_EXISTS;
     case 200:
     case "ERR_PAYLOAD_EMPTY":
       return ErrorCode.ERR_PAYLOAD_EMPTY;
@@ -193,12 +203,16 @@ export function errorCodeToJSON(object: ErrorCode): string {
       return "ERR_PASSWORD_REQUIRED";
     case ErrorCode.ERR_NAME_REQUIRED:
       return "ERR_NAME_REQUIRED";
+    case ErrorCode.ERR_EMAIL_REQUIRED:
+      return "ERR_EMAIL_REQUIRED";
     case ErrorCode.ERR_USER_NOT_FOUND:
       return "ERR_USER_NOT_FOUND";
     case ErrorCode.ERR_INVALID_PASSWORD:
       return "ERR_INVALID_PASSWORD";
     case ErrorCode.ERR_USER_ALREADY_EXISTS:
       return "ERR_USER_ALREADY_EXISTS";
+    case ErrorCode.ERR_EMAIL_ALREADY_EXISTS:
+      return "ERR_EMAIL_ALREADY_EXISTS";
     case ErrorCode.ERR_PAYLOAD_EMPTY:
       return "ERR_PAYLOAD_EMPTY";
     case ErrorCode.ERR_INVALID_CONV_ID:
@@ -243,8 +257,19 @@ export interface Envelope {
   /** 로그인 인증 토큰(JWT 등) */
   authToken: string;
   /** AUTH */
+  cCheckId?: CCheckId | undefined;
+  sCheckId?: SCheckId | undefined;
+  cCheckEmail?: CCheckEmail | undefined;
+  sCheckEmail?: SCheckEmail | undefined;
+  cReqEmailVerify?: CRequestEmailVerify | undefined;
+  sReqEmailVerify?: SRequestEmailVerify | undefined;
+  cConfirmEmailVerify?: CConfirmEmailVerify | undefined;
+  sConfirmEmailVerify?: SConfirmEmailVerify | undefined;
   cSignup?: CSignUp | undefined;
-  sSignup?: SSignUp | undefined;
+  sSignup?:
+    | SSignUp
+    | undefined;
+  /** LOGIN */
   cLogin?: CLogin | undefined;
   sLogin?: SLogin | undefined;
   cJoinDirect?: CJoinDirect | undefined;
@@ -316,7 +341,45 @@ export interface FileMsg {
   size: number;
 }
 
-/** 회원가입 */
+/**
+ * -------------
+ * 회원가입
+ * ---------------
+ */
+export interface CCheckId {
+  userId: string;
+}
+
+export interface SCheckId {
+  isAvailable: boolean;
+}
+
+export interface CCheckEmail {
+  email: string;
+}
+
+export interface SCheckEmail {
+  isAvailable: boolean;
+}
+
+export interface CRequestEmailVerify {
+  email: string;
+}
+
+export interface SRequestEmailVerify {
+  success: boolean;
+  message: string;
+}
+
+export interface CConfirmEmailVerify {
+  email: string;
+  code: string;
+}
+
+export interface SConfirmEmailVerify {
+  success: boolean;
+}
+
 export interface CSignUp {
   userId: string;
   password: string;
@@ -327,10 +390,14 @@ export interface CSignUp {
 export interface SSignUp {
   success: boolean;
   message: string;
-  /** 생성된 사용자 ID */
   userId: string;
 }
 
+/**
+ * -------------
+ * 로그인
+ * ---------------
+ */
 export interface CLogin {
   userId: string;
   password: string;
@@ -691,6 +758,14 @@ function createBaseEnvelope(): Envelope {
     version: 0,
     requestId: 0,
     authToken: "",
+    cCheckId: undefined,
+    sCheckId: undefined,
+    cCheckEmail: undefined,
+    sCheckEmail: undefined,
+    cReqEmailVerify: undefined,
+    sReqEmailVerify: undefined,
+    cConfirmEmailVerify: undefined,
+    sConfirmEmailVerify: undefined,
     cSignup: undefined,
     sSignup: undefined,
     cLogin: undefined,
@@ -746,11 +821,35 @@ export const Envelope = {
     if (message.authToken !== "") {
       writer.uint32(26).string(message.authToken);
     }
+    if (message.cCheckId !== undefined) {
+      CCheckId.encode(message.cCheckId, writer.uint32(82).fork()).ldelim();
+    }
+    if (message.sCheckId !== undefined) {
+      SCheckId.encode(message.sCheckId, writer.uint32(90).fork()).ldelim();
+    }
+    if (message.cCheckEmail !== undefined) {
+      CCheckEmail.encode(message.cCheckEmail, writer.uint32(98).fork()).ldelim();
+    }
+    if (message.sCheckEmail !== undefined) {
+      SCheckEmail.encode(message.sCheckEmail, writer.uint32(106).fork()).ldelim();
+    }
+    if (message.cReqEmailVerify !== undefined) {
+      CRequestEmailVerify.encode(message.cReqEmailVerify, writer.uint32(114).fork()).ldelim();
+    }
+    if (message.sReqEmailVerify !== undefined) {
+      SRequestEmailVerify.encode(message.sReqEmailVerify, writer.uint32(122).fork()).ldelim();
+    }
+    if (message.cConfirmEmailVerify !== undefined) {
+      CConfirmEmailVerify.encode(message.cConfirmEmailVerify, writer.uint32(130).fork()).ldelim();
+    }
+    if (message.sConfirmEmailVerify !== undefined) {
+      SConfirmEmailVerify.encode(message.sConfirmEmailVerify, writer.uint32(138).fork()).ldelim();
+    }
     if (message.cSignup !== undefined) {
-      CSignUp.encode(message.cSignup, writer.uint32(82).fork()).ldelim();
+      CSignUp.encode(message.cSignup, writer.uint32(146).fork()).ldelim();
     }
     if (message.sSignup !== undefined) {
-      SSignUp.encode(message.sSignup, writer.uint32(90).fork()).ldelim();
+      SSignUp.encode(message.sSignup, writer.uint32(154).fork()).ldelim();
     }
     if (message.cLogin !== undefined) {
       CLogin.encode(message.cLogin, writer.uint32(162).fork()).ldelim();
@@ -905,10 +1004,66 @@ export const Envelope = {
             break;
           }
 
-          message.cSignup = CSignUp.decode(reader, reader.uint32());
+          message.cCheckId = CCheckId.decode(reader, reader.uint32());
           continue;
         case 11:
           if (tag !== 90) {
+            break;
+          }
+
+          message.sCheckId = SCheckId.decode(reader, reader.uint32());
+          continue;
+        case 12:
+          if (tag !== 98) {
+            break;
+          }
+
+          message.cCheckEmail = CCheckEmail.decode(reader, reader.uint32());
+          continue;
+        case 13:
+          if (tag !== 106) {
+            break;
+          }
+
+          message.sCheckEmail = SCheckEmail.decode(reader, reader.uint32());
+          continue;
+        case 14:
+          if (tag !== 114) {
+            break;
+          }
+
+          message.cReqEmailVerify = CRequestEmailVerify.decode(reader, reader.uint32());
+          continue;
+        case 15:
+          if (tag !== 122) {
+            break;
+          }
+
+          message.sReqEmailVerify = SRequestEmailVerify.decode(reader, reader.uint32());
+          continue;
+        case 16:
+          if (tag !== 130) {
+            break;
+          }
+
+          message.cConfirmEmailVerify = CConfirmEmailVerify.decode(reader, reader.uint32());
+          continue;
+        case 17:
+          if (tag !== 138) {
+            break;
+          }
+
+          message.sConfirmEmailVerify = SConfirmEmailVerify.decode(reader, reader.uint32());
+          continue;
+        case 18:
+          if (tag !== 146) {
+            break;
+          }
+
+          message.cSignup = CSignUp.decode(reader, reader.uint32());
+          continue;
+        case 19:
+          if (tag !== 154) {
             break;
           }
 
@@ -1201,6 +1356,18 @@ export const Envelope = {
       version: isSet(object.version) ? globalThis.Number(object.version) : 0,
       requestId: isSet(object.requestId) ? globalThis.Number(object.requestId) : 0,
       authToken: isSet(object.authToken) ? globalThis.String(object.authToken) : "",
+      cCheckId: isSet(object.cCheckId) ? CCheckId.fromJSON(object.cCheckId) : undefined,
+      sCheckId: isSet(object.sCheckId) ? SCheckId.fromJSON(object.sCheckId) : undefined,
+      cCheckEmail: isSet(object.cCheckEmail) ? CCheckEmail.fromJSON(object.cCheckEmail) : undefined,
+      sCheckEmail: isSet(object.sCheckEmail) ? SCheckEmail.fromJSON(object.sCheckEmail) : undefined,
+      cReqEmailVerify: isSet(object.cReqEmailVerify) ? CRequestEmailVerify.fromJSON(object.cReqEmailVerify) : undefined,
+      sReqEmailVerify: isSet(object.sReqEmailVerify) ? SRequestEmailVerify.fromJSON(object.sReqEmailVerify) : undefined,
+      cConfirmEmailVerify: isSet(object.cConfirmEmailVerify)
+        ? CConfirmEmailVerify.fromJSON(object.cConfirmEmailVerify)
+        : undefined,
+      sConfirmEmailVerify: isSet(object.sConfirmEmailVerify)
+        ? SConfirmEmailVerify.fromJSON(object.sConfirmEmailVerify)
+        : undefined,
       cSignup: isSet(object.cSignup) ? CSignUp.fromJSON(object.cSignup) : undefined,
       sSignup: isSet(object.sSignup) ? SSignUp.fromJSON(object.sSignup) : undefined,
       cLogin: isSet(object.cLogin) ? CLogin.fromJSON(object.cLogin) : undefined,
@@ -1293,6 +1460,30 @@ export const Envelope = {
     }
     if (message.authToken !== "") {
       obj.authToken = message.authToken;
+    }
+    if (message.cCheckId !== undefined) {
+      obj.cCheckId = CCheckId.toJSON(message.cCheckId);
+    }
+    if (message.sCheckId !== undefined) {
+      obj.sCheckId = SCheckId.toJSON(message.sCheckId);
+    }
+    if (message.cCheckEmail !== undefined) {
+      obj.cCheckEmail = CCheckEmail.toJSON(message.cCheckEmail);
+    }
+    if (message.sCheckEmail !== undefined) {
+      obj.sCheckEmail = SCheckEmail.toJSON(message.sCheckEmail);
+    }
+    if (message.cReqEmailVerify !== undefined) {
+      obj.cReqEmailVerify = CRequestEmailVerify.toJSON(message.cReqEmailVerify);
+    }
+    if (message.sReqEmailVerify !== undefined) {
+      obj.sReqEmailVerify = SRequestEmailVerify.toJSON(message.sReqEmailVerify);
+    }
+    if (message.cConfirmEmailVerify !== undefined) {
+      obj.cConfirmEmailVerify = CConfirmEmailVerify.toJSON(message.cConfirmEmailVerify);
+    }
+    if (message.sConfirmEmailVerify !== undefined) {
+      obj.sConfirmEmailVerify = SConfirmEmailVerify.toJSON(message.sConfirmEmailVerify);
     }
     if (message.cSignup !== undefined) {
       obj.cSignup = CSignUp.toJSON(message.cSignup);
@@ -1428,6 +1619,30 @@ export const Envelope = {
     message.version = object.version ?? 0;
     message.requestId = object.requestId ?? 0;
     message.authToken = object.authToken ?? "";
+    message.cCheckId = (object.cCheckId !== undefined && object.cCheckId !== null)
+      ? CCheckId.fromPartial(object.cCheckId)
+      : undefined;
+    message.sCheckId = (object.sCheckId !== undefined && object.sCheckId !== null)
+      ? SCheckId.fromPartial(object.sCheckId)
+      : undefined;
+    message.cCheckEmail = (object.cCheckEmail !== undefined && object.cCheckEmail !== null)
+      ? CCheckEmail.fromPartial(object.cCheckEmail)
+      : undefined;
+    message.sCheckEmail = (object.sCheckEmail !== undefined && object.sCheckEmail !== null)
+      ? SCheckEmail.fromPartial(object.sCheckEmail)
+      : undefined;
+    message.cReqEmailVerify = (object.cReqEmailVerify !== undefined && object.cReqEmailVerify !== null)
+      ? CRequestEmailVerify.fromPartial(object.cReqEmailVerify)
+      : undefined;
+    message.sReqEmailVerify = (object.sReqEmailVerify !== undefined && object.sReqEmailVerify !== null)
+      ? SRequestEmailVerify.fromPartial(object.sReqEmailVerify)
+      : undefined;
+    message.cConfirmEmailVerify = (object.cConfirmEmailVerify !== undefined && object.cConfirmEmailVerify !== null)
+      ? CConfirmEmailVerify.fromPartial(object.cConfirmEmailVerify)
+      : undefined;
+    message.sConfirmEmailVerify = (object.sConfirmEmailVerify !== undefined && object.sConfirmEmailVerify !== null)
+      ? SConfirmEmailVerify.fromPartial(object.sConfirmEmailVerify)
+      : undefined;
     message.cSignup = (object.cSignup !== undefined && object.cSignup !== null)
       ? CSignUp.fromPartial(object.cSignup)
       : undefined;
@@ -1860,6 +2075,496 @@ export const FileMsg = {
     message.url = object.url ?? "";
     message.filename = object.filename ?? "";
     message.size = object.size ?? 0;
+    return message;
+  },
+};
+
+function createBaseCCheckId(): CCheckId {
+  return { userId: "" };
+}
+
+export const CCheckId = {
+  encode(message: CCheckId, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.userId !== "") {
+      writer.uint32(10).string(message.userId);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CCheckId {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCCheckId();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.userId = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CCheckId {
+    return { userId: isSet(object.userId) ? globalThis.String(object.userId) : "" };
+  },
+
+  toJSON(message: CCheckId): unknown {
+    const obj: any = {};
+    if (message.userId !== "") {
+      obj.userId = message.userId;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CCheckId>, I>>(base?: I): CCheckId {
+    return CCheckId.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CCheckId>, I>>(object: I): CCheckId {
+    const message = createBaseCCheckId();
+    message.userId = object.userId ?? "";
+    return message;
+  },
+};
+
+function createBaseSCheckId(): SCheckId {
+  return { isAvailable: false };
+}
+
+export const SCheckId = {
+  encode(message: SCheckId, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.isAvailable !== false) {
+      writer.uint32(8).bool(message.isAvailable);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SCheckId {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSCheckId();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.isAvailable = reader.bool();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SCheckId {
+    return { isAvailable: isSet(object.isAvailable) ? globalThis.Boolean(object.isAvailable) : false };
+  },
+
+  toJSON(message: SCheckId): unknown {
+    const obj: any = {};
+    if (message.isAvailable !== false) {
+      obj.isAvailable = message.isAvailable;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SCheckId>, I>>(base?: I): SCheckId {
+    return SCheckId.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SCheckId>, I>>(object: I): SCheckId {
+    const message = createBaseSCheckId();
+    message.isAvailable = object.isAvailable ?? false;
+    return message;
+  },
+};
+
+function createBaseCCheckEmail(): CCheckEmail {
+  return { email: "" };
+}
+
+export const CCheckEmail = {
+  encode(message: CCheckEmail, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.email !== "") {
+      writer.uint32(10).string(message.email);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CCheckEmail {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCCheckEmail();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.email = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CCheckEmail {
+    return { email: isSet(object.email) ? globalThis.String(object.email) : "" };
+  },
+
+  toJSON(message: CCheckEmail): unknown {
+    const obj: any = {};
+    if (message.email !== "") {
+      obj.email = message.email;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CCheckEmail>, I>>(base?: I): CCheckEmail {
+    return CCheckEmail.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CCheckEmail>, I>>(object: I): CCheckEmail {
+    const message = createBaseCCheckEmail();
+    message.email = object.email ?? "";
+    return message;
+  },
+};
+
+function createBaseSCheckEmail(): SCheckEmail {
+  return { isAvailable: false };
+}
+
+export const SCheckEmail = {
+  encode(message: SCheckEmail, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.isAvailable !== false) {
+      writer.uint32(8).bool(message.isAvailable);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SCheckEmail {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSCheckEmail();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.isAvailable = reader.bool();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SCheckEmail {
+    return { isAvailable: isSet(object.isAvailable) ? globalThis.Boolean(object.isAvailable) : false };
+  },
+
+  toJSON(message: SCheckEmail): unknown {
+    const obj: any = {};
+    if (message.isAvailable !== false) {
+      obj.isAvailable = message.isAvailable;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SCheckEmail>, I>>(base?: I): SCheckEmail {
+    return SCheckEmail.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SCheckEmail>, I>>(object: I): SCheckEmail {
+    const message = createBaseSCheckEmail();
+    message.isAvailable = object.isAvailable ?? false;
+    return message;
+  },
+};
+
+function createBaseCRequestEmailVerify(): CRequestEmailVerify {
+  return { email: "" };
+}
+
+export const CRequestEmailVerify = {
+  encode(message: CRequestEmailVerify, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.email !== "") {
+      writer.uint32(10).string(message.email);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CRequestEmailVerify {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCRequestEmailVerify();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.email = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CRequestEmailVerify {
+    return { email: isSet(object.email) ? globalThis.String(object.email) : "" };
+  },
+
+  toJSON(message: CRequestEmailVerify): unknown {
+    const obj: any = {};
+    if (message.email !== "") {
+      obj.email = message.email;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CRequestEmailVerify>, I>>(base?: I): CRequestEmailVerify {
+    return CRequestEmailVerify.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CRequestEmailVerify>, I>>(object: I): CRequestEmailVerify {
+    const message = createBaseCRequestEmailVerify();
+    message.email = object.email ?? "";
+    return message;
+  },
+};
+
+function createBaseSRequestEmailVerify(): SRequestEmailVerify {
+  return { success: false, message: "" };
+}
+
+export const SRequestEmailVerify = {
+  encode(message: SRequestEmailVerify, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.success !== false) {
+      writer.uint32(8).bool(message.success);
+    }
+    if (message.message !== "") {
+      writer.uint32(18).string(message.message);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SRequestEmailVerify {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSRequestEmailVerify();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.success = reader.bool();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.message = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SRequestEmailVerify {
+    return {
+      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
+      message: isSet(object.message) ? globalThis.String(object.message) : "",
+    };
+  },
+
+  toJSON(message: SRequestEmailVerify): unknown {
+    const obj: any = {};
+    if (message.success !== false) {
+      obj.success = message.success;
+    }
+    if (message.message !== "") {
+      obj.message = message.message;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SRequestEmailVerify>, I>>(base?: I): SRequestEmailVerify {
+    return SRequestEmailVerify.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SRequestEmailVerify>, I>>(object: I): SRequestEmailVerify {
+    const message = createBaseSRequestEmailVerify();
+    message.success = object.success ?? false;
+    message.message = object.message ?? "";
+    return message;
+  },
+};
+
+function createBaseCConfirmEmailVerify(): CConfirmEmailVerify {
+  return { email: "", code: "" };
+}
+
+export const CConfirmEmailVerify = {
+  encode(message: CConfirmEmailVerify, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.email !== "") {
+      writer.uint32(10).string(message.email);
+    }
+    if (message.code !== "") {
+      writer.uint32(18).string(message.code);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CConfirmEmailVerify {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCConfirmEmailVerify();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.email = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.code = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CConfirmEmailVerify {
+    return {
+      email: isSet(object.email) ? globalThis.String(object.email) : "",
+      code: isSet(object.code) ? globalThis.String(object.code) : "",
+    };
+  },
+
+  toJSON(message: CConfirmEmailVerify): unknown {
+    const obj: any = {};
+    if (message.email !== "") {
+      obj.email = message.email;
+    }
+    if (message.code !== "") {
+      obj.code = message.code;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CConfirmEmailVerify>, I>>(base?: I): CConfirmEmailVerify {
+    return CConfirmEmailVerify.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CConfirmEmailVerify>, I>>(object: I): CConfirmEmailVerify {
+    const message = createBaseCConfirmEmailVerify();
+    message.email = object.email ?? "";
+    message.code = object.code ?? "";
+    return message;
+  },
+};
+
+function createBaseSConfirmEmailVerify(): SConfirmEmailVerify {
+  return { success: false };
+}
+
+export const SConfirmEmailVerify = {
+  encode(message: SConfirmEmailVerify, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.success !== false) {
+      writer.uint32(8).bool(message.success);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SConfirmEmailVerify {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSConfirmEmailVerify();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.success = reader.bool();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SConfirmEmailVerify {
+    return { success: isSet(object.success) ? globalThis.Boolean(object.success) : false };
+  },
+
+  toJSON(message: SConfirmEmailVerify): unknown {
+    const obj: any = {};
+    if (message.success !== false) {
+      obj.success = message.success;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SConfirmEmailVerify>, I>>(base?: I): SConfirmEmailVerify {
+    return SConfirmEmailVerify.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SConfirmEmailVerify>, I>>(object: I): SConfirmEmailVerify {
+    const message = createBaseSConfirmEmailVerify();
+    message.success = object.success ?? false;
     return message;
   },
 };

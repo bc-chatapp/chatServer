@@ -29,9 +29,11 @@ const ErrorCode$json = {
     {'1': 'ERR_USER_ID_REQUIRED', '2': 101},
     {'1': 'ERR_PASSWORD_REQUIRED', '2': 102},
     {'1': 'ERR_NAME_REQUIRED', '2': 103},
-    {'1': 'ERR_USER_NOT_FOUND', '2': 104},
-    {'1': 'ERR_INVALID_PASSWORD', '2': 105},
-    {'1': 'ERR_USER_ALREADY_EXISTS', '2': 106},
+    {'1': 'ERR_EMAIL_REQUIRED', '2': 104},
+    {'1': 'ERR_USER_NOT_FOUND', '2': 105},
+    {'1': 'ERR_INVALID_PASSWORD', '2': 106},
+    {'1': 'ERR_USER_ALREADY_EXISTS', '2': 107},
+    {'1': 'ERR_EMAIL_ALREADY_EXISTS', '2': 108},
     {'1': 'ERR_PAYLOAD_EMPTY', '2': 200},
     {'1': 'ERR_INVALID_CONV_ID', '2': 201},
     {'1': 'ERR_INVALID_RECEIVER_ID', '2': 202},
@@ -56,17 +58,18 @@ final $typed_data.Uint8List errorCodeDescriptor = $convert.base64Decode(
     'JWRVJfSU5URVJOQUwQAhIWChJFUlJfSU5WQUxJRF9QQUNLRVQQAxIYChRFUlJfVkVSU0lPTl9N'
     'SVNNQVRDSBAEEhQKEEVSUl9VTkFVVEhPUklaRUQQBRIVChFFUlJfSU5WQUxJRF9UT0tFThAGEh'
     'UKEUVSUl9VU0VSX0lEX0VNUFRZEGQSGAoURVJSX1VTRVJfSURfUkVRVUlSRUQQZRIZChVFUlJf'
-    'UEFTU1dPUkRfUkVRVUlSRUQQZhIVChFFUlJfTkFNRV9SRVFVSVJFRBBnEhYKEkVSUl9VU0VSX0'
-    '5PVF9GT1VORBBoEhgKFEVSUl9JTlZBTElEX1BBU1NXT1JEEGkSGwoXRVJSX1VTRVJfQUxSRUFE'
-    'WV9FWElTVFMQahIWChFFUlJfUEFZTE9BRF9FTVBUWRDIARIYChNFUlJfSU5WQUxJRF9DT05WX0'
-    'lEEMkBEhwKF0VSUl9JTlZBTElEX1JFQ0VJVkVSX0lEEMoBEhQKD0VSUl9JTlZBTElEX0FDSxDL'
-    'ARIfChpFUlJfSU5WQUxJRF9GUklFTkRfVVNFUl9JRBCsAhIYChNFUlJfQ0FOTk9UX0FERF9TRU'
-    'xGEK0CEhUKEEVSUl9OT1RfQV9GUklFTkQQrgISIQocRVJSX0ZSSUVORF9SRVFVRVNUX05PVF9G'
-    'T1VORBCvAhIlCiBFUlJfRklMRV9TRVJWSUNFX05PVF9JTklUSUFMSVpFRBCQAxImCiFFUlJfQ0'
-    'xPVURfU1RPUkFHRV9OT1RfSU5JVElBTElaRUQQkQMSGgoVRVJSX0ZJTEVOQU1FX1JFUVVJUkVE'
-    'EJIDEhoKFUVSUl9JTlZBTElEX0ZJTEVfU0laRRCTAxIbChZFUlJfTUlNRV9UWVBFX1JFUVVJUk'
-    'VEEJQDEh8KGkVSUl9GQUlMRURfVE9fR0VORVJBVEVfVVJMEJUDEhkKFEVSUl9JTlZBTElEX0ZJ'
-    'TEVfVVJMEJYD');
+    'UEFTU1dPUkRfUkVRVUlSRUQQZhIVChFFUlJfTkFNRV9SRVFVSVJFRBBnEhYKEkVSUl9FTUFJTF'
+    '9SRVFVSVJFRBBoEhYKEkVSUl9VU0VSX05PVF9GT1VORBBpEhgKFEVSUl9JTlZBTElEX1BBU1NX'
+    'T1JEEGoSGwoXRVJSX1VTRVJfQUxSRUFEWV9FWElTVFMQaxIcChhFUlJfRU1BSUxfQUxSRUFEWV'
+    '9FWElTVFMQbBIWChFFUlJfUEFZTE9BRF9FTVBUWRDIARIYChNFUlJfSU5WQUxJRF9DT05WX0lE'
+    'EMkBEhwKF0VSUl9JTlZBTElEX1JFQ0VJVkVSX0lEEMoBEhQKD0VSUl9JTlZBTElEX0FDSxDLAR'
+    'IfChpFUlJfSU5WQUxJRF9GUklFTkRfVVNFUl9JRBCsAhIYChNFUlJfQ0FOTk9UX0FERF9TRUxG'
+    'EK0CEhUKEEVSUl9OT1RfQV9GUklFTkQQrgISIQocRVJSX0ZSSUVORF9SRVFVRVNUX05PVF9GT1'
+    'VORBCvAhIlCiBFUlJfRklMRV9TRVJWSUNFX05PVF9JTklUSUFMSVpFRBCQAxImCiFFUlJfQ0xP'
+    'VURfU1RPUkFHRV9OT1RfSU5JVElBTElaRUQQkQMSGgoVRVJSX0ZJTEVOQU1FX1JFUVVJUkVEEJ'
+    'IDEhoKFUVSUl9JTlZBTElEX0ZJTEVfU0laRRCTAxIbChZFUlJfTUlNRV9UWVBFX1JFUVVJUkVE'
+    'EJQDEh8KGkVSUl9GQUlMRURfVE9fR0VORVJBVEVfVVJMEJUDEhkKFEVSUl9JTlZBTElEX0ZJTE'
+    'VfVVJMEJYD');
 
 @$core.Deprecated('Use envelopeDescriptor instead')
 const Envelope$json = {
@@ -76,8 +79,80 @@ const Envelope$json = {
     {'1': 'request_id', '3': 2, '4': 1, '5': 4, '10': 'requestId'},
     {'1': 'auth_token', '3': 3, '4': 1, '5': 9, '10': 'authToken'},
     {
-      '1': 'c_signup',
+      '1': 'c_check_id',
       '3': 10,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.C_CheckId',
+      '9': 0,
+      '10': 'cCheckId'
+    },
+    {
+      '1': 's_check_id',
+      '3': 11,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.S_CheckId',
+      '9': 0,
+      '10': 'sCheckId'
+    },
+    {
+      '1': 'c_check_email',
+      '3': 12,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.C_CheckEmail',
+      '9': 0,
+      '10': 'cCheckEmail'
+    },
+    {
+      '1': 's_check_email',
+      '3': 13,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.S_CheckEmail',
+      '9': 0,
+      '10': 'sCheckEmail'
+    },
+    {
+      '1': 'c_req_email_verify',
+      '3': 14,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.C_RequestEmailVerify',
+      '9': 0,
+      '10': 'cReqEmailVerify'
+    },
+    {
+      '1': 's_req_email_verify',
+      '3': 15,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.S_RequestEmailVerify',
+      '9': 0,
+      '10': 'sReqEmailVerify'
+    },
+    {
+      '1': 'c_confirm_email_verify',
+      '3': 16,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.C_ConfirmEmailVerify',
+      '9': 0,
+      '10': 'cConfirmEmailVerify'
+    },
+    {
+      '1': 's_confirm_email_verify',
+      '3': 17,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.S_ConfirmEmailVerify',
+      '9': 0,
+      '10': 'sConfirmEmailVerify'
+    },
+    {
+      '1': 'c_signup',
+      '3': 18,
       '4': 1,
       '5': 11,
       '6': '.Protocol.C_SignUp',
@@ -86,7 +161,7 @@ const Envelope$json = {
     },
     {
       '1': 's_signup',
-      '3': 11,
+      '3': 19,
       '4': 1,
       '5': 11,
       '6': '.Protocol.S_SignUp',
@@ -453,59 +528,70 @@ const Envelope$json = {
 /// Descriptor for `Envelope`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List envelopeDescriptor = $convert.base64Decode(
     'CghFbnZlbG9wZRIYCgd2ZXJzaW9uGAEgASgNUgd2ZXJzaW9uEh0KCnJlcXVlc3RfaWQYAiABKA'
-    'RSCXJlcXVlc3RJZBIdCgphdXRoX3Rva2VuGAMgASgJUglhdXRoVG9rZW4SLwoIY19zaWdudXAY'
-    'CiABKAsyEi5Qcm90b2NvbC5DX1NpZ25VcEgAUgdjU2lnbnVwEi8KCHNfc2lnbnVwGAsgASgLMh'
-    'IuUHJvdG9jb2wuU19TaWduVXBIAFIHc1NpZ251cBIsCgdjX2xvZ2luGBQgASgLMhEuUHJvdG9j'
-    'b2wuQ19Mb2dpbkgAUgZjTG9naW4SLAoHc19sb2dpbhgVIAEoCzIRLlByb3RvY29sLlNfTG9naW'
-    '5IAFIGc0xvZ2luEjwKDWNfam9pbl9kaXJlY3QYFiABKAsyFi5Qcm90b2NvbC5DX0pvaW5EaXJl'
-    'Y3RIAFILY0pvaW5EaXJlY3QSOQoMY19qb2luX2dyb3VwGBcgASgLMhUuUHJvdG9jb2wuQ19Kb2'
-    'luR3JvdXBIAFIKY0pvaW5Hcm91cBI/Cg5jX2NyZWF0ZV9ncm91cBgYIAEoCzIXLlByb3RvY29s'
-    'LkNfQ3JlYXRlR3JvdXBIAFIMY0NyZWF0ZUdyb3VwEj8KDnNfY3JlYXRlX2dyb3VwGBkgASgLMh'
-    'cuUHJvdG9jb2wuU19DcmVhdGVHcm91cEgAUgxzQ3JlYXRlR3JvdXASJgoFY19hY2sYGiABKAsy'
-    'Dy5Qcm90b2NvbC5DX0Fja0gAUgRjQWNrEiwKB3NfZXJyb3IYGyABKAsyES5Qcm90b2NvbC5TX0'
-    'Vycm9ySABSBnNFcnJvchI4CgtjX2hlYXJ0YmVhdBgcIAEoCzIVLlByb3RvY29sLkNfSGVhcnRi'
-    'ZWF0SABSCmNIZWFydGJlYXQSOAoLc19oZWFydGJlYXQYHSABKAsyFS5Qcm90b2NvbC5TX0hlYX'
-    'J0YmVhdEgAUgpzSGVhcnRiZWF0EikKBmNfY2hhdBgeIAEoCzIQLlByb3RvY29sLkNfQ2hhdEgA'
-    'UgVjQ2hhdBIpCgZzX2NoYXQYHyABKAsyEC5Qcm90b2NvbC5TX0NoYXRIAFIFc0NoYXQSQgoPY1'
-    '9mZXRjaF9vZmZsaW5lGCAgASgLMhguUHJvdG9jb2wuQ19GZXRjaE9mZmxpbmVIAFINY0ZldGNo'
-    'T2ZmbGluZRJCCg9zX21lc3NhZ2VfYmF0Y2gYISABKAsyGC5Qcm90b2NvbC5TX01lc3NhZ2VCYX'
-    'RjaEgAUg1zTWVzc2FnZUJhdGNoEjwKDWNfdXBsb2FkX2ZpbGUYIiABKAsyFi5Qcm90b2NvbC5D'
-    'X1VwbG9hZEZpbGVIAFILY1VwbG9hZEZpbGUSPAoNc191cGxvYWRfZmlsZRgjIAEoCzIWLlByb3'
-    'RvY29sLlNfVXBsb2FkRmlsZUgAUgtzVXBsb2FkRmlsZRI8Cg1jX2ZyaWVuZF9saXN0GCggASgL'
-    'MhYuUHJvdG9jb2wuQ19GcmllbmRMaXN0SABSC2NGcmllbmRMaXN0EjwKDXNfZnJpZW5kX2xpc3'
-    'QYKSABKAsyFi5Qcm90b2NvbC5TX0ZyaWVuZExpc3RIAFILc0ZyaWVuZExpc3QSOQoMY19ncm91'
-    'cF9saXN0GCogASgLMhUuUHJvdG9jb2wuQ19Hcm91cExpc3RIAFIKY0dyb3VwTGlzdBI5CgxzX2'
-    'dyb3VwX2xpc3QYKyABKAsyFS5Qcm90b2NvbC5TX0dyb3VwTGlzdEgAUgpzR3JvdXBMaXN0Ek8K'
-    'FGNfZ3JvdXBfam9pbl9yZXF1ZXN0GCwgASgLMhwuUHJvdG9jb2wuQ19Hcm91cEpvaW5SZXF1ZX'
-    'N0SABSEWNHcm91cEpvaW5SZXF1ZXN0Ek8KFHNfZ3JvdXBfam9pbl9yZXF1ZXN0GC0gASgLMhwu'
-    'UHJvdG9jb2wuU19Hcm91cEpvaW5SZXF1ZXN0SABSEXNHcm91cEpvaW5SZXF1ZXN0ElIKFWNfZ3'
-    'JvdXBfam9pbl9yZXNwb25zZRguIAEoCzIdLlByb3RvY29sLkNfR3JvdXBKb2luUmVzcG9uc2VI'
-    'AFISY0dyb3VwSm9pblJlc3BvbnNlElIKFXNfZ3JvdXBfam9pbl9yZXNwb25zZRgvIAEoCzIdLl'
-    'Byb3RvY29sLlNfR3JvdXBKb2luUmVzcG9uc2VIAFISc0dyb3VwSm9pblJlc3BvbnNlElwKGWNf'
-    'Z3JvdXBfam9pbl9yZXF1ZXN0X2xpc3QYMCABKAsyIC5Qcm90b2NvbC5DX0dyb3VwSm9pblJlcX'
-    'Vlc3RMaXN0SABSFWNHcm91cEpvaW5SZXF1ZXN0TGlzdBJcChlzX2dyb3VwX2pvaW5fcmVxdWVz'
-    'dF9saXN0GDEgASgLMiAuUHJvdG9jb2wuU19Hcm91cEpvaW5SZXF1ZXN0TGlzdEgAUhVzR3JvdX'
-    'BKb2luUmVxdWVzdExpc3QSUwoVY19mcmllbnRfcmVxdWVzdF9maW5kGDIgASgLMh4uUHJvdG9j'
-    'b2wuQ19GcmllbmRSZXF1ZXN0X0ZpbmRIAFISY0ZyaWVudFJlcXVlc3RGaW5kElMKFXNfZnJpZW'
-    '50X3JlcXVlc3RfZmluZBgzIAEoCzIeLlByb3RvY29sLlNfRnJpZW5kUmVxdWVzdF9GaW5kSABS'
-    'EnNGcmllbnRSZXF1ZXN0RmluZBJQChRjX2ZyaWVuZF9yZXF1ZXN0X2FkZBg0IAEoCzIdLlByb3'
-    'RvY29sLkNfRnJpZW5kUmVxdWVzdF9BZGRIAFIRY0ZyaWVuZFJlcXVlc3RBZGQSUAoUc19mcmll'
-    'bmRfcmVxdWVzdF9hZGQYNSABKAsyHS5Qcm90b2NvbC5TX0ZyaWVuZFJlcXVlc3RfQWRkSABSEX'
-    'NGcmllbmRSZXF1ZXN0QWRkElkKF2NfZnJpZW5kX3JlcXVlc3RfY2FuY2VsGDYgASgLMiAuUHJv'
-    'dG9jb2wuQ19GcmllbmRSZXF1ZXN0X0NhbmNlbEgAUhRjRnJpZW5kUmVxdWVzdENhbmNlbBJZCh'
-    'dzX2ZyaWVuZF9yZXF1ZXN0X2NhbmNlbBg3IAEoCzIgLlByb3RvY29sLlNfRnJpZW5kUmVxdWVz'
-    'dF9DYW5jZWxIAFIUc0ZyaWVuZFJlcXVlc3RDYW5jZWwSWQoXY19mcmllbmRfcmVxdWVzdF9yZW'
-    '1vdmUYOCABKAsyIC5Qcm90b2NvbC5DX0ZyaWVuZFJlcXVlc3RfUmVtb3ZlSABSFGNGcmllbmRS'
-    'ZXF1ZXN0UmVtb3ZlElkKF3NfZnJpZW5kX3JlcXVlc3RfcmVtb3ZlGDkgASgLMiAuUHJvdG9jb2'
-    'wuU19GcmllbmRSZXF1ZXN0X1JlbW92ZUgAUhRzRnJpZW5kUmVxdWVzdFJlbW92ZRJTChVjX2Zy'
-    'aWVuZF9yZXF1ZXN0X2xpc3QYOiABKAsyHi5Qcm90b2NvbC5DX0ZyaWVuZFJlcXVlc3RfTGlzdE'
-    'gAUhJjRnJpZW5kUmVxdWVzdExpc3QSUwoVc19mcmllbmRfcmVxdWVzdF9saXN0GDsgASgLMh4u'
-    'UHJvdG9jb2wuU19GcmllbmRSZXF1ZXN0X0xpc3RIAFISc0ZyaWVuZFJlcXVlc3RMaXN0ElwKGG'
-    'NfZnJpZW5kX3JlcXVlc3RfcmVzcG9uZBg8IAEoCzIhLlByb3RvY29sLkNfRnJpZW5kUmVxdWVz'
-    'dF9SZXNwb25kSABSFWNGcmllbmRSZXF1ZXN0UmVzcG9uZBJcChhzX2ZyaWVuZF9yZXF1ZXN0X3'
-    'Jlc3BvbmQYPSABKAsyIS5Qcm90b2NvbC5TX0ZyaWVuZFJlcXVlc3RfUmVzcG9uZEgAUhVzRnJp'
-    'ZW5kUmVxdWVzdFJlc3BvbmQSUwoVc19mcmllbmRfcmVxdWVzdF9wdXNoGD4gASgLMh4uUHJvdG'
-    '9jb2wuU19GcmllbmRSZXF1ZXN0X1B1c2hIAFISc0ZyaWVuZFJlcXVlc3RQdXNoQgYKBGJvZHk=');
+    'RSCXJlcXVlc3RJZBIdCgphdXRoX3Rva2VuGAMgASgJUglhdXRoVG9rZW4SMwoKY19jaGVja19p'
+    'ZBgKIAEoCzITLlByb3RvY29sLkNfQ2hlY2tJZEgAUghjQ2hlY2tJZBIzCgpzX2NoZWNrX2lkGA'
+    'sgASgLMhMuUHJvdG9jb2wuU19DaGVja0lkSABSCHNDaGVja0lkEjwKDWNfY2hlY2tfZW1haWwY'
+    'DCABKAsyFi5Qcm90b2NvbC5DX0NoZWNrRW1haWxIAFILY0NoZWNrRW1haWwSPAoNc19jaGVja1'
+    '9lbWFpbBgNIAEoCzIWLlByb3RvY29sLlNfQ2hlY2tFbWFpbEgAUgtzQ2hlY2tFbWFpbBJNChJj'
+    'X3JlcV9lbWFpbF92ZXJpZnkYDiABKAsyHi5Qcm90b2NvbC5DX1JlcXVlc3RFbWFpbFZlcmlmeU'
+    'gAUg9jUmVxRW1haWxWZXJpZnkSTQoSc19yZXFfZW1haWxfdmVyaWZ5GA8gASgLMh4uUHJvdG9j'
+    'b2wuU19SZXF1ZXN0RW1haWxWZXJpZnlIAFIPc1JlcUVtYWlsVmVyaWZ5ElUKFmNfY29uZmlybV'
+    '9lbWFpbF92ZXJpZnkYECABKAsyHi5Qcm90b2NvbC5DX0NvbmZpcm1FbWFpbFZlcmlmeUgAUhNj'
+    'Q29uZmlybUVtYWlsVmVyaWZ5ElUKFnNfY29uZmlybV9lbWFpbF92ZXJpZnkYESABKAsyHi5Qcm'
+    '90b2NvbC5TX0NvbmZpcm1FbWFpbFZlcmlmeUgAUhNzQ29uZmlybUVtYWlsVmVyaWZ5Ei8KCGNf'
+    'c2lnbnVwGBIgASgLMhIuUHJvdG9jb2wuQ19TaWduVXBIAFIHY1NpZ251cBIvCghzX3NpZ251cB'
+    'gTIAEoCzISLlByb3RvY29sLlNfU2lnblVwSABSB3NTaWdudXASLAoHY19sb2dpbhgUIAEoCzIR'
+    'LlByb3RvY29sLkNfTG9naW5IAFIGY0xvZ2luEiwKB3NfbG9naW4YFSABKAsyES5Qcm90b2NvbC'
+    '5TX0xvZ2luSABSBnNMb2dpbhI8Cg1jX2pvaW5fZGlyZWN0GBYgASgLMhYuUHJvdG9jb2wuQ19K'
+    'b2luRGlyZWN0SABSC2NKb2luRGlyZWN0EjkKDGNfam9pbl9ncm91cBgXIAEoCzIVLlByb3RvY2'
+    '9sLkNfSm9pbkdyb3VwSABSCmNKb2luR3JvdXASPwoOY19jcmVhdGVfZ3JvdXAYGCABKAsyFy5Q'
+    'cm90b2NvbC5DX0NyZWF0ZUdyb3VwSABSDGNDcmVhdGVHcm91cBI/Cg5zX2NyZWF0ZV9ncm91cB'
+    'gZIAEoCzIXLlByb3RvY29sLlNfQ3JlYXRlR3JvdXBIAFIMc0NyZWF0ZUdyb3VwEiYKBWNfYWNr'
+    'GBogASgLMg8uUHJvdG9jb2wuQ19BY2tIAFIEY0FjaxIsCgdzX2Vycm9yGBsgASgLMhEuUHJvdG'
+    '9jb2wuU19FcnJvckgAUgZzRXJyb3ISOAoLY19oZWFydGJlYXQYHCABKAsyFS5Qcm90b2NvbC5D'
+    'X0hlYXJ0YmVhdEgAUgpjSGVhcnRiZWF0EjgKC3NfaGVhcnRiZWF0GB0gASgLMhUuUHJvdG9jb2'
+    'wuU19IZWFydGJlYXRIAFIKc0hlYXJ0YmVhdBIpCgZjX2NoYXQYHiABKAsyEC5Qcm90b2NvbC5D'
+    'X0NoYXRIAFIFY0NoYXQSKQoGc19jaGF0GB8gASgLMhAuUHJvdG9jb2wuU19DaGF0SABSBXNDaG'
+    'F0EkIKD2NfZmV0Y2hfb2ZmbGluZRggIAEoCzIYLlByb3RvY29sLkNfRmV0Y2hPZmZsaW5lSABS'
+    'DWNGZXRjaE9mZmxpbmUSQgoPc19tZXNzYWdlX2JhdGNoGCEgASgLMhguUHJvdG9jb2wuU19NZX'
+    'NzYWdlQmF0Y2hIAFINc01lc3NhZ2VCYXRjaBI8Cg1jX3VwbG9hZF9maWxlGCIgASgLMhYuUHJv'
+    'dG9jb2wuQ19VcGxvYWRGaWxlSABSC2NVcGxvYWRGaWxlEjwKDXNfdXBsb2FkX2ZpbGUYIyABKA'
+    'syFi5Qcm90b2NvbC5TX1VwbG9hZEZpbGVIAFILc1VwbG9hZEZpbGUSPAoNY19mcmllbmRfbGlz'
+    'dBgoIAEoCzIWLlByb3RvY29sLkNfRnJpZW5kTGlzdEgAUgtjRnJpZW5kTGlzdBI8Cg1zX2ZyaW'
+    'VuZF9saXN0GCkgASgLMhYuUHJvdG9jb2wuU19GcmllbmRMaXN0SABSC3NGcmllbmRMaXN0EjkK'
+    'DGNfZ3JvdXBfbGlzdBgqIAEoCzIVLlByb3RvY29sLkNfR3JvdXBMaXN0SABSCmNHcm91cExpc3'
+    'QSOQoMc19ncm91cF9saXN0GCsgASgLMhUuUHJvdG9jb2wuU19Hcm91cExpc3RIAFIKc0dyb3Vw'
+    'TGlzdBJPChRjX2dyb3VwX2pvaW5fcmVxdWVzdBgsIAEoCzIcLlByb3RvY29sLkNfR3JvdXBKb2'
+    'luUmVxdWVzdEgAUhFjR3JvdXBKb2luUmVxdWVzdBJPChRzX2dyb3VwX2pvaW5fcmVxdWVzdBgt'
+    'IAEoCzIcLlByb3RvY29sLlNfR3JvdXBKb2luUmVxdWVzdEgAUhFzR3JvdXBKb2luUmVxdWVzdB'
+    'JSChVjX2dyb3VwX2pvaW5fcmVzcG9uc2UYLiABKAsyHS5Qcm90b2NvbC5DX0dyb3VwSm9pblJl'
+    'c3BvbnNlSABSEmNHcm91cEpvaW5SZXNwb25zZRJSChVzX2dyb3VwX2pvaW5fcmVzcG9uc2UYLy'
+    'ABKAsyHS5Qcm90b2NvbC5TX0dyb3VwSm9pblJlc3BvbnNlSABSEnNHcm91cEpvaW5SZXNwb25z'
+    'ZRJcChljX2dyb3VwX2pvaW5fcmVxdWVzdF9saXN0GDAgASgLMiAuUHJvdG9jb2wuQ19Hcm91cE'
+    'pvaW5SZXF1ZXN0TGlzdEgAUhVjR3JvdXBKb2luUmVxdWVzdExpc3QSXAoZc19ncm91cF9qb2lu'
+    'X3JlcXVlc3RfbGlzdBgxIAEoCzIgLlByb3RvY29sLlNfR3JvdXBKb2luUmVxdWVzdExpc3RIAF'
+    'IVc0dyb3VwSm9pblJlcXVlc3RMaXN0ElMKFWNfZnJpZW50X3JlcXVlc3RfZmluZBgyIAEoCzIe'
+    'LlByb3RvY29sLkNfRnJpZW5kUmVxdWVzdF9GaW5kSABSEmNGcmllbnRSZXF1ZXN0RmluZBJTCh'
+    'VzX2ZyaWVudF9yZXF1ZXN0X2ZpbmQYMyABKAsyHi5Qcm90b2NvbC5TX0ZyaWVuZFJlcXVlc3Rf'
+    'RmluZEgAUhJzRnJpZW50UmVxdWVzdEZpbmQSUAoUY19mcmllbmRfcmVxdWVzdF9hZGQYNCABKA'
+    'syHS5Qcm90b2NvbC5DX0ZyaWVuZFJlcXVlc3RfQWRkSABSEWNGcmllbmRSZXF1ZXN0QWRkElAK'
+    'FHNfZnJpZW5kX3JlcXVlc3RfYWRkGDUgASgLMh0uUHJvdG9jb2wuU19GcmllbmRSZXF1ZXN0X0'
+    'FkZEgAUhFzRnJpZW5kUmVxdWVzdEFkZBJZChdjX2ZyaWVuZF9yZXF1ZXN0X2NhbmNlbBg2IAEo'
+    'CzIgLlByb3RvY29sLkNfRnJpZW5kUmVxdWVzdF9DYW5jZWxIAFIUY0ZyaWVuZFJlcXVlc3RDYW'
+    '5jZWwSWQoXc19mcmllbmRfcmVxdWVzdF9jYW5jZWwYNyABKAsyIC5Qcm90b2NvbC5TX0ZyaWVu'
+    'ZFJlcXVlc3RfQ2FuY2VsSABSFHNGcmllbmRSZXF1ZXN0Q2FuY2VsElkKF2NfZnJpZW5kX3JlcX'
+    'Vlc3RfcmVtb3ZlGDggASgLMiAuUHJvdG9jb2wuQ19GcmllbmRSZXF1ZXN0X1JlbW92ZUgAUhRj'
+    'RnJpZW5kUmVxdWVzdFJlbW92ZRJZChdzX2ZyaWVuZF9yZXF1ZXN0X3JlbW92ZRg5IAEoCzIgLl'
+    'Byb3RvY29sLlNfRnJpZW5kUmVxdWVzdF9SZW1vdmVIAFIUc0ZyaWVuZFJlcXVlc3RSZW1vdmUS'
+    'UwoVY19mcmllbmRfcmVxdWVzdF9saXN0GDogASgLMh4uUHJvdG9jb2wuQ19GcmllbmRSZXF1ZX'
+    'N0X0xpc3RIAFISY0ZyaWVuZFJlcXVlc3RMaXN0ElMKFXNfZnJpZW5kX3JlcXVlc3RfbGlzdBg7'
+    'IAEoCzIeLlByb3RvY29sLlNfRnJpZW5kUmVxdWVzdF9MaXN0SABSEnNGcmllbmRSZXF1ZXN0TG'
+    'lzdBJcChhjX2ZyaWVuZF9yZXF1ZXN0X3Jlc3BvbmQYPCABKAsyIS5Qcm90b2NvbC5DX0ZyaWVu'
+    'ZFJlcXVlc3RfUmVzcG9uZEgAUhVjRnJpZW5kUmVxdWVzdFJlc3BvbmQSXAoYc19mcmllbmRfcm'
+    'VxdWVzdF9yZXNwb25kGD0gASgLMiEuUHJvdG9jb2wuU19GcmllbmRSZXF1ZXN0X1Jlc3BvbmRI'
+    'AFIVc0ZyaWVuZFJlcXVlc3RSZXNwb25kElMKFXNfZnJpZW5kX3JlcXVlc3RfcHVzaBg+IAEoCz'
+    'IeLlByb3RvY29sLlNfRnJpZW5kUmVxdWVzdF9QdXNoSABSEnNGcmllbmRSZXF1ZXN0UHVzaEIG'
+    'CgRib2R5');
 
 @$core.Deprecated('Use chatPayloadDescriptor instead')
 const ChatPayload$json = {
@@ -590,6 +676,108 @@ const FileMsg$json = {
 final $typed_data.Uint8List fileMsgDescriptor = $convert.base64Decode(
     'CgdGaWxlTXNnEhAKA3VybBgBIAEoCVIDdXJsEhoKCGZpbGVuYW1lGAIgASgJUghmaWxlbmFtZR'
     'ISCgRzaXplGAMgASgDUgRzaXpl');
+
+@$core.Deprecated('Use c_CheckIdDescriptor instead')
+const C_CheckId$json = {
+  '1': 'C_CheckId',
+  '2': [
+    {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
+  ],
+};
+
+/// Descriptor for `C_CheckId`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List c_CheckIdDescriptor =
+    $convert.base64Decode('CglDX0NoZWNrSWQSFwoHdXNlcl9pZBgBIAEoCVIGdXNlcklk');
+
+@$core.Deprecated('Use s_CheckIdDescriptor instead')
+const S_CheckId$json = {
+  '1': 'S_CheckId',
+  '2': [
+    {'1': 'is_available', '3': 1, '4': 1, '5': 8, '10': 'isAvailable'},
+  ],
+};
+
+/// Descriptor for `S_CheckId`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List s_CheckIdDescriptor = $convert.base64Decode(
+    'CglTX0NoZWNrSWQSIQoMaXNfYXZhaWxhYmxlGAEgASgIUgtpc0F2YWlsYWJsZQ==');
+
+@$core.Deprecated('Use c_CheckEmailDescriptor instead')
+const C_CheckEmail$json = {
+  '1': 'C_CheckEmail',
+  '2': [
+    {'1': 'email', '3': 1, '4': 1, '5': 9, '10': 'email'},
+  ],
+};
+
+/// Descriptor for `C_CheckEmail`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List c_CheckEmailDescriptor =
+    $convert.base64Decode('CgxDX0NoZWNrRW1haWwSFAoFZW1haWwYASABKAlSBWVtYWls');
+
+@$core.Deprecated('Use s_CheckEmailDescriptor instead')
+const S_CheckEmail$json = {
+  '1': 'S_CheckEmail',
+  '2': [
+    {'1': 'is_available', '3': 1, '4': 1, '5': 8, '10': 'isAvailable'},
+  ],
+};
+
+/// Descriptor for `S_CheckEmail`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List s_CheckEmailDescriptor = $convert.base64Decode(
+    'CgxTX0NoZWNrRW1haWwSIQoMaXNfYXZhaWxhYmxlGAEgASgIUgtpc0F2YWlsYWJsZQ==');
+
+@$core.Deprecated('Use c_RequestEmailVerifyDescriptor instead')
+const C_RequestEmailVerify$json = {
+  '1': 'C_RequestEmailVerify',
+  '2': [
+    {'1': 'email', '3': 1, '4': 1, '5': 9, '10': 'email'},
+  ],
+};
+
+/// Descriptor for `C_RequestEmailVerify`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List c_RequestEmailVerifyDescriptor =
+    $convert.base64Decode(
+        'ChRDX1JlcXVlc3RFbWFpbFZlcmlmeRIUCgVlbWFpbBgBIAEoCVIFZW1haWw=');
+
+@$core.Deprecated('Use s_RequestEmailVerifyDescriptor instead')
+const S_RequestEmailVerify$json = {
+  '1': 'S_RequestEmailVerify',
+  '2': [
+    {'1': 'success', '3': 1, '4': 1, '5': 8, '10': 'success'},
+    {'1': 'message', '3': 2, '4': 1, '5': 9, '10': 'message'},
+  ],
+};
+
+/// Descriptor for `S_RequestEmailVerify`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List s_RequestEmailVerifyDescriptor = $convert.base64Decode(
+    'ChRTX1JlcXVlc3RFbWFpbFZlcmlmeRIYCgdzdWNjZXNzGAEgASgIUgdzdWNjZXNzEhgKB21lc3'
+    'NhZ2UYAiABKAlSB21lc3NhZ2U=');
+
+@$core.Deprecated('Use c_ConfirmEmailVerifyDescriptor instead')
+const C_ConfirmEmailVerify$json = {
+  '1': 'C_ConfirmEmailVerify',
+  '2': [
+    {'1': 'email', '3': 1, '4': 1, '5': 9, '10': 'email'},
+    {'1': 'code', '3': 2, '4': 1, '5': 9, '10': 'code'},
+  ],
+};
+
+/// Descriptor for `C_ConfirmEmailVerify`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List c_ConfirmEmailVerifyDescriptor = $convert.base64Decode(
+    'ChRDX0NvbmZpcm1FbWFpbFZlcmlmeRIUCgVlbWFpbBgBIAEoCVIFZW1haWwSEgoEY29kZRgCIA'
+    'EoCVIEY29kZQ==');
+
+@$core.Deprecated('Use s_ConfirmEmailVerifyDescriptor instead')
+const S_ConfirmEmailVerify$json = {
+  '1': 'S_ConfirmEmailVerify',
+  '2': [
+    {'1': 'success', '3': 1, '4': 1, '5': 8, '10': 'success'},
+  ],
+};
+
+/// Descriptor for `S_ConfirmEmailVerify`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List s_ConfirmEmailVerifyDescriptor =
+    $convert.base64Decode(
+        'ChRTX0NvbmZpcm1FbWFpbFZlcmlmeRIYCgdzdWNjZXNzGAEgASgIUgdzdWNjZXNz');
 
 @$core.Deprecated('Use c_SignUpDescriptor instead')
 const C_SignUp$json = {

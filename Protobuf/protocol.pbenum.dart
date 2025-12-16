@@ -42,12 +42,16 @@ class ErrorCode extends $pb.ProtobufEnum {
       ErrorCode._(102, _omitEnumNames ? '' : 'ERR_PASSWORD_REQUIRED');
   static const ErrorCode ERR_NAME_REQUIRED =
       ErrorCode._(103, _omitEnumNames ? '' : 'ERR_NAME_REQUIRED');
+  static const ErrorCode ERR_EMAIL_REQUIRED =
+      ErrorCode._(104, _omitEnumNames ? '' : 'ERR_EMAIL_REQUIRED');
   static const ErrorCode ERR_USER_NOT_FOUND =
-      ErrorCode._(104, _omitEnumNames ? '' : 'ERR_USER_NOT_FOUND');
+      ErrorCode._(105, _omitEnumNames ? '' : 'ERR_USER_NOT_FOUND');
   static const ErrorCode ERR_INVALID_PASSWORD =
-      ErrorCode._(105, _omitEnumNames ? '' : 'ERR_INVALID_PASSWORD');
+      ErrorCode._(106, _omitEnumNames ? '' : 'ERR_INVALID_PASSWORD');
   static const ErrorCode ERR_USER_ALREADY_EXISTS =
-      ErrorCode._(106, _omitEnumNames ? '' : 'ERR_USER_ALREADY_EXISTS');
+      ErrorCode._(107, _omitEnumNames ? '' : 'ERR_USER_ALREADY_EXISTS');
+  static const ErrorCode ERR_EMAIL_ALREADY_EXISTS =
+      ErrorCode._(108, _omitEnumNames ? '' : 'ERR_EMAIL_ALREADY_EXISTS');
 
   /// 200~299: 채팅 관련
   static const ErrorCode ERR_PAYLOAD_EMPTY =
@@ -97,9 +101,11 @@ class ErrorCode extends $pb.ProtobufEnum {
     ERR_USER_ID_REQUIRED,
     ERR_PASSWORD_REQUIRED,
     ERR_NAME_REQUIRED,
+    ERR_EMAIL_REQUIRED,
     ERR_USER_NOT_FOUND,
     ERR_INVALID_PASSWORD,
     ERR_USER_ALREADY_EXISTS,
+    ERR_EMAIL_ALREADY_EXISTS,
     ERR_PAYLOAD_EMPTY,
     ERR_INVALID_CONV_ID,
     ERR_INVALID_RECEIVER_ID,

@@ -24,9 +24,12 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 	}
 
 	/* Auth Token Check */
-	const bool passAuth =	(envelope.body_case() == Protocol::Envelope::kCSignup) ||
-							(envelope.body_case() == Protocol::Envelope::kCLogin) ||
-							(envelope.body_case() == Protocol::Envelope::kCHeartbeat);
+	const bool passAuth =
+		(envelope.body_case() == Protocol::Envelope::kCSignup) ||
+		(envelope.body_case() == Protocol::Envelope::kCLogin) ||
+		(envelope.body_case() == Protocol::Envelope::kCCheckId) ||
+		(envelope.body_case() == Protocol::Envelope::kCCheckEmail) ||
+		(envelope.body_case() == Protocol::Envelope::kCHeartbeat);
 
 	auto serverSession = static_pointer_cast<ServerSession>(session);
 	if (!passAuth) {
@@ -66,12 +69,25 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 	/* Pkt */
 	switch (envelope.body_case())
 	{
+		/* 회원가입 관련*/
+	case Protocol::Envelope::kCCheckId:
+		Dispatch_C_CheckId(session, envelope.request_id(), envelope.c_check_id());
+		break;
+
+	case Protocol::Envelope::kCCheckEmail:
+		Dispatch_C_CheckEmail(session, envelope.request_id(), envelope.c_check_email());
+		break;
+
 	case Protocol::Envelope::kCSignup:
 		Dispatch_C_SignUp(session, envelope.request_id(), envelope.c_signup());
 		break;
+
+		/* 로그인*/
 	case Protocol::Envelope::kCLogin:
 		Dispatch_C_Login(session, envelope.request_id(), envelope.c_login());
 		break;
+
+		/* 채팅 */
 	case Protocol::Envelope::kCChat:
 		Dispatch_C_Chat(session, envelope.request_id(), envelope.c_chat());
 		break;
@@ -86,7 +102,8 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 	case Protocol::Envelope::kCHeartbeat:
 		break;
 
-	// Friend Request
+	
+		/* 친구 관련 */
 	case Protocol::Envelope::kCFrientRequestFind:
 		Dispatch_C_FriendRequest_Find(session, envelope.request_id(), envelope.c_frient_request_find());
 		break;
@@ -109,7 +126,7 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 		Dispatch_C_FriendList(session, envelope.request_id(), envelope.c_friend_list());
 		break;
 
-	// Group Request
+		/* 그룹 관련 */
 	case Protocol::Envelope::kCCreateGroup:
 		Dispatch_C_CreateGroup(session, envelope.request_id(), envelope.c_create_group());
 		break;
@@ -232,6 +249,20 @@ void PacketDispatcher::DispatchError(sessionPtr& session, uint64 reqId, ErrorCod
 	*env.mutable_s_error() = pkt_error;
 
 	SendEnvelope(session, env);
+}
+
+bool PacketDispatcher::Dispatch_C_CheckId(sessionPtr& session, uint64 reqId, const Protocol::C_CheckId& pkt)
+{
+	const string userId = pkt.user_id();
+
+	return GAuthService->CheckIdAvailable(session, reqId, userId);
+}
+
+bool PacketDispatcher::Dispatch_C_CheckEmail(sessionPtr& session, uint64 reqId, const Protocol::C_CheckEmail& pkt)
+{
+	const string email = pkt.email();
+
+	return GAuthService->CheckEmailAvailable(session, reqId, email);
 }
 
 bool PacketDispatcher::Dispatch_C_SignUp(sessionPtr& session, uint64 reqId, const Protocol::C_SignUp& pkt)

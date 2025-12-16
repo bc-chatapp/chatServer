@@ -56,6 +56,26 @@ bool UserRepository::UserExists(const string& userId) {
     }
 }
 
+bool UserRepository::EmailExists(const string& email)
+{
+    try {
+        auto& db = DBManager::GetInstance();
+        auto schema = db.GetSchema();
+        auto users = schema.getTable("users");
+
+        auto result = users.select("email")
+            .where("email = :email")
+            .bind("email", email)
+            .execute();
+
+        return result.count() > 0;
+    }
+    catch (const mysqlx::Error& err) {
+        cerr << "[UserRepository] 이메일 확인 실패: " << err.what() << endl;
+        return true; 
+    }
+}
+
 
 
 bool UserRepository::GetUser(const string& userId, UserInfo& userInfo) {
