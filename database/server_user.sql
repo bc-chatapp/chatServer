@@ -23,5 +23,9 @@ FLUSH PRIVILEGES;
    
    TRUNCATE TABLE read_status;
    
+   
+SET FOREIGN_KEY_CHECKS = 0; -- 검사 끄기
+DROP TABLE IF EXISTS users;
+SET FOREIGN_KEY_CHECKS = 1; -- 다시 켜기
 
    

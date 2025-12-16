@@ -22,6 +22,8 @@ public:
     
 
     static bool UserExists(const string& userId);
+
+    static bool EmailExists(const string& email);
     
     static bool GetUser(const string& userId, UserInfo& userInfo);
     

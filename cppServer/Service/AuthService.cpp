@@ -5,12 +5,102 @@
 #include "../ServerSession.h"
 #include "../PacketDispatcher.h"
 #include "../CoreGlobal.h"
+
+#include "VerificationManager.h"
 #include "TokenManager.h"
 #include <sstream>
 #include <iomanip>
 #include <functional>  // hash 사용
 
 using namespace Protocol;
+
+bool AuthService::CheckIdAvailable(sessionPtr& session, uint64 reqId, const string& userId)
+{
+    bool exists = UserRepository::UserExists(userId);
+
+
+    if (exists) cout << "[AuthService] : " << userId << " is exists." << endl;
+    else cout << "[AuthService] : " << userId << " can use." << endl;
+
+    Protocol::S_CheckId pkt;
+    pkt.set_is_available(!exists); // 존재하지 않아야 사용 가능
+
+    Protocol::Envelope env;
+    env.set_version(GProtoVersion);
+    env.set_request_id(reqId);
+    env.mutable_s_check_id()->CopyFrom(pkt);
+    PacketDispatcher::SendEnvelope(session, env);
+
+    return !exists;
+}
+
+bool AuthService::CheckEmailAvailable(sessionPtr& session, uint64 reqId, const string& email)
+{
+    bool exists = UserRepository::EmailExists(email);
+
+    if (exists) cout << "[AuthService] : " << email << " is exists." << endl;
+    else cout << "[AuthService] : " << email << " can use." << endl;
+
+    Protocol::S_CheckEmail pkt;
+    pkt.set_is_available(!exists); // 없어야 사용 가능(true)
+
+    Protocol::Envelope env;
+    env.set_version(GProtoVersion);
+    env.set_request_id(reqId);
+    env.mutable_s_check_email()->CopyFrom(pkt);
+    PacketDispatcher::SendEnvelope(session, env);
+
+    return !exists;
+
+}
+
+
+
+
+
+bool AuthService::RequestEmailVerification(sessionPtr& session, uint64 reqId, const string& email)
+{
+    if (UserRepository::EmailExists(email)) {
+        Protocol::S_RequestEmailVerify pkt;
+        pkt.set_success(false);
+        pkt.set_message("이미 가입된 이메일입니다.");
+
+        // 전송 로직... (SendEnvelope)
+        return false;
+    }
+
+    string code = VerificationManager::CreateVerificationCode(email);
+    cout << "[Email 발송] To: " << email << " | Code: [" << code << "]" << endl;
+
+    Protocol::S_RequestEmailVerify pkt;
+    pkt.set_success(true);
+    pkt.set_message("인증번호가 발송되었습니다.");
+
+    Protocol::Envelope env;
+    env.set_version(GProtoVersion);
+    env.set_request_id(reqId);
+    env.mutable_s_req_email_verify()->CopyFrom(pkt);
+    PacketDispatcher::SendEnvelope(session, env);
+
+    return true;
+}
+
+bool AuthService::ConfirmEmailVerification(sessionPtr& session, uint64 reqId, const string& email, const string& code)
+{
+    bool valid = VerificationManager::CheckVerificationCode(email, code);
+
+    Protocol::S_ConfirmEmailVerify pkt;
+    pkt.set_success(valid);
+
+    Protocol::Envelope env;
+    env.set_version(GProtoVersion);
+    env.set_request_id(reqId);
+    env.mutable_s_confirm_email_verify()->CopyFrom(pkt);
+    PacketDispatcher::SendEnvelope(session, env);
+
+    return valid;
+}
+
 
 /*--------------------
         SignUp
@@ -22,29 +112,25 @@ bool AuthService::SignUp(sessionPtr& session, uint64 reqId, const string& userId
     cout << "[AuthService] SignUp 요청: userId=" << userId << ", name=" << name << endl;
     
     // 입력 검증
-    if (userId.empty()) {
-        HandleErr(session, reqId, ERR_USER_ID_REQUIRED);
-        return false;
-    }
+    if (userId.empty()) { HandleErr(session, reqId, ERR_USER_ID_REQUIRED);  return false; }
+    if (password.empty()) { HandleErr(session, reqId, ERR_PASSWORD_REQUIRED); return false; }
+    if (name.empty()) { HandleErr(session, reqId, ERR_NAME_REQUIRED); return false; }
+    if (email.empty()) { HandleErr(session, reqId, ERR_EMAIL_REQUIRED); return false; }
     
-    if (password.empty()) {
-        HandleErr(session, reqId, ERR_PASSWORD_REQUIRED);
-        return false;
-    }
-    
-    if (name.empty()) {
-        HandleErr(session, reqId, ERR_NAME_REQUIRED);
-        return false;
-    }
-    
+
     if (UserRepository::UserExists(userId)) {
         HandleErr(session, reqId, ERR_USER_ALREADY_EXISTS, "user_id already exists");
+        return false;
+    }
+
+    if (UserRepository::EmailExists(email)) {
+        HandleErr(session, reqId, ERR_EMAIL_ALREADY_EXISTS, "email already exists");
         return false;
     }
     
     string passwordHash = HashPassword(password);
     
-    bool success = UserRepository::CreateUser(userId, passwordHash, name, ""/*TODO: email추가*/);
+    bool success = UserRepository::CreateUser(userId, passwordHash, name, email);
     
     Protocol::S_SignUp pkt_s_signup;
     if (success) {

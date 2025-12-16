@@ -7,11 +7,20 @@ message Envelope {
   string auth_token      = 3; // 로그인 인증 토큰(JWT 등)
 
   oneof body {
+      // AUTH
+      C_CheckId               c_check_id                = 10;
+      S_CheckId               s_check_id                = 11;
+      C_CheckEmail            c_check_email             = 12;
+      S_CheckEmail            s_check_email             = 13;
 
-  // AUTH
-    C_SignUp             c_signup             = 10;
-    S_SignUp             s_signup             = 11;
+      C_RequestEmailVerify    c_req_email_verify        = 14;
+      S_RequestEmailVerify    s_req_email_verify        = 15;
+      C_ConfirmEmailVerify    c_confirm_email_verify    = 16;
+      S_ConfirmEmailVerify    s_confirm_email_verify    = 17;
+      C_SignUp                c_signup                  = 18;
+      S_SignUp                s_signup                  = 19;
 
+   //LOGIN
     C_Login              c_login              = 20;
     S_Login              s_login              = 21;
     C_JoinDirect         c_join_direct        = 22;
@@ -99,9 +108,39 @@ message FileMsg {
 }
 
 
-/* Packet */
+/*-------------
+    회원가입 
+---------------*/
+message C_CheckId {
+    string user_id = 1;
+}
+message S_CheckId {
+    bool is_available = 1; 
+}
 
-// 회원가입
+message C_CheckEmail {
+    string email = 1;
+}
+message S_CheckEmail {
+    bool is_available = 1; 
+}
+
+message C_RequestEmailVerify {
+    string email = 1;
+}
+message S_RequestEmailVerify {
+    bool success = 1;
+    string message = 2; 
+}
+
+message C_ConfirmEmailVerify {
+    string email = 1;
+    string code = 2;
+}
+message S_ConfirmEmailVerify {
+    bool success = 1;
+}
+
 message C_SignUp {
     string user_id = 1;        
     string password = 2;       
@@ -112,10 +151,14 @@ message C_SignUp {
 message S_SignUp {
     bool success = 1;
     string message = 2;
-    string user_id = 3;        // 생성된 사용자 ID
+    string user_id = 3;       
 }
 
 
+
+/*-------------
+    로그인 
+---------------*/
 message C_Login {
     string user_id = 1; 
     string password = 2; 
@@ -222,9 +265,11 @@ enum ErrorCode {
     ERR_USER_ID_REQUIRED = 101;   // 사용자 ID가 필요함
     ERR_PASSWORD_REQUIRED = 102;  // 비밀번호가 필요함
     ERR_NAME_REQUIRED = 103;      // 이름이 필요함
-    ERR_USER_NOT_FOUND = 104;     // 사용자를 찾을 수 없음
-    ERR_INVALID_PASSWORD = 105;   // 비밀번호가 올바르지 않음
-    ERR_USER_ALREADY_EXISTS = 106; // 사용자가 이미 존재함
+    ERR_EMAIL_REQUIRED = 104;      // 이메일이 필요함
+    ERR_USER_NOT_FOUND = 105;     // 사용자를 찾을 수 없음
+    ERR_INVALID_PASSWORD = 106;   // 비밀번호가 올바르지 않음
+    ERR_USER_ALREADY_EXISTS = 107; // 사용자가 이미 존재함
+    ERR_EMAIL_ALREADY_EXISTS = 108; // 사용자가 이미 존재함
     
     // 200~299: 채팅 관련
     ERR_PAYLOAD_EMPTY = 200;      // 페이로드가 비어있음

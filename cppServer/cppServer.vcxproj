@@ -225,6 +225,7 @@ copy /Y "$(SolutionDir)Libraries\mysql-connector-c++-9.5.0\lib64\libcrypto-3-x64
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="ServerSession.cpp" />
+    <ClCompile Include="Service\VerificationManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Service\AuthService.h" />
@@ -246,6 +247,7 @@ copy /Y "$(SolutionDir)Libraries\mysql-connector-c++-9.5.0\lib64\libcrypto-3-x64
     <ClInclude Include="pch.h" />
     <ClInclude Include="protocol.pb.h" />
     <ClInclude Include="ServerSession.h" />
+    <ClInclude Include="Service\VerificationManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Protobuf\GenPackets.bat" />
