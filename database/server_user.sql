@@ -28,4 +28,8 @@ SET FOREIGN_KEY_CHECKS = 0; -- 검사 끄기
 DROP TABLE IF EXISTS users;
 SET FOREIGN_KEY_CHECKS = 1; -- 다시 켜기
 
+
+DELETE FROM friends 
+WHERE (user_id = 'user01' AND friend_id = 'dummy001') 
+   OR (user_id = 'dummy001' AND friend_id = 'user01');
    

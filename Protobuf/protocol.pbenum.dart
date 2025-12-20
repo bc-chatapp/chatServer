@@ -130,50 +130,56 @@ class ErrorCode extends $pb.ProtobufEnum {
   const ErrorCode._(super.value, super.name);
 }
 
-class C_FriendRequest_List_RequestType extends $pb.ProtobufEnum {
-  static const C_FriendRequest_List_RequestType RECEIVED =
-      C_FriendRequest_List_RequestType._(0, _omitEnumNames ? '' : 'RECEIVED');
-  static const C_FriendRequest_List_RequestType SENT =
-      C_FriendRequest_List_RequestType._(1, _omitEnumNames ? '' : 'SENT');
+class C_FriendAction_ActionType extends $pb.ProtobufEnum {
+  static const C_FriendAction_ActionType SEND_REQUEST =
+      C_FriendAction_ActionType._(0, _omitEnumNames ? '' : 'SEND_REQUEST');
+  static const C_FriendAction_ActionType CANCEL_REQUEST =
+      C_FriendAction_ActionType._(1, _omitEnumNames ? '' : 'CANCEL_REQUEST');
+  static const C_FriendAction_ActionType ACCEPT_REQUEST =
+      C_FriendAction_ActionType._(2, _omitEnumNames ? '' : 'ACCEPT_REQUEST');
+  static const C_FriendAction_ActionType REJECT_REQUEST =
+      C_FriendAction_ActionType._(3, _omitEnumNames ? '' : 'REJECT_REQUEST');
+  static const C_FriendAction_ActionType DELETE_FRIEND =
+      C_FriendAction_ActionType._(4, _omitEnumNames ? '' : 'DELETE_FRIEND');
 
-  static const $core.List<C_FriendRequest_List_RequestType> values =
-      <C_FriendRequest_List_RequestType>[
-    RECEIVED,
-    SENT,
+  static const $core.List<C_FriendAction_ActionType> values =
+      <C_FriendAction_ActionType>[
+    SEND_REQUEST,
+    CANCEL_REQUEST,
+    ACCEPT_REQUEST,
+    REJECT_REQUEST,
+    DELETE_FRIEND,
   ];
 
-  static final $core.List<C_FriendRequest_List_RequestType?> _byValue =
-      $pb.ProtobufEnum.$_initByValueList(values, 1);
-  static C_FriendRequest_List_RequestType? valueOf($core.int value) =>
+  static final $core.List<C_FriendAction_ActionType?> _byValue =
+      $pb.ProtobufEnum.$_initByValueList(values, 4);
+  static C_FriendAction_ActionType? valueOf($core.int value) =>
       value < 0 || value >= _byValue.length ? null : _byValue[value];
 
-  const C_FriendRequest_List_RequestType._(super.value, super.name);
+  const C_FriendAction_ActionType._(super.value, super.name);
 }
 
-class S_FriendRequest_Push_EventType extends $pb.ProtobufEnum {
-  static const S_FriendRequest_Push_EventType REQUEST_RECEIVED =
-      S_FriendRequest_Push_EventType._(
-          0, _omitEnumNames ? '' : 'REQUEST_RECEIVED');
-  static const S_FriendRequest_Push_EventType REQUEST_ACCEPTED =
-      S_FriendRequest_Push_EventType._(
-          1, _omitEnumNames ? '' : 'REQUEST_ACCEPTED');
-  static const S_FriendRequest_Push_EventType REQUEST_CANCELLED =
-      S_FriendRequest_Push_EventType._(
-          2, _omitEnumNames ? '' : 'REQUEST_CANCELLED');
+class S_FriendPush_PushType extends $pb.ProtobufEnum {
+  static const S_FriendPush_PushType NEW_REQUEST =
+      S_FriendPush_PushType._(0, _omitEnumNames ? '' : 'NEW_REQUEST');
+  static const S_FriendPush_PushType REQUEST_ACCEPTED =
+      S_FriendPush_PushType._(1, _omitEnumNames ? '' : 'REQUEST_ACCEPTED');
+  static const S_FriendPush_PushType FRIEND_DELETED =
+      S_FriendPush_PushType._(2, _omitEnumNames ? '' : 'FRIEND_DELETED');
 
-  static const $core.List<S_FriendRequest_Push_EventType> values =
-      <S_FriendRequest_Push_EventType>[
-    REQUEST_RECEIVED,
+  static const $core.List<S_FriendPush_PushType> values =
+      <S_FriendPush_PushType>[
+    NEW_REQUEST,
     REQUEST_ACCEPTED,
-    REQUEST_CANCELLED,
+    FRIEND_DELETED,
   ];
 
-  static final $core.List<S_FriendRequest_Push_EventType?> _byValue =
+  static final $core.List<S_FriendPush_PushType?> _byValue =
       $pb.ProtobufEnum.$_initByValueList(values, 2);
-  static S_FriendRequest_Push_EventType? valueOf($core.int value) =>
+  static S_FriendPush_PushType? valueOf($core.int value) =>
       value < 0 || value >= _byValue.length ? null : _byValue[value];
 
-  const S_FriendRequest_Push_EventType._(super.value, super.name);
+  const S_FriendPush_PushType._(super.value, super.name);
 }
 
 const $core.bool _omitEnumNames =

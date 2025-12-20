@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "VerificationManager.h"
 #include <random>
 
@@ -13,12 +13,12 @@ string VerificationManager::CreateVerificationCode(const std::string& email)
 
     string code = to_string(dis(gen));
 
-    // À¯È¿±â°£ 5ºĞ
+    // ìœ íš¨ê¸°ê°„ 5ë¶„
     VerifyInfo info;
     info.code = code;
     info.expiresAt = time(nullptr) + (5 * 60);
 
-    verify_codes[email] = info; // µ¤¾î¾²±â (Àç¿äÃ» ½Ã °»½Å)
+    verify_codes[email] = info; // ë®ì–´ì“°ê¸° (ì¬ìš”ì²­ ì‹œ ê°±ì‹ )
 
     return code;
 }
@@ -31,12 +31,12 @@ bool VerificationManager::CheckVerificationCode(const string& email, const strin
 
     time_t now = time(nullptr);
     if (it->second.expiresAt < now) {
-        verify_codes.erase(it); // ¸¸·áµÊ
+        verify_codes.erase(it); // ë§Œë£Œë¨
         return false;
     }
 
     if (it->second.code == code) {
-        verify_codes.erase(it); // ÀÎÁõ ¼º°ø ½Ã »èÁ¦ (1È¸¿ë)
+        verify_codes.erase(it); // ì¸ì¦ ì„±ê³µ ì‹œ ì‚­ì œ (1íšŒìš©)
         return true;
     }
 

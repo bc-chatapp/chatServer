@@ -250,11 +250,11 @@ export function errorCodeToJSON(object: ErrorCode): string {
 }
 
 export interface Envelope {
-  /** 1버전 고정 */
+  /** 버전 고정 */
   version: number;
   /** 요청-응답 매칭(0이면 서버푸시) */
   requestId: number;
-  /** 로그인 인증 토큰(JWT 등) */
+  /** JWT 인증 토큰 */
   authToken: string;
   /** AUTH */
   cCheckId?: CCheckId | undefined;
@@ -288,9 +288,20 @@ export interface Envelope {
   cFetchOffline?: CFetchOffline | undefined;
   sMessageBatch?: SMessageBatch | undefined;
   cUploadFile?: CUploadFile | undefined;
-  sUploadFile?: SUploadFile | undefined;
-  cFriendList?: CFriendList | undefined;
-  sFriendList?: SFriendList | undefined;
+  sUploadFile?:
+    | SUploadFile
+    | undefined;
+  /** Freind */
+  cSearchUser?: CSearchUser | undefined;
+  sSearchUser?: SSearchUser | undefined;
+  cFriendAction?: CFriendAction | undefined;
+  sFriendAction?: SFriendAction | undefined;
+  cFetchFriendData?: CFetchFriendData | undefined;
+  sFetchFriendData?: SFetchFriendData | undefined;
+  sFriendPush?:
+    | SFriendPush
+    | undefined;
+  /** info */
   cGroupList?: CGroupList | undefined;
   sGroupList?: SGroupList | undefined;
   cGroupJoinRequest?: CGroupJoinRequest | undefined;
@@ -298,26 +309,7 @@ export interface Envelope {
   cGroupJoinResponse?: CGroupJoinResponse | undefined;
   sGroupJoinResponse?: SGroupJoinResponse | undefined;
   cGroupJoinRequestList?: CGroupJoinRequestList | undefined;
-  sGroupJoinRequestList?:
-    | SGroupJoinRequestList
-    | undefined;
-  /** Friend Request (50-) */
-  cFrientRequestFind?: CFriendRequestFind | undefined;
-  sFrientRequestFind?: SFriendRequestFind | undefined;
-  cFriendRequestAdd?: CFriendRequestAdd | undefined;
-  sFriendRequestAdd?: SFriendRequestAdd | undefined;
-  cFriendRequestCancel?: CFriendRequestCancel | undefined;
-  sFriendRequestCancel?: SFriendRequestCancel | undefined;
-  cFriendRequestRemove?: CFriendRequestRemove | undefined;
-  sFriendRequestRemove?: SFriendRequestRemove | undefined;
-  cFriendRequestList?: CFriendRequestList | undefined;
-  sFriendRequestList?: SFriendRequestList | undefined;
-  cFriendRequestRespond?: CFriendRequestRespond | undefined;
-  sFriendRequestRespond?:
-    | SFriendRequestRespond
-    | undefined;
-  /** 서버 푸시 */
-  sFriendRequestPush?: SFriendRequestPush | undefined;
+  sGroupJoinRequestList?: SGroupJoinRequestList | undefined;
 }
 
 export interface ChatPayload {
@@ -513,33 +505,170 @@ export interface FriendInfo {
   statusMessage: string;
   profileImageUrl: string;
   lastSeen: number;
-  /** "online", "offline", "away" */
+  /** "online", "offline", "accepted" */
   status: string;
 }
 
 export interface FriendRequest {
-  requesterUserId: string;
-  requesterName: string;
-  requesterStatusMessage: string;
-  requesterProfileImageUrl: string;
+  userId: string;
+  name: string;
+  statusMessage: string;
+  profileImageUrl: string;
   requestedAt: number;
+  /** true: 받은거, false: 보낸거 */
+  isReceived: boolean;
 }
 
-/** 친구 목록 조회 */
-export interface CFriendList {
+export interface CSearchUser {
+  /** 검색할 대상 ID */
+  userId: string;
 }
 
-export interface SFriendList {
+export interface SSearchUser {
+  success: boolean;
+  /** 찾은 유저 정보 */
+  userInfo:
+    | FriendInfo
+    | undefined;
+  /** 이미 친구인지 */
+  isFriend: boolean;
+  /** 이미 요청을 보냈는지 */
+  hasSentRequest: boolean;
+}
+
+/** --- 친구 관리 액션 (요청, 수락, 거절, 삭제) --- */
+export interface CFriendAction {
+  action: CFriendAction_ActionType;
+  targetUserId: string;
+}
+
+export enum CFriendAction_ActionType {
+  SEND_REQUEST = 0,
+  CANCEL_REQUEST = 1,
+  ACCEPT_REQUEST = 2,
+  REJECT_REQUEST = 3,
+  DELETE_FRIEND = 4,
+  UNRECOGNIZED = -1,
+}
+
+export function cFriendAction_ActionTypeFromJSON(object: any): CFriendAction_ActionType {
+  switch (object) {
+    case 0:
+    case "SEND_REQUEST":
+      return CFriendAction_ActionType.SEND_REQUEST;
+    case 1:
+    case "CANCEL_REQUEST":
+      return CFriendAction_ActionType.CANCEL_REQUEST;
+    case 2:
+    case "ACCEPT_REQUEST":
+      return CFriendAction_ActionType.ACCEPT_REQUEST;
+    case 3:
+    case "REJECT_REQUEST":
+      return CFriendAction_ActionType.REJECT_REQUEST;
+    case 4:
+    case "DELETE_FRIEND":
+      return CFriendAction_ActionType.DELETE_FRIEND;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return CFriendAction_ActionType.UNRECOGNIZED;
+  }
+}
+
+export function cFriendAction_ActionTypeToJSON(object: CFriendAction_ActionType): string {
+  switch (object) {
+    case CFriendAction_ActionType.SEND_REQUEST:
+      return "SEND_REQUEST";
+    case CFriendAction_ActionType.CANCEL_REQUEST:
+      return "CANCEL_REQUEST";
+    case CFriendAction_ActionType.ACCEPT_REQUEST:
+      return "ACCEPT_REQUEST";
+    case CFriendAction_ActionType.REJECT_REQUEST:
+      return "REJECT_REQUEST";
+    case CFriendAction_ActionType.DELETE_FRIEND:
+      return "DELETE_FRIEND";
+    case CFriendAction_ActionType.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
+export interface SFriendAction {
+  success: boolean;
+  message: string;
+  /** 수락 시, 새 친구 정보(목록 갱신용) */
+  updatedFriend: FriendInfo | undefined;
+}
+
+/** 빈 메시지 (토큰으로 식별) */
+export interface CFetchFriendData {
+}
+
+export interface SFetchFriendData {
+  /** 이미 친구인 목록 */
   friends: FriendInfo[];
+  /** 내가 받은 요청 */
+  receivedRequests: FriendRequest[];
+  /** 내가 보낸 요청 */
+  sentRequests: FriendRequest[];
 }
 
-/** 그룹 정보 */
+/** --- 실시간 푸시 알림 --- */
+export interface SFriendPush {
+  type: SFriendPush_PushType;
+  /** 대상 유저 정보 */
+  userInfo: FriendInfo | undefined;
+}
+
+export enum SFriendPush_PushType {
+  /** NEW_REQUEST - 누가 나한테 요청 보냄 */
+  NEW_REQUEST = 0,
+  /** REQUEST_ACCEPTED - 상대가 내 요청 수락함 */
+  REQUEST_ACCEPTED = 1,
+  /** FRIEND_DELETED - 친구 삭제됨 */
+  FRIEND_DELETED = 2,
+  UNRECOGNIZED = -1,
+}
+
+export function sFriendPush_PushTypeFromJSON(object: any): SFriendPush_PushType {
+  switch (object) {
+    case 0:
+    case "NEW_REQUEST":
+      return SFriendPush_PushType.NEW_REQUEST;
+    case 1:
+    case "REQUEST_ACCEPTED":
+      return SFriendPush_PushType.REQUEST_ACCEPTED;
+    case 2:
+    case "FRIEND_DELETED":
+      return SFriendPush_PushType.FRIEND_DELETED;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return SFriendPush_PushType.UNRECOGNIZED;
+  }
+}
+
+export function sFriendPush_PushTypeToJSON(object: SFriendPush_PushType): string {
+  switch (object) {
+    case SFriendPush_PushType.NEW_REQUEST:
+      return "NEW_REQUEST";
+    case SFriendPush_PushType.REQUEST_ACCEPTED:
+      return "REQUEST_ACCEPTED";
+    case SFriendPush_PushType.FRIEND_DELETED:
+      return "FRIEND_DELETED";
+    case SFriendPush_PushType.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
 export interface GroupInfo {
   groupId: string;
   groupName: string;
+  /** 초대 코드 */
   groupCode: string;
   creatorId: string;
-  createdAt: number;
+  memberCount: number;
 }
 
 /** 그룹 목록 조회 */
@@ -594,165 +723,6 @@ export interface GroupJoinRequestInfo {
   requestedAt: number;
 }
 
-/** 친구 요청 검색 */
-export interface CFriendRequestFind {
-  /** 검색할 사용자 ID */
-  userId: string;
-}
-
-export interface SFriendRequestFind {
-  /** 사용자 존재 여부 (error는 그냥 false 처리) */
-  exist: boolean;
-  /** 사용자 정보 (있으면) */
-  userInfo: FriendInfo | undefined;
-}
-
-/** 친구 요청 전송 */
-export interface CFriendRequestAdd {
-  friendUserId: string;
-}
-
-export interface SFriendRequestAdd {
-  success: boolean;
-  message: string;
-}
-
-/** 친구 요청 취소 (보낸 사람이 취소) */
-export interface CFriendRequestCancel {
-  friendUserId: string;
-}
-
-export interface SFriendRequestCancel {
-  success: boolean;
-  message: string;
-}
-
-/** 이미 보낸 친구 요청 취소 (받은 사람이 취소) */
-export interface CFriendRequestRemove {
-  friendUserId: string;
-}
-
-export interface SFriendRequestRemove {
-  success: boolean;
-  message: string;
-}
-
-/** 친구 요청 목록 조회 */
-export interface CFriendRequestList {
-  /** 요청 타입 (기본값: RECEIVED) */
-  type: CFriendRequestList_RequestType;
-}
-
-export enum CFriendRequestList_RequestType {
-  /** RECEIVED - 받은 요청 */
-  RECEIVED = 0,
-  /** SENT - 보낸 요청 */
-  SENT = 1,
-  UNRECOGNIZED = -1,
-}
-
-export function cFriendRequestList_RequestTypeFromJSON(object: any): CFriendRequestList_RequestType {
-  switch (object) {
-    case 0:
-    case "RECEIVED":
-      return CFriendRequestList_RequestType.RECEIVED;
-    case 1:
-    case "SENT":
-      return CFriendRequestList_RequestType.SENT;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return CFriendRequestList_RequestType.UNRECOGNIZED;
-  }
-}
-
-export function cFriendRequestList_RequestTypeToJSON(object: CFriendRequestList_RequestType): string {
-  switch (object) {
-    case CFriendRequestList_RequestType.RECEIVED:
-      return "RECEIVED";
-    case CFriendRequestList_RequestType.SENT:
-      return "SENT";
-    case CFriendRequestList_RequestType.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
-}
-
-export interface SFriendRequestList {
-  requests: FriendRequest[];
-}
-
-/** 친구 요청 수락/거절 */
-export interface CFriendRequestRespond {
-  requesterUserId: string;
-  /** true: 수락, false: 거절 */
-  accept: boolean;
-}
-
-export interface SFriendRequestRespond {
-  success: boolean;
-  message: string;
-  /** 수락 시 친구 정보 */
-  friend: FriendInfo | undefined;
-}
-
-/** 친구 요청 푸시 (서버 -> 클라이언트) */
-export interface SFriendRequestPush {
-  eventType: SFriendRequestPush_EventType;
-  /** REQUEST_RECEIVED일 때 */
-  request:
-    | FriendRequest
-    | undefined;
-  /** REQUEST_ACCEPTED일 때 */
-  friend:
-    | FriendInfo
-    | undefined;
-  /** REQUEST_CANCELLED일 때 */
-  cancelledUserId: string;
-}
-
-export enum SFriendRequestPush_EventType {
-  /** REQUEST_RECEIVED - 친구 요청 받음 */
-  REQUEST_RECEIVED = 0,
-  /** REQUEST_ACCEPTED - 친구 요청 수락됨 */
-  REQUEST_ACCEPTED = 1,
-  /** REQUEST_CANCELLED - 친구 요청 취소됨 */
-  REQUEST_CANCELLED = 2,
-  UNRECOGNIZED = -1,
-}
-
-export function sFriendRequestPush_EventTypeFromJSON(object: any): SFriendRequestPush_EventType {
-  switch (object) {
-    case 0:
-    case "REQUEST_RECEIVED":
-      return SFriendRequestPush_EventType.REQUEST_RECEIVED;
-    case 1:
-    case "REQUEST_ACCEPTED":
-      return SFriendRequestPush_EventType.REQUEST_ACCEPTED;
-    case 2:
-    case "REQUEST_CANCELLED":
-      return SFriendRequestPush_EventType.REQUEST_CANCELLED;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return SFriendRequestPush_EventType.UNRECOGNIZED;
-  }
-}
-
-export function sFriendRequestPush_EventTypeToJSON(object: SFriendRequestPush_EventType): string {
-  switch (object) {
-    case SFriendRequestPush_EventType.REQUEST_RECEIVED:
-      return "REQUEST_RECEIVED";
-    case SFriendRequestPush_EventType.REQUEST_ACCEPTED:
-      return "REQUEST_ACCEPTED";
-    case SFriendRequestPush_EventType.REQUEST_CANCELLED:
-      return "REQUEST_CANCELLED";
-    case SFriendRequestPush_EventType.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
-}
-
 function createBaseEnvelope(): Envelope {
   return {
     version: 0,
@@ -784,8 +754,13 @@ function createBaseEnvelope(): Envelope {
     sMessageBatch: undefined,
     cUploadFile: undefined,
     sUploadFile: undefined,
-    cFriendList: undefined,
-    sFriendList: undefined,
+    cSearchUser: undefined,
+    sSearchUser: undefined,
+    cFriendAction: undefined,
+    sFriendAction: undefined,
+    cFetchFriendData: undefined,
+    sFetchFriendData: undefined,
+    sFriendPush: undefined,
     cGroupList: undefined,
     sGroupList: undefined,
     cGroupJoinRequest: undefined,
@@ -794,19 +769,6 @@ function createBaseEnvelope(): Envelope {
     sGroupJoinResponse: undefined,
     cGroupJoinRequestList: undefined,
     sGroupJoinRequestList: undefined,
-    cFrientRequestFind: undefined,
-    sFrientRequestFind: undefined,
-    cFriendRequestAdd: undefined,
-    sFriendRequestAdd: undefined,
-    cFriendRequestCancel: undefined,
-    sFriendRequestCancel: undefined,
-    cFriendRequestRemove: undefined,
-    sFriendRequestRemove: undefined,
-    cFriendRequestList: undefined,
-    sFriendRequestList: undefined,
-    cFriendRequestRespond: undefined,
-    sFriendRequestRespond: undefined,
-    sFriendRequestPush: undefined,
   };
 }
 
@@ -899,74 +861,50 @@ export const Envelope = {
     if (message.sUploadFile !== undefined) {
       SUploadFile.encode(message.sUploadFile, writer.uint32(282).fork()).ldelim();
     }
-    if (message.cFriendList !== undefined) {
-      CFriendList.encode(message.cFriendList, writer.uint32(322).fork()).ldelim();
+    if (message.cSearchUser !== undefined) {
+      CSearchUser.encode(message.cSearchUser, writer.uint32(322).fork()).ldelim();
     }
-    if (message.sFriendList !== undefined) {
-      SFriendList.encode(message.sFriendList, writer.uint32(330).fork()).ldelim();
+    if (message.sSearchUser !== undefined) {
+      SSearchUser.encode(message.sSearchUser, writer.uint32(330).fork()).ldelim();
+    }
+    if (message.cFriendAction !== undefined) {
+      CFriendAction.encode(message.cFriendAction, writer.uint32(338).fork()).ldelim();
+    }
+    if (message.sFriendAction !== undefined) {
+      SFriendAction.encode(message.sFriendAction, writer.uint32(346).fork()).ldelim();
+    }
+    if (message.cFetchFriendData !== undefined) {
+      CFetchFriendData.encode(message.cFetchFriendData, writer.uint32(354).fork()).ldelim();
+    }
+    if (message.sFetchFriendData !== undefined) {
+      SFetchFriendData.encode(message.sFetchFriendData, writer.uint32(362).fork()).ldelim();
+    }
+    if (message.sFriendPush !== undefined) {
+      SFriendPush.encode(message.sFriendPush, writer.uint32(370).fork()).ldelim();
     }
     if (message.cGroupList !== undefined) {
-      CGroupList.encode(message.cGroupList, writer.uint32(338).fork()).ldelim();
+      CGroupList.encode(message.cGroupList, writer.uint32(402).fork()).ldelim();
     }
     if (message.sGroupList !== undefined) {
-      SGroupList.encode(message.sGroupList, writer.uint32(346).fork()).ldelim();
+      SGroupList.encode(message.sGroupList, writer.uint32(410).fork()).ldelim();
     }
     if (message.cGroupJoinRequest !== undefined) {
-      CGroupJoinRequest.encode(message.cGroupJoinRequest, writer.uint32(354).fork()).ldelim();
+      CGroupJoinRequest.encode(message.cGroupJoinRequest, writer.uint32(418).fork()).ldelim();
     }
     if (message.sGroupJoinRequest !== undefined) {
-      SGroupJoinRequest.encode(message.sGroupJoinRequest, writer.uint32(362).fork()).ldelim();
+      SGroupJoinRequest.encode(message.sGroupJoinRequest, writer.uint32(426).fork()).ldelim();
     }
     if (message.cGroupJoinResponse !== undefined) {
-      CGroupJoinResponse.encode(message.cGroupJoinResponse, writer.uint32(370).fork()).ldelim();
+      CGroupJoinResponse.encode(message.cGroupJoinResponse, writer.uint32(434).fork()).ldelim();
     }
     if (message.sGroupJoinResponse !== undefined) {
-      SGroupJoinResponse.encode(message.sGroupJoinResponse, writer.uint32(378).fork()).ldelim();
+      SGroupJoinResponse.encode(message.sGroupJoinResponse, writer.uint32(442).fork()).ldelim();
     }
     if (message.cGroupJoinRequestList !== undefined) {
-      CGroupJoinRequestList.encode(message.cGroupJoinRequestList, writer.uint32(386).fork()).ldelim();
+      CGroupJoinRequestList.encode(message.cGroupJoinRequestList, writer.uint32(450).fork()).ldelim();
     }
     if (message.sGroupJoinRequestList !== undefined) {
-      SGroupJoinRequestList.encode(message.sGroupJoinRequestList, writer.uint32(394).fork()).ldelim();
-    }
-    if (message.cFrientRequestFind !== undefined) {
-      CFriendRequestFind.encode(message.cFrientRequestFind, writer.uint32(402).fork()).ldelim();
-    }
-    if (message.sFrientRequestFind !== undefined) {
-      SFriendRequestFind.encode(message.sFrientRequestFind, writer.uint32(410).fork()).ldelim();
-    }
-    if (message.cFriendRequestAdd !== undefined) {
-      CFriendRequestAdd.encode(message.cFriendRequestAdd, writer.uint32(418).fork()).ldelim();
-    }
-    if (message.sFriendRequestAdd !== undefined) {
-      SFriendRequestAdd.encode(message.sFriendRequestAdd, writer.uint32(426).fork()).ldelim();
-    }
-    if (message.cFriendRequestCancel !== undefined) {
-      CFriendRequestCancel.encode(message.cFriendRequestCancel, writer.uint32(434).fork()).ldelim();
-    }
-    if (message.sFriendRequestCancel !== undefined) {
-      SFriendRequestCancel.encode(message.sFriendRequestCancel, writer.uint32(442).fork()).ldelim();
-    }
-    if (message.cFriendRequestRemove !== undefined) {
-      CFriendRequestRemove.encode(message.cFriendRequestRemove, writer.uint32(450).fork()).ldelim();
-    }
-    if (message.sFriendRequestRemove !== undefined) {
-      SFriendRequestRemove.encode(message.sFriendRequestRemove, writer.uint32(458).fork()).ldelim();
-    }
-    if (message.cFriendRequestList !== undefined) {
-      CFriendRequestList.encode(message.cFriendRequestList, writer.uint32(466).fork()).ldelim();
-    }
-    if (message.sFriendRequestList !== undefined) {
-      SFriendRequestList.encode(message.sFriendRequestList, writer.uint32(474).fork()).ldelim();
-    }
-    if (message.cFriendRequestRespond !== undefined) {
-      CFriendRequestRespond.encode(message.cFriendRequestRespond, writer.uint32(482).fork()).ldelim();
-    }
-    if (message.sFriendRequestRespond !== undefined) {
-      SFriendRequestRespond.encode(message.sFriendRequestRespond, writer.uint32(490).fork()).ldelim();
-    }
-    if (message.sFriendRequestPush !== undefined) {
-      SFriendRequestPush.encode(message.sFriendRequestPush, writer.uint32(498).fork()).ldelim();
+      SGroupJoinRequestList.encode(message.sGroupJoinRequestList, writer.uint32(458).fork()).ldelim();
     }
     return writer;
   },
@@ -1186,161 +1124,105 @@ export const Envelope = {
             break;
           }
 
-          message.cFriendList = CFriendList.decode(reader, reader.uint32());
+          message.cSearchUser = CSearchUser.decode(reader, reader.uint32());
           continue;
         case 41:
           if (tag !== 330) {
             break;
           }
 
-          message.sFriendList = SFriendList.decode(reader, reader.uint32());
+          message.sSearchUser = SSearchUser.decode(reader, reader.uint32());
           continue;
         case 42:
           if (tag !== 338) {
             break;
           }
 
-          message.cGroupList = CGroupList.decode(reader, reader.uint32());
+          message.cFriendAction = CFriendAction.decode(reader, reader.uint32());
           continue;
         case 43:
           if (tag !== 346) {
             break;
           }
 
-          message.sGroupList = SGroupList.decode(reader, reader.uint32());
+          message.sFriendAction = SFriendAction.decode(reader, reader.uint32());
           continue;
         case 44:
           if (tag !== 354) {
             break;
           }
 
-          message.cGroupJoinRequest = CGroupJoinRequest.decode(reader, reader.uint32());
+          message.cFetchFriendData = CFetchFriendData.decode(reader, reader.uint32());
           continue;
         case 45:
           if (tag !== 362) {
             break;
           }
 
-          message.sGroupJoinRequest = SGroupJoinRequest.decode(reader, reader.uint32());
+          message.sFetchFriendData = SFetchFriendData.decode(reader, reader.uint32());
           continue;
         case 46:
           if (tag !== 370) {
             break;
           }
 
-          message.cGroupJoinResponse = CGroupJoinResponse.decode(reader, reader.uint32());
-          continue;
-        case 47:
-          if (tag !== 378) {
-            break;
-          }
-
-          message.sGroupJoinResponse = SGroupJoinResponse.decode(reader, reader.uint32());
-          continue;
-        case 48:
-          if (tag !== 386) {
-            break;
-          }
-
-          message.cGroupJoinRequestList = CGroupJoinRequestList.decode(reader, reader.uint32());
-          continue;
-        case 49:
-          if (tag !== 394) {
-            break;
-          }
-
-          message.sGroupJoinRequestList = SGroupJoinRequestList.decode(reader, reader.uint32());
+          message.sFriendPush = SFriendPush.decode(reader, reader.uint32());
           continue;
         case 50:
           if (tag !== 402) {
             break;
           }
 
-          message.cFrientRequestFind = CFriendRequestFind.decode(reader, reader.uint32());
+          message.cGroupList = CGroupList.decode(reader, reader.uint32());
           continue;
         case 51:
           if (tag !== 410) {
             break;
           }
 
-          message.sFrientRequestFind = SFriendRequestFind.decode(reader, reader.uint32());
+          message.sGroupList = SGroupList.decode(reader, reader.uint32());
           continue;
         case 52:
           if (tag !== 418) {
             break;
           }
 
-          message.cFriendRequestAdd = CFriendRequestAdd.decode(reader, reader.uint32());
+          message.cGroupJoinRequest = CGroupJoinRequest.decode(reader, reader.uint32());
           continue;
         case 53:
           if (tag !== 426) {
             break;
           }
 
-          message.sFriendRequestAdd = SFriendRequestAdd.decode(reader, reader.uint32());
+          message.sGroupJoinRequest = SGroupJoinRequest.decode(reader, reader.uint32());
           continue;
         case 54:
           if (tag !== 434) {
             break;
           }
 
-          message.cFriendRequestCancel = CFriendRequestCancel.decode(reader, reader.uint32());
+          message.cGroupJoinResponse = CGroupJoinResponse.decode(reader, reader.uint32());
           continue;
         case 55:
           if (tag !== 442) {
             break;
           }
 
-          message.sFriendRequestCancel = SFriendRequestCancel.decode(reader, reader.uint32());
+          message.sGroupJoinResponse = SGroupJoinResponse.decode(reader, reader.uint32());
           continue;
         case 56:
           if (tag !== 450) {
             break;
           }
 
-          message.cFriendRequestRemove = CFriendRequestRemove.decode(reader, reader.uint32());
+          message.cGroupJoinRequestList = CGroupJoinRequestList.decode(reader, reader.uint32());
           continue;
         case 57:
           if (tag !== 458) {
             break;
           }
 
-          message.sFriendRequestRemove = SFriendRequestRemove.decode(reader, reader.uint32());
-          continue;
-        case 58:
-          if (tag !== 466) {
-            break;
-          }
-
-          message.cFriendRequestList = CFriendRequestList.decode(reader, reader.uint32());
-          continue;
-        case 59:
-          if (tag !== 474) {
-            break;
-          }
-
-          message.sFriendRequestList = SFriendRequestList.decode(reader, reader.uint32());
-          continue;
-        case 60:
-          if (tag !== 482) {
-            break;
-          }
-
-          message.cFriendRequestRespond = CFriendRequestRespond.decode(reader, reader.uint32());
-          continue;
-        case 61:
-          if (tag !== 490) {
-            break;
-          }
-
-          message.sFriendRequestRespond = SFriendRequestRespond.decode(reader, reader.uint32());
-          continue;
-        case 62:
-          if (tag !== 498) {
-            break;
-          }
-
-          message.sFriendRequestPush = SFriendRequestPush.decode(reader, reader.uint32());
+          message.sGroupJoinRequestList = SGroupJoinRequestList.decode(reader, reader.uint32());
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -1386,8 +1268,13 @@ export const Envelope = {
       sMessageBatch: isSet(object.sMessageBatch) ? SMessageBatch.fromJSON(object.sMessageBatch) : undefined,
       cUploadFile: isSet(object.cUploadFile) ? CUploadFile.fromJSON(object.cUploadFile) : undefined,
       sUploadFile: isSet(object.sUploadFile) ? SUploadFile.fromJSON(object.sUploadFile) : undefined,
-      cFriendList: isSet(object.cFriendList) ? CFriendList.fromJSON(object.cFriendList) : undefined,
-      sFriendList: isSet(object.sFriendList) ? SFriendList.fromJSON(object.sFriendList) : undefined,
+      cSearchUser: isSet(object.cSearchUser) ? CSearchUser.fromJSON(object.cSearchUser) : undefined,
+      sSearchUser: isSet(object.sSearchUser) ? SSearchUser.fromJSON(object.sSearchUser) : undefined,
+      cFriendAction: isSet(object.cFriendAction) ? CFriendAction.fromJSON(object.cFriendAction) : undefined,
+      sFriendAction: isSet(object.sFriendAction) ? SFriendAction.fromJSON(object.sFriendAction) : undefined,
+      cFetchFriendData: isSet(object.cFetchFriendData) ? CFetchFriendData.fromJSON(object.cFetchFriendData) : undefined,
+      sFetchFriendData: isSet(object.sFetchFriendData) ? SFetchFriendData.fromJSON(object.sFetchFriendData) : undefined,
+      sFriendPush: isSet(object.sFriendPush) ? SFriendPush.fromJSON(object.sFriendPush) : undefined,
       cGroupList: isSet(object.cGroupList) ? CGroupList.fromJSON(object.cGroupList) : undefined,
       sGroupList: isSet(object.sGroupList) ? SGroupList.fromJSON(object.sGroupList) : undefined,
       cGroupJoinRequest: isSet(object.cGroupJoinRequest)
@@ -1407,45 +1294,6 @@ export const Envelope = {
         : undefined,
       sGroupJoinRequestList: isSet(object.sGroupJoinRequestList)
         ? SGroupJoinRequestList.fromJSON(object.sGroupJoinRequestList)
-        : undefined,
-      cFrientRequestFind: isSet(object.cFrientRequestFind)
-        ? CFriendRequestFind.fromJSON(object.cFrientRequestFind)
-        : undefined,
-      sFrientRequestFind: isSet(object.sFrientRequestFind)
-        ? SFriendRequestFind.fromJSON(object.sFrientRequestFind)
-        : undefined,
-      cFriendRequestAdd: isSet(object.cFriendRequestAdd)
-        ? CFriendRequestAdd.fromJSON(object.cFriendRequestAdd)
-        : undefined,
-      sFriendRequestAdd: isSet(object.sFriendRequestAdd)
-        ? SFriendRequestAdd.fromJSON(object.sFriendRequestAdd)
-        : undefined,
-      cFriendRequestCancel: isSet(object.cFriendRequestCancel)
-        ? CFriendRequestCancel.fromJSON(object.cFriendRequestCancel)
-        : undefined,
-      sFriendRequestCancel: isSet(object.sFriendRequestCancel)
-        ? SFriendRequestCancel.fromJSON(object.sFriendRequestCancel)
-        : undefined,
-      cFriendRequestRemove: isSet(object.cFriendRequestRemove)
-        ? CFriendRequestRemove.fromJSON(object.cFriendRequestRemove)
-        : undefined,
-      sFriendRequestRemove: isSet(object.sFriendRequestRemove)
-        ? SFriendRequestRemove.fromJSON(object.sFriendRequestRemove)
-        : undefined,
-      cFriendRequestList: isSet(object.cFriendRequestList)
-        ? CFriendRequestList.fromJSON(object.cFriendRequestList)
-        : undefined,
-      sFriendRequestList: isSet(object.sFriendRequestList)
-        ? SFriendRequestList.fromJSON(object.sFriendRequestList)
-        : undefined,
-      cFriendRequestRespond: isSet(object.cFriendRequestRespond)
-        ? CFriendRequestRespond.fromJSON(object.cFriendRequestRespond)
-        : undefined,
-      sFriendRequestRespond: isSet(object.sFriendRequestRespond)
-        ? SFriendRequestRespond.fromJSON(object.sFriendRequestRespond)
-        : undefined,
-      sFriendRequestPush: isSet(object.sFriendRequestPush)
-        ? SFriendRequestPush.fromJSON(object.sFriendRequestPush)
         : undefined,
     };
   },
@@ -1539,11 +1387,26 @@ export const Envelope = {
     if (message.sUploadFile !== undefined) {
       obj.sUploadFile = SUploadFile.toJSON(message.sUploadFile);
     }
-    if (message.cFriendList !== undefined) {
-      obj.cFriendList = CFriendList.toJSON(message.cFriendList);
+    if (message.cSearchUser !== undefined) {
+      obj.cSearchUser = CSearchUser.toJSON(message.cSearchUser);
     }
-    if (message.sFriendList !== undefined) {
-      obj.sFriendList = SFriendList.toJSON(message.sFriendList);
+    if (message.sSearchUser !== undefined) {
+      obj.sSearchUser = SSearchUser.toJSON(message.sSearchUser);
+    }
+    if (message.cFriendAction !== undefined) {
+      obj.cFriendAction = CFriendAction.toJSON(message.cFriendAction);
+    }
+    if (message.sFriendAction !== undefined) {
+      obj.sFriendAction = SFriendAction.toJSON(message.sFriendAction);
+    }
+    if (message.cFetchFriendData !== undefined) {
+      obj.cFetchFriendData = CFetchFriendData.toJSON(message.cFetchFriendData);
+    }
+    if (message.sFetchFriendData !== undefined) {
+      obj.sFetchFriendData = SFetchFriendData.toJSON(message.sFetchFriendData);
+    }
+    if (message.sFriendPush !== undefined) {
+      obj.sFriendPush = SFriendPush.toJSON(message.sFriendPush);
     }
     if (message.cGroupList !== undefined) {
       obj.cGroupList = CGroupList.toJSON(message.cGroupList);
@@ -1568,45 +1431,6 @@ export const Envelope = {
     }
     if (message.sGroupJoinRequestList !== undefined) {
       obj.sGroupJoinRequestList = SGroupJoinRequestList.toJSON(message.sGroupJoinRequestList);
-    }
-    if (message.cFrientRequestFind !== undefined) {
-      obj.cFrientRequestFind = CFriendRequestFind.toJSON(message.cFrientRequestFind);
-    }
-    if (message.sFrientRequestFind !== undefined) {
-      obj.sFrientRequestFind = SFriendRequestFind.toJSON(message.sFrientRequestFind);
-    }
-    if (message.cFriendRequestAdd !== undefined) {
-      obj.cFriendRequestAdd = CFriendRequestAdd.toJSON(message.cFriendRequestAdd);
-    }
-    if (message.sFriendRequestAdd !== undefined) {
-      obj.sFriendRequestAdd = SFriendRequestAdd.toJSON(message.sFriendRequestAdd);
-    }
-    if (message.cFriendRequestCancel !== undefined) {
-      obj.cFriendRequestCancel = CFriendRequestCancel.toJSON(message.cFriendRequestCancel);
-    }
-    if (message.sFriendRequestCancel !== undefined) {
-      obj.sFriendRequestCancel = SFriendRequestCancel.toJSON(message.sFriendRequestCancel);
-    }
-    if (message.cFriendRequestRemove !== undefined) {
-      obj.cFriendRequestRemove = CFriendRequestRemove.toJSON(message.cFriendRequestRemove);
-    }
-    if (message.sFriendRequestRemove !== undefined) {
-      obj.sFriendRequestRemove = SFriendRequestRemove.toJSON(message.sFriendRequestRemove);
-    }
-    if (message.cFriendRequestList !== undefined) {
-      obj.cFriendRequestList = CFriendRequestList.toJSON(message.cFriendRequestList);
-    }
-    if (message.sFriendRequestList !== undefined) {
-      obj.sFriendRequestList = SFriendRequestList.toJSON(message.sFriendRequestList);
-    }
-    if (message.cFriendRequestRespond !== undefined) {
-      obj.cFriendRequestRespond = CFriendRequestRespond.toJSON(message.cFriendRequestRespond);
-    }
-    if (message.sFriendRequestRespond !== undefined) {
-      obj.sFriendRequestRespond = SFriendRequestRespond.toJSON(message.sFriendRequestRespond);
-    }
-    if (message.sFriendRequestPush !== undefined) {
-      obj.sFriendRequestPush = SFriendRequestPush.toJSON(message.sFriendRequestPush);
     }
     return obj;
   },
@@ -1691,11 +1515,26 @@ export const Envelope = {
     message.sUploadFile = (object.sUploadFile !== undefined && object.sUploadFile !== null)
       ? SUploadFile.fromPartial(object.sUploadFile)
       : undefined;
-    message.cFriendList = (object.cFriendList !== undefined && object.cFriendList !== null)
-      ? CFriendList.fromPartial(object.cFriendList)
+    message.cSearchUser = (object.cSearchUser !== undefined && object.cSearchUser !== null)
+      ? CSearchUser.fromPartial(object.cSearchUser)
       : undefined;
-    message.sFriendList = (object.sFriendList !== undefined && object.sFriendList !== null)
-      ? SFriendList.fromPartial(object.sFriendList)
+    message.sSearchUser = (object.sSearchUser !== undefined && object.sSearchUser !== null)
+      ? SSearchUser.fromPartial(object.sSearchUser)
+      : undefined;
+    message.cFriendAction = (object.cFriendAction !== undefined && object.cFriendAction !== null)
+      ? CFriendAction.fromPartial(object.cFriendAction)
+      : undefined;
+    message.sFriendAction = (object.sFriendAction !== undefined && object.sFriendAction !== null)
+      ? SFriendAction.fromPartial(object.sFriendAction)
+      : undefined;
+    message.cFetchFriendData = (object.cFetchFriendData !== undefined && object.cFetchFriendData !== null)
+      ? CFetchFriendData.fromPartial(object.cFetchFriendData)
+      : undefined;
+    message.sFetchFriendData = (object.sFetchFriendData !== undefined && object.sFetchFriendData !== null)
+      ? SFetchFriendData.fromPartial(object.sFetchFriendData)
+      : undefined;
+    message.sFriendPush = (object.sFriendPush !== undefined && object.sFriendPush !== null)
+      ? SFriendPush.fromPartial(object.sFriendPush)
       : undefined;
     message.cGroupList = (object.cGroupList !== undefined && object.cGroupList !== null)
       ? CGroupList.fromPartial(object.cGroupList)
@@ -1723,47 +1562,6 @@ export const Envelope = {
       (object.sGroupJoinRequestList !== undefined && object.sGroupJoinRequestList !== null)
         ? SGroupJoinRequestList.fromPartial(object.sGroupJoinRequestList)
         : undefined;
-    message.cFrientRequestFind = (object.cFrientRequestFind !== undefined && object.cFrientRequestFind !== null)
-      ? CFriendRequestFind.fromPartial(object.cFrientRequestFind)
-      : undefined;
-    message.sFrientRequestFind = (object.sFrientRequestFind !== undefined && object.sFrientRequestFind !== null)
-      ? SFriendRequestFind.fromPartial(object.sFrientRequestFind)
-      : undefined;
-    message.cFriendRequestAdd = (object.cFriendRequestAdd !== undefined && object.cFriendRequestAdd !== null)
-      ? CFriendRequestAdd.fromPartial(object.cFriendRequestAdd)
-      : undefined;
-    message.sFriendRequestAdd = (object.sFriendRequestAdd !== undefined && object.sFriendRequestAdd !== null)
-      ? SFriendRequestAdd.fromPartial(object.sFriendRequestAdd)
-      : undefined;
-    message.cFriendRequestCancel = (object.cFriendRequestCancel !== undefined && object.cFriendRequestCancel !== null)
-      ? CFriendRequestCancel.fromPartial(object.cFriendRequestCancel)
-      : undefined;
-    message.sFriendRequestCancel = (object.sFriendRequestCancel !== undefined && object.sFriendRequestCancel !== null)
-      ? SFriendRequestCancel.fromPartial(object.sFriendRequestCancel)
-      : undefined;
-    message.cFriendRequestRemove = (object.cFriendRequestRemove !== undefined && object.cFriendRequestRemove !== null)
-      ? CFriendRequestRemove.fromPartial(object.cFriendRequestRemove)
-      : undefined;
-    message.sFriendRequestRemove = (object.sFriendRequestRemove !== undefined && object.sFriendRequestRemove !== null)
-      ? SFriendRequestRemove.fromPartial(object.sFriendRequestRemove)
-      : undefined;
-    message.cFriendRequestList = (object.cFriendRequestList !== undefined && object.cFriendRequestList !== null)
-      ? CFriendRequestList.fromPartial(object.cFriendRequestList)
-      : undefined;
-    message.sFriendRequestList = (object.sFriendRequestList !== undefined && object.sFriendRequestList !== null)
-      ? SFriendRequestList.fromPartial(object.sFriendRequestList)
-      : undefined;
-    message.cFriendRequestRespond =
-      (object.cFriendRequestRespond !== undefined && object.cFriendRequestRespond !== null)
-        ? CFriendRequestRespond.fromPartial(object.cFriendRequestRespond)
-        : undefined;
-    message.sFriendRequestRespond =
-      (object.sFriendRequestRespond !== undefined && object.sFriendRequestRespond !== null)
-        ? SFriendRequestRespond.fromPartial(object.sFriendRequestRespond)
-        : undefined;
-    message.sFriendRequestPush = (object.sFriendRequestPush !== undefined && object.sFriendRequestPush !== null)
-      ? SFriendRequestPush.fromPartial(object.sFriendRequestPush)
-      : undefined;
     return message;
   },
 };
@@ -4249,31 +4047,28 @@ export const FriendInfo = {
 };
 
 function createBaseFriendRequest(): FriendRequest {
-  return {
-    requesterUserId: "",
-    requesterName: "",
-    requesterStatusMessage: "",
-    requesterProfileImageUrl: "",
-    requestedAt: 0,
-  };
+  return { userId: "", name: "", statusMessage: "", profileImageUrl: "", requestedAt: 0, isReceived: false };
 }
 
 export const FriendRequest = {
   encode(message: FriendRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.requesterUserId !== "") {
-      writer.uint32(10).string(message.requesterUserId);
+    if (message.userId !== "") {
+      writer.uint32(10).string(message.userId);
     }
-    if (message.requesterName !== "") {
-      writer.uint32(18).string(message.requesterName);
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
     }
-    if (message.requesterStatusMessage !== "") {
-      writer.uint32(26).string(message.requesterStatusMessage);
+    if (message.statusMessage !== "") {
+      writer.uint32(26).string(message.statusMessage);
     }
-    if (message.requesterProfileImageUrl !== "") {
-      writer.uint32(34).string(message.requesterProfileImageUrl);
+    if (message.profileImageUrl !== "") {
+      writer.uint32(34).string(message.profileImageUrl);
     }
     if (message.requestedAt !== 0) {
       writer.uint32(40).int64(message.requestedAt);
+    }
+    if (message.isReceived !== false) {
+      writer.uint32(48).bool(message.isReceived);
     }
     return writer;
   },
@@ -4290,28 +4085,28 @@ export const FriendRequest = {
             break;
           }
 
-          message.requesterUserId = reader.string();
+          message.userId = reader.string();
           continue;
         case 2:
           if (tag !== 18) {
             break;
           }
 
-          message.requesterName = reader.string();
+          message.name = reader.string();
           continue;
         case 3:
           if (tag !== 26) {
             break;
           }
 
-          message.requesterStatusMessage = reader.string();
+          message.statusMessage = reader.string();
           continue;
         case 4:
           if (tag !== 34) {
             break;
           }
 
-          message.requesterProfileImageUrl = reader.string();
+          message.profileImageUrl = reader.string();
           continue;
         case 5:
           if (tag !== 40) {
@@ -4319,6 +4114,13 @@ export const FriendRequest = {
           }
 
           message.requestedAt = longToNumber(reader.int64() as Long);
+          continue;
+        case 6:
+          if (tag !== 48) {
+            break;
+          }
+
+          message.isReceived = reader.bool();
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -4331,34 +4133,34 @@ export const FriendRequest = {
 
   fromJSON(object: any): FriendRequest {
     return {
-      requesterUserId: isSet(object.requesterUserId) ? globalThis.String(object.requesterUserId) : "",
-      requesterName: isSet(object.requesterName) ? globalThis.String(object.requesterName) : "",
-      requesterStatusMessage: isSet(object.requesterStatusMessage)
-        ? globalThis.String(object.requesterStatusMessage)
-        : "",
-      requesterProfileImageUrl: isSet(object.requesterProfileImageUrl)
-        ? globalThis.String(object.requesterProfileImageUrl)
-        : "",
+      userId: isSet(object.userId) ? globalThis.String(object.userId) : "",
+      name: isSet(object.name) ? globalThis.String(object.name) : "",
+      statusMessage: isSet(object.statusMessage) ? globalThis.String(object.statusMessage) : "",
+      profileImageUrl: isSet(object.profileImageUrl) ? globalThis.String(object.profileImageUrl) : "",
       requestedAt: isSet(object.requestedAt) ? globalThis.Number(object.requestedAt) : 0,
+      isReceived: isSet(object.isReceived) ? globalThis.Boolean(object.isReceived) : false,
     };
   },
 
   toJSON(message: FriendRequest): unknown {
     const obj: any = {};
-    if (message.requesterUserId !== "") {
-      obj.requesterUserId = message.requesterUserId;
+    if (message.userId !== "") {
+      obj.userId = message.userId;
     }
-    if (message.requesterName !== "") {
-      obj.requesterName = message.requesterName;
+    if (message.name !== "") {
+      obj.name = message.name;
     }
-    if (message.requesterStatusMessage !== "") {
-      obj.requesterStatusMessage = message.requesterStatusMessage;
+    if (message.statusMessage !== "") {
+      obj.statusMessage = message.statusMessage;
     }
-    if (message.requesterProfileImageUrl !== "") {
-      obj.requesterProfileImageUrl = message.requesterProfileImageUrl;
+    if (message.profileImageUrl !== "") {
+      obj.profileImageUrl = message.profileImageUrl;
     }
     if (message.requestedAt !== 0) {
       obj.requestedAt = Math.round(message.requestedAt);
+    }
+    if (message.isReceived !== false) {
+      obj.isReceived = message.isReceived;
     }
     return obj;
   },
@@ -4368,74 +4170,32 @@ export const FriendRequest = {
   },
   fromPartial<I extends Exact<DeepPartial<FriendRequest>, I>>(object: I): FriendRequest {
     const message = createBaseFriendRequest();
-    message.requesterUserId = object.requesterUserId ?? "";
-    message.requesterName = object.requesterName ?? "";
-    message.requesterStatusMessage = object.requesterStatusMessage ?? "";
-    message.requesterProfileImageUrl = object.requesterProfileImageUrl ?? "";
+    message.userId = object.userId ?? "";
+    message.name = object.name ?? "";
+    message.statusMessage = object.statusMessage ?? "";
+    message.profileImageUrl = object.profileImageUrl ?? "";
     message.requestedAt = object.requestedAt ?? 0;
+    message.isReceived = object.isReceived ?? false;
     return message;
   },
 };
 
-function createBaseCFriendList(): CFriendList {
-  return {};
+function createBaseCSearchUser(): CSearchUser {
+  return { userId: "" };
 }
 
-export const CFriendList = {
-  encode(_: CFriendList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): CFriendList {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCFriendList();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(_: any): CFriendList {
-    return {};
-  },
-
-  toJSON(_: CFriendList): unknown {
-    const obj: any = {};
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<CFriendList>, I>>(base?: I): CFriendList {
-    return CFriendList.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<CFriendList>, I>>(_: I): CFriendList {
-    const message = createBaseCFriendList();
-    return message;
-  },
-};
-
-function createBaseSFriendList(): SFriendList {
-  return { friends: [] };
-}
-
-export const SFriendList = {
-  encode(message: SFriendList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.friends) {
-      FriendInfo.encode(v!, writer.uint32(10).fork()).ldelim();
+export const CSearchUser = {
+  encode(message: CSearchUser, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.userId !== "") {
+      writer.uint32(10).string(message.userId);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): SFriendList {
+  decode(input: _m0.Reader | Uint8Array, length?: number): CSearchUser {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseSFriendList();
+    const message = createBaseCSearchUser();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -4444,7 +4204,7 @@ export const SFriendList = {
             break;
           }
 
-          message.friends.push(FriendInfo.decode(reader, reader.uint32()));
+          message.userId = reader.string();
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -4455,32 +4215,513 @@ export const SFriendList = {
     return message;
   },
 
-  fromJSON(object: any): SFriendList {
-    return {
-      friends: globalThis.Array.isArray(object?.friends) ? object.friends.map((e: any) => FriendInfo.fromJSON(e)) : [],
-    };
+  fromJSON(object: any): CSearchUser {
+    return { userId: isSet(object.userId) ? globalThis.String(object.userId) : "" };
   },
 
-  toJSON(message: SFriendList): unknown {
+  toJSON(message: CSearchUser): unknown {
     const obj: any = {};
-    if (message.friends?.length) {
-      obj.friends = message.friends.map((e) => FriendInfo.toJSON(e));
+    if (message.userId !== "") {
+      obj.userId = message.userId;
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<SFriendList>, I>>(base?: I): SFriendList {
-    return SFriendList.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<CSearchUser>, I>>(base?: I): CSearchUser {
+    return CSearchUser.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<SFriendList>, I>>(object: I): SFriendList {
-    const message = createBaseSFriendList();
+  fromPartial<I extends Exact<DeepPartial<CSearchUser>, I>>(object: I): CSearchUser {
+    const message = createBaseCSearchUser();
+    message.userId = object.userId ?? "";
+    return message;
+  },
+};
+
+function createBaseSSearchUser(): SSearchUser {
+  return { success: false, userInfo: undefined, isFriend: false, hasSentRequest: false };
+}
+
+export const SSearchUser = {
+  encode(message: SSearchUser, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.success !== false) {
+      writer.uint32(8).bool(message.success);
+    }
+    if (message.userInfo !== undefined) {
+      FriendInfo.encode(message.userInfo, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.isFriend !== false) {
+      writer.uint32(24).bool(message.isFriend);
+    }
+    if (message.hasSentRequest !== false) {
+      writer.uint32(32).bool(message.hasSentRequest);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SSearchUser {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSSearchUser();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.success = reader.bool();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.userInfo = FriendInfo.decode(reader, reader.uint32());
+          continue;
+        case 3:
+          if (tag !== 24) {
+            break;
+          }
+
+          message.isFriend = reader.bool();
+          continue;
+        case 4:
+          if (tag !== 32) {
+            break;
+          }
+
+          message.hasSentRequest = reader.bool();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SSearchUser {
+    return {
+      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
+      userInfo: isSet(object.userInfo) ? FriendInfo.fromJSON(object.userInfo) : undefined,
+      isFriend: isSet(object.isFriend) ? globalThis.Boolean(object.isFriend) : false,
+      hasSentRequest: isSet(object.hasSentRequest) ? globalThis.Boolean(object.hasSentRequest) : false,
+    };
+  },
+
+  toJSON(message: SSearchUser): unknown {
+    const obj: any = {};
+    if (message.success !== false) {
+      obj.success = message.success;
+    }
+    if (message.userInfo !== undefined) {
+      obj.userInfo = FriendInfo.toJSON(message.userInfo);
+    }
+    if (message.isFriend !== false) {
+      obj.isFriend = message.isFriend;
+    }
+    if (message.hasSentRequest !== false) {
+      obj.hasSentRequest = message.hasSentRequest;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SSearchUser>, I>>(base?: I): SSearchUser {
+    return SSearchUser.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SSearchUser>, I>>(object: I): SSearchUser {
+    const message = createBaseSSearchUser();
+    message.success = object.success ?? false;
+    message.userInfo = (object.userInfo !== undefined && object.userInfo !== null)
+      ? FriendInfo.fromPartial(object.userInfo)
+      : undefined;
+    message.isFriend = object.isFriend ?? false;
+    message.hasSentRequest = object.hasSentRequest ?? false;
+    return message;
+  },
+};
+
+function createBaseCFriendAction(): CFriendAction {
+  return { action: 0, targetUserId: "" };
+}
+
+export const CFriendAction = {
+  encode(message: CFriendAction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.action !== 0) {
+      writer.uint32(8).int32(message.action);
+    }
+    if (message.targetUserId !== "") {
+      writer.uint32(18).string(message.targetUserId);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CFriendAction {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCFriendAction();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.action = reader.int32() as any;
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.targetUserId = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CFriendAction {
+    return {
+      action: isSet(object.action) ? cFriendAction_ActionTypeFromJSON(object.action) : 0,
+      targetUserId: isSet(object.targetUserId) ? globalThis.String(object.targetUserId) : "",
+    };
+  },
+
+  toJSON(message: CFriendAction): unknown {
+    const obj: any = {};
+    if (message.action !== 0) {
+      obj.action = cFriendAction_ActionTypeToJSON(message.action);
+    }
+    if (message.targetUserId !== "") {
+      obj.targetUserId = message.targetUserId;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CFriendAction>, I>>(base?: I): CFriendAction {
+    return CFriendAction.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CFriendAction>, I>>(object: I): CFriendAction {
+    const message = createBaseCFriendAction();
+    message.action = object.action ?? 0;
+    message.targetUserId = object.targetUserId ?? "";
+    return message;
+  },
+};
+
+function createBaseSFriendAction(): SFriendAction {
+  return { success: false, message: "", updatedFriend: undefined };
+}
+
+export const SFriendAction = {
+  encode(message: SFriendAction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.success !== false) {
+      writer.uint32(8).bool(message.success);
+    }
+    if (message.message !== "") {
+      writer.uint32(18).string(message.message);
+    }
+    if (message.updatedFriend !== undefined) {
+      FriendInfo.encode(message.updatedFriend, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SFriendAction {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSFriendAction();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.success = reader.bool();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.message = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.updatedFriend = FriendInfo.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SFriendAction {
+    return {
+      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
+      message: isSet(object.message) ? globalThis.String(object.message) : "",
+      updatedFriend: isSet(object.updatedFriend) ? FriendInfo.fromJSON(object.updatedFriend) : undefined,
+    };
+  },
+
+  toJSON(message: SFriendAction): unknown {
+    const obj: any = {};
+    if (message.success !== false) {
+      obj.success = message.success;
+    }
+    if (message.message !== "") {
+      obj.message = message.message;
+    }
+    if (message.updatedFriend !== undefined) {
+      obj.updatedFriend = FriendInfo.toJSON(message.updatedFriend);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SFriendAction>, I>>(base?: I): SFriendAction {
+    return SFriendAction.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SFriendAction>, I>>(object: I): SFriendAction {
+    const message = createBaseSFriendAction();
+    message.success = object.success ?? false;
+    message.message = object.message ?? "";
+    message.updatedFriend = (object.updatedFriend !== undefined && object.updatedFriend !== null)
+      ? FriendInfo.fromPartial(object.updatedFriend)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseCFetchFriendData(): CFetchFriendData {
+  return {};
+}
+
+export const CFetchFriendData = {
+  encode(_: CFetchFriendData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CFetchFriendData {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCFetchFriendData();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(_: any): CFetchFriendData {
+    return {};
+  },
+
+  toJSON(_: CFetchFriendData): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CFetchFriendData>, I>>(base?: I): CFetchFriendData {
+    return CFetchFriendData.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CFetchFriendData>, I>>(_: I): CFetchFriendData {
+    const message = createBaseCFetchFriendData();
+    return message;
+  },
+};
+
+function createBaseSFetchFriendData(): SFetchFriendData {
+  return { friends: [], receivedRequests: [], sentRequests: [] };
+}
+
+export const SFetchFriendData = {
+  encode(message: SFetchFriendData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.friends) {
+      FriendInfo.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    for (const v of message.receivedRequests) {
+      FriendRequest.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    for (const v of message.sentRequests) {
+      FriendRequest.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SFetchFriendData {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSFetchFriendData();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.friends.push(FriendInfo.decode(reader, reader.uint32()));
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.receivedRequests.push(FriendRequest.decode(reader, reader.uint32()));
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.sentRequests.push(FriendRequest.decode(reader, reader.uint32()));
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SFetchFriendData {
+    return {
+      friends: globalThis.Array.isArray(object?.friends) ? object.friends.map((e: any) => FriendInfo.fromJSON(e)) : [],
+      receivedRequests: globalThis.Array.isArray(object?.receivedRequests)
+        ? object.receivedRequests.map((e: any) => FriendRequest.fromJSON(e))
+        : [],
+      sentRequests: globalThis.Array.isArray(object?.sentRequests)
+        ? object.sentRequests.map((e: any) => FriendRequest.fromJSON(e))
+        : [],
+    };
+  },
+
+  toJSON(message: SFetchFriendData): unknown {
+    const obj: any = {};
+    if (message.friends?.length) {
+      obj.friends = message.friends.map((e) => FriendInfo.toJSON(e));
+    }
+    if (message.receivedRequests?.length) {
+      obj.receivedRequests = message.receivedRequests.map((e) => FriendRequest.toJSON(e));
+    }
+    if (message.sentRequests?.length) {
+      obj.sentRequests = message.sentRequests.map((e) => FriendRequest.toJSON(e));
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SFetchFriendData>, I>>(base?: I): SFetchFriendData {
+    return SFetchFriendData.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SFetchFriendData>, I>>(object: I): SFetchFriendData {
+    const message = createBaseSFetchFriendData();
     message.friends = object.friends?.map((e) => FriendInfo.fromPartial(e)) || [];
+    message.receivedRequests = object.receivedRequests?.map((e) => FriendRequest.fromPartial(e)) || [];
+    message.sentRequests = object.sentRequests?.map((e) => FriendRequest.fromPartial(e)) || [];
+    return message;
+  },
+};
+
+function createBaseSFriendPush(): SFriendPush {
+  return { type: 0, userInfo: undefined };
+}
+
+export const SFriendPush = {
+  encode(message: SFriendPush, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.type !== 0) {
+      writer.uint32(8).int32(message.type);
+    }
+    if (message.userInfo !== undefined) {
+      FriendInfo.encode(message.userInfo, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SFriendPush {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSFriendPush();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.type = reader.int32() as any;
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.userInfo = FriendInfo.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SFriendPush {
+    return {
+      type: isSet(object.type) ? sFriendPush_PushTypeFromJSON(object.type) : 0,
+      userInfo: isSet(object.userInfo) ? FriendInfo.fromJSON(object.userInfo) : undefined,
+    };
+  },
+
+  toJSON(message: SFriendPush): unknown {
+    const obj: any = {};
+    if (message.type !== 0) {
+      obj.type = sFriendPush_PushTypeToJSON(message.type);
+    }
+    if (message.userInfo !== undefined) {
+      obj.userInfo = FriendInfo.toJSON(message.userInfo);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SFriendPush>, I>>(base?: I): SFriendPush {
+    return SFriendPush.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SFriendPush>, I>>(object: I): SFriendPush {
+    const message = createBaseSFriendPush();
+    message.type = object.type ?? 0;
+    message.userInfo = (object.userInfo !== undefined && object.userInfo !== null)
+      ? FriendInfo.fromPartial(object.userInfo)
+      : undefined;
     return message;
   },
 };
 
 function createBaseGroupInfo(): GroupInfo {
-  return { groupId: "", groupName: "", groupCode: "", creatorId: "", createdAt: 0 };
+  return { groupId: "", groupName: "", groupCode: "", creatorId: "", memberCount: 0 };
 }
 
 export const GroupInfo = {
@@ -4497,8 +4738,8 @@ export const GroupInfo = {
     if (message.creatorId !== "") {
       writer.uint32(34).string(message.creatorId);
     }
-    if (message.createdAt !== 0) {
-      writer.uint32(40).int64(message.createdAt);
+    if (message.memberCount !== 0) {
+      writer.uint32(40).int64(message.memberCount);
     }
     return writer;
   },
@@ -4543,7 +4784,7 @@ export const GroupInfo = {
             break;
           }
 
-          message.createdAt = longToNumber(reader.int64() as Long);
+          message.memberCount = longToNumber(reader.int64() as Long);
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -4560,7 +4801,7 @@ export const GroupInfo = {
       groupName: isSet(object.groupName) ? globalThis.String(object.groupName) : "",
       groupCode: isSet(object.groupCode) ? globalThis.String(object.groupCode) : "",
       creatorId: isSet(object.creatorId) ? globalThis.String(object.creatorId) : "",
-      createdAt: isSet(object.createdAt) ? globalThis.Number(object.createdAt) : 0,
+      memberCount: isSet(object.memberCount) ? globalThis.Number(object.memberCount) : 0,
     };
   },
 
@@ -4578,8 +4819,8 @@ export const GroupInfo = {
     if (message.creatorId !== "") {
       obj.creatorId = message.creatorId;
     }
-    if (message.createdAt !== 0) {
-      obj.createdAt = Math.round(message.createdAt);
+    if (message.memberCount !== 0) {
+      obj.memberCount = Math.round(message.memberCount);
     }
     return obj;
   },
@@ -4593,7 +4834,7 @@ export const GroupInfo = {
     message.groupName = object.groupName ?? "";
     message.groupCode = object.groupCode ?? "";
     message.creatorId = object.creatorId ?? "";
-    message.createdAt = object.createdAt ?? 0;
+    message.memberCount = object.memberCount ?? 0;
     return message;
   },
 };
@@ -5227,923 +5468,6 @@ export const GroupJoinRequestInfo = {
     message.requesterUserId = object.requesterUserId ?? "";
     message.requesterName = object.requesterName ?? "";
     message.requestedAt = object.requestedAt ?? 0;
-    return message;
-  },
-};
-
-function createBaseCFriendRequestFind(): CFriendRequestFind {
-  return { userId: "" };
-}
-
-export const CFriendRequestFind = {
-  encode(message: CFriendRequestFind, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.userId !== "") {
-      writer.uint32(10).string(message.userId);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): CFriendRequestFind {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCFriendRequestFind();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.userId = reader.string();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): CFriendRequestFind {
-    return { userId: isSet(object.userId) ? globalThis.String(object.userId) : "" };
-  },
-
-  toJSON(message: CFriendRequestFind): unknown {
-    const obj: any = {};
-    if (message.userId !== "") {
-      obj.userId = message.userId;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<CFriendRequestFind>, I>>(base?: I): CFriendRequestFind {
-    return CFriendRequestFind.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<CFriendRequestFind>, I>>(object: I): CFriendRequestFind {
-    const message = createBaseCFriendRequestFind();
-    message.userId = object.userId ?? "";
-    return message;
-  },
-};
-
-function createBaseSFriendRequestFind(): SFriendRequestFind {
-  return { exist: false, userInfo: undefined };
-}
-
-export const SFriendRequestFind = {
-  encode(message: SFriendRequestFind, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.exist !== false) {
-      writer.uint32(8).bool(message.exist);
-    }
-    if (message.userInfo !== undefined) {
-      FriendInfo.encode(message.userInfo, writer.uint32(18).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): SFriendRequestFind {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseSFriendRequestFind();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 8) {
-            break;
-          }
-
-          message.exist = reader.bool();
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.userInfo = FriendInfo.decode(reader, reader.uint32());
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): SFriendRequestFind {
-    return {
-      exist: isSet(object.exist) ? globalThis.Boolean(object.exist) : false,
-      userInfo: isSet(object.userInfo) ? FriendInfo.fromJSON(object.userInfo) : undefined,
-    };
-  },
-
-  toJSON(message: SFriendRequestFind): unknown {
-    const obj: any = {};
-    if (message.exist !== false) {
-      obj.exist = message.exist;
-    }
-    if (message.userInfo !== undefined) {
-      obj.userInfo = FriendInfo.toJSON(message.userInfo);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<SFriendRequestFind>, I>>(base?: I): SFriendRequestFind {
-    return SFriendRequestFind.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<SFriendRequestFind>, I>>(object: I): SFriendRequestFind {
-    const message = createBaseSFriendRequestFind();
-    message.exist = object.exist ?? false;
-    message.userInfo = (object.userInfo !== undefined && object.userInfo !== null)
-      ? FriendInfo.fromPartial(object.userInfo)
-      : undefined;
-    return message;
-  },
-};
-
-function createBaseCFriendRequestAdd(): CFriendRequestAdd {
-  return { friendUserId: "" };
-}
-
-export const CFriendRequestAdd = {
-  encode(message: CFriendRequestAdd, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.friendUserId !== "") {
-      writer.uint32(10).string(message.friendUserId);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): CFriendRequestAdd {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCFriendRequestAdd();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.friendUserId = reader.string();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): CFriendRequestAdd {
-    return { friendUserId: isSet(object.friendUserId) ? globalThis.String(object.friendUserId) : "" };
-  },
-
-  toJSON(message: CFriendRequestAdd): unknown {
-    const obj: any = {};
-    if (message.friendUserId !== "") {
-      obj.friendUserId = message.friendUserId;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<CFriendRequestAdd>, I>>(base?: I): CFriendRequestAdd {
-    return CFriendRequestAdd.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<CFriendRequestAdd>, I>>(object: I): CFriendRequestAdd {
-    const message = createBaseCFriendRequestAdd();
-    message.friendUserId = object.friendUserId ?? "";
-    return message;
-  },
-};
-
-function createBaseSFriendRequestAdd(): SFriendRequestAdd {
-  return { success: false, message: "" };
-}
-
-export const SFriendRequestAdd = {
-  encode(message: SFriendRequestAdd, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.success !== false) {
-      writer.uint32(8).bool(message.success);
-    }
-    if (message.message !== "") {
-      writer.uint32(18).string(message.message);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): SFriendRequestAdd {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseSFriendRequestAdd();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 8) {
-            break;
-          }
-
-          message.success = reader.bool();
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.message = reader.string();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): SFriendRequestAdd {
-    return {
-      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
-      message: isSet(object.message) ? globalThis.String(object.message) : "",
-    };
-  },
-
-  toJSON(message: SFriendRequestAdd): unknown {
-    const obj: any = {};
-    if (message.success !== false) {
-      obj.success = message.success;
-    }
-    if (message.message !== "") {
-      obj.message = message.message;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<SFriendRequestAdd>, I>>(base?: I): SFriendRequestAdd {
-    return SFriendRequestAdd.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<SFriendRequestAdd>, I>>(object: I): SFriendRequestAdd {
-    const message = createBaseSFriendRequestAdd();
-    message.success = object.success ?? false;
-    message.message = object.message ?? "";
-    return message;
-  },
-};
-
-function createBaseCFriendRequestCancel(): CFriendRequestCancel {
-  return { friendUserId: "" };
-}
-
-export const CFriendRequestCancel = {
-  encode(message: CFriendRequestCancel, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.friendUserId !== "") {
-      writer.uint32(10).string(message.friendUserId);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): CFriendRequestCancel {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCFriendRequestCancel();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.friendUserId = reader.string();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): CFriendRequestCancel {
-    return { friendUserId: isSet(object.friendUserId) ? globalThis.String(object.friendUserId) : "" };
-  },
-
-  toJSON(message: CFriendRequestCancel): unknown {
-    const obj: any = {};
-    if (message.friendUserId !== "") {
-      obj.friendUserId = message.friendUserId;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<CFriendRequestCancel>, I>>(base?: I): CFriendRequestCancel {
-    return CFriendRequestCancel.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<CFriendRequestCancel>, I>>(object: I): CFriendRequestCancel {
-    const message = createBaseCFriendRequestCancel();
-    message.friendUserId = object.friendUserId ?? "";
-    return message;
-  },
-};
-
-function createBaseSFriendRequestCancel(): SFriendRequestCancel {
-  return { success: false, message: "" };
-}
-
-export const SFriendRequestCancel = {
-  encode(message: SFriendRequestCancel, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.success !== false) {
-      writer.uint32(8).bool(message.success);
-    }
-    if (message.message !== "") {
-      writer.uint32(18).string(message.message);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): SFriendRequestCancel {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseSFriendRequestCancel();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 8) {
-            break;
-          }
-
-          message.success = reader.bool();
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.message = reader.string();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): SFriendRequestCancel {
-    return {
-      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
-      message: isSet(object.message) ? globalThis.String(object.message) : "",
-    };
-  },
-
-  toJSON(message: SFriendRequestCancel): unknown {
-    const obj: any = {};
-    if (message.success !== false) {
-      obj.success = message.success;
-    }
-    if (message.message !== "") {
-      obj.message = message.message;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<SFriendRequestCancel>, I>>(base?: I): SFriendRequestCancel {
-    return SFriendRequestCancel.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<SFriendRequestCancel>, I>>(object: I): SFriendRequestCancel {
-    const message = createBaseSFriendRequestCancel();
-    message.success = object.success ?? false;
-    message.message = object.message ?? "";
-    return message;
-  },
-};
-
-function createBaseCFriendRequestRemove(): CFriendRequestRemove {
-  return { friendUserId: "" };
-}
-
-export const CFriendRequestRemove = {
-  encode(message: CFriendRequestRemove, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.friendUserId !== "") {
-      writer.uint32(10).string(message.friendUserId);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): CFriendRequestRemove {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCFriendRequestRemove();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.friendUserId = reader.string();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): CFriendRequestRemove {
-    return { friendUserId: isSet(object.friendUserId) ? globalThis.String(object.friendUserId) : "" };
-  },
-
-  toJSON(message: CFriendRequestRemove): unknown {
-    const obj: any = {};
-    if (message.friendUserId !== "") {
-      obj.friendUserId = message.friendUserId;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<CFriendRequestRemove>, I>>(base?: I): CFriendRequestRemove {
-    return CFriendRequestRemove.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<CFriendRequestRemove>, I>>(object: I): CFriendRequestRemove {
-    const message = createBaseCFriendRequestRemove();
-    message.friendUserId = object.friendUserId ?? "";
-    return message;
-  },
-};
-
-function createBaseSFriendRequestRemove(): SFriendRequestRemove {
-  return { success: false, message: "" };
-}
-
-export const SFriendRequestRemove = {
-  encode(message: SFriendRequestRemove, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.success !== false) {
-      writer.uint32(8).bool(message.success);
-    }
-    if (message.message !== "") {
-      writer.uint32(18).string(message.message);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): SFriendRequestRemove {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseSFriendRequestRemove();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 8) {
-            break;
-          }
-
-          message.success = reader.bool();
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.message = reader.string();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): SFriendRequestRemove {
-    return {
-      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
-      message: isSet(object.message) ? globalThis.String(object.message) : "",
-    };
-  },
-
-  toJSON(message: SFriendRequestRemove): unknown {
-    const obj: any = {};
-    if (message.success !== false) {
-      obj.success = message.success;
-    }
-    if (message.message !== "") {
-      obj.message = message.message;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<SFriendRequestRemove>, I>>(base?: I): SFriendRequestRemove {
-    return SFriendRequestRemove.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<SFriendRequestRemove>, I>>(object: I): SFriendRequestRemove {
-    const message = createBaseSFriendRequestRemove();
-    message.success = object.success ?? false;
-    message.message = object.message ?? "";
-    return message;
-  },
-};
-
-function createBaseCFriendRequestList(): CFriendRequestList {
-  return { type: 0 };
-}
-
-export const CFriendRequestList = {
-  encode(message: CFriendRequestList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.type !== 0) {
-      writer.uint32(8).int32(message.type);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): CFriendRequestList {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCFriendRequestList();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 8) {
-            break;
-          }
-
-          message.type = reader.int32() as any;
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): CFriendRequestList {
-    return { type: isSet(object.type) ? cFriendRequestList_RequestTypeFromJSON(object.type) : 0 };
-  },
-
-  toJSON(message: CFriendRequestList): unknown {
-    const obj: any = {};
-    if (message.type !== 0) {
-      obj.type = cFriendRequestList_RequestTypeToJSON(message.type);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<CFriendRequestList>, I>>(base?: I): CFriendRequestList {
-    return CFriendRequestList.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<CFriendRequestList>, I>>(object: I): CFriendRequestList {
-    const message = createBaseCFriendRequestList();
-    message.type = object.type ?? 0;
-    return message;
-  },
-};
-
-function createBaseSFriendRequestList(): SFriendRequestList {
-  return { requests: [] };
-}
-
-export const SFriendRequestList = {
-  encode(message: SFriendRequestList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.requests) {
-      FriendRequest.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): SFriendRequestList {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseSFriendRequestList();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.requests.push(FriendRequest.decode(reader, reader.uint32()));
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): SFriendRequestList {
-    return {
-      requests: globalThis.Array.isArray(object?.requests)
-        ? object.requests.map((e: any) => FriendRequest.fromJSON(e))
-        : [],
-    };
-  },
-
-  toJSON(message: SFriendRequestList): unknown {
-    const obj: any = {};
-    if (message.requests?.length) {
-      obj.requests = message.requests.map((e) => FriendRequest.toJSON(e));
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<SFriendRequestList>, I>>(base?: I): SFriendRequestList {
-    return SFriendRequestList.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<SFriendRequestList>, I>>(object: I): SFriendRequestList {
-    const message = createBaseSFriendRequestList();
-    message.requests = object.requests?.map((e) => FriendRequest.fromPartial(e)) || [];
-    return message;
-  },
-};
-
-function createBaseCFriendRequestRespond(): CFriendRequestRespond {
-  return { requesterUserId: "", accept: false };
-}
-
-export const CFriendRequestRespond = {
-  encode(message: CFriendRequestRespond, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.requesterUserId !== "") {
-      writer.uint32(10).string(message.requesterUserId);
-    }
-    if (message.accept !== false) {
-      writer.uint32(16).bool(message.accept);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): CFriendRequestRespond {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCFriendRequestRespond();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.requesterUserId = reader.string();
-          continue;
-        case 2:
-          if (tag !== 16) {
-            break;
-          }
-
-          message.accept = reader.bool();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): CFriendRequestRespond {
-    return {
-      requesterUserId: isSet(object.requesterUserId) ? globalThis.String(object.requesterUserId) : "",
-      accept: isSet(object.accept) ? globalThis.Boolean(object.accept) : false,
-    };
-  },
-
-  toJSON(message: CFriendRequestRespond): unknown {
-    const obj: any = {};
-    if (message.requesterUserId !== "") {
-      obj.requesterUserId = message.requesterUserId;
-    }
-    if (message.accept !== false) {
-      obj.accept = message.accept;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<CFriendRequestRespond>, I>>(base?: I): CFriendRequestRespond {
-    return CFriendRequestRespond.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<CFriendRequestRespond>, I>>(object: I): CFriendRequestRespond {
-    const message = createBaseCFriendRequestRespond();
-    message.requesterUserId = object.requesterUserId ?? "";
-    message.accept = object.accept ?? false;
-    return message;
-  },
-};
-
-function createBaseSFriendRequestRespond(): SFriendRequestRespond {
-  return { success: false, message: "", friend: undefined };
-}
-
-export const SFriendRequestRespond = {
-  encode(message: SFriendRequestRespond, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.success !== false) {
-      writer.uint32(8).bool(message.success);
-    }
-    if (message.message !== "") {
-      writer.uint32(18).string(message.message);
-    }
-    if (message.friend !== undefined) {
-      FriendInfo.encode(message.friend, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): SFriendRequestRespond {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseSFriendRequestRespond();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 8) {
-            break;
-          }
-
-          message.success = reader.bool();
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.message = reader.string();
-          continue;
-        case 3:
-          if (tag !== 26) {
-            break;
-          }
-
-          message.friend = FriendInfo.decode(reader, reader.uint32());
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): SFriendRequestRespond {
-    return {
-      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
-      message: isSet(object.message) ? globalThis.String(object.message) : "",
-      friend: isSet(object.friend) ? FriendInfo.fromJSON(object.friend) : undefined,
-    };
-  },
-
-  toJSON(message: SFriendRequestRespond): unknown {
-    const obj: any = {};
-    if (message.success !== false) {
-      obj.success = message.success;
-    }
-    if (message.message !== "") {
-      obj.message = message.message;
-    }
-    if (message.friend !== undefined) {
-      obj.friend = FriendInfo.toJSON(message.friend);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<SFriendRequestRespond>, I>>(base?: I): SFriendRequestRespond {
-    return SFriendRequestRespond.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<SFriendRequestRespond>, I>>(object: I): SFriendRequestRespond {
-    const message = createBaseSFriendRequestRespond();
-    message.success = object.success ?? false;
-    message.message = object.message ?? "";
-    message.friend = (object.friend !== undefined && object.friend !== null)
-      ? FriendInfo.fromPartial(object.friend)
-      : undefined;
-    return message;
-  },
-};
-
-function createBaseSFriendRequestPush(): SFriendRequestPush {
-  return { eventType: 0, request: undefined, friend: undefined, cancelledUserId: "" };
-}
-
-export const SFriendRequestPush = {
-  encode(message: SFriendRequestPush, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.eventType !== 0) {
-      writer.uint32(8).int32(message.eventType);
-    }
-    if (message.request !== undefined) {
-      FriendRequest.encode(message.request, writer.uint32(18).fork()).ldelim();
-    }
-    if (message.friend !== undefined) {
-      FriendInfo.encode(message.friend, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.cancelledUserId !== "") {
-      writer.uint32(34).string(message.cancelledUserId);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): SFriendRequestPush {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseSFriendRequestPush();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 8) {
-            break;
-          }
-
-          message.eventType = reader.int32() as any;
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.request = FriendRequest.decode(reader, reader.uint32());
-          continue;
-        case 3:
-          if (tag !== 26) {
-            break;
-          }
-
-          message.friend = FriendInfo.decode(reader, reader.uint32());
-          continue;
-        case 4:
-          if (tag !== 34) {
-            break;
-          }
-
-          message.cancelledUserId = reader.string();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): SFriendRequestPush {
-    return {
-      eventType: isSet(object.eventType) ? sFriendRequestPush_EventTypeFromJSON(object.eventType) : 0,
-      request: isSet(object.request) ? FriendRequest.fromJSON(object.request) : undefined,
-      friend: isSet(object.friend) ? FriendInfo.fromJSON(object.friend) : undefined,
-      cancelledUserId: isSet(object.cancelledUserId) ? globalThis.String(object.cancelledUserId) : "",
-    };
-  },
-
-  toJSON(message: SFriendRequestPush): unknown {
-    const obj: any = {};
-    if (message.eventType !== 0) {
-      obj.eventType = sFriendRequestPush_EventTypeToJSON(message.eventType);
-    }
-    if (message.request !== undefined) {
-      obj.request = FriendRequest.toJSON(message.request);
-    }
-    if (message.friend !== undefined) {
-      obj.friend = FriendInfo.toJSON(message.friend);
-    }
-    if (message.cancelledUserId !== "") {
-      obj.cancelledUserId = message.cancelledUserId;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<SFriendRequestPush>, I>>(base?: I): SFriendRequestPush {
-    return SFriendRequestPush.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<SFriendRequestPush>, I>>(object: I): SFriendRequestPush {
-    const message = createBaseSFriendRequestPush();
-    message.eventType = object.eventType ?? 0;
-    message.request = (object.request !== undefined && object.request !== null)
-      ? FriendRequest.fromPartial(object.request)
-      : undefined;
-    message.friend = (object.friend !== undefined && object.friend !== null)
-      ? FriendInfo.fromPartial(object.friend)
-      : undefined;
-    message.cancelledUserId = object.cancelledUserId ?? "";
     return message;
   },
 };

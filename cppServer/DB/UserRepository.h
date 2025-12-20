@@ -9,6 +9,7 @@ struct UserInfo {
     string authToken;
     string name;
     string email;
+    string status_message;
     string profileImageUrl;
     int64 lastSeen;
 };
@@ -25,8 +26,9 @@ public:
 
     static bool EmailExists(const string& email);
     
+
+
     static bool GetUser(const string& userId, UserInfo& userInfo);
-    
     static bool GetUserWithPassword(const string& userId, UserInfo& userInfo);
 
     static bool UpdateAuthToken(const string& userId, const string& authToken);
