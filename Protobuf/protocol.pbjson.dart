@@ -313,26 +313,71 @@ const Envelope$json = {
       '10': 'sUploadFile'
     },
     {
-      '1': 'c_friend_list',
+      '1': 'c_search_user',
       '3': 40,
       '4': 1,
       '5': 11,
-      '6': '.Protocol.C_FriendList',
+      '6': '.Protocol.C_SearchUser',
       '9': 0,
-      '10': 'cFriendList'
+      '10': 'cSearchUser'
     },
     {
-      '1': 's_friend_list',
+      '1': 's_search_user',
       '3': 41,
       '4': 1,
       '5': 11,
-      '6': '.Protocol.S_FriendList',
+      '6': '.Protocol.S_SearchUser',
       '9': 0,
-      '10': 'sFriendList'
+      '10': 'sSearchUser'
+    },
+    {
+      '1': 'c_friend_action',
+      '3': 42,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.C_FriendAction',
+      '9': 0,
+      '10': 'cFriendAction'
+    },
+    {
+      '1': 's_friend_action',
+      '3': 43,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.S_FriendAction',
+      '9': 0,
+      '10': 'sFriendAction'
+    },
+    {
+      '1': 'c_fetch_friend_data',
+      '3': 44,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.C_FetchFriendData',
+      '9': 0,
+      '10': 'cFetchFriendData'
+    },
+    {
+      '1': 's_fetch_friend_data',
+      '3': 45,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.S_FetchFriendData',
+      '9': 0,
+      '10': 'sFetchFriendData'
+    },
+    {
+      '1': 's_friend_push',
+      '3': 46,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.S_FriendPush',
+      '9': 0,
+      '10': 'sFriendPush'
     },
     {
       '1': 'c_group_list',
-      '3': 42,
+      '3': 50,
       '4': 1,
       '5': 11,
       '6': '.Protocol.C_GroupList',
@@ -341,7 +386,7 @@ const Envelope$json = {
     },
     {
       '1': 's_group_list',
-      '3': 43,
+      '3': 51,
       '4': 1,
       '5': 11,
       '6': '.Protocol.S_GroupList',
@@ -350,7 +395,7 @@ const Envelope$json = {
     },
     {
       '1': 'c_group_join_request',
-      '3': 44,
+      '3': 52,
       '4': 1,
       '5': 11,
       '6': '.Protocol.C_GroupJoinRequest',
@@ -359,7 +404,7 @@ const Envelope$json = {
     },
     {
       '1': 's_group_join_request',
-      '3': 45,
+      '3': 53,
       '4': 1,
       '5': 11,
       '6': '.Protocol.S_GroupJoinRequest',
@@ -368,7 +413,7 @@ const Envelope$json = {
     },
     {
       '1': 'c_group_join_response',
-      '3': 46,
+      '3': 54,
       '4': 1,
       '5': 11,
       '6': '.Protocol.C_GroupJoinResponse',
@@ -377,7 +422,7 @@ const Envelope$json = {
     },
     {
       '1': 's_group_join_response',
-      '3': 47,
+      '3': 55,
       '4': 1,
       '5': 11,
       '6': '.Protocol.S_GroupJoinResponse',
@@ -386,7 +431,7 @@ const Envelope$json = {
     },
     {
       '1': 'c_group_join_request_list',
-      '3': 48,
+      '3': 56,
       '4': 1,
       '5': 11,
       '6': '.Protocol.C_GroupJoinRequestList',
@@ -395,129 +440,12 @@ const Envelope$json = {
     },
     {
       '1': 's_group_join_request_list',
-      '3': 49,
+      '3': 57,
       '4': 1,
       '5': 11,
       '6': '.Protocol.S_GroupJoinRequestList',
       '9': 0,
       '10': 'sGroupJoinRequestList'
-    },
-    {
-      '1': 'c_frient_request_find',
-      '3': 50,
-      '4': 1,
-      '5': 11,
-      '6': '.Protocol.C_FriendRequest_Find',
-      '9': 0,
-      '10': 'cFrientRequestFind'
-    },
-    {
-      '1': 's_frient_request_find',
-      '3': 51,
-      '4': 1,
-      '5': 11,
-      '6': '.Protocol.S_FriendRequest_Find',
-      '9': 0,
-      '10': 'sFrientRequestFind'
-    },
-    {
-      '1': 'c_friend_request_add',
-      '3': 52,
-      '4': 1,
-      '5': 11,
-      '6': '.Protocol.C_FriendRequest_Add',
-      '9': 0,
-      '10': 'cFriendRequestAdd'
-    },
-    {
-      '1': 's_friend_request_add',
-      '3': 53,
-      '4': 1,
-      '5': 11,
-      '6': '.Protocol.S_FriendRequest_Add',
-      '9': 0,
-      '10': 'sFriendRequestAdd'
-    },
-    {
-      '1': 'c_friend_request_cancel',
-      '3': 54,
-      '4': 1,
-      '5': 11,
-      '6': '.Protocol.C_FriendRequest_Cancel',
-      '9': 0,
-      '10': 'cFriendRequestCancel'
-    },
-    {
-      '1': 's_friend_request_cancel',
-      '3': 55,
-      '4': 1,
-      '5': 11,
-      '6': '.Protocol.S_FriendRequest_Cancel',
-      '9': 0,
-      '10': 'sFriendRequestCancel'
-    },
-    {
-      '1': 'c_friend_request_remove',
-      '3': 56,
-      '4': 1,
-      '5': 11,
-      '6': '.Protocol.C_FriendRequest_Remove',
-      '9': 0,
-      '10': 'cFriendRequestRemove'
-    },
-    {
-      '1': 's_friend_request_remove',
-      '3': 57,
-      '4': 1,
-      '5': 11,
-      '6': '.Protocol.S_FriendRequest_Remove',
-      '9': 0,
-      '10': 'sFriendRequestRemove'
-    },
-    {
-      '1': 'c_friend_request_list',
-      '3': 58,
-      '4': 1,
-      '5': 11,
-      '6': '.Protocol.C_FriendRequest_List',
-      '9': 0,
-      '10': 'cFriendRequestList'
-    },
-    {
-      '1': 's_friend_request_list',
-      '3': 59,
-      '4': 1,
-      '5': 11,
-      '6': '.Protocol.S_FriendRequest_List',
-      '9': 0,
-      '10': 'sFriendRequestList'
-    },
-    {
-      '1': 'c_friend_request_respond',
-      '3': 60,
-      '4': 1,
-      '5': 11,
-      '6': '.Protocol.C_FriendRequest_Respond',
-      '9': 0,
-      '10': 'cFriendRequestRespond'
-    },
-    {
-      '1': 's_friend_request_respond',
-      '3': 61,
-      '4': 1,
-      '5': 11,
-      '6': '.Protocol.S_FriendRequest_Respond',
-      '9': 0,
-      '10': 'sFriendRequestRespond'
-    },
-    {
-      '1': 's_friend_request_push',
-      '3': 62,
-      '4': 1,
-      '5': 11,
-      '6': '.Protocol.S_FriendRequest_Push',
-      '9': 0,
-      '10': 'sFriendRequestPush'
     },
   ],
   '8': [
@@ -556,42 +484,27 @@ final $typed_data.Uint8List envelopeDescriptor = $convert.base64Decode(
     'DWNGZXRjaE9mZmxpbmUSQgoPc19tZXNzYWdlX2JhdGNoGCEgASgLMhguUHJvdG9jb2wuU19NZX'
     'NzYWdlQmF0Y2hIAFINc01lc3NhZ2VCYXRjaBI8Cg1jX3VwbG9hZF9maWxlGCIgASgLMhYuUHJv'
     'dG9jb2wuQ19VcGxvYWRGaWxlSABSC2NVcGxvYWRGaWxlEjwKDXNfdXBsb2FkX2ZpbGUYIyABKA'
-    'syFi5Qcm90b2NvbC5TX1VwbG9hZEZpbGVIAFILc1VwbG9hZEZpbGUSPAoNY19mcmllbmRfbGlz'
-    'dBgoIAEoCzIWLlByb3RvY29sLkNfRnJpZW5kTGlzdEgAUgtjRnJpZW5kTGlzdBI8Cg1zX2ZyaW'
-    'VuZF9saXN0GCkgASgLMhYuUHJvdG9jb2wuU19GcmllbmRMaXN0SABSC3NGcmllbmRMaXN0EjkK'
-    'DGNfZ3JvdXBfbGlzdBgqIAEoCzIVLlByb3RvY29sLkNfR3JvdXBMaXN0SABSCmNHcm91cExpc3'
-    'QSOQoMc19ncm91cF9saXN0GCsgASgLMhUuUHJvdG9jb2wuU19Hcm91cExpc3RIAFIKc0dyb3Vw'
-    'TGlzdBJPChRjX2dyb3VwX2pvaW5fcmVxdWVzdBgsIAEoCzIcLlByb3RvY29sLkNfR3JvdXBKb2'
-    'luUmVxdWVzdEgAUhFjR3JvdXBKb2luUmVxdWVzdBJPChRzX2dyb3VwX2pvaW5fcmVxdWVzdBgt'
-    'IAEoCzIcLlByb3RvY29sLlNfR3JvdXBKb2luUmVxdWVzdEgAUhFzR3JvdXBKb2luUmVxdWVzdB'
-    'JSChVjX2dyb3VwX2pvaW5fcmVzcG9uc2UYLiABKAsyHS5Qcm90b2NvbC5DX0dyb3VwSm9pblJl'
-    'c3BvbnNlSABSEmNHcm91cEpvaW5SZXNwb25zZRJSChVzX2dyb3VwX2pvaW5fcmVzcG9uc2UYLy'
-    'ABKAsyHS5Qcm90b2NvbC5TX0dyb3VwSm9pblJlc3BvbnNlSABSEnNHcm91cEpvaW5SZXNwb25z'
-    'ZRJcChljX2dyb3VwX2pvaW5fcmVxdWVzdF9saXN0GDAgASgLMiAuUHJvdG9jb2wuQ19Hcm91cE'
-    'pvaW5SZXF1ZXN0TGlzdEgAUhVjR3JvdXBKb2luUmVxdWVzdExpc3QSXAoZc19ncm91cF9qb2lu'
-    'X3JlcXVlc3RfbGlzdBgxIAEoCzIgLlByb3RvY29sLlNfR3JvdXBKb2luUmVxdWVzdExpc3RIAF'
-    'IVc0dyb3VwSm9pblJlcXVlc3RMaXN0ElMKFWNfZnJpZW50X3JlcXVlc3RfZmluZBgyIAEoCzIe'
-    'LlByb3RvY29sLkNfRnJpZW5kUmVxdWVzdF9GaW5kSABSEmNGcmllbnRSZXF1ZXN0RmluZBJTCh'
-    'VzX2ZyaWVudF9yZXF1ZXN0X2ZpbmQYMyABKAsyHi5Qcm90b2NvbC5TX0ZyaWVuZFJlcXVlc3Rf'
-    'RmluZEgAUhJzRnJpZW50UmVxdWVzdEZpbmQSUAoUY19mcmllbmRfcmVxdWVzdF9hZGQYNCABKA'
-    'syHS5Qcm90b2NvbC5DX0ZyaWVuZFJlcXVlc3RfQWRkSABSEWNGcmllbmRSZXF1ZXN0QWRkElAK'
-    'FHNfZnJpZW5kX3JlcXVlc3RfYWRkGDUgASgLMh0uUHJvdG9jb2wuU19GcmllbmRSZXF1ZXN0X0'
-    'FkZEgAUhFzRnJpZW5kUmVxdWVzdEFkZBJZChdjX2ZyaWVuZF9yZXF1ZXN0X2NhbmNlbBg2IAEo'
-    'CzIgLlByb3RvY29sLkNfRnJpZW5kUmVxdWVzdF9DYW5jZWxIAFIUY0ZyaWVuZFJlcXVlc3RDYW'
-    '5jZWwSWQoXc19mcmllbmRfcmVxdWVzdF9jYW5jZWwYNyABKAsyIC5Qcm90b2NvbC5TX0ZyaWVu'
-    'ZFJlcXVlc3RfQ2FuY2VsSABSFHNGcmllbmRSZXF1ZXN0Q2FuY2VsElkKF2NfZnJpZW5kX3JlcX'
-    'Vlc3RfcmVtb3ZlGDggASgLMiAuUHJvdG9jb2wuQ19GcmllbmRSZXF1ZXN0X1JlbW92ZUgAUhRj'
-    'RnJpZW5kUmVxdWVzdFJlbW92ZRJZChdzX2ZyaWVuZF9yZXF1ZXN0X3JlbW92ZRg5IAEoCzIgLl'
-    'Byb3RvY29sLlNfRnJpZW5kUmVxdWVzdF9SZW1vdmVIAFIUc0ZyaWVuZFJlcXVlc3RSZW1vdmUS'
-    'UwoVY19mcmllbmRfcmVxdWVzdF9saXN0GDogASgLMh4uUHJvdG9jb2wuQ19GcmllbmRSZXF1ZX'
-    'N0X0xpc3RIAFISY0ZyaWVuZFJlcXVlc3RMaXN0ElMKFXNfZnJpZW5kX3JlcXVlc3RfbGlzdBg7'
-    'IAEoCzIeLlByb3RvY29sLlNfRnJpZW5kUmVxdWVzdF9MaXN0SABSEnNGcmllbmRSZXF1ZXN0TG'
-    'lzdBJcChhjX2ZyaWVuZF9yZXF1ZXN0X3Jlc3BvbmQYPCABKAsyIS5Qcm90b2NvbC5DX0ZyaWVu'
-    'ZFJlcXVlc3RfUmVzcG9uZEgAUhVjRnJpZW5kUmVxdWVzdFJlc3BvbmQSXAoYc19mcmllbmRfcm'
-    'VxdWVzdF9yZXNwb25kGD0gASgLMiEuUHJvdG9jb2wuU19GcmllbmRSZXF1ZXN0X1Jlc3BvbmRI'
-    'AFIVc0ZyaWVuZFJlcXVlc3RSZXNwb25kElMKFXNfZnJpZW5kX3JlcXVlc3RfcHVzaBg+IAEoCz'
-    'IeLlByb3RvY29sLlNfRnJpZW5kUmVxdWVzdF9QdXNoSABSEnNGcmllbmRSZXF1ZXN0UHVzaEIG'
-    'CgRib2R5');
+    'syFi5Qcm90b2NvbC5TX1VwbG9hZEZpbGVIAFILc1VwbG9hZEZpbGUSPAoNY19zZWFyY2hfdXNl'
+    'chgoIAEoCzIWLlByb3RvY29sLkNfU2VhcmNoVXNlckgAUgtjU2VhcmNoVXNlchI8Cg1zX3NlYX'
+    'JjaF91c2VyGCkgASgLMhYuUHJvdG9jb2wuU19TZWFyY2hVc2VySABSC3NTZWFyY2hVc2VyEkIK'
+    'D2NfZnJpZW5kX2FjdGlvbhgqIAEoCzIYLlByb3RvY29sLkNfRnJpZW5kQWN0aW9uSABSDWNGcm'
+    'llbmRBY3Rpb24SQgoPc19mcmllbmRfYWN0aW9uGCsgASgLMhguUHJvdG9jb2wuU19GcmllbmRB'
+    'Y3Rpb25IAFINc0ZyaWVuZEFjdGlvbhJMChNjX2ZldGNoX2ZyaWVuZF9kYXRhGCwgASgLMhsuUH'
+    'JvdG9jb2wuQ19GZXRjaEZyaWVuZERhdGFIAFIQY0ZldGNoRnJpZW5kRGF0YRJMChNzX2ZldGNo'
+    'X2ZyaWVuZF9kYXRhGC0gASgLMhsuUHJvdG9jb2wuU19GZXRjaEZyaWVuZERhdGFIAFIQc0ZldG'
+    'NoRnJpZW5kRGF0YRI8Cg1zX2ZyaWVuZF9wdXNoGC4gASgLMhYuUHJvdG9jb2wuU19GcmllbmRQ'
+    'dXNoSABSC3NGcmllbmRQdXNoEjkKDGNfZ3JvdXBfbGlzdBgyIAEoCzIVLlByb3RvY29sLkNfR3'
+    'JvdXBMaXN0SABSCmNHcm91cExpc3QSOQoMc19ncm91cF9saXN0GDMgASgLMhUuUHJvdG9jb2wu'
+    'U19Hcm91cExpc3RIAFIKc0dyb3VwTGlzdBJPChRjX2dyb3VwX2pvaW5fcmVxdWVzdBg0IAEoCz'
+    'IcLlByb3RvY29sLkNfR3JvdXBKb2luUmVxdWVzdEgAUhFjR3JvdXBKb2luUmVxdWVzdBJPChRz'
+    'X2dyb3VwX2pvaW5fcmVxdWVzdBg1IAEoCzIcLlByb3RvY29sLlNfR3JvdXBKb2luUmVxdWVzdE'
+    'gAUhFzR3JvdXBKb2luUmVxdWVzdBJSChVjX2dyb3VwX2pvaW5fcmVzcG9uc2UYNiABKAsyHS5Q'
+    'cm90b2NvbC5DX0dyb3VwSm9pblJlc3BvbnNlSABSEmNHcm91cEpvaW5SZXNwb25zZRJSChVzX2'
+    'dyb3VwX2pvaW5fcmVzcG9uc2UYNyABKAsyHS5Qcm90b2NvbC5TX0dyb3VwSm9pblJlc3BvbnNl'
+    'SABSEnNHcm91cEpvaW5SZXNwb25zZRJcChljX2dyb3VwX2pvaW5fcmVxdWVzdF9saXN0GDggAS'
+    'gLMiAuUHJvdG9jb2wuQ19Hcm91cEpvaW5SZXF1ZXN0TGlzdEgAUhVjR3JvdXBKb2luUmVxdWVz'
+    'dExpc3QSXAoZc19ncm91cF9qb2luX3JlcXVlc3RfbGlzdBg5IAEoCzIgLlByb3RvY29sLlNfR3'
+    'JvdXBKb2luUmVxdWVzdExpc3RIAFIVc0dyb3VwSm9pblJlcXVlc3RMaXN0QgYKBGJvZHk=');
 
 @$core.Deprecated('Use chatPayloadDescriptor instead')
 const ChatPayload$json = {
@@ -1095,46 +1008,130 @@ final $typed_data.Uint8List friendInfoDescriptor = $convert.base64Decode(
 const FriendRequest$json = {
   '1': 'FriendRequest',
   '2': [
-    {'1': 'requester_user_id', '3': 1, '4': 1, '5': 9, '10': 'requesterUserId'},
-    {'1': 'requester_name', '3': 2, '4': 1, '5': 9, '10': 'requesterName'},
-    {
-      '1': 'requester_status_message',
-      '3': 3,
-      '4': 1,
-      '5': 9,
-      '10': 'requesterStatusMessage'
-    },
-    {
-      '1': 'requester_profile_image_url',
-      '3': 4,
-      '4': 1,
-      '5': 9,
-      '10': 'requesterProfileImageUrl'
-    },
+    {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'status_message', '3': 3, '4': 1, '5': 9, '10': 'statusMessage'},
+    {'1': 'profile_image_url', '3': 4, '4': 1, '5': 9, '10': 'profileImageUrl'},
     {'1': 'requested_at', '3': 5, '4': 1, '5': 3, '10': 'requestedAt'},
+    {'1': 'is_received', '3': 6, '4': 1, '5': 8, '10': 'isReceived'},
   ],
 };
 
 /// Descriptor for `FriendRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List friendRequestDescriptor = $convert.base64Decode(
-    'Cg1GcmllbmRSZXF1ZXN0EioKEXJlcXVlc3Rlcl91c2VyX2lkGAEgASgJUg9yZXF1ZXN0ZXJVc2'
-    'VySWQSJQoOcmVxdWVzdGVyX25hbWUYAiABKAlSDXJlcXVlc3Rlck5hbWUSOAoYcmVxdWVzdGVy'
-    'X3N0YXR1c19tZXNzYWdlGAMgASgJUhZyZXF1ZXN0ZXJTdGF0dXNNZXNzYWdlEj0KG3JlcXVlc3'
-    'Rlcl9wcm9maWxlX2ltYWdlX3VybBgEIAEoCVIYcmVxdWVzdGVyUHJvZmlsZUltYWdlVXJsEiEK'
-    'DHJlcXVlc3RlZF9hdBgFIAEoA1ILcmVxdWVzdGVkQXQ=');
+    'Cg1GcmllbmRSZXF1ZXN0EhcKB3VzZXJfaWQYASABKAlSBnVzZXJJZBISCgRuYW1lGAIgASgJUg'
+    'RuYW1lEiUKDnN0YXR1c19tZXNzYWdlGAMgASgJUg1zdGF0dXNNZXNzYWdlEioKEXByb2ZpbGVf'
+    'aW1hZ2VfdXJsGAQgASgJUg9wcm9maWxlSW1hZ2VVcmwSIQoMcmVxdWVzdGVkX2F0GAUgASgDUg'
+    'tyZXF1ZXN0ZWRBdBIfCgtpc19yZWNlaXZlZBgGIAEoCFIKaXNSZWNlaXZlZA==');
 
-@$core.Deprecated('Use c_FriendListDescriptor instead')
-const C_FriendList$json = {
-  '1': 'C_FriendList',
+@$core.Deprecated('Use c_SearchUserDescriptor instead')
+const C_SearchUser$json = {
+  '1': 'C_SearchUser',
+  '2': [
+    {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
+  ],
 };
 
-/// Descriptor for `C_FriendList`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List c_FriendListDescriptor =
-    $convert.base64Decode('CgxDX0ZyaWVuZExpc3Q=');
+/// Descriptor for `C_SearchUser`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List c_SearchUserDescriptor = $convert
+    .base64Decode('CgxDX1NlYXJjaFVzZXISFwoHdXNlcl9pZBgBIAEoCVIGdXNlcklk');
 
-@$core.Deprecated('Use s_FriendListDescriptor instead')
-const S_FriendList$json = {
-  '1': 'S_FriendList',
+@$core.Deprecated('Use s_SearchUserDescriptor instead')
+const S_SearchUser$json = {
+  '1': 'S_SearchUser',
+  '2': [
+    {'1': 'success', '3': 1, '4': 1, '5': 8, '10': 'success'},
+    {
+      '1': 'user_info',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.FriendInfo',
+      '10': 'userInfo'
+    },
+    {'1': 'is_friend', '3': 3, '4': 1, '5': 8, '10': 'isFriend'},
+    {'1': 'has_sent_request', '3': 4, '4': 1, '5': 8, '10': 'hasSentRequest'},
+  ],
+};
+
+/// Descriptor for `S_SearchUser`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List s_SearchUserDescriptor = $convert.base64Decode(
+    'CgxTX1NlYXJjaFVzZXISGAoHc3VjY2VzcxgBIAEoCFIHc3VjY2VzcxIxCgl1c2VyX2luZm8YAi'
+    'ABKAsyFC5Qcm90b2NvbC5GcmllbmRJbmZvUgh1c2VySW5mbxIbCglpc19mcmllbmQYAyABKAhS'
+    'CGlzRnJpZW5kEigKEGhhc19zZW50X3JlcXVlc3QYBCABKAhSDmhhc1NlbnRSZXF1ZXN0');
+
+@$core.Deprecated('Use c_FriendActionDescriptor instead')
+const C_FriendAction$json = {
+  '1': 'C_FriendAction',
+  '2': [
+    {
+      '1': 'action',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.Protocol.C_FriendAction.ActionType',
+      '10': 'action'
+    },
+    {'1': 'target_user_id', '3': 2, '4': 1, '5': 9, '10': 'targetUserId'},
+  ],
+  '4': [C_FriendAction_ActionType$json],
+};
+
+@$core.Deprecated('Use c_FriendActionDescriptor instead')
+const C_FriendAction_ActionType$json = {
+  '1': 'ActionType',
+  '2': [
+    {'1': 'SEND_REQUEST', '2': 0},
+    {'1': 'CANCEL_REQUEST', '2': 1},
+    {'1': 'ACCEPT_REQUEST', '2': 2},
+    {'1': 'REJECT_REQUEST', '2': 3},
+    {'1': 'DELETE_FRIEND', '2': 4},
+  ],
+};
+
+/// Descriptor for `C_FriendAction`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List c_FriendActionDescriptor = $convert.base64Decode(
+    'Cg5DX0ZyaWVuZEFjdGlvbhI7CgZhY3Rpb24YASABKA4yIy5Qcm90b2NvbC5DX0ZyaWVuZEFjdG'
+    'lvbi5BY3Rpb25UeXBlUgZhY3Rpb24SJAoOdGFyZ2V0X3VzZXJfaWQYAiABKAlSDHRhcmdldFVz'
+    'ZXJJZCJtCgpBY3Rpb25UeXBlEhAKDFNFTkRfUkVRVUVTVBAAEhIKDkNBTkNFTF9SRVFVRVNUEA'
+    'ESEgoOQUNDRVBUX1JFUVVFU1QQAhISCg5SRUpFQ1RfUkVRVUVTVBADEhEKDURFTEVURV9GUklF'
+    'TkQQBA==');
+
+@$core.Deprecated('Use s_FriendActionDescriptor instead')
+const S_FriendAction$json = {
+  '1': 'S_FriendAction',
+  '2': [
+    {'1': 'success', '3': 1, '4': 1, '5': 8, '10': 'success'},
+    {'1': 'message', '3': 2, '4': 1, '5': 9, '10': 'message'},
+    {
+      '1': 'updated_friend',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.FriendInfo',
+      '10': 'updatedFriend'
+    },
+  ],
+};
+
+/// Descriptor for `S_FriendAction`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List s_FriendActionDescriptor = $convert.base64Decode(
+    'Cg5TX0ZyaWVuZEFjdGlvbhIYCgdzdWNjZXNzGAEgASgIUgdzdWNjZXNzEhgKB21lc3NhZ2UYAi'
+    'ABKAlSB21lc3NhZ2USOwoOdXBkYXRlZF9mcmllbmQYAyABKAsyFC5Qcm90b2NvbC5GcmllbmRJ'
+    'bmZvUg11cGRhdGVkRnJpZW5k');
+
+@$core.Deprecated('Use c_FetchFriendDataDescriptor instead')
+const C_FetchFriendData$json = {
+  '1': 'C_FetchFriendData',
+};
+
+/// Descriptor for `C_FetchFriendData`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List c_FetchFriendDataDescriptor =
+    $convert.base64Decode('ChFDX0ZldGNoRnJpZW5kRGF0YQ==');
+
+@$core.Deprecated('Use s_FetchFriendDataDescriptor instead')
+const S_FetchFriendData$json = {
+  '1': 'S_FetchFriendData',
   '2': [
     {
       '1': 'friends',
@@ -1144,13 +1141,72 @@ const S_FriendList$json = {
       '6': '.Protocol.FriendInfo',
       '10': 'friends'
     },
+    {
+      '1': 'received_requests',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.Protocol.FriendRequest',
+      '10': 'receivedRequests'
+    },
+    {
+      '1': 'sent_requests',
+      '3': 3,
+      '4': 3,
+      '5': 11,
+      '6': '.Protocol.FriendRequest',
+      '10': 'sentRequests'
+    },
   ],
 };
 
-/// Descriptor for `S_FriendList`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List s_FriendListDescriptor = $convert.base64Decode(
-    'CgxTX0ZyaWVuZExpc3QSLgoHZnJpZW5kcxgBIAMoCzIULlByb3RvY29sLkZyaWVuZEluZm9SB2'
-    'ZyaWVuZHM=');
+/// Descriptor for `S_FetchFriendData`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List s_FetchFriendDataDescriptor = $convert.base64Decode(
+    'ChFTX0ZldGNoRnJpZW5kRGF0YRIuCgdmcmllbmRzGAEgAygLMhQuUHJvdG9jb2wuRnJpZW5kSW'
+    '5mb1IHZnJpZW5kcxJEChFyZWNlaXZlZF9yZXF1ZXN0cxgCIAMoCzIXLlByb3RvY29sLkZyaWVu'
+    'ZFJlcXVlc3RSEHJlY2VpdmVkUmVxdWVzdHMSPAoNc2VudF9yZXF1ZXN0cxgDIAMoCzIXLlByb3'
+    'RvY29sLkZyaWVuZFJlcXVlc3RSDHNlbnRSZXF1ZXN0cw==');
+
+@$core.Deprecated('Use s_FriendPushDescriptor instead')
+const S_FriendPush$json = {
+  '1': 'S_FriendPush',
+  '2': [
+    {
+      '1': 'type',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.Protocol.S_FriendPush.PushType',
+      '10': 'type'
+    },
+    {
+      '1': 'user_info',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.FriendInfo',
+      '10': 'userInfo'
+    },
+  ],
+  '4': [S_FriendPush_PushType$json],
+};
+
+@$core.Deprecated('Use s_FriendPushDescriptor instead')
+const S_FriendPush_PushType$json = {
+  '1': 'PushType',
+  '2': [
+    {'1': 'NEW_REQUEST', '2': 0},
+    {'1': 'REQUEST_ACCEPTED', '2': 1},
+    {'1': 'FRIEND_DELETED', '2': 2},
+  ],
+};
+
+/// Descriptor for `S_FriendPush`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List s_FriendPushDescriptor = $convert.base64Decode(
+    'CgxTX0ZyaWVuZFB1c2gSMwoEdHlwZRgBIAEoDjIfLlByb3RvY29sLlNfRnJpZW5kUHVzaC5QdX'
+    'NoVHlwZVIEdHlwZRIxCgl1c2VyX2luZm8YAiABKAsyFC5Qcm90b2NvbC5GcmllbmRJbmZvUgh1'
+    'c2VySW5mbyJFCghQdXNoVHlwZRIPCgtORVdfUkVRVUVTVBAAEhQKEFJFUVVFU1RfQUNDRVBURU'
+    'QQARISCg5GUklFTkRfREVMRVRFRBAC');
 
 @$core.Deprecated('Use groupInfoDescriptor instead')
 const GroupInfo$json = {
@@ -1160,7 +1216,7 @@ const GroupInfo$json = {
     {'1': 'group_name', '3': 2, '4': 1, '5': 9, '10': 'groupName'},
     {'1': 'group_code', '3': 3, '4': 1, '5': 9, '10': 'groupCode'},
     {'1': 'creator_id', '3': 4, '4': 1, '5': 9, '10': 'creatorId'},
-    {'1': 'created_at', '3': 5, '4': 1, '5': 3, '10': 'createdAt'},
+    {'1': 'member_count', '3': 5, '4': 1, '5': 3, '10': 'memberCount'},
   ],
 };
 
@@ -1168,7 +1224,8 @@ const GroupInfo$json = {
 final $typed_data.Uint8List groupInfoDescriptor = $convert.base64Decode(
     'CglHcm91cEluZm8SGQoIZ3JvdXBfaWQYASABKAlSB2dyb3VwSWQSHQoKZ3JvdXBfbmFtZRgCIA'
     'EoCVIJZ3JvdXBOYW1lEh0KCmdyb3VwX2NvZGUYAyABKAlSCWdyb3VwQ29kZRIdCgpjcmVhdG9y'
-    'X2lkGAQgASgJUgljcmVhdG9ySWQSHQoKY3JlYXRlZF9hdBgFIAEoA1IJY3JlYXRlZEF0');
+    'X2lkGAQgASgJUgljcmVhdG9ySWQSIQoMbWVtYmVyX2NvdW50GAUgASgDUgttZW1iZXJDb3VudA'
+    '==');
 
 @$core.Deprecated('Use c_GroupListDescriptor instead')
 const C_GroupList$json = {
@@ -1308,263 +1365,3 @@ final $typed_data.Uint8List groupJoinRequestInfoDescriptor = $convert.base64Deco
     'ChRHcm91cEpvaW5SZXF1ZXN0SW5mbxIqChFyZXF1ZXN0ZXJfdXNlcl9pZBgBIAEoCVIPcmVxdW'
     'VzdGVyVXNlcklkEiUKDnJlcXVlc3Rlcl9uYW1lGAIgASgJUg1yZXF1ZXN0ZXJOYW1lEiEKDHJl'
     'cXVlc3RlZF9hdBgDIAEoA1ILcmVxdWVzdGVkQXQ=');
-
-@$core.Deprecated('Use c_FriendRequest_FindDescriptor instead')
-const C_FriendRequest_Find$json = {
-  '1': 'C_FriendRequest_Find',
-  '2': [
-    {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
-  ],
-};
-
-/// Descriptor for `C_FriendRequest_Find`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List c_FriendRequest_FindDescriptor =
-    $convert.base64Decode(
-        'ChRDX0ZyaWVuZFJlcXVlc3RfRmluZBIXCgd1c2VyX2lkGAEgASgJUgZ1c2VySWQ=');
-
-@$core.Deprecated('Use s_FriendRequest_FindDescriptor instead')
-const S_FriendRequest_Find$json = {
-  '1': 'S_FriendRequest_Find',
-  '2': [
-    {'1': 'exist', '3': 1, '4': 1, '5': 8, '10': 'exist'},
-    {
-      '1': 'user_info',
-      '3': 2,
-      '4': 1,
-      '5': 11,
-      '6': '.Protocol.FriendInfo',
-      '10': 'userInfo'
-    },
-  ],
-};
-
-/// Descriptor for `S_FriendRequest_Find`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List s_FriendRequest_FindDescriptor = $convert.base64Decode(
-    'ChRTX0ZyaWVuZFJlcXVlc3RfRmluZBIUCgVleGlzdBgBIAEoCFIFZXhpc3QSMQoJdXNlcl9pbm'
-    'ZvGAIgASgLMhQuUHJvdG9jb2wuRnJpZW5kSW5mb1IIdXNlckluZm8=');
-
-@$core.Deprecated('Use c_FriendRequest_AddDescriptor instead')
-const C_FriendRequest_Add$json = {
-  '1': 'C_FriendRequest_Add',
-  '2': [
-    {'1': 'friend_user_id', '3': 1, '4': 1, '5': 9, '10': 'friendUserId'},
-  ],
-};
-
-/// Descriptor for `C_FriendRequest_Add`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List c_FriendRequest_AddDescriptor = $convert.base64Decode(
-    'ChNDX0ZyaWVuZFJlcXVlc3RfQWRkEiQKDmZyaWVuZF91c2VyX2lkGAEgASgJUgxmcmllbmRVc2'
-    'VySWQ=');
-
-@$core.Deprecated('Use s_FriendRequest_AddDescriptor instead')
-const S_FriendRequest_Add$json = {
-  '1': 'S_FriendRequest_Add',
-  '2': [
-    {'1': 'success', '3': 1, '4': 1, '5': 8, '10': 'success'},
-    {'1': 'message', '3': 2, '4': 1, '5': 9, '10': 'message'},
-  ],
-};
-
-/// Descriptor for `S_FriendRequest_Add`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List s_FriendRequest_AddDescriptor = $convert.base64Decode(
-    'ChNTX0ZyaWVuZFJlcXVlc3RfQWRkEhgKB3N1Y2Nlc3MYASABKAhSB3N1Y2Nlc3MSGAoHbWVzc2'
-    'FnZRgCIAEoCVIHbWVzc2FnZQ==');
-
-@$core.Deprecated('Use c_FriendRequest_CancelDescriptor instead')
-const C_FriendRequest_Cancel$json = {
-  '1': 'C_FriendRequest_Cancel',
-  '2': [
-    {'1': 'friend_user_id', '3': 1, '4': 1, '5': 9, '10': 'friendUserId'},
-  ],
-};
-
-/// Descriptor for `C_FriendRequest_Cancel`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List c_FriendRequest_CancelDescriptor =
-    $convert.base64Decode(
-        'ChZDX0ZyaWVuZFJlcXVlc3RfQ2FuY2VsEiQKDmZyaWVuZF91c2VyX2lkGAEgASgJUgxmcmllbm'
-        'RVc2VySWQ=');
-
-@$core.Deprecated('Use s_FriendRequest_CancelDescriptor instead')
-const S_FriendRequest_Cancel$json = {
-  '1': 'S_FriendRequest_Cancel',
-  '2': [
-    {'1': 'success', '3': 1, '4': 1, '5': 8, '10': 'success'},
-    {'1': 'message', '3': 2, '4': 1, '5': 9, '10': 'message'},
-  ],
-};
-
-/// Descriptor for `S_FriendRequest_Cancel`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List s_FriendRequest_CancelDescriptor =
-    $convert.base64Decode(
-        'ChZTX0ZyaWVuZFJlcXVlc3RfQ2FuY2VsEhgKB3N1Y2Nlc3MYASABKAhSB3N1Y2Nlc3MSGAoHbW'
-        'Vzc2FnZRgCIAEoCVIHbWVzc2FnZQ==');
-
-@$core.Deprecated('Use c_FriendRequest_RemoveDescriptor instead')
-const C_FriendRequest_Remove$json = {
-  '1': 'C_FriendRequest_Remove',
-  '2': [
-    {'1': 'friend_user_id', '3': 1, '4': 1, '5': 9, '10': 'friendUserId'},
-  ],
-};
-
-/// Descriptor for `C_FriendRequest_Remove`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List c_FriendRequest_RemoveDescriptor =
-    $convert.base64Decode(
-        'ChZDX0ZyaWVuZFJlcXVlc3RfUmVtb3ZlEiQKDmZyaWVuZF91c2VyX2lkGAEgASgJUgxmcmllbm'
-        'RVc2VySWQ=');
-
-@$core.Deprecated('Use s_FriendRequest_RemoveDescriptor instead')
-const S_FriendRequest_Remove$json = {
-  '1': 'S_FriendRequest_Remove',
-  '2': [
-    {'1': 'success', '3': 1, '4': 1, '5': 8, '10': 'success'},
-    {'1': 'message', '3': 2, '4': 1, '5': 9, '10': 'message'},
-  ],
-};
-
-/// Descriptor for `S_FriendRequest_Remove`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List s_FriendRequest_RemoveDescriptor =
-    $convert.base64Decode(
-        'ChZTX0ZyaWVuZFJlcXVlc3RfUmVtb3ZlEhgKB3N1Y2Nlc3MYASABKAhSB3N1Y2Nlc3MSGAoHbW'
-        'Vzc2FnZRgCIAEoCVIHbWVzc2FnZQ==');
-
-@$core.Deprecated('Use c_FriendRequest_ListDescriptor instead')
-const C_FriendRequest_List$json = {
-  '1': 'C_FriendRequest_List',
-  '2': [
-    {
-      '1': 'type',
-      '3': 1,
-      '4': 1,
-      '5': 14,
-      '6': '.Protocol.C_FriendRequest_List.RequestType',
-      '10': 'type'
-    },
-  ],
-  '4': [C_FriendRequest_List_RequestType$json],
-};
-
-@$core.Deprecated('Use c_FriendRequest_ListDescriptor instead')
-const C_FriendRequest_List_RequestType$json = {
-  '1': 'RequestType',
-  '2': [
-    {'1': 'RECEIVED', '2': 0},
-    {'1': 'SENT', '2': 1},
-  ],
-};
-
-/// Descriptor for `C_FriendRequest_List`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List c_FriendRequest_ListDescriptor = $convert.base64Decode(
-    'ChRDX0ZyaWVuZFJlcXVlc3RfTGlzdBI+CgR0eXBlGAEgASgOMiouUHJvdG9jb2wuQ19Gcmllbm'
-    'RSZXF1ZXN0X0xpc3QuUmVxdWVzdFR5cGVSBHR5cGUiJQoLUmVxdWVzdFR5cGUSDAoIUkVDRUlW'
-    'RUQQABIICgRTRU5UEAE=');
-
-@$core.Deprecated('Use s_FriendRequest_ListDescriptor instead')
-const S_FriendRequest_List$json = {
-  '1': 'S_FriendRequest_List',
-  '2': [
-    {
-      '1': 'requests',
-      '3': 1,
-      '4': 3,
-      '5': 11,
-      '6': '.Protocol.FriendRequest',
-      '10': 'requests'
-    },
-  ],
-};
-
-/// Descriptor for `S_FriendRequest_List`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List s_FriendRequest_ListDescriptor = $convert.base64Decode(
-    'ChRTX0ZyaWVuZFJlcXVlc3RfTGlzdBIzCghyZXF1ZXN0cxgBIAMoCzIXLlByb3RvY29sLkZyaW'
-    'VuZFJlcXVlc3RSCHJlcXVlc3Rz');
-
-@$core.Deprecated('Use c_FriendRequest_RespondDescriptor instead')
-const C_FriendRequest_Respond$json = {
-  '1': 'C_FriendRequest_Respond',
-  '2': [
-    {'1': 'requester_user_id', '3': 1, '4': 1, '5': 9, '10': 'requesterUserId'},
-    {'1': 'accept', '3': 2, '4': 1, '5': 8, '10': 'accept'},
-  ],
-};
-
-/// Descriptor for `C_FriendRequest_Respond`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List c_FriendRequest_RespondDescriptor =
-    $convert.base64Decode(
-        'ChdDX0ZyaWVuZFJlcXVlc3RfUmVzcG9uZBIqChFyZXF1ZXN0ZXJfdXNlcl9pZBgBIAEoCVIPcm'
-        'VxdWVzdGVyVXNlcklkEhYKBmFjY2VwdBgCIAEoCFIGYWNjZXB0');
-
-@$core.Deprecated('Use s_FriendRequest_RespondDescriptor instead')
-const S_FriendRequest_Respond$json = {
-  '1': 'S_FriendRequest_Respond',
-  '2': [
-    {'1': 'success', '3': 1, '4': 1, '5': 8, '10': 'success'},
-    {'1': 'message', '3': 2, '4': 1, '5': 9, '10': 'message'},
-    {
-      '1': 'friend_',
-      '3': 3,
-      '4': 1,
-      '5': 11,
-      '6': '.Protocol.FriendInfo',
-      '10': 'friend'
-    },
-  ],
-};
-
-/// Descriptor for `S_FriendRequest_Respond`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List s_FriendRequest_RespondDescriptor = $convert.base64Decode(
-    'ChdTX0ZyaWVuZFJlcXVlc3RfUmVzcG9uZBIYCgdzdWNjZXNzGAEgASgIUgdzdWNjZXNzEhgKB2'
-    '1lc3NhZ2UYAiABKAlSB21lc3NhZ2USLQoHZnJpZW5kXxgDIAEoCzIULlByb3RvY29sLkZyaWVu'
-    'ZEluZm9SBmZyaWVuZA==');
-
-@$core.Deprecated('Use s_FriendRequest_PushDescriptor instead')
-const S_FriendRequest_Push$json = {
-  '1': 'S_FriendRequest_Push',
-  '2': [
-    {
-      '1': 'event_type',
-      '3': 1,
-      '4': 1,
-      '5': 14,
-      '6': '.Protocol.S_FriendRequest_Push.EventType',
-      '10': 'eventType'
-    },
-    {
-      '1': 'request',
-      '3': 2,
-      '4': 1,
-      '5': 11,
-      '6': '.Protocol.FriendRequest',
-      '10': 'request'
-    },
-    {
-      '1': 'friend',
-      '3': 3,
-      '4': 1,
-      '5': 11,
-      '6': '.Protocol.FriendInfo',
-      '10': 'friend'
-    },
-    {'1': 'cancelled_user_id', '3': 4, '4': 1, '5': 9, '10': 'cancelledUserId'},
-  ],
-  '4': [S_FriendRequest_Push_EventType$json],
-};
-
-@$core.Deprecated('Use s_FriendRequest_PushDescriptor instead')
-const S_FriendRequest_Push_EventType$json = {
-  '1': 'EventType',
-  '2': [
-    {'1': 'REQUEST_RECEIVED', '2': 0},
-    {'1': 'REQUEST_ACCEPTED', '2': 1},
-    {'1': 'REQUEST_CANCELLED', '2': 2},
-  ],
-};
-
-/// Descriptor for `S_FriendRequest_Push`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List s_FriendRequest_PushDescriptor = $convert.base64Decode(
-    'ChRTX0ZyaWVuZFJlcXVlc3RfUHVzaBJHCgpldmVudF90eXBlGAEgASgOMiguUHJvdG9jb2wuU1'
-    '9GcmllbmRSZXF1ZXN0X1B1c2guRXZlbnRUeXBlUglldmVudFR5cGUSMQoHcmVxdWVzdBgCIAEo'
-    'CzIXLlByb3RvY29sLkZyaWVuZFJlcXVlc3RSB3JlcXVlc3QSLAoGZnJpZW5kGAMgASgLMhQuUH'
-    'JvdG9jb2wuRnJpZW5kSW5mb1IGZnJpZW5kEioKEWNhbmNlbGxlZF91c2VyX2lkGAQgASgJUg9j'
-    'YW5jZWxsZWRVc2VySWQiTgoJRXZlbnRUeXBlEhQKEFJFUVVFU1RfUkVDRUlWRUQQABIUChBSRV'
-    'FVRVNUX0FDQ0VQVEVEEAESFQoRUkVRVUVTVF9DQU5DRUxMRUQQAg==');

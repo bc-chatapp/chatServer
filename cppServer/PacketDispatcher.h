@@ -60,13 +60,10 @@ protected:
 
 
     // Friend Request Handlers ()
-    static bool Dispatch_C_FriendRequest_Find(sessionPtr& session, uint64 reqId, const Protocol::C_FriendRequest_Find& pkt);
-    static bool Dispatch_C_FriendRequest_Add(sessionPtr& session, uint64 reqId, const Protocol::C_FriendRequest_Add& pkt);
-    static bool Dispatch_C_FriendRequest_Cancel(sessionPtr& session, uint64 reqId, const Protocol::C_FriendRequest_Cancel& pkt);
-    static bool Dispatch_C_FriendRequest_List(sessionPtr& session, uint64 reqId, const Protocol::C_FriendRequest_List& pkt);
-    static bool Dispatch_C_FriendRequest_Respond(sessionPtr& session, uint64 reqId, const Protocol::C_FriendRequest_Respond& pkt);
-    static bool Dispatch_C_FriendRequest_Remove(sessionPtr& session, uint64 reqId, const Protocol::C_FriendRequest_Remove& pkt);
-    static bool Dispatch_C_FriendList(sessionPtr& session, uint64 reqId, const Protocol::C_FriendList& pkt);
+  
+    static bool Dispatch_C_SearchUser(sessionPtr& session, uint64 reqId, const Protocol::C_SearchUser& pkt);
+    static bool Dispatch_C_FriendAction(sessionPtr& session, uint64 reqId, const Protocol::C_FriendAction& pkt);
+    static bool Dispatch_C_FetchFriendData(sessionPtr& session, uint64 reqId, const Protocol::C_FetchFriendData& pkt);
 
     // Group Handlers
     static bool Dispatch_C_CreateGroup(sessionPtr& session, uint64 reqId, const Protocol::C_CreateGroup& pkt);

@@ -13,399 +13,245 @@ using namespace Protocol;
 // Friend Request
 // ============================================
 
-bool FriendService::FindUser(sessionPtr& session, uint64 reqId, const string& searchUserId)
-{
-	// UserRepository에서 사용자 정보 조회
-	UserInfo userInfo;
-	if (!UserRepository::GetUser(searchUserId, userInfo)) {
-		// 사용자 없음
-		Protocol::S_FriendRequest_Find pkt;
-		pkt.set_exist(false);
-		
-		Protocol::Envelope env;
-		env.set_version(GProtoVersion);
-		env.set_request_id(reqId);
-		*env.mutable_s_frient_request_find() = pkt;
-		PacketDispatcher::SendEnvelope(session, env);
-		return false;
-	}
-	
-	// 사용자 정보 반환
-	Protocol::FriendInfo friendInfo;
-	friendInfo.set_user_id(userInfo.userId);
-	friendInfo.set_name(userInfo.name);
-	friendInfo.set_status_message(userInfo.email);
-	friendInfo.set_profile_image_url(userInfo.profileImageUrl);
-	friendInfo.set_last_seen(userInfo.lastSeen);
-	friendInfo.set_status(""); // 검색 결과에는 status 불필요
-	
-	Protocol::S_FriendRequest_Find pkt;
-	pkt.set_exist(true);
-	*pkt.mutable_user_info() = friendInfo;
-	
-	Protocol::Envelope env;
-	env.set_version(GProtoVersion);
-	env.set_request_id(reqId);
-	*env.mutable_s_frient_request_find() = pkt;
-	PacketDispatcher::SendEnvelope(session, env);
-	
-	cout << "[FriendService] FindUser: userId=" << searchUserId << " found=true" << endl;
-	return true;
-}
 
-bool FriendService::AddFriendRequest(sessionPtr& session, uint64 reqId, const string& friendId)
+bool FriendService::SearchUser(sessionPtr& session, uint64 reqId, const string& searchUserId)
 {
 	auto serverSession = static_pointer_cast<ServerSession>(session);
-	const string userId = serverSession->GetUserId();
-	if (userId.empty()) {
-		return false;
-	}
+	const string myUserId = serverSession->GetUserId();
 
-	if (userId == friendId) {
-		return false;
-	}
+	cout << "[FriendService] 검색 요청: " << searchUserId << endl;
 
-	cout << "[FriendService] AddFriendRequest userId=" << userId << " friendId=" << friendId << endl;
+	UserInfo userInfo;
+	bool found = UserRepository::GetUser(searchUserId, userInfo);
 
-	// DB
-	bool success = FriendRepository::AddFriendRequest(userId, friendId);
-	
-	Protocol::S_FriendRequest_Add pkt_s_friend_add;
-	if (success) {
-		pkt_s_friend_add.set_success(true);
-		pkt_s_friend_add.set_message("Friend request sent");
+	Protocol::S_SearchUser pkt;
+	pkt.set_success(found);
 
-		// 
-		auto requests = FriendRepository::GetFriendRequests(friendId);
-		for (const auto& reqInfo : requests) {
-			if (reqInfo.requesterUserId == userId) {
-				Protocol::FriendRequest request = FriendRepository::ToProtocolFriendRequest(reqInfo);
-				PushFriendRequestEvent(friendId, Protocol::S_FriendRequest_Push::REQUEST_RECEIVED, &request);
-				break;
-			}
+	if (found) {
+		// 찾은 유저 정보 설정
+		Protocol::FriendInfo* info = pkt.mutable_user_info();
+		info->set_user_id(userInfo.userId);
+		info->set_name(userInfo.name);
+		info->set_status_message(userInfo.status_message);
+		info->set_profile_image_url(userInfo.profileImageUrl);
+		// info->set_last_seen(userInfo.lastSeen); // 필요 시
+
+		// 관계 상태 확인 (나랑 무슨 사이인지)
+		if (!myUserId.empty()) {
+			bool isFriend = FriendRepository::IsFriend(myUserId, userInfo.userId);
+			bool hasSent = FriendRepository::HasSentRequest(myUserId, userInfo.userId);
+
+			pkt.set_is_friend(isFriend);
+			pkt.set_has_sent_request(hasSent);
 		}
 	}
-	else {
-		pkt_s_friend_add.set_success(false);
-		pkt_s_friend_add.set_message("Failed to send friend request");
-	}
 
+	// 응답 전송
 	Protocol::Envelope env;
 	env.set_version(GProtoVersion);
 	env.set_request_id(reqId);
-	env.mutable_s_friend_request_add()->CopyFrom(pkt_s_friend_add);
-
+	*env.mutable_s_search_user() = pkt;
 	PacketDispatcher::SendEnvelope(session, env);
-	return success;
-}
 
-bool FriendService::CancelFriendRequest(sessionPtr& session, uint64 reqId, const string& friendId)
-{
-	auto serverSession = static_pointer_cast<ServerSession>(session);
-	const string userId = serverSession->GetUserId();
-	if (userId.empty()) {
-		return false;
-	}
-
-	cout << "[FriendService] CancelFriendRequest userId=" << userId << " friendId=" << friendId << endl;
-
-	// DB에서 친구 요청 취소
-	bool success = FriendRepository::CancelFriendRequest(userId, friendId);
-
-	Protocol::S_FriendRequest_Cancel pkt_s_friend_cancel;
-	if (success) {
-		pkt_s_friend_cancel.set_success(true);
-		pkt_s_friend_cancel.set_message("Friend request cancelled");
-
-		// ?섏떊?먯뿉寃?Push 硫붿떆吏 ?꾩넚 (?붿껌 痍⑥냼??
-		PushFriendRequestEvent(friendId, Protocol::S_FriendRequest_Push::REQUEST_CANCELLED, nullptr, nullptr, userId);
-	}
-	else {
-		pkt_s_friend_cancel.set_success(false);
-		pkt_s_friend_cancel.set_message("Failed to cancel friend request");
-	}
-
-	Protocol::Envelope env;
-	env.set_version(GProtoVersion);
-	env.set_request_id(reqId);
-	env.mutable_s_friend_request_cancel()->CopyFrom(pkt_s_friend_cancel);
-
-	PacketDispatcher::SendEnvelope(session, env);
-	return success;
-}
-
-bool FriendService::GetFriendRequestList(sessionPtr& session, uint64 reqId)
-{
-	auto serverSession = static_pointer_cast<ServerSession>(session);
-	const string userId = serverSession->GetUserId();
-	if (userId.empty()) {
-		return false;
-	}
-
-	cout << "[FriendService] GetFriendRequestList userId=" << userId << endl;
-
-	// DB?먯꽌 ?섏뿉寃???移쒓뎄 ?붿껌 紐⑸줉 議고쉶
-	auto requests = FriendRepository::GetFriendRequests(userId);
-
-	Protocol::S_FriendRequest_List pkt_s_list;
-	for (const auto& reqInfo : requests) {
-		Protocol::FriendRequest* request = pkt_s_list.add_requests();
-		*request = FriendRepository::ToProtocolFriendRequest(reqInfo);
-	}
-
-	Protocol::Envelope env;
-	env.set_version(GProtoVersion);
-	env.set_request_id(reqId);
-	env.mutable_s_friend_request_list()->CopyFrom(pkt_s_list);
-
-	PacketDispatcher::SendEnvelope(session, env);
 	return true;
 }
 
-bool FriendService::GetSentFriendRequestList(sessionPtr& session, uint64 reqId)
+
+
+
+bool FriendService::FetchFriendData(sessionPtr& session, uint64 reqId)
 {
 	auto serverSession = static_pointer_cast<ServerSession>(session);
 	const string userId = serverSession->GetUserId();
-	if (userId.empty()) {
-		return false;
+	if (userId.empty()) return false;
+
+	Protocol::S_FetchFriendData pkt;
+
+	// (1) 이미 친구인 목록
+	auto friends = FriendRepository::GetFriends(userId);
+	for (const auto& f : friends) {
+		*pkt.add_friends() = FriendRepository::ToProtocolFriendInfo(f);
 	}
 
-	cout << "[FriendService] GetSentFriendRequestList userId=" << userId << endl;
-
-	// DB에서 보낸 친구 요청 목록 조회
-	auto requests = FriendRepository::GetSentFriendRequests(userId);
-
-	Protocol::S_FriendRequest_List pkt_s_list;
-	for (const auto& reqInfo : requests) {
-		Protocol::FriendRequest* request = pkt_s_list.add_requests();
-		*request = FriendRepository::ToProtocolFriendRequest(reqInfo);
+	// (2) 받은 요청 목록
+	auto received = FriendRepository::GetFriendRequests(userId);
+	for (const auto& r : received) {
+		auto* req = pkt.add_received_requests();
+		req->set_user_id(r.userId);
+		req->set_name(r.name);
+		req->set_status_message(r.statusMessage);
+		req->set_profile_image_url(r.profileImageUrl);
+		req->set_is_received(true);
 	}
 
+	// (3) 보낸 요청 목록
+	auto sent = FriendRepository::GetSentFriendRequests(userId);
+	for (const auto& s : sent) {
+		auto* req = pkt.add_sent_requests();
+		req->set_user_id(s.userId);
+		req->set_name(s.name);
+		req->set_status_message(s.statusMessage);
+		req->set_profile_image_url(s.profileImageUrl);
+		req->set_is_received(false);
+	}
+
+	cout << "[FetchFriendData] User: " << userId
+		<< " | Friends: " << friends.size()
+		<< " | Recv: " << received.size()
+		<< " | Sent: " << sent.size() << endl;
+
+	// 응답 전송
 	Protocol::Envelope env;
 	env.set_version(GProtoVersion);
 	env.set_request_id(reqId);
-	env.mutable_s_friend_request_list()->CopyFrom(pkt_s_list);
-
+	*env.mutable_s_fetch_friend_data() = pkt;
 	PacketDispatcher::SendEnvelope(session, env);
+
 	return true;
 }
 
-bool FriendService::RespondToFriendRequest(sessionPtr& session, uint64 reqId, const string& requesterId, bool accept)
+
+
+
+
+bool FriendService::HandleFriendAction(sessionPtr& session, uint64 reqId, Protocol::C_FriendAction::ActionType action, const string& targetId)
 {
 	auto serverSession = static_pointer_cast<ServerSession>(session);
-	const string userId = serverSession->GetUserId();
-	if (userId.empty()) {
+	const string myId = serverSession->GetUserId();
+
+	// 기본 유효성 검사
+	if (myId.empty() || targetId.empty() || myId == targetId) {
+		HandleErr(session, reqId, ERR_INVALID_PACKET, "Invalid Request");
 		return false;
 	}
-
-	cout << "[FriendService] RespondToFriendRequest userId=" << userId << " requesterId=" << requesterId 
-		 << " accept=" << (accept ? "true" : "false") << endl;
 
 	bool success = false;
-	Protocol::S_FriendRequest_Respond pkt_s_respond;
+	string message = "";
+	Protocol::FriendInfo updatedFriendInfo; // 수락 시 클라 갱신용
 
-	if (accept) {
-		// 친구 요청 수락
-		success = FriendRepository::AcceptFriendRequest(userId, requesterId);
+	switch (action)
+	{
+	case Protocol::C_FriendAction::SEND_REQUEST:
+		success = FriendRepository::AddFriendRequest(myId, targetId);
+		message = success ? "친구 요청을 보냈습니다." : "이미 요청했거나 친구입니다.";
+
 		if (success) {
-			pkt_s_respond.set_success(true);
-			pkt_s_respond.set_message("Friend request accepted");
+			// 상대방에게 푸시: NEW_REQUEST (내 정보를 담아서 보냄)
+			UserInfo myInfo;
+			if (UserRepository::GetUser(myId, myInfo)) {
+				Protocol::FriendInfo pkt_req;
+				pkt_req.set_user_id(myInfo.userId);
+				pkt_req.set_name(myInfo.name);
+				pkt_req.set_status_message(myInfo.status_message);
+				pkt_req.set_profile_image_url(myInfo.profileImageUrl);
 
-			// 친구 정보 조회하여 응답에 포함
-			auto friends = FriendRepository::GetFriends(userId);
-			for (const auto& friendInfo : friends) {
-				if (friendInfo.friendId == requesterId) {
-					*pkt_s_respond.mutable_friend_() = FriendRepository::ToProtocolFriendInfo(friendInfo);
-					break;
-				}
-			}
-
-			// ?붿껌?먯뿉寃?Push 硫붿떆吏 ?꾩넚 (?붿껌 ?섎씫??
-			auto requesterFriends = FriendRepository::GetFriends(requesterId);
-			for (const auto& friendInfo : requesterFriends) {
-				if (friendInfo.friendId == userId) {
-					Protocol::FriendInfo acceptedFriendInfo = FriendRepository::ToProtocolFriendInfo(friendInfo);
-					PushFriendRequestEvent(requesterId, Protocol::S_FriendRequest_Push::REQUEST_ACCEPTED, nullptr, &acceptedFriendInfo);
-					break;
-				}
+				PushFriendEvent(targetId, Protocol::S_FriendPush::NEW_REQUEST, &pkt_req);
 			}
 		}
-		else {
-			pkt_s_respond.set_success(false);
-			pkt_s_respond.set_message("Failed to accept friend request");
-		}
-	}
-	else {
-		// 친구 요청 거절
-		success = FriendRepository::RejectFriendRequest(userId, requesterId);
+		break;
+
+	case Protocol::C_FriendAction::CANCEL_REQUEST:
+		success = FriendRepository::CancelFriendRequest(myId, targetId);
+		message = success ? "요청이 취소되었습니다." : "취소 실패";
+		break;
+
+	case Protocol::C_FriendAction::ACCEPT_REQUEST:
+		success = FriendRepository::AcceptFriendRequest(myId, targetId);
+		message = success ? "친구 요청을 수락했습니다." : "수락 실패";
+
 		if (success) {
-			pkt_s_respond.set_success(true);
-			pkt_s_respond.set_message("Friend request rejected");
+			// (A) 응답 패킷에 새 친구 정보 포함 (클라 목록 갱신용)
+			UserInfo friendInfo;
+			if (UserRepository::GetUser(targetId, friendInfo)) {
+				updatedFriendInfo.set_user_id(friendInfo.userId);
+				updatedFriendInfo.set_name(friendInfo.name);
+				updatedFriendInfo.set_status_message(friendInfo.status_message);
+				updatedFriendInfo.set_profile_image_url(friendInfo.profileImageUrl);
+				updatedFriendInfo.set_status("online"); // 일단 온라인으로 가정하거나 상태 조회 필요
+			}
+
+			// (B) 상대방에게 푸시: REQUEST_ACCEPTED (내 정보를 담아서 보냄)
+			UserInfo myInfo;
+			if (UserRepository::GetUser(myId, myInfo)) {
+				Protocol::FriendInfo myProto;
+				myProto.set_user_id(myInfo.userId);
+				myProto.set_name(myInfo.name);
+				myProto.set_status_message(myInfo.status_message);
+				myProto.set_profile_image_url(myInfo.profileImageUrl);
+
+				PushFriendEvent(targetId, Protocol::S_FriendPush::REQUEST_ACCEPTED, &myProto);
+			}
 		}
-		else {
-			pkt_s_respond.set_success(false);
-			pkt_s_respond.set_message("Failed to reject friend request");
+		break;
+
+	case Protocol::C_FriendAction::REJECT_REQUEST:
+		success = FriendRepository::RejectFriendRequest(myId, targetId);
+		message = success ? "요청을 거절했습니다." : "거절 실패";
+		break;
+
+	case Protocol::C_FriendAction::DELETE_FRIEND:
+		success = FriendRepository::RemoveFriend(myId, targetId);
+		message = success ? "친구가 삭제되었습니다." : "삭제 실패";
+
+		if (success) {
+			// 상대방에게 푸시: FRIEND_DELETED (내 ID만 있으면 됨)
+			// 삭제된 친구 ID를 알리기 위해 임시 객체 사용 가능하지만, 
+			// 보통은 클라가 전체 갱신하거나 Push 타입만 보고 처리
+			PushFriendEvent(targetId, Protocol::S_FriendPush::FRIEND_DELETED, nullptr);
 		}
+		break;
+	}
+
+	// 결과 응답 전송
+	Protocol::S_FriendAction pkt;
+	pkt.set_success(success);
+	pkt.set_message(message);
+
+	// 수락일 경우에만 갱신된 친구 정보 포함
+	if (success && action == Protocol::C_FriendAction::ACCEPT_REQUEST) {
+		*pkt.mutable_updated_friend() = updatedFriendInfo;
 	}
 
 	Protocol::Envelope env;
 	env.set_version(GProtoVersion);
 	env.set_request_id(reqId);
-	env.mutable_s_friend_request_respond()->CopyFrom(pkt_s_respond);
-
+	*env.mutable_s_friend_action() = pkt;
 	PacketDispatcher::SendEnvelope(session, env);
-	return success;
-}
 
-bool FriendService::RemoveFriend(sessionPtr& session, uint64 reqId, const string& friendId)
-{
-	auto serverSession = static_pointer_cast<ServerSession>(session);
-	const string userId = serverSession->GetUserId();
-	if (userId.empty()) {
-		return false;
-	}
-
-	cout << "[FriendService] RemoveFriend userId=" << userId << " friendId=" << friendId << endl;
-
-	// 기존 친구인지 확인
-	if (!FriendRepository::IsFriend(userId, friendId)) {
-		return false;
-	}
-
-	// DB에서 친구 삭제 (양방향)
-	bool success = FriendRepository::RemoveFriend(userId, friendId);
-
-	Protocol::S_FriendRequest_Remove pkt_s_remove;
-	if (success) {
-		pkt_s_remove.set_success(true);
-		pkt_s_remove.set_message("Friend removed");
-
-		// ?곷?諛⑹뿉寃?Push 硫붿떆吏 ?꾩넚 (移쒓뎄 ??젣??
-		PushFriendRequestEvent(friendId, Protocol::S_FriendRequest_Push::REQUEST_CANCELLED, nullptr, nullptr, userId);
-	}
-	else {
-		pkt_s_remove.set_success(false);
-		pkt_s_remove.set_message("Failed to remove friend");
-	}
-
-	Protocol::Envelope env;
-	env.set_version(GProtoVersion);
-	env.set_request_id(reqId);
-	env.mutable_s_friend_request_remove()->CopyFrom(pkt_s_remove);
-
-	PacketDispatcher::SendEnvelope(session, env);
-	return success;
-}
-
-// ============================================
-// Friend List
-// ============================================
-
-bool FriendService::GetFriendList(sessionPtr& session, uint64 reqId)
-{
-	auto serverSession = static_pointer_cast<ServerSession>(session);
-	const string userId = serverSession->GetUserId();
-	if (userId.empty()) {
-		return false;
-	}
-
-	cout << "[FriendService] GetFriendList userId=" << userId << endl;
-
-	// DB?먯꽌 移쒓뎄 紐⑸줉 議고쉶 (accepted ?곹깭留?
-	auto friends = FriendRepository::GetFriends(userId);
-
-	Protocol::S_FriendList pkt_s_list;
-	for (const auto& friendInfo : friends) {
-		Protocol::FriendInfo* friendInfoProto = pkt_s_list.add_friends();
-		*friendInfoProto = FriendRepository::ToProtocolFriendInfo(friendInfo);
-	}
-
-	Protocol::Envelope env;
-	env.set_version(GProtoVersion);
-	env.set_request_id(reqId);
-	env.mutable_s_friend_list()->CopyFrom(pkt_s_list);
-
-	PacketDispatcher::SendEnvelope(session, env);
 	return true;
 }
 
-bool FriendService::GetAlreadyFriend(const string& userId, const string& friendId)
-{
-	return FriendRepository::IsFriend(userId, friendId);
-}
 
-// ============================================
-// Push Message Helper
-// ============================================
-/*
- * PushFriendRequestEvent: 移쒓뎄 ?붿껌 愿???대깽?몃? ?ㅼ떆媛꾩쑝濡??꾩넚?섎뒗 ?ы띁 ?⑥닔
- * 
- * 濡쒖쭅 ?ㅻ챸:
- * 1. ????ъ슜??userId)???몄뀡??UserManager?먯꽌 議고쉶
- * 2. ?몄뀡???놁쑝硫??ㅽ봽?쇱씤 ?곹깭?대?濡?濡쒓렇留?異쒕젰?섍퀬 醫낅즺
- *    (?ν썑 ?ㅽ봽?쇱씤 硫붿떆吏 ?먯뿉 ??ν븷 ???덉쓬)
- * 3. ?대깽????낆뿉 ?곕씪 ?곸젅???곗씠?곕? S_FriendRequest_Push???ㅼ젙:
- *    - REQUEST_RECEIVED: 移쒓뎄 ?붿껌??諛쏆븯????(request ?곗씠???ы븿)
- *    - REQUEST_ACCEPTED: 移쒓뎄 ?붿껌???섎씫?섏뿀????(friendInfo ?곗씠???ы븿)
- *    - REQUEST_CANCELLED: 移쒓뎄 ?붿껌??痍⑥냼?섏뿀????(cancelled_user_id ?ы븿)
- * 4. Envelope???댁븘???대떦 ?몄뀡?쇰줈 ?꾩넚
- * 5. request_id??0?쇰줈 ?ㅼ젙 (Push 硫붿떆吏???대씪?댁뼵???붿껌??????묐떟???꾨떂)
- * 
- * ?ν썑 ?뺤옣:
- * - 洹몃９ 梨꾪똿?먯꽌 移쒓뎄 異붽? ??洹몃９ 硫ㅻ쾭?ㅼ뿉寃뚮룄 Push 媛??
- * - ?ㅽ봽?쇱씤 ?ъ슜?먯뿉寃뚮뒗 硫붿떆吏 ?먯뿉 ???
- */
 
-void FriendService::PushFriendRequestEvent(const string& userId, Protocol::S_FriendRequest_Push::EventType eventType,
-										   const Protocol::FriendRequest* request,
-										   const Protocol::FriendInfo* friendInfo,
-										   const string& cancelledUserId)
+void FriendService::PushFriendEvent(const string& targetUserId, Protocol::S_FriendPush::PushType type, const Protocol::FriendInfo* info)
 {
-	// 1. ?대떦 ?ъ슜?먯쓽 ?몄뀡 李얘린
-	auto targetSession = GUserManager->FindSession(userId);
-	if (!targetSession) {
-		// ?ㅽ봽?쇱씤 ?ъ슜??- ?섏쨷???ㅽ봽?쇱씤 硫붿떆吏 ?먯뿉 ??ν븷 ???덉쓬
-		cout << "[FriendService] PushFriendRequestEvent: User " << userId << " is offline" << endl;
-		return;
+	// GUserManager는 싱글톤이나 전역 객체여야 합니다. (CoreGlobal.h 확인)
+	auto targetSession = GUserManager->FindSession(targetUserId);
+
+	// 상대가 오프라인이면 푸시 안 함 (나중에 FetchFriendData로 가져감)
+	if (!targetSession) return;
+
+	Protocol::S_FriendPush pkt;
+	pkt.set_type(type);
+	if (info) {
+		*pkt.mutable_user_info() = *info;
 	}
 
-	// 2. Push 硫붿떆吏 ?앹꽦
-	Protocol::S_FriendRequest_Push pkt_push;
-	pkt_push.set_event_type(eventType);
-
-	// 3. ?대깽????낆뿉 ?곕씪 ?곸젅???곗씠???ㅼ젙
-	switch (eventType) {
-	case Protocol::S_FriendRequest_Push::REQUEST_RECEIVED:
-		// 移쒓뎄 ?붿껌??諛쏆븯???? ?붿껌???뺣낫 ?ы븿
-		if (request) {
-			*pkt_push.mutable_request() = *request;
-		}
-		break;
-
-	case Protocol::S_FriendRequest_Push::REQUEST_ACCEPTED:
-		// 移쒓뎄 ?붿껌???섎씫?섏뿀???? ?덈줈 異붽???移쒓뎄 ?뺣낫 ?ы븿
-		if (friendInfo) {
-			*pkt_push.mutable_friend_() = *friendInfo;
-		}
-		break;
-
-	case Protocol::S_FriendRequest_Push::REQUEST_CANCELLED:
-		// 移쒓뎄 ?붿껌??痍⑥냼?섏뿀???? 痍⑥냼???ъ슜??ID ?ы븿
-		if (!cancelledUserId.empty()) {
-			pkt_push.set_cancelled_user_id(cancelledUserId);
-		}
-		break;
-	}
-
-	// 4. Envelope???댁븘???꾩넚
 	Protocol::Envelope env;
 	env.set_version(GProtoVersion);
-	env.set_request_id(0);  // Push 硫붿떆吏??request_id = 0 (?대씪?댁뼵???붿껌??????묐떟???꾨떂)
-	env.mutable_s_friend_request_push()->CopyFrom(pkt_push);
+	env.set_request_id(0); // Server Push는 reqId 0
+	*env.mutable_s_friend_push() = pkt;
 
 	PacketDispatcher::SendEnvelope(targetSession, env);
-	cout << "[FriendService] PushFriendRequestEvent sent to userId=" << userId << " eventType=" << eventType << endl;
 }
+
+
+
+
+
+
+
+
 
 void FriendService::HandleErr(sessionPtr& session, uint64 reqId, ErrorCode errorCode, const string& errMessage)
 {

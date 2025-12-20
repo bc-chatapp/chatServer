@@ -37,7 +37,7 @@ int main()
 	// 3. Service 생성 (ServerSession을 만들도록 팩토리 지정)
 	auto service = make_shared<Service>(
 		ServiceType::Server,
-		NetAddress(L"127.0.0.1", 7777), // 리스닝할 주소
+		NetAddress(L"127.0.0.1", 3000), // 리스닝할 주소
 		iocpCore,
 		[]() { return make_shared<ServerSession>(); }
 	);

@@ -97,7 +97,9 @@ bool UserRepository::GetUser(const string& userId, UserInfo& userInfo) {
         if (!row[1].isNull()) userInfo.authToken = row[1].get<string>();
         if (!row[2].isNull()) userInfo.name = row[2].get<string>();
         if (!row[3].isNull()) userInfo.email = row[3].get<string>(); 
-        if (!row[4].isNull()) userInfo.profileImageUrl = row[4].get<string>();
+
+        if (!row[4].isNull()) userInfo.status_message = row[4].get<string>();
+        if (!row[5].isNull()) userInfo.profileImageUrl = row[5].get<string>();
         
         
         // last_seen 파싱
@@ -198,6 +200,19 @@ bool UserRepository::GetUserWithPassword(const string& userId, UserInfo& userInf
         return false;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 bool UserRepository::UpdateAuthToken(const string& userId, const string& authToken) {
     try {

@@ -104,27 +104,16 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 
 	
 		/* 친구 관련 */
-	case Protocol::Envelope::kCFrientRequestFind:
-		Dispatch_C_FriendRequest_Find(session, envelope.request_id(), envelope.c_frient_request_find());
+	case Protocol::Envelope::kCFriendAction:
+		Dispatch_C_FriendAction(session, envelope.request_id(), envelope.c_friend_action());
 		break;
-	case Protocol::Envelope::kCFriendRequestAdd:
-		Dispatch_C_FriendRequest_Add(session, envelope.request_id(), envelope.c_friend_request_add());
+	case Protocol::Envelope::kCSearchUser:
+		Dispatch_C_SearchUser(session, envelope.request_id(), envelope.c_search_user());
 		break;
-	case Protocol::Envelope::kCFriendRequestCancel:
-		Dispatch_C_FriendRequest_Cancel(session, envelope.request_id(), envelope.c_friend_request_cancel());
+	case Protocol::Envelope::kCFetchFriendData:
+		Dispatch_C_FetchFriendData(session, envelope.request_id(), envelope.c_fetch_friend_data());
 		break;
-	case Protocol::Envelope::kCFriendRequestList:
-		Dispatch_C_FriendRequest_List(session, envelope.request_id(), envelope.c_friend_request_list());
-		break;
-	case Protocol::Envelope::kCFriendRequestRespond:
-		Dispatch_C_FriendRequest_Respond(session, envelope.request_id(), envelope.c_friend_request_respond());
-		break;
-	case Protocol::Envelope::kCFriendRequestRemove:
-		Dispatch_C_FriendRequest_Remove(session, envelope.request_id(), envelope.c_friend_request_remove());
-		break;
-	case Protocol::Envelope::kCFriendList:
-		Dispatch_C_FriendList(session, envelope.request_id(), envelope.c_friend_list());
-		break;
+
 
 		/* 그룹 관련 */
 	case Protocol::Envelope::kCCreateGroup:
@@ -392,146 +381,44 @@ bool PacketDispatcher::Dispatch_C_UploadFile(sessionPtr& session, uint64 reqId, 
 /*---------------------------------
 		Friend Request Handler
 -----------------------------------*/
-
-bool PacketDispatcher::Dispatch_C_FriendRequest_Find(sessionPtr& session, uint64 reqId, const Protocol::C_FriendRequest_Find& pkt)
+bool PacketDispatcher::Dispatch_C_SearchUser(sessionPtr& session, uint64 reqId, const Protocol::C_SearchUser& pkt)
 {
 	auto serverSession = static_pointer_cast<ServerSession>(session);
 	const string userId = serverSession->GetUserId();
 	if (userId.empty()) {
-		DispatchError(session, reqId, "unauthorized");
+		DispatchError(session, reqId, ERR_UNAUTHORIZED);
 		return false;
 	}
 
-	const string searchUserId = pkt.user_id();
-	if (searchUserId.empty()) {
-		DispatchError(session, reqId, ERR_USER_ID_REQUIRED);
-		return false;
-	}
-
-	// FriendService로 위임
-	return GFriendService->FindUser(session, reqId, searchUserId);
+	return GFriendService->SearchUser(session, reqId, pkt.user_id());
 }
 
-bool PacketDispatcher::Dispatch_C_FriendRequest_Add(sessionPtr& session, uint64 reqId, const Protocol::C_FriendRequest_Add& pkt)
+bool PacketDispatcher::Dispatch_C_FriendAction(sessionPtr& session, uint64 reqId, const Protocol::C_FriendAction& pkt)
 {
 	auto serverSession = static_pointer_cast<ServerSession>(session);
 	const string userId = serverSession->GetUserId();
 	if (userId.empty()) {
-		DispatchError(session, reqId, "unauthorized");
+		DispatchError(session, reqId, ERR_UNAUTHORIZED);
 		return false;
 	}
 
-	const string friendId = pkt.friend_user_id();
-	if (friendId.empty()) {
-		DispatchError(session, reqId, ERR_INVALID_FRIEND_USER_ID);
-		return false;
-	}
-
-	if (userId == friendId) {
-		DispatchError(session, reqId, ERR_CANNOT_ADD_SELF);
-		return false;
-	}
-
-	// FriendService로 위임
-	return GFriendService->AddFriendRequest(session, reqId, friendId);
+	return GFriendService->HandleFriendAction(session, reqId, pkt.action(), pkt.target_user_id());
 }
 
-bool PacketDispatcher::Dispatch_C_FriendRequest_Cancel(sessionPtr& session, uint64 reqId, const Protocol::C_FriendRequest_Cancel& pkt)
+bool PacketDispatcher::Dispatch_C_FetchFriendData(sessionPtr& session, uint64 reqId, const Protocol::C_FetchFriendData& pkt)
 {
 	auto serverSession = static_pointer_cast<ServerSession>(session);
 	const string userId = serverSession->GetUserId();
 	if (userId.empty()) {
-		DispatchError(session, reqId, "unauthorized");
+		DispatchError(session, reqId, ERR_UNAUTHORIZED);
 		return false;
 	}
 
-	const string friendId = pkt.friend_user_id();
-	if (friendId.empty()) {
-		DispatchError(session, reqId, "invalid friend_user_id");
-		return false;
-	}
-
-	// FriendService로 위임
-	return GFriendService->CancelFriendRequest(session, reqId, friendId);
+	return GFriendService->FetchFriendData(session, reqId);
 }
 
-bool PacketDispatcher::Dispatch_C_FriendRequest_List(sessionPtr& session, uint64 reqId, const Protocol::C_FriendRequest_List& pkt)
-{
-	auto serverSession = static_pointer_cast<ServerSession>(session);
-	const string userId = serverSession->GetUserId();
-	if (userId.empty()) {
-		DispatchError(session, reqId, "unauthorized");
-		return false;
-	}
 
-	// 요청 타입에 따라 분기
-	if (pkt.type() == Protocol::C_FriendRequest_List::SENT) {
-		// 보낸 요청 목록
-		return GFriendService->GetSentFriendRequestList(session, reqId);
-	} else {
-		// 받은 요청 목록 (기본값)
-		return GFriendService->GetFriendRequestList(session, reqId);
-	}
-}
 
-bool PacketDispatcher::Dispatch_C_FriendRequest_Respond(sessionPtr& session, uint64 reqId, const Protocol::C_FriendRequest_Respond& pkt)
-{
-	auto serverSession = static_pointer_cast<ServerSession>(session);
-	const string userId = serverSession->GetUserId();
-	if (userId.empty()) {
-		DispatchError(session, reqId, "unauthorized");
-		return false;
-	}
-
-	const string requesterId = pkt.requester_user_id();
-	if (requesterId.empty()) {
-		DispatchError(session, reqId, ERR_INVALID_FRIEND_USER_ID);
-		return false;
-	}
-
-	const bool accept = pkt.accept();
-
-	// FriendService로 위임
-	return GFriendService->RespondToFriendRequest(session, reqId, requesterId, accept);
-}
-
-bool PacketDispatcher::Dispatch_C_FriendRequest_Remove(sessionPtr& session, uint64 reqId, const Protocol::C_FriendRequest_Remove& pkt)
-{
-	auto serverSession = static_pointer_cast<ServerSession>(session);
-	const string userId = serverSession->GetUserId();
-	if (userId.empty()) {
-		DispatchError(session, reqId, "unauthorized");
-		return false;
-	}
-
-	const string friendId = pkt.friend_user_id();
-	if (friendId.empty()) {
-		DispatchError(session, reqId, "invalid friend_user_id");
-		return false;
-	}
-
-	// 이미 친구인지 확인
-	if (GFriendService->GetAlreadyFriend(userId, friendId)) {
-		DispatchError(session, reqId, ERR_NOT_A_FRIEND);
-		return false;
-	}
-
-	// FriendService로 위임
-	return GFriendService->RemoveFriend(session, reqId, friendId);
-}
-
-bool PacketDispatcher::Dispatch_C_FriendList(sessionPtr& session, uint64 reqId, const Protocol::C_FriendList& pkt)
-{
-	auto serverSession = static_pointer_cast<ServerSession>(session);
-	const string userId = serverSession->GetUserId();
-	if (userId.empty()) {
-		DispatchError(session, reqId, "unauthorized");
-		return false;
-	}
-
-	// FriendService로 위임
-	return GFriendService->GetFriendList(session, reqId);
-}
 
 
 
@@ -539,17 +426,10 @@ void PacketDispatcher::PushOfflineData(sessionPtr& session, const string& userId
 {
 	cout << "[PacketDispatcher] PushOfflineData: userId=" << userId << endl;
 	
-	// 1. 오프라인 친구 요청 푸시 (읽지 않은 요청만)
-	auto friendRequests = FriendRepository::GetUnreadFriendRequests(userId);
-	for (const auto& reqInfo : friendRequests) {
-		Protocol::FriendRequest request = FriendRepository::ToProtocolFriendRequest(reqInfo);
-		FriendService::PushFriendRequestEvent(userId, Protocol::S_FriendRequest_Push::REQUEST_RECEIVED, &request);
-		
-		// 푸시 후 읽음 처리
-		FriendRepository::MarkFriendRequestAsRead(userId, reqInfo.requesterUserId);
-	}
 	
-	// 2. 오프라인 메시지 푸시
+
+	
+	// 오프라인 메시지 푸시
 	// read_status 없이 단순하게: is_delivered = 0인 메시지만 조회
 	int totalMessages = 0;
 	auto conversations = MessageRepository::GetUserConversations(userId);
@@ -586,7 +466,6 @@ void PacketDispatcher::PushOfflineData(sessionPtr& session, const string& userId
 	}
 	
 	cout << "[PacketDispatcher] PushOfflineData 완료: userId=" << userId 
-		 << ", friendRequests=" << friendRequests.size() << "개"
 		 << ", offlineMessages=" << totalMessages << "개" << endl;
 }
 
@@ -660,7 +539,7 @@ bool PacketDispatcher::Dispatch_C_GroupList(sessionPtr& session, uint64 reqId, c
 		group->set_group_name(groupInfo.groupName);
 		group->set_group_code(groupInfo.groupCode);
 		group->set_creator_id(groupInfo.creatorId);
-		group->set_created_at(groupInfo.createdAt);
+		group->set_member_count(0);
 	}
 
 	Protocol::Envelope env;
@@ -674,6 +553,11 @@ bool PacketDispatcher::Dispatch_C_GroupList(sessionPtr& session, uint64 reqId, c
 
 	return true;
 }
+
+
+
+
+
 
 bool PacketDispatcher::Dispatch_C_GroupJoinRequest(sessionPtr& session, uint64 reqId, const Protocol::C_GroupJoinRequest& pkt)
 {

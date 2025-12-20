@@ -2,9 +2,9 @@ syntax = "proto3";
 package Protocol;
 
 message Envelope {
-  uint32 version         = 1; // 1버전 고정
+  uint32 version         = 1; // 버전 고정
   uint64 request_id      = 2; // 요청-응답 매칭(0이면 서버푸시)
-  string auth_token      = 3; // 로그인 인증 토큰(JWT 등)
+  string auth_token      = 3; // JWT 인증 토큰
 
   oneof body {
       // AUTH
@@ -20,66 +20,54 @@ message Envelope {
       C_SignUp                c_signup                  = 18;
       S_SignUp                s_signup                  = 19;
 
-   //LOGIN
-    C_Login              c_login              = 20;
-    S_Login              s_login              = 21;
-    C_JoinDirect         c_join_direct        = 22;
-    C_JoinGroup          c_join_group         = 23;
-    C_CreateGroup        c_create_group       = 24;
-    S_CreateGroup        s_create_group       = 25;
-    C_Ack                c_ack                = 26;
-    S_Error              s_error              = 27;
-    C_Heartbeat          c_heartbeat          = 28;
-    S_Heartbeat          s_heartbeat          = 29;
+      //LOGIN
+      C_Login              c_login              = 20;
+      S_Login              s_login              = 21;
+      C_JoinDirect         c_join_direct        = 22;
+      C_JoinGroup          c_join_group         = 23;
+      C_CreateGroup        c_create_group       = 24;
+      S_CreateGroup        s_create_group       = 25;
+      C_Ack                c_ack                = 26;
+      S_Error              s_error              = 27;
+      C_Heartbeat          c_heartbeat          = 28;
+      S_Heartbeat          s_heartbeat          = 29;
 
 
 
-
-    // Chat, Data(File)
-    C_Chat               c_chat               = 30;
-    S_Chat               s_chat               = 31;
-    C_FetchOffline       c_fetch_offline      = 32;
-    S_MessageBatch       s_message_batch      = 33;
+      // Chat, Data(File)
+      C_Chat               c_chat               = 30;
+      S_Chat               s_chat               = 31;
+      C_FetchOffline       c_fetch_offline      = 32;
+      S_MessageBatch       s_message_batch      = 33;
     
-    C_UploadFile            c_upload_file     = 34;
-    S_UploadFile            s_upload_file     = 35;
+      C_UploadFile            c_upload_file     = 34;
+      S_UploadFile            s_upload_file     = 35;
+
+
+
+
+      // Freind
+      C_SearchUser          c_search_user           = 40;
+      S_SearchUser          s_search_user           = 41;
+      C_FriendAction        c_friend_action         = 42;
+      S_FriendAction        s_friend_action         = 43;
+      C_FetchFriendData     c_fetch_friend_data     = 44;
+      S_FetchFriendData     s_fetch_friend_data     = 45;
+      S_FriendPush          s_friend_push           = 46;
+  
 
 
 
     // info
+    C_GroupList             c_group_list            = 50;
+    S_GroupList             s_group_list            = 51;
+    C_GroupJoinRequest      c_group_join_request    = 52;
+    S_GroupJoinRequest      s_group_join_request    = 53;
+    C_GroupJoinResponse     c_group_join_response   = 54;
+    S_GroupJoinResponse     s_group_join_response   = 55;
+    C_GroupJoinRequestList  c_group_join_request_list = 56;
+    S_GroupJoinRequestList  s_group_join_request_list = 57;
 
-    C_FriendList            c_friend_list           = 40;
-    S_FriendList            s_friend_list           = 41;
-    C_GroupList             c_group_list            = 42;
-    S_GroupList             s_group_list            = 43;
-    C_GroupJoinRequest      c_group_join_request    = 44;
-    S_GroupJoinRequest      s_group_join_request    = 45;
-    C_GroupJoinResponse     c_group_join_response   = 46;
-    S_GroupJoinResponse     s_group_join_response   = 47;
-    C_GroupJoinRequestList  c_group_join_request_list = 48;
-    S_GroupJoinRequestList  s_group_join_request_list = 49;
-
-
-
-    // Friend Request (50-)
-    C_FriendRequest_Find    c_frient_request_find        = 50;
-    S_FriendRequest_Find    s_frient_request_find        = 51;
-
-    C_FriendRequest_Add     c_friend_request_add         = 52;
-    S_FriendRequest_Add     s_friend_request_add         = 53;
-    C_FriendRequest_Cancel  c_friend_request_cancel      = 54;
-    S_FriendRequest_Cancel  s_friend_request_cancel      = 55;
-    C_FriendRequest_Remove  c_friend_request_remove      = 56;
-    S_FriendRequest_Remove  s_friend_request_remove      = 57;
-    C_FriendRequest_List    c_friend_request_list        = 58;
-    S_FriendRequest_List    s_friend_request_list        = 59;
-    C_FriendRequest_Respond c_friend_request_respond     = 60;
-    S_FriendRequest_Respond s_friend_request_respond     = 61;
-    S_FriendRequest_Push    s_friend_request_push        = 62;  // 서버 푸시
-
-   
-
-   
 
   }
 }
@@ -303,6 +291,10 @@ message C_Heartbeat {}
 message S_Heartbeat {}
 
 
+
+
+
+
 /*-----------------------------
             Friends 
 -----------------------------*/
@@ -312,35 +304,90 @@ message FriendInfo {
     string name = 2;
     string status_message = 3;
     string profile_image_url = 4;
-    int64 last_seen = 5;
-    string status = 6;  // "online", "offline", "away"
+    int64  last_seen = 5;
+    string status = 6;  // "online", "offline", "accepted"
 }
 
 message FriendRequest {
-    string requester_user_id = 1;
-    string requester_name = 2;
-    string requester_status_message = 3;
-    string requester_profile_image_url = 4;
-    int64 requested_at = 5;
+  string user_id = 1;
+  string name = 2;
+  string status_message = 3;
+  string profile_image_url = 4;
+  int64 requested_at = 5;
+  bool  is_received = 6; // true: 받은거, false: 보낸거
 }
 
-// 친구 목록 조회
-message C_FriendList {
-    // 빈 메시지
+
+
+message C_SearchUser {
+  string user_id = 1;           // 검색할 대상 ID
 }
 
-message S_FriendList {
-    repeated FriendInfo friends = 1;
+message S_SearchUser {
+  bool success = 1;
+  FriendInfo user_info = 2;     // 찾은 유저 정보
+  bool is_friend = 3;           // 이미 친구인지
+  bool has_sent_request = 4;    // 이미 요청을 보냈는지
 }
 
-// 그룹 정보
+// --- 친구 관리 액션 (요청, 수락, 거절, 삭제) ---
+message C_FriendAction {
+  enum ActionType {
+    SEND_REQUEST = 0;
+    CANCEL_REQUEST = 1;
+    ACCEPT_REQUEST = 2;
+    REJECT_REQUEST = 3;
+    DELETE_FRIEND = 4;
+  }
+  ActionType action = 1;
+  string target_user_id = 2;
+}
+
+message S_FriendAction {
+  bool success = 1;
+  string message = 2;
+  FriendInfo updated_friend = 3; // 수락 시, 새 친구 정보(목록 갱신용)
+}
+
+
+
+message C_FetchFriendData {
+  // 빈 메시지 (토큰으로 식별)
+}
+
+message S_FetchFriendData {
+  repeated FriendInfo friends = 1;              // 이미 친구인 목록
+  repeated FriendRequest received_requests = 2; // 내가 받은 요청
+  repeated FriendRequest sent_requests = 3;     // 내가 보낸 요청
+}
+
+// --- 실시간 푸시 알림 ---
+message S_FriendPush {
+  enum PushType {
+    NEW_REQUEST = 0;      // 누가 나한테 요청 보냄
+    REQUEST_ACCEPTED = 1; // 상대가 내 요청 수락함
+    FRIEND_DELETED = 2;   // 친구 삭제됨
+  }
+  PushType type = 1;
+  FriendInfo user_info = 2; // 대상 유저 정보
+}
+
+
+
+
+
+
+
 message GroupInfo {
-    string group_id = 1;
-    string group_name = 2;
-    string group_code = 3;
-    string creator_id = 4;
-    int64 created_at = 5;
+  string group_id = 1;
+  string group_name = 2;
+  string group_code = 3; // 초대 코드
+  string creator_id = 4;
+  int64 member_count = 5;
 }
+
+
+
 
 // 그룹 목록 조회
 message C_GroupList {
@@ -389,82 +436,3 @@ message GroupJoinRequestInfo {
     string requester_name = 2;
     int64 requested_at = 3;
 }
-
-// 친구 요청 검색
-message C_FriendRequest_Find {
-    string user_id = 1;  // 검색할 사용자 ID
-}
-
-message S_FriendRequest_Find {
-    bool exist = 1;  // 사용자 존재 여부 (error는 그냥 false 처리)
-    FriendInfo user_info = 2;  // 사용자 정보 (있으면)
-}
-
-// 친구 요청 전송
-message C_FriendRequest_Add {
-    string friend_user_id = 1;
-}
-
-message S_FriendRequest_Add {
-    bool success = 1;
-    string message = 2;
-}
-
-// 친구 요청 취소 (보낸 사람이 취소)
-message C_FriendRequest_Cancel {
-    string friend_user_id = 1;
-}
-
-message S_FriendRequest_Cancel {
-    bool success = 1;
-    string message = 2;
-}
-
-// 이미 보낸 친구 요청 취소 (받은 사람이 취소)
-message C_FriendRequest_Remove {
-    string friend_user_id = 1;
-}
-
-message S_FriendRequest_Remove {
-    bool success = 1;
-    string message = 2;
-}
-
-// 친구 요청 목록 조회
-message C_FriendRequest_List {
-    enum RequestType {
-        RECEIVED = 0;  // 받은 요청
-        SENT = 1;      // 보낸 요청
-    }
-    RequestType type = 1;  // 요청 타입 (기본값: RECEIVED)
-}
-
-message S_FriendRequest_List {
-    repeated FriendRequest requests = 1;
-}
-
-// 친구 요청 수락/거절
-message C_FriendRequest_Respond {
-    string requester_user_id = 1;
-    bool accept = 2;  // true: 수락, false: 거절
-}
-
-message S_FriendRequest_Respond {
-    bool success = 1;
-    string message = 2;
-    FriendInfo friend_ = 3;  // 수락 시 친구 정보
-}
-
-// 친구 요청 푸시 (서버 -> 클라이언트)
-message S_FriendRequest_Push {
-    enum EventType {
-        REQUEST_RECEIVED = 0;  // 친구 요청 받음
-        REQUEST_ACCEPTED = 1;  // 친구 요청 수락됨
-        REQUEST_CANCELLED = 2; // 친구 요청 취소됨
-    }
-    EventType event_type = 1;
-    FriendRequest request = 2;  // REQUEST_RECEIVED일 때
-    FriendInfo friend = 3;          // REQUEST_ACCEPTED일 때
-    string cancelled_user_id = 4; // REQUEST_CANCELLED일 때
-}
-

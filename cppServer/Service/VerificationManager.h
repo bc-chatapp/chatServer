@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 
 
@@ -13,7 +13,7 @@ class VerificationManager
 public:
     static string CreateVerificationCode(const string& email);
 
-    // ÀÎÁõ¹øÈ£ È®ÀÎ
+    // ì¸ì¦ë²ˆí˜¸ í™•ì¸
     static bool CheckVerificationCode(const string& email, const string& code);
 
 private:
