@@ -78,6 +78,9 @@
     <ClCompile Include="Service\VerificationManager.cpp">
       <Filter>Service</Filter>
     </ClCompile>
+    <ClCompile Include="Service\GroupService.cpp">
+      <Filter>Service</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -138,6 +141,9 @@
       <Filter>Service</Filter>
     </ClInclude>
     <ClInclude Include="Service\VerificationManager.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="Service\GroupService.h">
       <Filter>Service</Filter>
     </ClInclude>
   </ItemGroup>
