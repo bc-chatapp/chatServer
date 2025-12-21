@@ -249,6 +249,48 @@ export function errorCodeToJSON(object: ErrorCode): string {
   }
 }
 
+export enum GroupRole {
+  /** MEMBER - 일반 멤버 */
+  MEMBER = 0,
+  /** ADMIN - 관리자 (가입 승인, 멤버 강퇴 가능) */
+  ADMIN = 1,
+  /** OWNER - 방장 (그룹 삭제, 스토리지 결제 권한) */
+  OWNER = 2,
+  UNRECOGNIZED = -1,
+}
+
+export function groupRoleFromJSON(object: any): GroupRole {
+  switch (object) {
+    case 0:
+    case "MEMBER":
+      return GroupRole.MEMBER;
+    case 1:
+    case "ADMIN":
+      return GroupRole.ADMIN;
+    case 2:
+    case "OWNER":
+      return GroupRole.OWNER;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return GroupRole.UNRECOGNIZED;
+  }
+}
+
+export function groupRoleToJSON(object: GroupRole): string {
+  switch (object) {
+    case GroupRole.MEMBER:
+      return "MEMBER";
+    case GroupRole.ADMIN:
+      return "ADMIN";
+    case GroupRole.OWNER:
+      return "OWNER";
+    case GroupRole.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
 export interface Envelope {
   /** 버전 고정 */
   version: number;
@@ -272,11 +314,8 @@ export interface Envelope {
   /** LOGIN */
   cLogin?: CLogin | undefined;
   sLogin?: SLogin | undefined;
-  cJoinDirect?: CJoinDirect | undefined;
-  cJoinGroup?: CJoinGroup | undefined;
-  cCreateGroup?: CCreateGroup | undefined;
-  sCreateGroup?: SCreateGroup | undefined;
-  cAck?: CAck | undefined;
+  cFetchOffline?: CFetchOffline | undefined;
+  sMessageBatch?: SMessageBatch | undefined;
   sError?: SError | undefined;
   cHeartbeat?: CHeartbeat | undefined;
   sHeartbeat?:
@@ -285,8 +324,7 @@ export interface Envelope {
   /** Chat, Data(File) */
   cChat?: CChat | undefined;
   sChat?: SChat | undefined;
-  cFetchOffline?: CFetchOffline | undefined;
-  sMessageBatch?: SMessageBatch | undefined;
+  cAck?: CAck | undefined;
   cUploadFile?: CUploadFile | undefined;
   sUploadFile?:
     | SUploadFile
@@ -301,15 +339,17 @@ export interface Envelope {
   sFriendPush?:
     | SFriendPush
     | undefined;
-  /** info */
+  /** Group */
+  cCreateGroup?: CCreateGroup | undefined;
+  sCreateGroup?: SCreateGroup | undefined;
   cGroupList?: CGroupList | undefined;
   sGroupList?: SGroupList | undefined;
-  cGroupJoinRequest?: CGroupJoinRequest | undefined;
-  sGroupJoinRequest?: SGroupJoinRequest | undefined;
-  cGroupJoinResponse?: CGroupJoinResponse | undefined;
-  sGroupJoinResponse?: SGroupJoinResponse | undefined;
-  cGroupJoinRequestList?: CGroupJoinRequestList | undefined;
-  sGroupJoinRequestList?: SGroupJoinRequestList | undefined;
+  cJoinGroup?: CJoinGroup | undefined;
+  sJoinGroup?: SJoinGroup | undefined;
+  cLeaveGroup?: CLeaveGroup | undefined;
+  sLeaveGroup?: SLeaveGroup | undefined;
+  cGroupMemberList?: CGroupMemberList | undefined;
+  sGroupMemberList?: SGroupMemberList | undefined;
 }
 
 export interface ChatPayload {
@@ -400,30 +440,6 @@ export interface SLogin {
   authToken: string;
   name: string;
   email: string;
-}
-
-export interface CJoinDirect {
-  peerUserId: string;
-}
-
-export interface CJoinGroup {
-  groupId: string;
-}
-
-export interface CCreateGroup {
-  /** 그룹 이름 */
-  groupName: string;
-}
-
-export interface SCreateGroup {
-  success: boolean;
-  message: string;
-  /** 생성된 그룹 ID */
-  groupId: string;
-  /** 그룹 이름 */
-  groupName: string;
-  /** 그룹 초대 코드 */
-  groupCode: string;
 }
 
 export interface CChat {
@@ -667,11 +683,42 @@ export interface GroupInfo {
   groupName: string;
   /** 초대 코드 */
   groupCode: string;
-  creatorId: string;
+  /** 그룹 설명 (공지사항 등) */
+  description: string;
+  /** 그룹 대표 이미지 */
+  groupImageUrl: string;
+  /** 멤버 관련 */
   memberCount: number;
+  /** 공유 스토리지 정보 */
+  storageCapacityBytes: number;
+  /** 현재 사용량 */
+  storageUsageBytes: number;
 }
 
-/** 그룹 목록 조회 */
+export interface GroupMemberInfo {
+  userId: string;
+  name: string;
+  profileImageUrl: string;
+  statusMessage: string;
+  /** 이 멤버의 역할 */
+  role: GroupRole;
+  /** 가입일 */
+  joinedAt: number;
+  /** 마지막 활동 시간 (접속일) */
+  lastActiveAt: number;
+}
+
+export interface CCreateGroup {
+  /** 그룹 이름 */
+  groupName: string;
+}
+
+export interface SCreateGroup {
+  success: boolean;
+  message: string;
+  group: GroupInfo | undefined;
+}
+
 export interface CGroupList {
 }
 
@@ -679,48 +726,45 @@ export interface SGroupList {
   groups: GroupInfo[];
 }
 
-/** 그룹 가입 신청 */
-export interface CGroupJoinRequest {
-  /** 그룹 코드 */
+export interface CGroupInfo {
+  groupId: string;
+}
+
+export interface SGroupInfo {
+  group:
+    | GroupInfo
+    | undefined;
+  /** 이 그룹에서 나의 역할 */
+  myRole: GroupRole;
+}
+
+export interface CJoinGroup {
   groupCode: string;
 }
 
-export interface SGroupJoinRequest {
+export interface SJoinGroup {
   success: boolean;
   message: string;
-  /** 그룹 ID (성공 시) */
-  groupId: string;
-  /** 그룹 이름 (성공 시) */
-  groupName: string;
+  /** 성공 시, 바로 방 정보를 줘서 채팅방으로 이동시킴 */
+  group: GroupInfo | undefined;
 }
 
-/** 그룹 가입 신청 응답 (그룹장이 수락/거절) */
-export interface CGroupJoinResponse {
+export interface CGroupMemberList {
   groupId: string;
-  /** 신청자 ID */
-  requesterUserId: string;
-  /** true: 수락, false: 거절 */
-  accept: boolean;
 }
 
-export interface SGroupJoinResponse {
+export interface SGroupMemberList {
+  groupId: string;
+  members: GroupMemberInfo[];
+}
+
+export interface CLeaveGroup {
+  groupId: string;
+}
+
+export interface SLeaveGroup {
   success: boolean;
   message: string;
-}
-
-/** 그룹 가입 신청 목록 조회 (그룹장용) */
-export interface CGroupJoinRequestList {
-  groupId: string;
-}
-
-export interface SGroupJoinRequestList {
-  requests: GroupJoinRequestInfo[];
-}
-
-export interface GroupJoinRequestInfo {
-  requesterUserId: string;
-  requesterName: string;
-  requestedAt: number;
 }
 
 function createBaseEnvelope(): Envelope {
@@ -740,18 +784,14 @@ function createBaseEnvelope(): Envelope {
     sSignup: undefined,
     cLogin: undefined,
     sLogin: undefined,
-    cJoinDirect: undefined,
-    cJoinGroup: undefined,
-    cCreateGroup: undefined,
-    sCreateGroup: undefined,
-    cAck: undefined,
+    cFetchOffline: undefined,
+    sMessageBatch: undefined,
     sError: undefined,
     cHeartbeat: undefined,
     sHeartbeat: undefined,
     cChat: undefined,
     sChat: undefined,
-    cFetchOffline: undefined,
-    sMessageBatch: undefined,
+    cAck: undefined,
     cUploadFile: undefined,
     sUploadFile: undefined,
     cSearchUser: undefined,
@@ -761,14 +801,16 @@ function createBaseEnvelope(): Envelope {
     cFetchFriendData: undefined,
     sFetchFriendData: undefined,
     sFriendPush: undefined,
+    cCreateGroup: undefined,
+    sCreateGroup: undefined,
     cGroupList: undefined,
     sGroupList: undefined,
-    cGroupJoinRequest: undefined,
-    sGroupJoinRequest: undefined,
-    cGroupJoinResponse: undefined,
-    sGroupJoinResponse: undefined,
-    cGroupJoinRequestList: undefined,
-    sGroupJoinRequestList: undefined,
+    cJoinGroup: undefined,
+    sJoinGroup: undefined,
+    cLeaveGroup: undefined,
+    sLeaveGroup: undefined,
+    cGroupMemberList: undefined,
+    sGroupMemberList: undefined,
   };
 }
 
@@ -819,20 +861,11 @@ export const Envelope = {
     if (message.sLogin !== undefined) {
       SLogin.encode(message.sLogin, writer.uint32(170).fork()).ldelim();
     }
-    if (message.cJoinDirect !== undefined) {
-      CJoinDirect.encode(message.cJoinDirect, writer.uint32(178).fork()).ldelim();
+    if (message.cFetchOffline !== undefined) {
+      CFetchOffline.encode(message.cFetchOffline, writer.uint32(178).fork()).ldelim();
     }
-    if (message.cJoinGroup !== undefined) {
-      CJoinGroup.encode(message.cJoinGroup, writer.uint32(186).fork()).ldelim();
-    }
-    if (message.cCreateGroup !== undefined) {
-      CCreateGroup.encode(message.cCreateGroup, writer.uint32(194).fork()).ldelim();
-    }
-    if (message.sCreateGroup !== undefined) {
-      SCreateGroup.encode(message.sCreateGroup, writer.uint32(202).fork()).ldelim();
-    }
-    if (message.cAck !== undefined) {
-      CAck.encode(message.cAck, writer.uint32(210).fork()).ldelim();
+    if (message.sMessageBatch !== undefined) {
+      SMessageBatch.encode(message.sMessageBatch, writer.uint32(186).fork()).ldelim();
     }
     if (message.sError !== undefined) {
       SError.encode(message.sError, writer.uint32(218).fork()).ldelim();
@@ -849,17 +882,14 @@ export const Envelope = {
     if (message.sChat !== undefined) {
       SChat.encode(message.sChat, writer.uint32(250).fork()).ldelim();
     }
-    if (message.cFetchOffline !== undefined) {
-      CFetchOffline.encode(message.cFetchOffline, writer.uint32(258).fork()).ldelim();
-    }
-    if (message.sMessageBatch !== undefined) {
-      SMessageBatch.encode(message.sMessageBatch, writer.uint32(266).fork()).ldelim();
+    if (message.cAck !== undefined) {
+      CAck.encode(message.cAck, writer.uint32(258).fork()).ldelim();
     }
     if (message.cUploadFile !== undefined) {
-      CUploadFile.encode(message.cUploadFile, writer.uint32(274).fork()).ldelim();
+      CUploadFile.encode(message.cUploadFile, writer.uint32(282).fork()).ldelim();
     }
     if (message.sUploadFile !== undefined) {
-      SUploadFile.encode(message.sUploadFile, writer.uint32(282).fork()).ldelim();
+      SUploadFile.encode(message.sUploadFile, writer.uint32(290).fork()).ldelim();
     }
     if (message.cSearchUser !== undefined) {
       CSearchUser.encode(message.cSearchUser, writer.uint32(322).fork()).ldelim();
@@ -882,29 +912,35 @@ export const Envelope = {
     if (message.sFriendPush !== undefined) {
       SFriendPush.encode(message.sFriendPush, writer.uint32(370).fork()).ldelim();
     }
+    if (message.cCreateGroup !== undefined) {
+      CCreateGroup.encode(message.cCreateGroup, writer.uint32(402).fork()).ldelim();
+    }
+    if (message.sCreateGroup !== undefined) {
+      SCreateGroup.encode(message.sCreateGroup, writer.uint32(410).fork()).ldelim();
+    }
     if (message.cGroupList !== undefined) {
-      CGroupList.encode(message.cGroupList, writer.uint32(402).fork()).ldelim();
+      CGroupList.encode(message.cGroupList, writer.uint32(418).fork()).ldelim();
     }
     if (message.sGroupList !== undefined) {
-      SGroupList.encode(message.sGroupList, writer.uint32(410).fork()).ldelim();
+      SGroupList.encode(message.sGroupList, writer.uint32(426).fork()).ldelim();
     }
-    if (message.cGroupJoinRequest !== undefined) {
-      CGroupJoinRequest.encode(message.cGroupJoinRequest, writer.uint32(418).fork()).ldelim();
+    if (message.cJoinGroup !== undefined) {
+      CJoinGroup.encode(message.cJoinGroup, writer.uint32(434).fork()).ldelim();
     }
-    if (message.sGroupJoinRequest !== undefined) {
-      SGroupJoinRequest.encode(message.sGroupJoinRequest, writer.uint32(426).fork()).ldelim();
+    if (message.sJoinGroup !== undefined) {
+      SJoinGroup.encode(message.sJoinGroup, writer.uint32(442).fork()).ldelim();
     }
-    if (message.cGroupJoinResponse !== undefined) {
-      CGroupJoinResponse.encode(message.cGroupJoinResponse, writer.uint32(434).fork()).ldelim();
+    if (message.cLeaveGroup !== undefined) {
+      CLeaveGroup.encode(message.cLeaveGroup, writer.uint32(450).fork()).ldelim();
     }
-    if (message.sGroupJoinResponse !== undefined) {
-      SGroupJoinResponse.encode(message.sGroupJoinResponse, writer.uint32(442).fork()).ldelim();
+    if (message.sLeaveGroup !== undefined) {
+      SLeaveGroup.encode(message.sLeaveGroup, writer.uint32(458).fork()).ldelim();
     }
-    if (message.cGroupJoinRequestList !== undefined) {
-      CGroupJoinRequestList.encode(message.cGroupJoinRequestList, writer.uint32(450).fork()).ldelim();
+    if (message.cGroupMemberList !== undefined) {
+      CGroupMemberList.encode(message.cGroupMemberList, writer.uint32(466).fork()).ldelim();
     }
-    if (message.sGroupJoinRequestList !== undefined) {
-      SGroupJoinRequestList.encode(message.sGroupJoinRequestList, writer.uint32(458).fork()).ldelim();
+    if (message.sGroupMemberList !== undefined) {
+      SGroupMemberList.encode(message.sGroupMemberList, writer.uint32(474).fork()).ldelim();
     }
     return writer;
   },
@@ -1026,35 +1062,14 @@ export const Envelope = {
             break;
           }
 
-          message.cJoinDirect = CJoinDirect.decode(reader, reader.uint32());
+          message.cFetchOffline = CFetchOffline.decode(reader, reader.uint32());
           continue;
         case 23:
           if (tag !== 186) {
             break;
           }
 
-          message.cJoinGroup = CJoinGroup.decode(reader, reader.uint32());
-          continue;
-        case 24:
-          if (tag !== 194) {
-            break;
-          }
-
-          message.cCreateGroup = CCreateGroup.decode(reader, reader.uint32());
-          continue;
-        case 25:
-          if (tag !== 202) {
-            break;
-          }
-
-          message.sCreateGroup = SCreateGroup.decode(reader, reader.uint32());
-          continue;
-        case 26:
-          if (tag !== 210) {
-            break;
-          }
-
-          message.cAck = CAck.decode(reader, reader.uint32());
+          message.sMessageBatch = SMessageBatch.decode(reader, reader.uint32());
           continue;
         case 27:
           if (tag !== 218) {
@@ -1096,24 +1111,17 @@ export const Envelope = {
             break;
           }
 
-          message.cFetchOffline = CFetchOffline.decode(reader, reader.uint32());
+          message.cAck = CAck.decode(reader, reader.uint32());
           continue;
-        case 33:
-          if (tag !== 266) {
-            break;
-          }
-
-          message.sMessageBatch = SMessageBatch.decode(reader, reader.uint32());
-          continue;
-        case 34:
-          if (tag !== 274) {
+        case 35:
+          if (tag !== 282) {
             break;
           }
 
           message.cUploadFile = CUploadFile.decode(reader, reader.uint32());
           continue;
-        case 35:
-          if (tag !== 282) {
+        case 36:
+          if (tag !== 290) {
             break;
           }
 
@@ -1173,56 +1181,70 @@ export const Envelope = {
             break;
           }
 
-          message.cGroupList = CGroupList.decode(reader, reader.uint32());
+          message.cCreateGroup = CCreateGroup.decode(reader, reader.uint32());
           continue;
         case 51:
           if (tag !== 410) {
             break;
           }
 
-          message.sGroupList = SGroupList.decode(reader, reader.uint32());
+          message.sCreateGroup = SCreateGroup.decode(reader, reader.uint32());
           continue;
         case 52:
           if (tag !== 418) {
             break;
           }
 
-          message.cGroupJoinRequest = CGroupJoinRequest.decode(reader, reader.uint32());
+          message.cGroupList = CGroupList.decode(reader, reader.uint32());
           continue;
         case 53:
           if (tag !== 426) {
             break;
           }
 
-          message.sGroupJoinRequest = SGroupJoinRequest.decode(reader, reader.uint32());
+          message.sGroupList = SGroupList.decode(reader, reader.uint32());
           continue;
         case 54:
           if (tag !== 434) {
             break;
           }
 
-          message.cGroupJoinResponse = CGroupJoinResponse.decode(reader, reader.uint32());
+          message.cJoinGroup = CJoinGroup.decode(reader, reader.uint32());
           continue;
         case 55:
           if (tag !== 442) {
             break;
           }
 
-          message.sGroupJoinResponse = SGroupJoinResponse.decode(reader, reader.uint32());
+          message.sJoinGroup = SJoinGroup.decode(reader, reader.uint32());
           continue;
         case 56:
           if (tag !== 450) {
             break;
           }
 
-          message.cGroupJoinRequestList = CGroupJoinRequestList.decode(reader, reader.uint32());
+          message.cLeaveGroup = CLeaveGroup.decode(reader, reader.uint32());
           continue;
         case 57:
           if (tag !== 458) {
             break;
           }
 
-          message.sGroupJoinRequestList = SGroupJoinRequestList.decode(reader, reader.uint32());
+          message.sLeaveGroup = SLeaveGroup.decode(reader, reader.uint32());
+          continue;
+        case 58:
+          if (tag !== 466) {
+            break;
+          }
+
+          message.cGroupMemberList = CGroupMemberList.decode(reader, reader.uint32());
+          continue;
+        case 59:
+          if (tag !== 474) {
+            break;
+          }
+
+          message.sGroupMemberList = SGroupMemberList.decode(reader, reader.uint32());
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -1254,18 +1276,14 @@ export const Envelope = {
       sSignup: isSet(object.sSignup) ? SSignUp.fromJSON(object.sSignup) : undefined,
       cLogin: isSet(object.cLogin) ? CLogin.fromJSON(object.cLogin) : undefined,
       sLogin: isSet(object.sLogin) ? SLogin.fromJSON(object.sLogin) : undefined,
-      cJoinDirect: isSet(object.cJoinDirect) ? CJoinDirect.fromJSON(object.cJoinDirect) : undefined,
-      cJoinGroup: isSet(object.cJoinGroup) ? CJoinGroup.fromJSON(object.cJoinGroup) : undefined,
-      cCreateGroup: isSet(object.cCreateGroup) ? CCreateGroup.fromJSON(object.cCreateGroup) : undefined,
-      sCreateGroup: isSet(object.sCreateGroup) ? SCreateGroup.fromJSON(object.sCreateGroup) : undefined,
-      cAck: isSet(object.cAck) ? CAck.fromJSON(object.cAck) : undefined,
+      cFetchOffline: isSet(object.cFetchOffline) ? CFetchOffline.fromJSON(object.cFetchOffline) : undefined,
+      sMessageBatch: isSet(object.sMessageBatch) ? SMessageBatch.fromJSON(object.sMessageBatch) : undefined,
       sError: isSet(object.sError) ? SError.fromJSON(object.sError) : undefined,
       cHeartbeat: isSet(object.cHeartbeat) ? CHeartbeat.fromJSON(object.cHeartbeat) : undefined,
       sHeartbeat: isSet(object.sHeartbeat) ? SHeartbeat.fromJSON(object.sHeartbeat) : undefined,
       cChat: isSet(object.cChat) ? CChat.fromJSON(object.cChat) : undefined,
       sChat: isSet(object.sChat) ? SChat.fromJSON(object.sChat) : undefined,
-      cFetchOffline: isSet(object.cFetchOffline) ? CFetchOffline.fromJSON(object.cFetchOffline) : undefined,
-      sMessageBatch: isSet(object.sMessageBatch) ? SMessageBatch.fromJSON(object.sMessageBatch) : undefined,
+      cAck: isSet(object.cAck) ? CAck.fromJSON(object.cAck) : undefined,
       cUploadFile: isSet(object.cUploadFile) ? CUploadFile.fromJSON(object.cUploadFile) : undefined,
       sUploadFile: isSet(object.sUploadFile) ? SUploadFile.fromJSON(object.sUploadFile) : undefined,
       cSearchUser: isSet(object.cSearchUser) ? CSearchUser.fromJSON(object.cSearchUser) : undefined,
@@ -1275,26 +1293,16 @@ export const Envelope = {
       cFetchFriendData: isSet(object.cFetchFriendData) ? CFetchFriendData.fromJSON(object.cFetchFriendData) : undefined,
       sFetchFriendData: isSet(object.sFetchFriendData) ? SFetchFriendData.fromJSON(object.sFetchFriendData) : undefined,
       sFriendPush: isSet(object.sFriendPush) ? SFriendPush.fromJSON(object.sFriendPush) : undefined,
+      cCreateGroup: isSet(object.cCreateGroup) ? CCreateGroup.fromJSON(object.cCreateGroup) : undefined,
+      sCreateGroup: isSet(object.sCreateGroup) ? SCreateGroup.fromJSON(object.sCreateGroup) : undefined,
       cGroupList: isSet(object.cGroupList) ? CGroupList.fromJSON(object.cGroupList) : undefined,
       sGroupList: isSet(object.sGroupList) ? SGroupList.fromJSON(object.sGroupList) : undefined,
-      cGroupJoinRequest: isSet(object.cGroupJoinRequest)
-        ? CGroupJoinRequest.fromJSON(object.cGroupJoinRequest)
-        : undefined,
-      sGroupJoinRequest: isSet(object.sGroupJoinRequest)
-        ? SGroupJoinRequest.fromJSON(object.sGroupJoinRequest)
-        : undefined,
-      cGroupJoinResponse: isSet(object.cGroupJoinResponse)
-        ? CGroupJoinResponse.fromJSON(object.cGroupJoinResponse)
-        : undefined,
-      sGroupJoinResponse: isSet(object.sGroupJoinResponse)
-        ? SGroupJoinResponse.fromJSON(object.sGroupJoinResponse)
-        : undefined,
-      cGroupJoinRequestList: isSet(object.cGroupJoinRequestList)
-        ? CGroupJoinRequestList.fromJSON(object.cGroupJoinRequestList)
-        : undefined,
-      sGroupJoinRequestList: isSet(object.sGroupJoinRequestList)
-        ? SGroupJoinRequestList.fromJSON(object.sGroupJoinRequestList)
-        : undefined,
+      cJoinGroup: isSet(object.cJoinGroup) ? CJoinGroup.fromJSON(object.cJoinGroup) : undefined,
+      sJoinGroup: isSet(object.sJoinGroup) ? SJoinGroup.fromJSON(object.sJoinGroup) : undefined,
+      cLeaveGroup: isSet(object.cLeaveGroup) ? CLeaveGroup.fromJSON(object.cLeaveGroup) : undefined,
+      sLeaveGroup: isSet(object.sLeaveGroup) ? SLeaveGroup.fromJSON(object.sLeaveGroup) : undefined,
+      cGroupMemberList: isSet(object.cGroupMemberList) ? CGroupMemberList.fromJSON(object.cGroupMemberList) : undefined,
+      sGroupMemberList: isSet(object.sGroupMemberList) ? SGroupMemberList.fromJSON(object.sGroupMemberList) : undefined,
     };
   },
 
@@ -1345,20 +1353,11 @@ export const Envelope = {
     if (message.sLogin !== undefined) {
       obj.sLogin = SLogin.toJSON(message.sLogin);
     }
-    if (message.cJoinDirect !== undefined) {
-      obj.cJoinDirect = CJoinDirect.toJSON(message.cJoinDirect);
+    if (message.cFetchOffline !== undefined) {
+      obj.cFetchOffline = CFetchOffline.toJSON(message.cFetchOffline);
     }
-    if (message.cJoinGroup !== undefined) {
-      obj.cJoinGroup = CJoinGroup.toJSON(message.cJoinGroup);
-    }
-    if (message.cCreateGroup !== undefined) {
-      obj.cCreateGroup = CCreateGroup.toJSON(message.cCreateGroup);
-    }
-    if (message.sCreateGroup !== undefined) {
-      obj.sCreateGroup = SCreateGroup.toJSON(message.sCreateGroup);
-    }
-    if (message.cAck !== undefined) {
-      obj.cAck = CAck.toJSON(message.cAck);
+    if (message.sMessageBatch !== undefined) {
+      obj.sMessageBatch = SMessageBatch.toJSON(message.sMessageBatch);
     }
     if (message.sError !== undefined) {
       obj.sError = SError.toJSON(message.sError);
@@ -1375,11 +1374,8 @@ export const Envelope = {
     if (message.sChat !== undefined) {
       obj.sChat = SChat.toJSON(message.sChat);
     }
-    if (message.cFetchOffline !== undefined) {
-      obj.cFetchOffline = CFetchOffline.toJSON(message.cFetchOffline);
-    }
-    if (message.sMessageBatch !== undefined) {
-      obj.sMessageBatch = SMessageBatch.toJSON(message.sMessageBatch);
+    if (message.cAck !== undefined) {
+      obj.cAck = CAck.toJSON(message.cAck);
     }
     if (message.cUploadFile !== undefined) {
       obj.cUploadFile = CUploadFile.toJSON(message.cUploadFile);
@@ -1408,29 +1404,35 @@ export const Envelope = {
     if (message.sFriendPush !== undefined) {
       obj.sFriendPush = SFriendPush.toJSON(message.sFriendPush);
     }
+    if (message.cCreateGroup !== undefined) {
+      obj.cCreateGroup = CCreateGroup.toJSON(message.cCreateGroup);
+    }
+    if (message.sCreateGroup !== undefined) {
+      obj.sCreateGroup = SCreateGroup.toJSON(message.sCreateGroup);
+    }
     if (message.cGroupList !== undefined) {
       obj.cGroupList = CGroupList.toJSON(message.cGroupList);
     }
     if (message.sGroupList !== undefined) {
       obj.sGroupList = SGroupList.toJSON(message.sGroupList);
     }
-    if (message.cGroupJoinRequest !== undefined) {
-      obj.cGroupJoinRequest = CGroupJoinRequest.toJSON(message.cGroupJoinRequest);
+    if (message.cJoinGroup !== undefined) {
+      obj.cJoinGroup = CJoinGroup.toJSON(message.cJoinGroup);
     }
-    if (message.sGroupJoinRequest !== undefined) {
-      obj.sGroupJoinRequest = SGroupJoinRequest.toJSON(message.sGroupJoinRequest);
+    if (message.sJoinGroup !== undefined) {
+      obj.sJoinGroup = SJoinGroup.toJSON(message.sJoinGroup);
     }
-    if (message.cGroupJoinResponse !== undefined) {
-      obj.cGroupJoinResponse = CGroupJoinResponse.toJSON(message.cGroupJoinResponse);
+    if (message.cLeaveGroup !== undefined) {
+      obj.cLeaveGroup = CLeaveGroup.toJSON(message.cLeaveGroup);
     }
-    if (message.sGroupJoinResponse !== undefined) {
-      obj.sGroupJoinResponse = SGroupJoinResponse.toJSON(message.sGroupJoinResponse);
+    if (message.sLeaveGroup !== undefined) {
+      obj.sLeaveGroup = SLeaveGroup.toJSON(message.sLeaveGroup);
     }
-    if (message.cGroupJoinRequestList !== undefined) {
-      obj.cGroupJoinRequestList = CGroupJoinRequestList.toJSON(message.cGroupJoinRequestList);
+    if (message.cGroupMemberList !== undefined) {
+      obj.cGroupMemberList = CGroupMemberList.toJSON(message.cGroupMemberList);
     }
-    if (message.sGroupJoinRequestList !== undefined) {
-      obj.sGroupJoinRequestList = SGroupJoinRequestList.toJSON(message.sGroupJoinRequestList);
+    if (message.sGroupMemberList !== undefined) {
+      obj.sGroupMemberList = SGroupMemberList.toJSON(message.sGroupMemberList);
     }
     return obj;
   },
@@ -1479,19 +1481,12 @@ export const Envelope = {
     message.sLogin = (object.sLogin !== undefined && object.sLogin !== null)
       ? SLogin.fromPartial(object.sLogin)
       : undefined;
-    message.cJoinDirect = (object.cJoinDirect !== undefined && object.cJoinDirect !== null)
-      ? CJoinDirect.fromPartial(object.cJoinDirect)
+    message.cFetchOffline = (object.cFetchOffline !== undefined && object.cFetchOffline !== null)
+      ? CFetchOffline.fromPartial(object.cFetchOffline)
       : undefined;
-    message.cJoinGroup = (object.cJoinGroup !== undefined && object.cJoinGroup !== null)
-      ? CJoinGroup.fromPartial(object.cJoinGroup)
+    message.sMessageBatch = (object.sMessageBatch !== undefined && object.sMessageBatch !== null)
+      ? SMessageBatch.fromPartial(object.sMessageBatch)
       : undefined;
-    message.cCreateGroup = (object.cCreateGroup !== undefined && object.cCreateGroup !== null)
-      ? CCreateGroup.fromPartial(object.cCreateGroup)
-      : undefined;
-    message.sCreateGroup = (object.sCreateGroup !== undefined && object.sCreateGroup !== null)
-      ? SCreateGroup.fromPartial(object.sCreateGroup)
-      : undefined;
-    message.cAck = (object.cAck !== undefined && object.cAck !== null) ? CAck.fromPartial(object.cAck) : undefined;
     message.sError = (object.sError !== undefined && object.sError !== null)
       ? SError.fromPartial(object.sError)
       : undefined;
@@ -1503,12 +1498,7 @@ export const Envelope = {
       : undefined;
     message.cChat = (object.cChat !== undefined && object.cChat !== null) ? CChat.fromPartial(object.cChat) : undefined;
     message.sChat = (object.sChat !== undefined && object.sChat !== null) ? SChat.fromPartial(object.sChat) : undefined;
-    message.cFetchOffline = (object.cFetchOffline !== undefined && object.cFetchOffline !== null)
-      ? CFetchOffline.fromPartial(object.cFetchOffline)
-      : undefined;
-    message.sMessageBatch = (object.sMessageBatch !== undefined && object.sMessageBatch !== null)
-      ? SMessageBatch.fromPartial(object.sMessageBatch)
-      : undefined;
+    message.cAck = (object.cAck !== undefined && object.cAck !== null) ? CAck.fromPartial(object.cAck) : undefined;
     message.cUploadFile = (object.cUploadFile !== undefined && object.cUploadFile !== null)
       ? CUploadFile.fromPartial(object.cUploadFile)
       : undefined;
@@ -1536,32 +1526,36 @@ export const Envelope = {
     message.sFriendPush = (object.sFriendPush !== undefined && object.sFriendPush !== null)
       ? SFriendPush.fromPartial(object.sFriendPush)
       : undefined;
+    message.cCreateGroup = (object.cCreateGroup !== undefined && object.cCreateGroup !== null)
+      ? CCreateGroup.fromPartial(object.cCreateGroup)
+      : undefined;
+    message.sCreateGroup = (object.sCreateGroup !== undefined && object.sCreateGroup !== null)
+      ? SCreateGroup.fromPartial(object.sCreateGroup)
+      : undefined;
     message.cGroupList = (object.cGroupList !== undefined && object.cGroupList !== null)
       ? CGroupList.fromPartial(object.cGroupList)
       : undefined;
     message.sGroupList = (object.sGroupList !== undefined && object.sGroupList !== null)
       ? SGroupList.fromPartial(object.sGroupList)
       : undefined;
-    message.cGroupJoinRequest = (object.cGroupJoinRequest !== undefined && object.cGroupJoinRequest !== null)
-      ? CGroupJoinRequest.fromPartial(object.cGroupJoinRequest)
+    message.cJoinGroup = (object.cJoinGroup !== undefined && object.cJoinGroup !== null)
+      ? CJoinGroup.fromPartial(object.cJoinGroup)
       : undefined;
-    message.sGroupJoinRequest = (object.sGroupJoinRequest !== undefined && object.sGroupJoinRequest !== null)
-      ? SGroupJoinRequest.fromPartial(object.sGroupJoinRequest)
+    message.sJoinGroup = (object.sJoinGroup !== undefined && object.sJoinGroup !== null)
+      ? SJoinGroup.fromPartial(object.sJoinGroup)
       : undefined;
-    message.cGroupJoinResponse = (object.cGroupJoinResponse !== undefined && object.cGroupJoinResponse !== null)
-      ? CGroupJoinResponse.fromPartial(object.cGroupJoinResponse)
+    message.cLeaveGroup = (object.cLeaveGroup !== undefined && object.cLeaveGroup !== null)
+      ? CLeaveGroup.fromPartial(object.cLeaveGroup)
       : undefined;
-    message.sGroupJoinResponse = (object.sGroupJoinResponse !== undefined && object.sGroupJoinResponse !== null)
-      ? SGroupJoinResponse.fromPartial(object.sGroupJoinResponse)
+    message.sLeaveGroup = (object.sLeaveGroup !== undefined && object.sLeaveGroup !== null)
+      ? SLeaveGroup.fromPartial(object.sLeaveGroup)
       : undefined;
-    message.cGroupJoinRequestList =
-      (object.cGroupJoinRequestList !== undefined && object.cGroupJoinRequestList !== null)
-        ? CGroupJoinRequestList.fromPartial(object.cGroupJoinRequestList)
-        : undefined;
-    message.sGroupJoinRequestList =
-      (object.sGroupJoinRequestList !== undefined && object.sGroupJoinRequestList !== null)
-        ? SGroupJoinRequestList.fromPartial(object.sGroupJoinRequestList)
-        : undefined;
+    message.cGroupMemberList = (object.cGroupMemberList !== undefined && object.cGroupMemberList !== null)
+      ? CGroupMemberList.fromPartial(object.cGroupMemberList)
+      : undefined;
+    message.sGroupMemberList = (object.sGroupMemberList !== undefined && object.sGroupMemberList !== null)
+      ? SGroupMemberList.fromPartial(object.sGroupMemberList)
+      : undefined;
     return message;
   },
 };
@@ -2734,296 +2728,6 @@ export const SLogin = {
     message.authToken = object.authToken ?? "";
     message.name = object.name ?? "";
     message.email = object.email ?? "";
-    return message;
-  },
-};
-
-function createBaseCJoinDirect(): CJoinDirect {
-  return { peerUserId: "" };
-}
-
-export const CJoinDirect = {
-  encode(message: CJoinDirect, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.peerUserId !== "") {
-      writer.uint32(10).string(message.peerUserId);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): CJoinDirect {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCJoinDirect();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.peerUserId = reader.string();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): CJoinDirect {
-    return { peerUserId: isSet(object.peerUserId) ? globalThis.String(object.peerUserId) : "" };
-  },
-
-  toJSON(message: CJoinDirect): unknown {
-    const obj: any = {};
-    if (message.peerUserId !== "") {
-      obj.peerUserId = message.peerUserId;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<CJoinDirect>, I>>(base?: I): CJoinDirect {
-    return CJoinDirect.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<CJoinDirect>, I>>(object: I): CJoinDirect {
-    const message = createBaseCJoinDirect();
-    message.peerUserId = object.peerUserId ?? "";
-    return message;
-  },
-};
-
-function createBaseCJoinGroup(): CJoinGroup {
-  return { groupId: "" };
-}
-
-export const CJoinGroup = {
-  encode(message: CJoinGroup, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.groupId !== "") {
-      writer.uint32(10).string(message.groupId);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): CJoinGroup {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCJoinGroup();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.groupId = reader.string();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): CJoinGroup {
-    return { groupId: isSet(object.groupId) ? globalThis.String(object.groupId) : "" };
-  },
-
-  toJSON(message: CJoinGroup): unknown {
-    const obj: any = {};
-    if (message.groupId !== "") {
-      obj.groupId = message.groupId;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<CJoinGroup>, I>>(base?: I): CJoinGroup {
-    return CJoinGroup.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<CJoinGroup>, I>>(object: I): CJoinGroup {
-    const message = createBaseCJoinGroup();
-    message.groupId = object.groupId ?? "";
-    return message;
-  },
-};
-
-function createBaseCCreateGroup(): CCreateGroup {
-  return { groupName: "" };
-}
-
-export const CCreateGroup = {
-  encode(message: CCreateGroup, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.groupName !== "") {
-      writer.uint32(10).string(message.groupName);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): CCreateGroup {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCCreateGroup();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.groupName = reader.string();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): CCreateGroup {
-    return { groupName: isSet(object.groupName) ? globalThis.String(object.groupName) : "" };
-  },
-
-  toJSON(message: CCreateGroup): unknown {
-    const obj: any = {};
-    if (message.groupName !== "") {
-      obj.groupName = message.groupName;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<CCreateGroup>, I>>(base?: I): CCreateGroup {
-    return CCreateGroup.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<CCreateGroup>, I>>(object: I): CCreateGroup {
-    const message = createBaseCCreateGroup();
-    message.groupName = object.groupName ?? "";
-    return message;
-  },
-};
-
-function createBaseSCreateGroup(): SCreateGroup {
-  return { success: false, message: "", groupId: "", groupName: "", groupCode: "" };
-}
-
-export const SCreateGroup = {
-  encode(message: SCreateGroup, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.success !== false) {
-      writer.uint32(8).bool(message.success);
-    }
-    if (message.message !== "") {
-      writer.uint32(18).string(message.message);
-    }
-    if (message.groupId !== "") {
-      writer.uint32(26).string(message.groupId);
-    }
-    if (message.groupName !== "") {
-      writer.uint32(34).string(message.groupName);
-    }
-    if (message.groupCode !== "") {
-      writer.uint32(42).string(message.groupCode);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): SCreateGroup {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseSCreateGroup();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 8) {
-            break;
-          }
-
-          message.success = reader.bool();
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.message = reader.string();
-          continue;
-        case 3:
-          if (tag !== 26) {
-            break;
-          }
-
-          message.groupId = reader.string();
-          continue;
-        case 4:
-          if (tag !== 34) {
-            break;
-          }
-
-          message.groupName = reader.string();
-          continue;
-        case 5:
-          if (tag !== 42) {
-            break;
-          }
-
-          message.groupCode = reader.string();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): SCreateGroup {
-    return {
-      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
-      message: isSet(object.message) ? globalThis.String(object.message) : "",
-      groupId: isSet(object.groupId) ? globalThis.String(object.groupId) : "",
-      groupName: isSet(object.groupName) ? globalThis.String(object.groupName) : "",
-      groupCode: isSet(object.groupCode) ? globalThis.String(object.groupCode) : "",
-    };
-  },
-
-  toJSON(message: SCreateGroup): unknown {
-    const obj: any = {};
-    if (message.success !== false) {
-      obj.success = message.success;
-    }
-    if (message.message !== "") {
-      obj.message = message.message;
-    }
-    if (message.groupId !== "") {
-      obj.groupId = message.groupId;
-    }
-    if (message.groupName !== "") {
-      obj.groupName = message.groupName;
-    }
-    if (message.groupCode !== "") {
-      obj.groupCode = message.groupCode;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<SCreateGroup>, I>>(base?: I): SCreateGroup {
-    return SCreateGroup.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<SCreateGroup>, I>>(object: I): SCreateGroup {
-    const message = createBaseSCreateGroup();
-    message.success = object.success ?? false;
-    message.message = object.message ?? "";
-    message.groupId = object.groupId ?? "";
-    message.groupName = object.groupName ?? "";
-    message.groupCode = object.groupCode ?? "";
     return message;
   },
 };
@@ -4721,7 +4425,16 @@ export const SFriendPush = {
 };
 
 function createBaseGroupInfo(): GroupInfo {
-  return { groupId: "", groupName: "", groupCode: "", creatorId: "", memberCount: 0 };
+  return {
+    groupId: "",
+    groupName: "",
+    groupCode: "",
+    description: "",
+    groupImageUrl: "",
+    memberCount: 0,
+    storageCapacityBytes: 0,
+    storageUsageBytes: 0,
+  };
 }
 
 export const GroupInfo = {
@@ -4735,11 +4448,20 @@ export const GroupInfo = {
     if (message.groupCode !== "") {
       writer.uint32(26).string(message.groupCode);
     }
-    if (message.creatorId !== "") {
-      writer.uint32(34).string(message.creatorId);
+    if (message.description !== "") {
+      writer.uint32(34).string(message.description);
+    }
+    if (message.groupImageUrl !== "") {
+      writer.uint32(42).string(message.groupImageUrl);
     }
     if (message.memberCount !== 0) {
-      writer.uint32(40).int64(message.memberCount);
+      writer.uint32(48).int32(message.memberCount);
+    }
+    if (message.storageCapacityBytes !== 0) {
+      writer.uint32(56).int64(message.storageCapacityBytes);
+    }
+    if (message.storageUsageBytes !== 0) {
+      writer.uint32(64).int64(message.storageUsageBytes);
     }
     return writer;
   },
@@ -4777,14 +4499,35 @@ export const GroupInfo = {
             break;
           }
 
-          message.creatorId = reader.string();
+          message.description = reader.string();
           continue;
         case 5:
-          if (tag !== 40) {
+          if (tag !== 42) {
             break;
           }
 
-          message.memberCount = longToNumber(reader.int64() as Long);
+          message.groupImageUrl = reader.string();
+          continue;
+        case 6:
+          if (tag !== 48) {
+            break;
+          }
+
+          message.memberCount = reader.int32();
+          continue;
+        case 7:
+          if (tag !== 56) {
+            break;
+          }
+
+          message.storageCapacityBytes = longToNumber(reader.int64() as Long);
+          continue;
+        case 8:
+          if (tag !== 64) {
+            break;
+          }
+
+          message.storageUsageBytes = longToNumber(reader.int64() as Long);
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -4800,8 +4543,11 @@ export const GroupInfo = {
       groupId: isSet(object.groupId) ? globalThis.String(object.groupId) : "",
       groupName: isSet(object.groupName) ? globalThis.String(object.groupName) : "",
       groupCode: isSet(object.groupCode) ? globalThis.String(object.groupCode) : "",
-      creatorId: isSet(object.creatorId) ? globalThis.String(object.creatorId) : "",
+      description: isSet(object.description) ? globalThis.String(object.description) : "",
+      groupImageUrl: isSet(object.groupImageUrl) ? globalThis.String(object.groupImageUrl) : "",
       memberCount: isSet(object.memberCount) ? globalThis.Number(object.memberCount) : 0,
+      storageCapacityBytes: isSet(object.storageCapacityBytes) ? globalThis.Number(object.storageCapacityBytes) : 0,
+      storageUsageBytes: isSet(object.storageUsageBytes) ? globalThis.Number(object.storageUsageBytes) : 0,
     };
   },
 
@@ -4816,11 +4562,20 @@ export const GroupInfo = {
     if (message.groupCode !== "") {
       obj.groupCode = message.groupCode;
     }
-    if (message.creatorId !== "") {
-      obj.creatorId = message.creatorId;
+    if (message.description !== "") {
+      obj.description = message.description;
+    }
+    if (message.groupImageUrl !== "") {
+      obj.groupImageUrl = message.groupImageUrl;
     }
     if (message.memberCount !== 0) {
       obj.memberCount = Math.round(message.memberCount);
+    }
+    if (message.storageCapacityBytes !== 0) {
+      obj.storageCapacityBytes = Math.round(message.storageCapacityBytes);
+    }
+    if (message.storageUsageBytes !== 0) {
+      obj.storageUsageBytes = Math.round(message.storageUsageBytes);
     }
     return obj;
   },
@@ -4833,8 +4588,308 @@ export const GroupInfo = {
     message.groupId = object.groupId ?? "";
     message.groupName = object.groupName ?? "";
     message.groupCode = object.groupCode ?? "";
-    message.creatorId = object.creatorId ?? "";
+    message.description = object.description ?? "";
+    message.groupImageUrl = object.groupImageUrl ?? "";
     message.memberCount = object.memberCount ?? 0;
+    message.storageCapacityBytes = object.storageCapacityBytes ?? 0;
+    message.storageUsageBytes = object.storageUsageBytes ?? 0;
+    return message;
+  },
+};
+
+function createBaseGroupMemberInfo(): GroupMemberInfo {
+  return { userId: "", name: "", profileImageUrl: "", statusMessage: "", role: 0, joinedAt: 0, lastActiveAt: 0 };
+}
+
+export const GroupMemberInfo = {
+  encode(message: GroupMemberInfo, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.userId !== "") {
+      writer.uint32(10).string(message.userId);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    if (message.profileImageUrl !== "") {
+      writer.uint32(26).string(message.profileImageUrl);
+    }
+    if (message.statusMessage !== "") {
+      writer.uint32(34).string(message.statusMessage);
+    }
+    if (message.role !== 0) {
+      writer.uint32(40).int32(message.role);
+    }
+    if (message.joinedAt !== 0) {
+      writer.uint32(48).int64(message.joinedAt);
+    }
+    if (message.lastActiveAt !== 0) {
+      writer.uint32(56).int64(message.lastActiveAt);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): GroupMemberInfo {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGroupMemberInfo();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.userId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.name = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.profileImageUrl = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.statusMessage = reader.string();
+          continue;
+        case 5:
+          if (tag !== 40) {
+            break;
+          }
+
+          message.role = reader.int32() as any;
+          continue;
+        case 6:
+          if (tag !== 48) {
+            break;
+          }
+
+          message.joinedAt = longToNumber(reader.int64() as Long);
+          continue;
+        case 7:
+          if (tag !== 56) {
+            break;
+          }
+
+          message.lastActiveAt = longToNumber(reader.int64() as Long);
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): GroupMemberInfo {
+    return {
+      userId: isSet(object.userId) ? globalThis.String(object.userId) : "",
+      name: isSet(object.name) ? globalThis.String(object.name) : "",
+      profileImageUrl: isSet(object.profileImageUrl) ? globalThis.String(object.profileImageUrl) : "",
+      statusMessage: isSet(object.statusMessage) ? globalThis.String(object.statusMessage) : "",
+      role: isSet(object.role) ? groupRoleFromJSON(object.role) : 0,
+      joinedAt: isSet(object.joinedAt) ? globalThis.Number(object.joinedAt) : 0,
+      lastActiveAt: isSet(object.lastActiveAt) ? globalThis.Number(object.lastActiveAt) : 0,
+    };
+  },
+
+  toJSON(message: GroupMemberInfo): unknown {
+    const obj: any = {};
+    if (message.userId !== "") {
+      obj.userId = message.userId;
+    }
+    if (message.name !== "") {
+      obj.name = message.name;
+    }
+    if (message.profileImageUrl !== "") {
+      obj.profileImageUrl = message.profileImageUrl;
+    }
+    if (message.statusMessage !== "") {
+      obj.statusMessage = message.statusMessage;
+    }
+    if (message.role !== 0) {
+      obj.role = groupRoleToJSON(message.role);
+    }
+    if (message.joinedAt !== 0) {
+      obj.joinedAt = Math.round(message.joinedAt);
+    }
+    if (message.lastActiveAt !== 0) {
+      obj.lastActiveAt = Math.round(message.lastActiveAt);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<GroupMemberInfo>, I>>(base?: I): GroupMemberInfo {
+    return GroupMemberInfo.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<GroupMemberInfo>, I>>(object: I): GroupMemberInfo {
+    const message = createBaseGroupMemberInfo();
+    message.userId = object.userId ?? "";
+    message.name = object.name ?? "";
+    message.profileImageUrl = object.profileImageUrl ?? "";
+    message.statusMessage = object.statusMessage ?? "";
+    message.role = object.role ?? 0;
+    message.joinedAt = object.joinedAt ?? 0;
+    message.lastActiveAt = object.lastActiveAt ?? 0;
+    return message;
+  },
+};
+
+function createBaseCCreateGroup(): CCreateGroup {
+  return { groupName: "" };
+}
+
+export const CCreateGroup = {
+  encode(message: CCreateGroup, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.groupName !== "") {
+      writer.uint32(10).string(message.groupName);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CCreateGroup {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCCreateGroup();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.groupName = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CCreateGroup {
+    return { groupName: isSet(object.groupName) ? globalThis.String(object.groupName) : "" };
+  },
+
+  toJSON(message: CCreateGroup): unknown {
+    const obj: any = {};
+    if (message.groupName !== "") {
+      obj.groupName = message.groupName;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CCreateGroup>, I>>(base?: I): CCreateGroup {
+    return CCreateGroup.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CCreateGroup>, I>>(object: I): CCreateGroup {
+    const message = createBaseCCreateGroup();
+    message.groupName = object.groupName ?? "";
+    return message;
+  },
+};
+
+function createBaseSCreateGroup(): SCreateGroup {
+  return { success: false, message: "", group: undefined };
+}
+
+export const SCreateGroup = {
+  encode(message: SCreateGroup, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.success !== false) {
+      writer.uint32(8).bool(message.success);
+    }
+    if (message.message !== "") {
+      writer.uint32(18).string(message.message);
+    }
+    if (message.group !== undefined) {
+      GroupInfo.encode(message.group, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SCreateGroup {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSCreateGroup();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.success = reader.bool();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.message = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.group = GroupInfo.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SCreateGroup {
+    return {
+      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
+      message: isSet(object.message) ? globalThis.String(object.message) : "",
+      group: isSet(object.group) ? GroupInfo.fromJSON(object.group) : undefined,
+    };
+  },
+
+  toJSON(message: SCreateGroup): unknown {
+    const obj: any = {};
+    if (message.success !== false) {
+      obj.success = message.success;
+    }
+    if (message.message !== "") {
+      obj.message = message.message;
+    }
+    if (message.group !== undefined) {
+      obj.group = GroupInfo.toJSON(message.group);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SCreateGroup>, I>>(base?: I): SCreateGroup {
+    return SCreateGroup.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SCreateGroup>, I>>(object: I): SCreateGroup {
+    const message = createBaseSCreateGroup();
+    message.success = object.success ?? false;
+    message.message = object.message ?? "";
+    message.group = (object.group !== undefined && object.group !== null)
+      ? GroupInfo.fromPartial(object.group)
+      : undefined;
     return message;
   },
 };
@@ -4941,22 +4996,155 @@ export const SGroupList = {
   },
 };
 
-function createBaseCGroupJoinRequest(): CGroupJoinRequest {
+function createBaseCGroupInfo(): CGroupInfo {
+  return { groupId: "" };
+}
+
+export const CGroupInfo = {
+  encode(message: CGroupInfo, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.groupId !== "") {
+      writer.uint32(10).string(message.groupId);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CGroupInfo {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCGroupInfo();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.groupId = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CGroupInfo {
+    return { groupId: isSet(object.groupId) ? globalThis.String(object.groupId) : "" };
+  },
+
+  toJSON(message: CGroupInfo): unknown {
+    const obj: any = {};
+    if (message.groupId !== "") {
+      obj.groupId = message.groupId;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CGroupInfo>, I>>(base?: I): CGroupInfo {
+    return CGroupInfo.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CGroupInfo>, I>>(object: I): CGroupInfo {
+    const message = createBaseCGroupInfo();
+    message.groupId = object.groupId ?? "";
+    return message;
+  },
+};
+
+function createBaseSGroupInfo(): SGroupInfo {
+  return { group: undefined, myRole: 0 };
+}
+
+export const SGroupInfo = {
+  encode(message: SGroupInfo, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.group !== undefined) {
+      GroupInfo.encode(message.group, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.myRole !== 0) {
+      writer.uint32(16).int32(message.myRole);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SGroupInfo {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSGroupInfo();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.group = GroupInfo.decode(reader, reader.uint32());
+          continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.myRole = reader.int32() as any;
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SGroupInfo {
+    return {
+      group: isSet(object.group) ? GroupInfo.fromJSON(object.group) : undefined,
+      myRole: isSet(object.myRole) ? groupRoleFromJSON(object.myRole) : 0,
+    };
+  },
+
+  toJSON(message: SGroupInfo): unknown {
+    const obj: any = {};
+    if (message.group !== undefined) {
+      obj.group = GroupInfo.toJSON(message.group);
+    }
+    if (message.myRole !== 0) {
+      obj.myRole = groupRoleToJSON(message.myRole);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SGroupInfo>, I>>(base?: I): SGroupInfo {
+    return SGroupInfo.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SGroupInfo>, I>>(object: I): SGroupInfo {
+    const message = createBaseSGroupInfo();
+    message.group = (object.group !== undefined && object.group !== null)
+      ? GroupInfo.fromPartial(object.group)
+      : undefined;
+    message.myRole = object.myRole ?? 0;
+    return message;
+  },
+};
+
+function createBaseCJoinGroup(): CJoinGroup {
   return { groupCode: "" };
 }
 
-export const CGroupJoinRequest = {
-  encode(message: CGroupJoinRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const CJoinGroup = {
+  encode(message: CJoinGroup, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.groupCode !== "") {
       writer.uint32(10).string(message.groupCode);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): CGroupJoinRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): CJoinGroup {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCGroupJoinRequest();
+    const message = createBaseCJoinGroup();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -4976,11 +5164,11 @@ export const CGroupJoinRequest = {
     return message;
   },
 
-  fromJSON(object: any): CGroupJoinRequest {
+  fromJSON(object: any): CJoinGroup {
     return { groupCode: isSet(object.groupCode) ? globalThis.String(object.groupCode) : "" };
   },
 
-  toJSON(message: CGroupJoinRequest): unknown {
+  toJSON(message: CJoinGroup): unknown {
     const obj: any = {};
     if (message.groupCode !== "") {
       obj.groupCode = message.groupCode;
@@ -4988,41 +5176,38 @@ export const CGroupJoinRequest = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<CGroupJoinRequest>, I>>(base?: I): CGroupJoinRequest {
-    return CGroupJoinRequest.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<CJoinGroup>, I>>(base?: I): CJoinGroup {
+    return CJoinGroup.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<CGroupJoinRequest>, I>>(object: I): CGroupJoinRequest {
-    const message = createBaseCGroupJoinRequest();
+  fromPartial<I extends Exact<DeepPartial<CJoinGroup>, I>>(object: I): CJoinGroup {
+    const message = createBaseCJoinGroup();
     message.groupCode = object.groupCode ?? "";
     return message;
   },
 };
 
-function createBaseSGroupJoinRequest(): SGroupJoinRequest {
-  return { success: false, message: "", groupId: "", groupName: "" };
+function createBaseSJoinGroup(): SJoinGroup {
+  return { success: false, message: "", group: undefined };
 }
 
-export const SGroupJoinRequest = {
-  encode(message: SGroupJoinRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const SJoinGroup = {
+  encode(message: SJoinGroup, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.success !== false) {
       writer.uint32(8).bool(message.success);
     }
     if (message.message !== "") {
       writer.uint32(18).string(message.message);
     }
-    if (message.groupId !== "") {
-      writer.uint32(26).string(message.groupId);
-    }
-    if (message.groupName !== "") {
-      writer.uint32(34).string(message.groupName);
+    if (message.group !== undefined) {
+      GroupInfo.encode(message.group, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): SGroupJoinRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): SJoinGroup {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseSGroupJoinRequest();
+    const message = createBaseSJoinGroup();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -5045,14 +5230,7 @@ export const SGroupJoinRequest = {
             break;
           }
 
-          message.groupId = reader.string();
-          continue;
-        case 4:
-          if (tag !== 34) {
-            break;
-          }
-
-          message.groupName = reader.string();
+          message.group = GroupInfo.decode(reader, reader.uint32());
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -5063,16 +5241,15 @@ export const SGroupJoinRequest = {
     return message;
   },
 
-  fromJSON(object: any): SGroupJoinRequest {
+  fromJSON(object: any): SJoinGroup {
     return {
       success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
       message: isSet(object.message) ? globalThis.String(object.message) : "",
-      groupId: isSet(object.groupId) ? globalThis.String(object.groupId) : "",
-      groupName: isSet(object.groupName) ? globalThis.String(object.groupName) : "",
+      group: isSet(object.group) ? GroupInfo.fromJSON(object.group) : undefined,
     };
   },
 
-  toJSON(message: SGroupJoinRequest): unknown {
+  toJSON(message: SJoinGroup): unknown {
     const obj: any = {};
     if (message.success !== false) {
       obj.success = message.success;
@@ -5080,50 +5257,102 @@ export const SGroupJoinRequest = {
     if (message.message !== "") {
       obj.message = message.message;
     }
-    if (message.groupId !== "") {
-      obj.groupId = message.groupId;
-    }
-    if (message.groupName !== "") {
-      obj.groupName = message.groupName;
+    if (message.group !== undefined) {
+      obj.group = GroupInfo.toJSON(message.group);
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<SGroupJoinRequest>, I>>(base?: I): SGroupJoinRequest {
-    return SGroupJoinRequest.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<SJoinGroup>, I>>(base?: I): SJoinGroup {
+    return SJoinGroup.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<SGroupJoinRequest>, I>>(object: I): SGroupJoinRequest {
-    const message = createBaseSGroupJoinRequest();
+  fromPartial<I extends Exact<DeepPartial<SJoinGroup>, I>>(object: I): SJoinGroup {
+    const message = createBaseSJoinGroup();
     message.success = object.success ?? false;
     message.message = object.message ?? "";
-    message.groupId = object.groupId ?? "";
-    message.groupName = object.groupName ?? "";
+    message.group = (object.group !== undefined && object.group !== null)
+      ? GroupInfo.fromPartial(object.group)
+      : undefined;
     return message;
   },
 };
 
-function createBaseCGroupJoinResponse(): CGroupJoinResponse {
-  return { groupId: "", requesterUserId: "", accept: false };
+function createBaseCGroupMemberList(): CGroupMemberList {
+  return { groupId: "" };
 }
 
-export const CGroupJoinResponse = {
-  encode(message: CGroupJoinResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const CGroupMemberList = {
+  encode(message: CGroupMemberList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.groupId !== "") {
       writer.uint32(10).string(message.groupId);
-    }
-    if (message.requesterUserId !== "") {
-      writer.uint32(18).string(message.requesterUserId);
-    }
-    if (message.accept !== false) {
-      writer.uint32(24).bool(message.accept);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): CGroupJoinResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): CGroupMemberList {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCGroupJoinResponse();
+    const message = createBaseCGroupMemberList();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.groupId = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CGroupMemberList {
+    return { groupId: isSet(object.groupId) ? globalThis.String(object.groupId) : "" };
+  },
+
+  toJSON(message: CGroupMemberList): unknown {
+    const obj: any = {};
+    if (message.groupId !== "") {
+      obj.groupId = message.groupId;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CGroupMemberList>, I>>(base?: I): CGroupMemberList {
+    return CGroupMemberList.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CGroupMemberList>, I>>(object: I): CGroupMemberList {
+    const message = createBaseCGroupMemberList();
+    message.groupId = object.groupId ?? "";
+    return message;
+  },
+};
+
+function createBaseSGroupMemberList(): SGroupMemberList {
+  return { groupId: "", members: [] };
+}
+
+export const SGroupMemberList = {
+  encode(message: SGroupMemberList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.groupId !== "") {
+      writer.uint32(10).string(message.groupId);
+    }
+    for (const v of message.members) {
+      GroupMemberInfo.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SGroupMemberList {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSGroupMemberList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -5139,14 +5368,7 @@ export const CGroupJoinResponse = {
             break;
           }
 
-          message.requesterUserId = reader.string();
-          continue;
-        case 3:
-          if (tag !== 24) {
-            break;
-          }
-
-          message.accept = reader.bool();
+          message.members.push(GroupMemberInfo.decode(reader, reader.uint32()));
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -5157,46 +5379,100 @@ export const CGroupJoinResponse = {
     return message;
   },
 
-  fromJSON(object: any): CGroupJoinResponse {
+  fromJSON(object: any): SGroupMemberList {
     return {
       groupId: isSet(object.groupId) ? globalThis.String(object.groupId) : "",
-      requesterUserId: isSet(object.requesterUserId) ? globalThis.String(object.requesterUserId) : "",
-      accept: isSet(object.accept) ? globalThis.Boolean(object.accept) : false,
+      members: globalThis.Array.isArray(object?.members)
+        ? object.members.map((e: any) => GroupMemberInfo.fromJSON(e))
+        : [],
     };
   },
 
-  toJSON(message: CGroupJoinResponse): unknown {
+  toJSON(message: SGroupMemberList): unknown {
     const obj: any = {};
     if (message.groupId !== "") {
       obj.groupId = message.groupId;
     }
-    if (message.requesterUserId !== "") {
-      obj.requesterUserId = message.requesterUserId;
-    }
-    if (message.accept !== false) {
-      obj.accept = message.accept;
+    if (message.members?.length) {
+      obj.members = message.members.map((e) => GroupMemberInfo.toJSON(e));
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<CGroupJoinResponse>, I>>(base?: I): CGroupJoinResponse {
-    return CGroupJoinResponse.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<SGroupMemberList>, I>>(base?: I): SGroupMemberList {
+    return SGroupMemberList.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<CGroupJoinResponse>, I>>(object: I): CGroupJoinResponse {
-    const message = createBaseCGroupJoinResponse();
+  fromPartial<I extends Exact<DeepPartial<SGroupMemberList>, I>>(object: I): SGroupMemberList {
+    const message = createBaseSGroupMemberList();
     message.groupId = object.groupId ?? "";
-    message.requesterUserId = object.requesterUserId ?? "";
-    message.accept = object.accept ?? false;
+    message.members = object.members?.map((e) => GroupMemberInfo.fromPartial(e)) || [];
     return message;
   },
 };
 
-function createBaseSGroupJoinResponse(): SGroupJoinResponse {
+function createBaseCLeaveGroup(): CLeaveGroup {
+  return { groupId: "" };
+}
+
+export const CLeaveGroup = {
+  encode(message: CLeaveGroup, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.groupId !== "") {
+      writer.uint32(10).string(message.groupId);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CLeaveGroup {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCLeaveGroup();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.groupId = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CLeaveGroup {
+    return { groupId: isSet(object.groupId) ? globalThis.String(object.groupId) : "" };
+  },
+
+  toJSON(message: CLeaveGroup): unknown {
+    const obj: any = {};
+    if (message.groupId !== "") {
+      obj.groupId = message.groupId;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CLeaveGroup>, I>>(base?: I): CLeaveGroup {
+    return CLeaveGroup.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CLeaveGroup>, I>>(object: I): CLeaveGroup {
+    const message = createBaseCLeaveGroup();
+    message.groupId = object.groupId ?? "";
+    return message;
+  },
+};
+
+function createBaseSLeaveGroup(): SLeaveGroup {
   return { success: false, message: "" };
 }
 
-export const SGroupJoinResponse = {
-  encode(message: SGroupJoinResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const SLeaveGroup = {
+  encode(message: SLeaveGroup, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.success !== false) {
       writer.uint32(8).bool(message.success);
     }
@@ -5206,10 +5482,10 @@ export const SGroupJoinResponse = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): SGroupJoinResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): SLeaveGroup {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseSGroupJoinResponse();
+    const message = createBaseSLeaveGroup();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -5236,14 +5512,14 @@ export const SGroupJoinResponse = {
     return message;
   },
 
-  fromJSON(object: any): SGroupJoinResponse {
+  fromJSON(object: any): SLeaveGroup {
     return {
       success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
       message: isSet(object.message) ? globalThis.String(object.message) : "",
     };
   },
 
-  toJSON(message: SGroupJoinResponse): unknown {
+  toJSON(message: SLeaveGroup): unknown {
     const obj: any = {};
     if (message.success !== false) {
       obj.success = message.success;
@@ -5254,220 +5530,13 @@ export const SGroupJoinResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<SGroupJoinResponse>, I>>(base?: I): SGroupJoinResponse {
-    return SGroupJoinResponse.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<SLeaveGroup>, I>>(base?: I): SLeaveGroup {
+    return SLeaveGroup.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<SGroupJoinResponse>, I>>(object: I): SGroupJoinResponse {
-    const message = createBaseSGroupJoinResponse();
+  fromPartial<I extends Exact<DeepPartial<SLeaveGroup>, I>>(object: I): SLeaveGroup {
+    const message = createBaseSLeaveGroup();
     message.success = object.success ?? false;
     message.message = object.message ?? "";
-    return message;
-  },
-};
-
-function createBaseCGroupJoinRequestList(): CGroupJoinRequestList {
-  return { groupId: "" };
-}
-
-export const CGroupJoinRequestList = {
-  encode(message: CGroupJoinRequestList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.groupId !== "") {
-      writer.uint32(10).string(message.groupId);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): CGroupJoinRequestList {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCGroupJoinRequestList();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.groupId = reader.string();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): CGroupJoinRequestList {
-    return { groupId: isSet(object.groupId) ? globalThis.String(object.groupId) : "" };
-  },
-
-  toJSON(message: CGroupJoinRequestList): unknown {
-    const obj: any = {};
-    if (message.groupId !== "") {
-      obj.groupId = message.groupId;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<CGroupJoinRequestList>, I>>(base?: I): CGroupJoinRequestList {
-    return CGroupJoinRequestList.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<CGroupJoinRequestList>, I>>(object: I): CGroupJoinRequestList {
-    const message = createBaseCGroupJoinRequestList();
-    message.groupId = object.groupId ?? "";
-    return message;
-  },
-};
-
-function createBaseSGroupJoinRequestList(): SGroupJoinRequestList {
-  return { requests: [] };
-}
-
-export const SGroupJoinRequestList = {
-  encode(message: SGroupJoinRequestList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.requests) {
-      GroupJoinRequestInfo.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): SGroupJoinRequestList {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseSGroupJoinRequestList();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.requests.push(GroupJoinRequestInfo.decode(reader, reader.uint32()));
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): SGroupJoinRequestList {
-    return {
-      requests: globalThis.Array.isArray(object?.requests)
-        ? object.requests.map((e: any) => GroupJoinRequestInfo.fromJSON(e))
-        : [],
-    };
-  },
-
-  toJSON(message: SGroupJoinRequestList): unknown {
-    const obj: any = {};
-    if (message.requests?.length) {
-      obj.requests = message.requests.map((e) => GroupJoinRequestInfo.toJSON(e));
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<SGroupJoinRequestList>, I>>(base?: I): SGroupJoinRequestList {
-    return SGroupJoinRequestList.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<SGroupJoinRequestList>, I>>(object: I): SGroupJoinRequestList {
-    const message = createBaseSGroupJoinRequestList();
-    message.requests = object.requests?.map((e) => GroupJoinRequestInfo.fromPartial(e)) || [];
-    return message;
-  },
-};
-
-function createBaseGroupJoinRequestInfo(): GroupJoinRequestInfo {
-  return { requesterUserId: "", requesterName: "", requestedAt: 0 };
-}
-
-export const GroupJoinRequestInfo = {
-  encode(message: GroupJoinRequestInfo, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.requesterUserId !== "") {
-      writer.uint32(10).string(message.requesterUserId);
-    }
-    if (message.requesterName !== "") {
-      writer.uint32(18).string(message.requesterName);
-    }
-    if (message.requestedAt !== 0) {
-      writer.uint32(24).int64(message.requestedAt);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GroupJoinRequestInfo {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGroupJoinRequestInfo();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.requesterUserId = reader.string();
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.requesterName = reader.string();
-          continue;
-        case 3:
-          if (tag !== 24) {
-            break;
-          }
-
-          message.requestedAt = longToNumber(reader.int64() as Long);
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GroupJoinRequestInfo {
-    return {
-      requesterUserId: isSet(object.requesterUserId) ? globalThis.String(object.requesterUserId) : "",
-      requesterName: isSet(object.requesterName) ? globalThis.String(object.requesterName) : "",
-      requestedAt: isSet(object.requestedAt) ? globalThis.Number(object.requestedAt) : 0,
-    };
-  },
-
-  toJSON(message: GroupJoinRequestInfo): unknown {
-    const obj: any = {};
-    if (message.requesterUserId !== "") {
-      obj.requesterUserId = message.requesterUserId;
-    }
-    if (message.requesterName !== "") {
-      obj.requesterName = message.requesterName;
-    }
-    if (message.requestedAt !== 0) {
-      obj.requestedAt = Math.round(message.requestedAt);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<GroupJoinRequestInfo>, I>>(base?: I): GroupJoinRequestInfo {
-    return GroupJoinRequestInfo.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<GroupJoinRequestInfo>, I>>(object: I): GroupJoinRequestInfo {
-    const message = createBaseGroupJoinRequestInfo();
-    message.requesterUserId = object.requesterUserId ?? "";
-    message.requesterName = object.requesterName ?? "";
-    message.requestedAt = object.requestedAt ?? 0;
     return message;
   },
 };

@@ -17,7 +17,8 @@ using namespace Protocol;
 bool FriendService::SearchUser(sessionPtr& session, uint64 reqId, const string& searchUserId)
 {
 	auto serverSession = static_pointer_cast<ServerSession>(session);
-	const string myUserId = serverSession->GetUserId();
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) return false;
 
 	cout << "[FriendService] 검색 요청: " << searchUserId << endl;
 
@@ -37,9 +38,9 @@ bool FriendService::SearchUser(sessionPtr& session, uint64 reqId, const string& 
 		// info->set_last_seen(userInfo.lastSeen); // 필요 시
 
 		// 관계 상태 확인 (나랑 무슨 사이인지)
-		if (!myUserId.empty()) {
-			bool isFriend = FriendRepository::IsFriend(myUserId, userInfo.userId);
-			bool hasSent = FriendRepository::HasSentRequest(myUserId, userInfo.userId);
+		if (!userId.empty()) {
+			bool isFriend = FriendRepository::IsFriend(userId, userInfo.userId);
+			bool hasSent = FriendRepository::HasSentRequest(userId, userInfo.userId);
 
 			pkt.set_is_friend(isFriend);
 			pkt.set_has_sent_request(hasSent);

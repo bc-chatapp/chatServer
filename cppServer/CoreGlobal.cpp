@@ -4,6 +4,8 @@
 #include "Service/UserManager.h"
 #include "Service/ChatService.h"
 #include "Service/FriendService.h"
+#include "Service/GroupService.h"
+
 #include "Service/AuthService.h"
 #include "Service/FileService.h"
 #include "Cloud/CloudStorageGCS.h"
@@ -21,6 +23,8 @@ const int64 TIMEOUT_MS = 120 * 1000;
 UserManager* GUserManager = nullptr;
 ChatService* GChatService = nullptr;
 FriendService* GFriendService = nullptr;
+GroupService* GGroupService = nullptr;
+
 AuthService* GAuthService = nullptr;
 FileService* GFileService = nullptr;
 
@@ -96,6 +100,7 @@ CoreGlobal::CoreGlobal()
     _userManager = make_unique<UserManager>();
     _chatService = make_unique<ChatService>(*_userManager);
     _friendService = make_unique<FriendService>(*_userManager);
+    _groupService = make_unique<GroupService>(*_userManager);
     _authService = make_unique<AuthService>(*_userManager);
     
     // CloudStorage 초기화 (파일에서 설정 읽기)
@@ -118,6 +123,8 @@ CoreGlobal::CoreGlobal()
     GUserManager = _userManager.get();
     GChatService = _chatService.get();
     GFriendService = _friendService.get();
+    GGroupService = _groupService.get();
+
     GAuthService = _authService.get();
     GFileService = _fileService.get();
 }
@@ -126,6 +133,7 @@ CoreGlobal::~CoreGlobal()
 {
     GFileService = nullptr;
     GAuthService = nullptr;
+    GGroupService = nullptr;
     GFriendService = nullptr;
     GChatService = nullptr;
     GUserManager = nullptr;
@@ -133,6 +141,7 @@ CoreGlobal::~CoreGlobal()
     _fileService.reset();
     _cloudStorage.reset();
     _authService.reset();
+    _groupService.reset();
     _friendService.reset();
     _chatService.reset();
     _userManager.reset();
@@ -144,18 +153,22 @@ void CoreGlobal::Reset()
     _cloudStorage.reset();
     _authService.reset();
     _friendService.reset();
+    _groupService.reset();
     _chatService.reset();
     _userManager.reset();
 
     GFileService = nullptr;
     GAuthService = nullptr;
     GFriendService = nullptr;
+    GGroupService = nullptr;
     GChatService = nullptr;
     GUserManager = nullptr;
 
     _userManager = make_unique<UserManager>();
     _chatService = make_unique<ChatService>(*_userManager);
     _friendService = make_unique<FriendService>(*_userManager);
+    _groupService = make_unique<GroupService>(*_userManager);
+
     _authService = make_unique<AuthService>(*_userManager);
     
     // CloudStorage 초기화 (파일에서 설정 읽기)
@@ -178,6 +191,7 @@ void CoreGlobal::Reset()
     GUserManager = _userManager.get();
     GChatService = _chatService.get();
     GFriendService = _friendService.get();
+    GGroupService = _groupService.get();
     GAuthService = _authService.get();
     GFileService = _fileService.get();
 }

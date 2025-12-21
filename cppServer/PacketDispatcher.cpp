@@ -1,16 +1,20 @@
 ﻿#include "pch.h"
 #include "PacketDispatcher.h"
 #include "ServerSession.h"
+
 #include "Service/UserManager.h"
 #include "Service/ChatService.h"
 #include "Service/FriendService.h"
 #include "Service/AuthService.h"
 #include "Service/FileService.h"
+#include "Service/GroupService.h"
+
+
 #include "DB/UserRepository.h"
 #include "DB/FriendRepository.h"
 #include "DB/MessageRepository.h"
 #include "DB/GroupRepository.h"
-#include "CoreGlobal.h"
+
 
 using namespace Protocol;
 
@@ -122,14 +126,14 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 	case Protocol::Envelope::kCGroupList:
 		Dispatch_C_GroupList(session, envelope.request_id(), envelope.c_group_list());
 		break;
-	case Protocol::Envelope::kCGroupJoinRequest:
-		Dispatch_C_GroupJoinRequest(session, envelope.request_id(), envelope.c_group_join_request());
+	case Protocol::Envelope::kCJoinGroup:
+		Dispatch_C_JoinGroup(session, envelope.request_id(), envelope.c_join_group());
 		break;
-	case Protocol::Envelope::kCGroupJoinResponse:
-		Dispatch_C_GroupJoinResponse(session, envelope.request_id(), envelope.c_group_join_response());
+	case Protocol::Envelope::kCLeaveGroup:
+		Dispatch_C_LeaveGroup(session, envelope.request_id(), envelope.c_leave_group());
 		break;
-	case Protocol::Envelope::kCGroupJoinRequestList:
-		Dispatch_C_GroupJoinRequestList(session, envelope.request_id(), envelope.c_group_join_request_list());
+	case Protocol::Envelope::kCGroupMemberList:
+		Dispatch_C_GroupMemberList(session, envelope.request_id(), envelope.c_group_member_list());
 		break;
 
 	default:
@@ -469,6 +473,22 @@ void PacketDispatcher::PushOfflineData(sessionPtr& session, const string& userId
 		 << ", offlineMessages=" << totalMessages << "개" << endl;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+/*---------------------------------
+			Group Handler
+-----------------------------------*/
+
 bool PacketDispatcher::Dispatch_C_CreateGroup(sessionPtr& session, uint64 reqId, const Protocol::C_CreateGroup& pkt)
 {
 	auto serverSession = static_pointer_cast<ServerSession>(session);
@@ -477,46 +497,7 @@ bool PacketDispatcher::Dispatch_C_CreateGroup(sessionPtr& session, uint64 reqId,
 		DispatchError(session, reqId, ERR_UNAUTHORIZED, "인증이 필요합니다.");
 		return false;
 	}
-
-	// 그룹 이름 검증
-	if (pkt.group_name().empty()) {
-		DispatchError(session, reqId, ERR_INVALID_PACKET, "그룹 이름이 필요합니다.");
-		return false;
-	}
-
-	// 그룹 ID 생성 (timestamp 기반)
-	int64_t timestamp = Nowts();
-	string groupId = "group_" + to_string(timestamp) + "_" + userId.substr(0, min(static_cast<size_t>(6), userId.length()));
-
-	// 그룹 코드 생성 (랜덤 6자리)
-	string groupCode = GroupRepository::GenerateGroupCode();
-
-	// DB에 그룹 저장
-	if (!GroupRepository::CreateGroup(groupId, pkt.group_name(), groupCode, userId)) {
-		DispatchError(session, reqId, ERR_SERVER_INTERNAL, "그룹 생성 실패: 데이터베이스 오류");
-		return false;
-	}
-
-	// 응답 생성
-	Protocol::S_CreateGroup response;
-	response.set_success(true);
-	response.set_message("그룹이 생성되었습니다.");
-	response.set_group_id(groupId);
-	response.set_group_name(pkt.group_name());
-	response.set_group_code(groupCode);
-
-	Protocol::Envelope env;
-	env.set_version(GProtoVersion);
-	env.set_request_id(reqId);
-	*env.mutable_s_create_group() = response;
-	SendEnvelope(session, env);
-
-	cout << "[PacketDispatcher] 그룹 생성 성공: userId=" << userId 
-		 << ", groupId=" << groupId 
-		 << ", groupName=" << pkt.group_name()
-		 << ", groupCode=" << groupCode << endl;
-
-	return true;
+	return GGroupService->CreateGroup(session, reqId, const_cast<Protocol::C_CreateGroup&>(pkt));
 }
 
 bool PacketDispatcher::Dispatch_C_GroupList(sessionPtr& session, uint64 reqId, const Protocol::C_GroupList& pkt)
@@ -527,39 +508,10 @@ bool PacketDispatcher::Dispatch_C_GroupList(sessionPtr& session, uint64 reqId, c
 		DispatchError(session, reqId, ERR_UNAUTHORIZED, "인증이 필요합니다.");
 		return false;
 	}
-
-	// 사용자가 속한 그룹 목록 조회
-	auto groups = GroupRepository::GetUserGroups(userId);
-
-	// 응답 생성
-	Protocol::S_GroupList response;
-	for (const auto& groupInfo : groups) {
-		Protocol::GroupInfo* group = response.add_groups();
-		group->set_group_id(groupInfo.groupId);
-		group->set_group_name(groupInfo.groupName);
-		group->set_group_code(groupInfo.groupCode);
-		group->set_creator_id(groupInfo.creatorId);
-		group->set_member_count(0);
-	}
-
-	Protocol::Envelope env;
-	env.set_version(GProtoVersion);
-	env.set_request_id(reqId);
-	*env.mutable_s_group_list() = response;
-	SendEnvelope(session, env);
-
-	cout << "[PacketDispatcher] 그룹 목록 조회: userId=" << userId 
-		 << ", groups=" << groups.size() << "개" << endl;
-
-	return true;
+	return GGroupService->GetGroupList(session, reqId);
 }
 
-
-
-
-
-
-bool PacketDispatcher::Dispatch_C_GroupJoinRequest(sessionPtr& session, uint64 reqId, const Protocol::C_GroupJoinRequest& pkt)
+bool PacketDispatcher::Dispatch_C_JoinGroup(sessionPtr& session, uint64 reqId, const Protocol::C_JoinGroup& pkt)
 {
 	auto serverSession = static_pointer_cast<ServerSession>(session);
 	const string userId = serverSession->GetUserId();
@@ -569,53 +521,14 @@ bool PacketDispatcher::Dispatch_C_GroupJoinRequest(sessionPtr& session, uint64 r
 	}
 
 	if (pkt.group_code().empty()) {
-		DispatchError(session, reqId, ERR_INVALID_PACKET, "그룹 코드가 필요합니다.");
+		DispatchError(session, reqId, ERR_INVALID_PACKET, "초대 코드를 입력해주세요.");
 		return false;
 	}
 
-	// 그룹 코드로 그룹 조회
-	::GroupInfo groupInfo;  // GroupRepository.h의 GroupInfo 구조체 사용
-	if (!GroupRepository::GetGroupByCode(pkt.group_code(), groupInfo)) {
-		DispatchError(session, reqId, ERR_INVALID_PACKET, "존재하지 않는 그룹 코드입니다.");
-		return false;
-	}
-
-	// 이미 멤버인지 확인
-	if (GroupRepository::IsMember(groupInfo.groupId, userId)) {
-		DispatchError(session, reqId, ERR_INVALID_PACKET, "이미 그룹 멤버입니다.");
-		return false;
-	}
-
-	// TODO: 그룹 가입 신청을 DB에 저장 (group_join_requests 테이블)
-	// 현재는 신청만 저장하고 바로 가입하지 않음 (그룹장 승인 필요)
-	// 실제 구현 시: group_join_requests 테이블에 저장
-	// 예: INSERT INTO group_join_requests (group_id, requester_user_id, requested_at) VALUES (?, ?, NOW())
-	
-	// 임시로 바로 멤버 추가하지 않고 신청만 처리
-	// 주의: 현재는 DB 테이블이 없으므로 신청만 저장하고 멤버 추가는 하지 않음
-	// 그룹장이 승인하면 그때 AddMember 호출
-	
-	// 응답 생성 (신청 완료, 승인 대기 중)
-	Protocol::S_GroupJoinRequest response;
-	response.set_success(true);
-	response.set_message("그룹 가입 신청이 완료되었습니다. 그룹장의 승인을 기다려주세요.");
-	response.set_group_id(groupInfo.groupId);
-	response.set_group_name(groupInfo.groupName);
-
-	Protocol::Envelope env;
-	env.set_version(GProtoVersion);
-	env.set_request_id(reqId);
-	*env.mutable_s_group_join_request() = response;
-	SendEnvelope(session, env);
-
-	cout << "[PacketDispatcher] 그룹 가입 신청: userId=" << userId 
-		 << ", groupId=" << groupInfo.groupId 
-		 << ", groupCode=" << pkt.group_code() << endl;
-
-	return true;
+	return GGroupService->JoinGroup(session, reqId, pkt.group_code());
 }
 
-bool PacketDispatcher::Dispatch_C_GroupJoinResponse(sessionPtr& session, uint64 reqId, const Protocol::C_GroupJoinResponse& pkt)
+bool PacketDispatcher::Dispatch_C_LeaveGroup(sessionPtr& session, uint64 reqId, const Protocol::C_LeaveGroup& pkt)
 {
 	auto serverSession = static_pointer_cast<ServerSession>(session);
 	const string userId = serverSession->GetUserId();
@@ -624,43 +537,10 @@ bool PacketDispatcher::Dispatch_C_GroupJoinResponse(sessionPtr& session, uint64 
 		return false;
 	}
 
-	// 그룹장 권한 확인
-	string role = GroupRepository::GetMemberRole(pkt.group_id(), userId);
-	if (role != "owner" && role != "admin") {
-		DispatchError(session, reqId, ERR_UNAUTHORIZED, "그룹장 또는 관리자만 승인할 수 있습니다.");
-		return false;
-	}
-
-	// TODO: 그룹 가입 신청을 DB에서 조회하여 처리
-	// 현재는 바로 멤버 추가/거절 처리
-	if (pkt.accept()) {
-		if (!GroupRepository::AddMember(pkt.group_id(), pkt.requester_user_id(), "member")) {
-			DispatchError(session, reqId, ERR_SERVER_INTERNAL, "멤버 추가 실패.");
-			return false;
-		}
-	}
-
-	// TODO: 그룹 가입 신청을 DB에서 삭제
-
-	// 응답 생성
-	Protocol::S_GroupJoinResponse response;
-	response.set_success(true);
-	response.set_message(pkt.accept() ? "가입 신청을 수락했습니다." : "가입 신청을 거절했습니다.");
-
-	Protocol::Envelope env;
-	env.set_version(GProtoVersion);
-	env.set_request_id(reqId);
-	*env.mutable_s_group_join_response() = response;
-	SendEnvelope(session, env);
-
-	cout << "[PacketDispatcher] 그룹 가입 신청 응답: groupId=" << pkt.group_id()
-		 << ", requesterId=" << pkt.requester_user_id()
-		 << ", accept=" << (pkt.accept() ? "true" : "false") << endl;
-
-	return true;
+	return GGroupService->LeaveGroup(session, reqId, pkt.group_id());
 }
 
-bool PacketDispatcher::Dispatch_C_GroupJoinRequestList(sessionPtr& session, uint64 reqId, const Protocol::C_GroupJoinRequestList& pkt)
+bool PacketDispatcher::Dispatch_C_GroupMemberList(sessionPtr& session, uint64 reqId, const Protocol::C_GroupMemberList& pkt)
 {
 	auto serverSession = static_pointer_cast<ServerSession>(session);
 	const string userId = serverSession->GetUserId();
@@ -668,25 +548,6 @@ bool PacketDispatcher::Dispatch_C_GroupJoinRequestList(sessionPtr& session, uint
 		DispatchError(session, reqId, ERR_UNAUTHORIZED, "인증이 필요합니다.");
 		return false;
 	}
-
-	// 그룹장 권한 확인
-	string role = GroupRepository::GetMemberRole(pkt.group_id(), userId);
-	if (role != "owner" && role != "admin") {
-		DispatchError(session, reqId, ERR_UNAUTHORIZED, "그룹장 또는 관리자만 조회할 수 있습니다.");
-		return false;
-	}
-
-	// TODO: 그룹 가입 신청 목록을 DB에서 조회
-	// 현재는 빈 목록 반환
-	Protocol::S_GroupJoinRequestList response;
-
-	Protocol::Envelope env;
-	env.set_version(GProtoVersion);
-	env.set_request_id(reqId);
-	*env.mutable_s_group_join_request_list() = response;
-	SendEnvelope(session, env);
-
-	cout << "[PacketDispatcher] 그룹 가입 신청 목록 조회: groupId=" << pkt.group_id() << endl;
-
-	return true;
+	return GGroupService->GetGroupMemberList(session, reqId, pkt.group_id());
 }
+

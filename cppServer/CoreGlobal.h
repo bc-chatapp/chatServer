@@ -5,6 +5,8 @@
 class UserManager;
 class ChatService;
 class FriendService;
+class GroupService;
+
 class AuthService;
 class FileService;
 class CloudStorage;
@@ -18,6 +20,8 @@ int64 Nowts();
 extern UserManager* GUserManager;
 extern ChatService* GChatService;
 extern FriendService* GFriendService;
+extern GroupService* GGroupService;
+
 extern AuthService* GAuthService;
 extern FileService* GFileService;
 
@@ -34,6 +38,8 @@ private:
     unique_ptr<UserManager> _userManager;
     unique_ptr<ChatService> _chatService;
     unique_ptr<FriendService> _friendService;
+    unique_ptr<GroupService> _groupService;
+
     unique_ptr<AuthService> _authService;
     unique_ptr<CloudStorage> _cloudStorage;
     unique_ptr<FileService> _fileService;

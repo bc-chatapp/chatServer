@@ -130,6 +130,26 @@ class ErrorCode extends $pb.ProtobufEnum {
   const ErrorCode._(super.value, super.name);
 }
 
+class GroupRole extends $pb.ProtobufEnum {
+  static const GroupRole MEMBER =
+      GroupRole._(0, _omitEnumNames ? '' : 'MEMBER');
+  static const GroupRole ADMIN = GroupRole._(1, _omitEnumNames ? '' : 'ADMIN');
+  static const GroupRole OWNER = GroupRole._(2, _omitEnumNames ? '' : 'OWNER');
+
+  static const $core.List<GroupRole> values = <GroupRole>[
+    MEMBER,
+    ADMIN,
+    OWNER,
+  ];
+
+  static final $core.List<GroupRole?> _byValue =
+      $pb.ProtobufEnum.$_initByValueList(values, 2);
+  static GroupRole? valueOf($core.int value) =>
+      value < 0 || value >= _byValue.length ? null : _byValue[value];
+
+  const GroupRole._(super.value, super.name);
+}
+
 class C_FriendAction_ActionType extends $pb.ProtobufEnum {
   static const C_FriendAction_ActionType SEND_REQUEST =
       C_FriendAction_ActionType._(0, _omitEnumNames ? '' : 'SEND_REQUEST');

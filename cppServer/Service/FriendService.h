@@ -25,8 +25,6 @@ public:
 	static void PushFriendEvent(const string& targetUserId, Protocol::S_FriendPush::PushType type, const Protocol::FriendInfo* info = nullptr);
 	
 
-
-
 protected:
 
 private:

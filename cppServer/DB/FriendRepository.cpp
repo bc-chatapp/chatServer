@@ -176,7 +176,7 @@ bool FriendRepository::RemoveFriend(const string& userId, const string& friendId
 
 vector<cFriendInfo> FriendRepository::GetFriends(const string& userId)
 {
-	vector<cFriendInfo> result; // ★ cFriendInfo 사용
+	vector<cFriendInfo> result; 
 
 	try {
 		auto& db = DBManager::GetInstance();
