@@ -4,8 +4,14 @@
 #include "ServerSession.h"
 #include "PacketDispatcher.h"
 #include "../DB/GroupRepository.h"
+#include "../DB/UserRepository.h"
+#include "../DB/MessageRepository.h"
+
+#include "ChatService.h"
 
 using namespace Protocol;
+
+
 
 bool GroupService::CreateGroup(sessionPtr& session, uint64 reqId, Protocol::C_CreateGroup& pkt)
 {
@@ -125,6 +131,8 @@ bool GroupService::JoinGroup(sessionPtr& session, uint64 reqId, const string& gr
 
 	cout << "[GroupService] User(" << userId << ") Joined Group(" << dbInfo.groupId << ")" << endl;
 
+	GChatService->SendSystemMessage(dbInfo.groupId, userId + " 님이 입장하셨습니다.");
+
 	return true;
 }
 
@@ -163,8 +171,68 @@ bool GroupService::LeaveGroup(sessionPtr& session, uint64 reqId, const string& g
 	*env.mutable_s_leave_group() = pkt_leave;
 	PacketDispatcher::SendEnvelope(session, env);
 
+	GChatService->SendSystemMessage(groupId, userId + " 님이 퇴장하셨습니다.");
+
 	return true;
 }
+
+
+
+
+
+bool GroupService::InviteFriend(sessionPtr& session, const Protocol::C_InviteFriend& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) return false;
+
+	string senderName = "";
+	if (!UserRepository::GetUserNameWithId(userId, senderName))
+	{
+		return false;
+	}
+
+	string groupId = pkt.group_id();
+	cGroupInfo groupInfo;
+	if (!GroupRepository::GetGroupByCode(groupId, groupInfo)) {
+		// 실패 응답
+		return false;
+	}
+
+	for (const string& friendId : pkt.friend_user_ids()) {
+
+		if (GroupRepository::IsMember(groupId, friendId)) continue;
+
+		Protocol::S_Chat pkt_invite;
+		string convId = MessageRepository::CreateConversationId(userId, friendId); // 1:1 방 ID 계산
+		pkt_invite.set_conv_id(convId);
+		pkt_invite.set_sender_id(userId); // 내가 보낸 것처럼
+		pkt_invite.set_sender_name(senderName);
+		pkt_invite.set_ts_server(Nowts());
+
+		// ★ Payload: System 타입 (Invite)
+		auto* sysPayload = pkt_invite.mutable_payload()->mutable_system();
+		sysPayload->set_message(senderName + " 님이 '" + groupInfo.groupName + "' 그룹에 초대했습니다.");
+		sysPayload->set_type(1); // 1 = 초대장
+		sysPayload->set_invite_group_id(groupId);
+		sysPayload->set_invite_group_code(groupInfo.groupCode);
+		sysPayload->set_invite_group_name(groupInfo.groupName);
+
+		// DB 저장 & 전송 (ChatService 기능 재사용 권장)
+		// 여기선 개념적으로 작성:
+		// MessageRepository::SaveMessage(convId, senderId, friendId, inviteMsg);
+		// 타겟 유저가 온라인이면 PushEnvelope(targetSession, inviteMsg);
+	}
+
+	// 성공 응답 전송
+	Protocol::S_InviteFriend res;
+	res.set_success(true);
+	// SendEnvelope(session, res);
+
+	return true;
+}
+
+
 
 
 

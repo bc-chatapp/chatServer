@@ -18,6 +18,7 @@ public:
 	bool JoinGroup(sessionPtr& session, uint64 reqId, const string& groupCode);
 	bool LeaveGroup(sessionPtr& session, uint64 reqId, const string& groupId);
 
+	bool InviteFriend(sessionPtr& session, const Protocol::C_InviteFriend& pkt);
 
 	bool GetGroupMemberList(sessionPtr& session, uint64 reqId, const string& groupId);
 

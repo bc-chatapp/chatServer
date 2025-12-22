@@ -325,6 +325,8 @@ export interface Envelope {
   cChat?: CChat | undefined;
   sChat?: SChat | undefined;
   cAck?: CAck | undefined;
+  cReqHistory?: CReqHistory | undefined;
+  sReqHistory?: SReqHistory | undefined;
   cUploadFile?: CUploadFile | undefined;
   sUploadFile?:
     | SUploadFile
@@ -345,32 +347,16 @@ export interface Envelope {
   cGroupList?: CGroupList | undefined;
   sGroupList?: SGroupList | undefined;
   cJoinGroup?: CJoinGroup | undefined;
-  sJoinGroup?: SJoinGroup | undefined;
+  sJoinGroup?:
+    | SJoinGroup
+    | undefined;
+  /** 번호는 순서에 맞게 */
+  cInviteFriend?: CInviteFriend | undefined;
+  sInviteFriend?: SInviteFriend | undefined;
   cLeaveGroup?: CLeaveGroup | undefined;
   sLeaveGroup?: SLeaveGroup | undefined;
   cGroupMemberList?: CGroupMemberList | undefined;
   sGroupMemberList?: SGroupMemberList | undefined;
-}
-
-export interface ChatPayload {
-  text?: TextMsg | undefined;
-  image?: ImageMsg | undefined;
-  file?: FileMsg | undefined;
-}
-
-export interface TextMsg {
-  message: string;
-}
-
-export interface ImageMsg {
-  url: string;
-  thumbnail: string;
-}
-
-export interface FileMsg {
-  url: string;
-  filename: string;
-  size: number;
 }
 
 /**
@@ -442,6 +428,45 @@ export interface SLogin {
   email: string;
 }
 
+export interface ChatPayload {
+  text?: Text | undefined;
+  image?: Image | undefined;
+  video?: Video | undefined;
+  file?: File | undefined;
+  system?: SystemMsg | undefined;
+}
+
+export interface Text {
+  message: string;
+}
+
+export interface Image {
+  url: string;
+  thumbnail: string;
+}
+
+export interface Video {
+  url: string;
+  thumbnail: string;
+  durationSec: number;
+}
+
+export interface File {
+  url: string;
+  filename: string;
+  size: number;
+  mimeType: string;
+}
+
+export interface SystemMsg {
+  message: string;
+  /** 0: 일반 알림, 1: 초대장(Invite) */
+  type: number;
+  inviteGroupId: string;
+  inviteGroupCode: string;
+  inviteGroupName: string;
+}
+
 export interface CChat {
   convId: string;
   clientMsgId: number;
@@ -454,8 +479,24 @@ export interface SChat {
   clientMsgId: number;
   serverMsgId: number;
   senderId: string;
+  senderName: string;
   payload: ChatPayload | undefined;
   tsServer: number;
+}
+
+export interface CReqHistory {
+  convId: string;
+  /** 클라가 가지고 있는 가장 오래된 메시지 번호 */
+  lastMsgSeq: number;
+  /** 보통 30~50개 */
+  limit: number;
+}
+
+export interface SReqHistory {
+  convId: string;
+  messages: SChat[];
+  /** 더 옛날 게 남아있는지 여부 */
+  isEnd: boolean;
 }
 
 /** 파일 업로드 요청 */
@@ -497,7 +538,15 @@ export interface CFetchOffline {
 }
 
 export interface SMessageBatch {
+  batches: SMessageBatch_ConversationBatch[];
+}
+
+export interface SMessageBatch_ConversationBatch {
+  convId: string;
+  /** 최신 50개 */
   messages: SChat[];
+  /** ★ 안 읽은 전체 개수 (배지 표시용) */
+  unreadCount: number;
 }
 
 export interface SError {
@@ -738,6 +787,17 @@ export interface SGroupInfo {
   myRole: GroupRole;
 }
 
+export interface CInviteFriend {
+  groupId: string;
+  /** 여러 명 동시 초대 가능하게 */
+  friendUserIds: string[];
+}
+
+export interface SInviteFriend {
+  success: boolean;
+  message: string;
+}
+
 export interface CJoinGroup {
   groupCode: string;
 }
@@ -792,6 +852,8 @@ function createBaseEnvelope(): Envelope {
     cChat: undefined,
     sChat: undefined,
     cAck: undefined,
+    cReqHistory: undefined,
+    sReqHistory: undefined,
     cUploadFile: undefined,
     sUploadFile: undefined,
     cSearchUser: undefined,
@@ -807,6 +869,8 @@ function createBaseEnvelope(): Envelope {
     sGroupList: undefined,
     cJoinGroup: undefined,
     sJoinGroup: undefined,
+    cInviteFriend: undefined,
+    sInviteFriend: undefined,
     cLeaveGroup: undefined,
     sLeaveGroup: undefined,
     cGroupMemberList: undefined,
@@ -885,6 +949,12 @@ export const Envelope = {
     if (message.cAck !== undefined) {
       CAck.encode(message.cAck, writer.uint32(258).fork()).ldelim();
     }
+    if (message.cReqHistory !== undefined) {
+      CReqHistory.encode(message.cReqHistory, writer.uint32(266).fork()).ldelim();
+    }
+    if (message.sReqHistory !== undefined) {
+      SReqHistory.encode(message.sReqHistory, writer.uint32(274).fork()).ldelim();
+    }
     if (message.cUploadFile !== undefined) {
       CUploadFile.encode(message.cUploadFile, writer.uint32(282).fork()).ldelim();
     }
@@ -930,17 +1000,23 @@ export const Envelope = {
     if (message.sJoinGroup !== undefined) {
       SJoinGroup.encode(message.sJoinGroup, writer.uint32(442).fork()).ldelim();
     }
+    if (message.cInviteFriend !== undefined) {
+      CInviteFriend.encode(message.cInviteFriend, writer.uint32(450).fork()).ldelim();
+    }
+    if (message.sInviteFriend !== undefined) {
+      SInviteFriend.encode(message.sInviteFriend, writer.uint32(458).fork()).ldelim();
+    }
     if (message.cLeaveGroup !== undefined) {
-      CLeaveGroup.encode(message.cLeaveGroup, writer.uint32(450).fork()).ldelim();
+      CLeaveGroup.encode(message.cLeaveGroup, writer.uint32(482).fork()).ldelim();
     }
     if (message.sLeaveGroup !== undefined) {
-      SLeaveGroup.encode(message.sLeaveGroup, writer.uint32(458).fork()).ldelim();
+      SLeaveGroup.encode(message.sLeaveGroup, writer.uint32(490).fork()).ldelim();
     }
     if (message.cGroupMemberList !== undefined) {
-      CGroupMemberList.encode(message.cGroupMemberList, writer.uint32(466).fork()).ldelim();
+      CGroupMemberList.encode(message.cGroupMemberList, writer.uint32(498).fork()).ldelim();
     }
     if (message.sGroupMemberList !== undefined) {
-      SGroupMemberList.encode(message.sGroupMemberList, writer.uint32(474).fork()).ldelim();
+      SGroupMemberList.encode(message.sGroupMemberList, writer.uint32(506).fork()).ldelim();
     }
     return writer;
   },
@@ -1113,6 +1189,20 @@ export const Envelope = {
 
           message.cAck = CAck.decode(reader, reader.uint32());
           continue;
+        case 33:
+          if (tag !== 266) {
+            break;
+          }
+
+          message.cReqHistory = CReqHistory.decode(reader, reader.uint32());
+          continue;
+        case 34:
+          if (tag !== 274) {
+            break;
+          }
+
+          message.sReqHistory = SReqHistory.decode(reader, reader.uint32());
+          continue;
         case 35:
           if (tag !== 282) {
             break;
@@ -1223,24 +1313,38 @@ export const Envelope = {
             break;
           }
 
-          message.cLeaveGroup = CLeaveGroup.decode(reader, reader.uint32());
+          message.cInviteFriend = CInviteFriend.decode(reader, reader.uint32());
           continue;
         case 57:
           if (tag !== 458) {
             break;
           }
 
+          message.sInviteFriend = SInviteFriend.decode(reader, reader.uint32());
+          continue;
+        case 60:
+          if (tag !== 482) {
+            break;
+          }
+
+          message.cLeaveGroup = CLeaveGroup.decode(reader, reader.uint32());
+          continue;
+        case 61:
+          if (tag !== 490) {
+            break;
+          }
+
           message.sLeaveGroup = SLeaveGroup.decode(reader, reader.uint32());
           continue;
-        case 58:
-          if (tag !== 466) {
+        case 62:
+          if (tag !== 498) {
             break;
           }
 
           message.cGroupMemberList = CGroupMemberList.decode(reader, reader.uint32());
           continue;
-        case 59:
-          if (tag !== 474) {
+        case 63:
+          if (tag !== 506) {
             break;
           }
 
@@ -1284,6 +1388,8 @@ export const Envelope = {
       cChat: isSet(object.cChat) ? CChat.fromJSON(object.cChat) : undefined,
       sChat: isSet(object.sChat) ? SChat.fromJSON(object.sChat) : undefined,
       cAck: isSet(object.cAck) ? CAck.fromJSON(object.cAck) : undefined,
+      cReqHistory: isSet(object.cReqHistory) ? CReqHistory.fromJSON(object.cReqHistory) : undefined,
+      sReqHistory: isSet(object.sReqHistory) ? SReqHistory.fromJSON(object.sReqHistory) : undefined,
       cUploadFile: isSet(object.cUploadFile) ? CUploadFile.fromJSON(object.cUploadFile) : undefined,
       sUploadFile: isSet(object.sUploadFile) ? SUploadFile.fromJSON(object.sUploadFile) : undefined,
       cSearchUser: isSet(object.cSearchUser) ? CSearchUser.fromJSON(object.cSearchUser) : undefined,
@@ -1299,6 +1405,8 @@ export const Envelope = {
       sGroupList: isSet(object.sGroupList) ? SGroupList.fromJSON(object.sGroupList) : undefined,
       cJoinGroup: isSet(object.cJoinGroup) ? CJoinGroup.fromJSON(object.cJoinGroup) : undefined,
       sJoinGroup: isSet(object.sJoinGroup) ? SJoinGroup.fromJSON(object.sJoinGroup) : undefined,
+      cInviteFriend: isSet(object.cInviteFriend) ? CInviteFriend.fromJSON(object.cInviteFriend) : undefined,
+      sInviteFriend: isSet(object.sInviteFriend) ? SInviteFriend.fromJSON(object.sInviteFriend) : undefined,
       cLeaveGroup: isSet(object.cLeaveGroup) ? CLeaveGroup.fromJSON(object.cLeaveGroup) : undefined,
       sLeaveGroup: isSet(object.sLeaveGroup) ? SLeaveGroup.fromJSON(object.sLeaveGroup) : undefined,
       cGroupMemberList: isSet(object.cGroupMemberList) ? CGroupMemberList.fromJSON(object.cGroupMemberList) : undefined,
@@ -1377,6 +1485,12 @@ export const Envelope = {
     if (message.cAck !== undefined) {
       obj.cAck = CAck.toJSON(message.cAck);
     }
+    if (message.cReqHistory !== undefined) {
+      obj.cReqHistory = CReqHistory.toJSON(message.cReqHistory);
+    }
+    if (message.sReqHistory !== undefined) {
+      obj.sReqHistory = SReqHistory.toJSON(message.sReqHistory);
+    }
     if (message.cUploadFile !== undefined) {
       obj.cUploadFile = CUploadFile.toJSON(message.cUploadFile);
     }
@@ -1421,6 +1535,12 @@ export const Envelope = {
     }
     if (message.sJoinGroup !== undefined) {
       obj.sJoinGroup = SJoinGroup.toJSON(message.sJoinGroup);
+    }
+    if (message.cInviteFriend !== undefined) {
+      obj.cInviteFriend = CInviteFriend.toJSON(message.cInviteFriend);
+    }
+    if (message.sInviteFriend !== undefined) {
+      obj.sInviteFriend = SInviteFriend.toJSON(message.sInviteFriend);
     }
     if (message.cLeaveGroup !== undefined) {
       obj.cLeaveGroup = CLeaveGroup.toJSON(message.cLeaveGroup);
@@ -1499,6 +1619,12 @@ export const Envelope = {
     message.cChat = (object.cChat !== undefined && object.cChat !== null) ? CChat.fromPartial(object.cChat) : undefined;
     message.sChat = (object.sChat !== undefined && object.sChat !== null) ? SChat.fromPartial(object.sChat) : undefined;
     message.cAck = (object.cAck !== undefined && object.cAck !== null) ? CAck.fromPartial(object.cAck) : undefined;
+    message.cReqHistory = (object.cReqHistory !== undefined && object.cReqHistory !== null)
+      ? CReqHistory.fromPartial(object.cReqHistory)
+      : undefined;
+    message.sReqHistory = (object.sReqHistory !== undefined && object.sReqHistory !== null)
+      ? SReqHistory.fromPartial(object.sReqHistory)
+      : undefined;
     message.cUploadFile = (object.cUploadFile !== undefined && object.cUploadFile !== null)
       ? CUploadFile.fromPartial(object.cUploadFile)
       : undefined;
@@ -1544,6 +1670,12 @@ export const Envelope = {
     message.sJoinGroup = (object.sJoinGroup !== undefined && object.sJoinGroup !== null)
       ? SJoinGroup.fromPartial(object.sJoinGroup)
       : undefined;
+    message.cInviteFriend = (object.cInviteFriend !== undefined && object.cInviteFriend !== null)
+      ? CInviteFriend.fromPartial(object.cInviteFriend)
+      : undefined;
+    message.sInviteFriend = (object.sInviteFriend !== undefined && object.sInviteFriend !== null)
+      ? SInviteFriend.fromPartial(object.sInviteFriend)
+      : undefined;
     message.cLeaveGroup = (object.cLeaveGroup !== undefined && object.cLeaveGroup !== null)
       ? CLeaveGroup.fromPartial(object.cLeaveGroup)
       : undefined;
@@ -1556,317 +1688,6 @@ export const Envelope = {
     message.sGroupMemberList = (object.sGroupMemberList !== undefined && object.sGroupMemberList !== null)
       ? SGroupMemberList.fromPartial(object.sGroupMemberList)
       : undefined;
-    return message;
-  },
-};
-
-function createBaseChatPayload(): ChatPayload {
-  return { text: undefined, image: undefined, file: undefined };
-}
-
-export const ChatPayload = {
-  encode(message: ChatPayload, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.text !== undefined) {
-      TextMsg.encode(message.text, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.image !== undefined) {
-      ImageMsg.encode(message.image, writer.uint32(18).fork()).ldelim();
-    }
-    if (message.file !== undefined) {
-      FileMsg.encode(message.file, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): ChatPayload {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseChatPayload();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.text = TextMsg.decode(reader, reader.uint32());
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.image = ImageMsg.decode(reader, reader.uint32());
-          continue;
-        case 3:
-          if (tag !== 26) {
-            break;
-          }
-
-          message.file = FileMsg.decode(reader, reader.uint32());
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): ChatPayload {
-    return {
-      text: isSet(object.text) ? TextMsg.fromJSON(object.text) : undefined,
-      image: isSet(object.image) ? ImageMsg.fromJSON(object.image) : undefined,
-      file: isSet(object.file) ? FileMsg.fromJSON(object.file) : undefined,
-    };
-  },
-
-  toJSON(message: ChatPayload): unknown {
-    const obj: any = {};
-    if (message.text !== undefined) {
-      obj.text = TextMsg.toJSON(message.text);
-    }
-    if (message.image !== undefined) {
-      obj.image = ImageMsg.toJSON(message.image);
-    }
-    if (message.file !== undefined) {
-      obj.file = FileMsg.toJSON(message.file);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<ChatPayload>, I>>(base?: I): ChatPayload {
-    return ChatPayload.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<ChatPayload>, I>>(object: I): ChatPayload {
-    const message = createBaseChatPayload();
-    message.text = (object.text !== undefined && object.text !== null) ? TextMsg.fromPartial(object.text) : undefined;
-    message.image = (object.image !== undefined && object.image !== null)
-      ? ImageMsg.fromPartial(object.image)
-      : undefined;
-    message.file = (object.file !== undefined && object.file !== null) ? FileMsg.fromPartial(object.file) : undefined;
-    return message;
-  },
-};
-
-function createBaseTextMsg(): TextMsg {
-  return { message: "" };
-}
-
-export const TextMsg = {
-  encode(message: TextMsg, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.message !== "") {
-      writer.uint32(10).string(message.message);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): TextMsg {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseTextMsg();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.message = reader.string();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): TextMsg {
-    return { message: isSet(object.message) ? globalThis.String(object.message) : "" };
-  },
-
-  toJSON(message: TextMsg): unknown {
-    const obj: any = {};
-    if (message.message !== "") {
-      obj.message = message.message;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<TextMsg>, I>>(base?: I): TextMsg {
-    return TextMsg.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<TextMsg>, I>>(object: I): TextMsg {
-    const message = createBaseTextMsg();
-    message.message = object.message ?? "";
-    return message;
-  },
-};
-
-function createBaseImageMsg(): ImageMsg {
-  return { url: "", thumbnail: "" };
-}
-
-export const ImageMsg = {
-  encode(message: ImageMsg, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.url !== "") {
-      writer.uint32(10).string(message.url);
-    }
-    if (message.thumbnail !== "") {
-      writer.uint32(18).string(message.thumbnail);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): ImageMsg {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseImageMsg();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.url = reader.string();
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.thumbnail = reader.string();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): ImageMsg {
-    return {
-      url: isSet(object.url) ? globalThis.String(object.url) : "",
-      thumbnail: isSet(object.thumbnail) ? globalThis.String(object.thumbnail) : "",
-    };
-  },
-
-  toJSON(message: ImageMsg): unknown {
-    const obj: any = {};
-    if (message.url !== "") {
-      obj.url = message.url;
-    }
-    if (message.thumbnail !== "") {
-      obj.thumbnail = message.thumbnail;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<ImageMsg>, I>>(base?: I): ImageMsg {
-    return ImageMsg.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<ImageMsg>, I>>(object: I): ImageMsg {
-    const message = createBaseImageMsg();
-    message.url = object.url ?? "";
-    message.thumbnail = object.thumbnail ?? "";
-    return message;
-  },
-};
-
-function createBaseFileMsg(): FileMsg {
-  return { url: "", filename: "", size: 0 };
-}
-
-export const FileMsg = {
-  encode(message: FileMsg, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.url !== "") {
-      writer.uint32(10).string(message.url);
-    }
-    if (message.filename !== "") {
-      writer.uint32(18).string(message.filename);
-    }
-    if (message.size !== 0) {
-      writer.uint32(24).int64(message.size);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): FileMsg {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseFileMsg();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.url = reader.string();
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.filename = reader.string();
-          continue;
-        case 3:
-          if (tag !== 24) {
-            break;
-          }
-
-          message.size = longToNumber(reader.int64() as Long);
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): FileMsg {
-    return {
-      url: isSet(object.url) ? globalThis.String(object.url) : "",
-      filename: isSet(object.filename) ? globalThis.String(object.filename) : "",
-      size: isSet(object.size) ? globalThis.Number(object.size) : 0,
-    };
-  },
-
-  toJSON(message: FileMsg): unknown {
-    const obj: any = {};
-    if (message.url !== "") {
-      obj.url = message.url;
-    }
-    if (message.filename !== "") {
-      obj.filename = message.filename;
-    }
-    if (message.size !== 0) {
-      obj.size = Math.round(message.size);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<FileMsg>, I>>(base?: I): FileMsg {
-    return FileMsg.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<FileMsg>, I>>(object: I): FileMsg {
-    const message = createBaseFileMsg();
-    message.url = object.url ?? "";
-    message.filename = object.filename ?? "";
-    message.size = object.size ?? 0;
     return message;
   },
 };
@@ -2732,6 +2553,570 @@ export const SLogin = {
   },
 };
 
+function createBaseChatPayload(): ChatPayload {
+  return { text: undefined, image: undefined, video: undefined, file: undefined, system: undefined };
+}
+
+export const ChatPayload = {
+  encode(message: ChatPayload, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.text !== undefined) {
+      Text.encode(message.text, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.image !== undefined) {
+      Image.encode(message.image, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.video !== undefined) {
+      Video.encode(message.video, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.file !== undefined) {
+      File.encode(message.file, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.system !== undefined) {
+      SystemMsg.encode(message.system, writer.uint32(42).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): ChatPayload {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseChatPayload();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.text = Text.decode(reader, reader.uint32());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.image = Image.decode(reader, reader.uint32());
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.video = Video.decode(reader, reader.uint32());
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.file = File.decode(reader, reader.uint32());
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.system = SystemMsg.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ChatPayload {
+    return {
+      text: isSet(object.text) ? Text.fromJSON(object.text) : undefined,
+      image: isSet(object.image) ? Image.fromJSON(object.image) : undefined,
+      video: isSet(object.video) ? Video.fromJSON(object.video) : undefined,
+      file: isSet(object.file) ? File.fromJSON(object.file) : undefined,
+      system: isSet(object.system) ? SystemMsg.fromJSON(object.system) : undefined,
+    };
+  },
+
+  toJSON(message: ChatPayload): unknown {
+    const obj: any = {};
+    if (message.text !== undefined) {
+      obj.text = Text.toJSON(message.text);
+    }
+    if (message.image !== undefined) {
+      obj.image = Image.toJSON(message.image);
+    }
+    if (message.video !== undefined) {
+      obj.video = Video.toJSON(message.video);
+    }
+    if (message.file !== undefined) {
+      obj.file = File.toJSON(message.file);
+    }
+    if (message.system !== undefined) {
+      obj.system = SystemMsg.toJSON(message.system);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<ChatPayload>, I>>(base?: I): ChatPayload {
+    return ChatPayload.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<ChatPayload>, I>>(object: I): ChatPayload {
+    const message = createBaseChatPayload();
+    message.text = (object.text !== undefined && object.text !== null) ? Text.fromPartial(object.text) : undefined;
+    message.image = (object.image !== undefined && object.image !== null) ? Image.fromPartial(object.image) : undefined;
+    message.video = (object.video !== undefined && object.video !== null) ? Video.fromPartial(object.video) : undefined;
+    message.file = (object.file !== undefined && object.file !== null) ? File.fromPartial(object.file) : undefined;
+    message.system = (object.system !== undefined && object.system !== null)
+      ? SystemMsg.fromPartial(object.system)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseText(): Text {
+  return { message: "" };
+}
+
+export const Text = {
+  encode(message: Text, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.message !== "") {
+      writer.uint32(10).string(message.message);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): Text {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseText();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.message = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Text {
+    return { message: isSet(object.message) ? globalThis.String(object.message) : "" };
+  },
+
+  toJSON(message: Text): unknown {
+    const obj: any = {};
+    if (message.message !== "") {
+      obj.message = message.message;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<Text>, I>>(base?: I): Text {
+    return Text.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<Text>, I>>(object: I): Text {
+    const message = createBaseText();
+    message.message = object.message ?? "";
+    return message;
+  },
+};
+
+function createBaseImage(): Image {
+  return { url: "", thumbnail: "" };
+}
+
+export const Image = {
+  encode(message: Image, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.url !== "") {
+      writer.uint32(10).string(message.url);
+    }
+    if (message.thumbnail !== "") {
+      writer.uint32(18).string(message.thumbnail);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): Image {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseImage();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.url = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.thumbnail = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Image {
+    return {
+      url: isSet(object.url) ? globalThis.String(object.url) : "",
+      thumbnail: isSet(object.thumbnail) ? globalThis.String(object.thumbnail) : "",
+    };
+  },
+
+  toJSON(message: Image): unknown {
+    const obj: any = {};
+    if (message.url !== "") {
+      obj.url = message.url;
+    }
+    if (message.thumbnail !== "") {
+      obj.thumbnail = message.thumbnail;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<Image>, I>>(base?: I): Image {
+    return Image.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<Image>, I>>(object: I): Image {
+    const message = createBaseImage();
+    message.url = object.url ?? "";
+    message.thumbnail = object.thumbnail ?? "";
+    return message;
+  },
+};
+
+function createBaseVideo(): Video {
+  return { url: "", thumbnail: "", durationSec: 0 };
+}
+
+export const Video = {
+  encode(message: Video, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.url !== "") {
+      writer.uint32(10).string(message.url);
+    }
+    if (message.thumbnail !== "") {
+      writer.uint32(18).string(message.thumbnail);
+    }
+    if (message.durationSec !== 0) {
+      writer.uint32(24).int64(message.durationSec);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): Video {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseVideo();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.url = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.thumbnail = reader.string();
+          continue;
+        case 3:
+          if (tag !== 24) {
+            break;
+          }
+
+          message.durationSec = longToNumber(reader.int64() as Long);
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Video {
+    return {
+      url: isSet(object.url) ? globalThis.String(object.url) : "",
+      thumbnail: isSet(object.thumbnail) ? globalThis.String(object.thumbnail) : "",
+      durationSec: isSet(object.durationSec) ? globalThis.Number(object.durationSec) : 0,
+    };
+  },
+
+  toJSON(message: Video): unknown {
+    const obj: any = {};
+    if (message.url !== "") {
+      obj.url = message.url;
+    }
+    if (message.thumbnail !== "") {
+      obj.thumbnail = message.thumbnail;
+    }
+    if (message.durationSec !== 0) {
+      obj.durationSec = Math.round(message.durationSec);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<Video>, I>>(base?: I): Video {
+    return Video.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<Video>, I>>(object: I): Video {
+    const message = createBaseVideo();
+    message.url = object.url ?? "";
+    message.thumbnail = object.thumbnail ?? "";
+    message.durationSec = object.durationSec ?? 0;
+    return message;
+  },
+};
+
+function createBaseFile(): File {
+  return { url: "", filename: "", size: 0, mimeType: "" };
+}
+
+export const File = {
+  encode(message: File, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.url !== "") {
+      writer.uint32(10).string(message.url);
+    }
+    if (message.filename !== "") {
+      writer.uint32(18).string(message.filename);
+    }
+    if (message.size !== 0) {
+      writer.uint32(24).int64(message.size);
+    }
+    if (message.mimeType !== "") {
+      writer.uint32(34).string(message.mimeType);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): File {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseFile();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.url = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.filename = reader.string();
+          continue;
+        case 3:
+          if (tag !== 24) {
+            break;
+          }
+
+          message.size = longToNumber(reader.int64() as Long);
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.mimeType = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): File {
+    return {
+      url: isSet(object.url) ? globalThis.String(object.url) : "",
+      filename: isSet(object.filename) ? globalThis.String(object.filename) : "",
+      size: isSet(object.size) ? globalThis.Number(object.size) : 0,
+      mimeType: isSet(object.mimeType) ? globalThis.String(object.mimeType) : "",
+    };
+  },
+
+  toJSON(message: File): unknown {
+    const obj: any = {};
+    if (message.url !== "") {
+      obj.url = message.url;
+    }
+    if (message.filename !== "") {
+      obj.filename = message.filename;
+    }
+    if (message.size !== 0) {
+      obj.size = Math.round(message.size);
+    }
+    if (message.mimeType !== "") {
+      obj.mimeType = message.mimeType;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<File>, I>>(base?: I): File {
+    return File.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<File>, I>>(object: I): File {
+    const message = createBaseFile();
+    message.url = object.url ?? "";
+    message.filename = object.filename ?? "";
+    message.size = object.size ?? 0;
+    message.mimeType = object.mimeType ?? "";
+    return message;
+  },
+};
+
+function createBaseSystemMsg(): SystemMsg {
+  return { message: "", type: 0, inviteGroupId: "", inviteGroupCode: "", inviteGroupName: "" };
+}
+
+export const SystemMsg = {
+  encode(message: SystemMsg, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.message !== "") {
+      writer.uint32(10).string(message.message);
+    }
+    if (message.type !== 0) {
+      writer.uint32(16).int32(message.type);
+    }
+    if (message.inviteGroupId !== "") {
+      writer.uint32(26).string(message.inviteGroupId);
+    }
+    if (message.inviteGroupCode !== "") {
+      writer.uint32(34).string(message.inviteGroupCode);
+    }
+    if (message.inviteGroupName !== "") {
+      writer.uint32(42).string(message.inviteGroupName);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SystemMsg {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSystemMsg();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.message = reader.string();
+          continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.type = reader.int32();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.inviteGroupId = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.inviteGroupCode = reader.string();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.inviteGroupName = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SystemMsg {
+    return {
+      message: isSet(object.message) ? globalThis.String(object.message) : "",
+      type: isSet(object.type) ? globalThis.Number(object.type) : 0,
+      inviteGroupId: isSet(object.inviteGroupId) ? globalThis.String(object.inviteGroupId) : "",
+      inviteGroupCode: isSet(object.inviteGroupCode) ? globalThis.String(object.inviteGroupCode) : "",
+      inviteGroupName: isSet(object.inviteGroupName) ? globalThis.String(object.inviteGroupName) : "",
+    };
+  },
+
+  toJSON(message: SystemMsg): unknown {
+    const obj: any = {};
+    if (message.message !== "") {
+      obj.message = message.message;
+    }
+    if (message.type !== 0) {
+      obj.type = Math.round(message.type);
+    }
+    if (message.inviteGroupId !== "") {
+      obj.inviteGroupId = message.inviteGroupId;
+    }
+    if (message.inviteGroupCode !== "") {
+      obj.inviteGroupCode = message.inviteGroupCode;
+    }
+    if (message.inviteGroupName !== "") {
+      obj.inviteGroupName = message.inviteGroupName;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SystemMsg>, I>>(base?: I): SystemMsg {
+    return SystemMsg.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SystemMsg>, I>>(object: I): SystemMsg {
+    const message = createBaseSystemMsg();
+    message.message = object.message ?? "";
+    message.type = object.type ?? 0;
+    message.inviteGroupId = object.inviteGroupId ?? "";
+    message.inviteGroupCode = object.inviteGroupCode ?? "";
+    message.inviteGroupName = object.inviteGroupName ?? "";
+    return message;
+  },
+};
+
 function createBaseCChat(): CChat {
   return { convId: "", clientMsgId: 0, payload: undefined, tsClient: 0 };
 }
@@ -2839,7 +3224,7 @@ export const CChat = {
 };
 
 function createBaseSChat(): SChat {
-  return { convId: "", clientMsgId: 0, serverMsgId: 0, senderId: "", payload: undefined, tsServer: 0 };
+  return { convId: "", clientMsgId: 0, serverMsgId: 0, senderId: "", senderName: "", payload: undefined, tsServer: 0 };
 }
 
 export const SChat = {
@@ -2856,11 +3241,14 @@ export const SChat = {
     if (message.senderId !== "") {
       writer.uint32(34).string(message.senderId);
     }
+    if (message.senderName !== "") {
+      writer.uint32(42).string(message.senderName);
+    }
     if (message.payload !== undefined) {
-      ChatPayload.encode(message.payload, writer.uint32(42).fork()).ldelim();
+      ChatPayload.encode(message.payload, writer.uint32(50).fork()).ldelim();
     }
     if (message.tsServer !== 0) {
-      writer.uint32(48).int64(message.tsServer);
+      writer.uint32(56).int64(message.tsServer);
     }
     return writer;
   },
@@ -2905,10 +3293,17 @@ export const SChat = {
             break;
           }
 
-          message.payload = ChatPayload.decode(reader, reader.uint32());
+          message.senderName = reader.string();
           continue;
         case 6:
-          if (tag !== 48) {
+          if (tag !== 50) {
+            break;
+          }
+
+          message.payload = ChatPayload.decode(reader, reader.uint32());
+          continue;
+        case 7:
+          if (tag !== 56) {
             break;
           }
 
@@ -2929,6 +3324,7 @@ export const SChat = {
       clientMsgId: isSet(object.clientMsgId) ? globalThis.Number(object.clientMsgId) : 0,
       serverMsgId: isSet(object.serverMsgId) ? globalThis.Number(object.serverMsgId) : 0,
       senderId: isSet(object.senderId) ? globalThis.String(object.senderId) : "",
+      senderName: isSet(object.senderName) ? globalThis.String(object.senderName) : "",
       payload: isSet(object.payload) ? ChatPayload.fromJSON(object.payload) : undefined,
       tsServer: isSet(object.tsServer) ? globalThis.Number(object.tsServer) : 0,
     };
@@ -2948,6 +3344,9 @@ export const SChat = {
     if (message.senderId !== "") {
       obj.senderId = message.senderId;
     }
+    if (message.senderName !== "") {
+      obj.senderName = message.senderName;
+    }
     if (message.payload !== undefined) {
       obj.payload = ChatPayload.toJSON(message.payload);
     }
@@ -2966,10 +3365,189 @@ export const SChat = {
     message.clientMsgId = object.clientMsgId ?? 0;
     message.serverMsgId = object.serverMsgId ?? 0;
     message.senderId = object.senderId ?? "";
+    message.senderName = object.senderName ?? "";
     message.payload = (object.payload !== undefined && object.payload !== null)
       ? ChatPayload.fromPartial(object.payload)
       : undefined;
     message.tsServer = object.tsServer ?? 0;
+    return message;
+  },
+};
+
+function createBaseCReqHistory(): CReqHistory {
+  return { convId: "", lastMsgSeq: 0, limit: 0 };
+}
+
+export const CReqHistory = {
+  encode(message: CReqHistory, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.convId !== "") {
+      writer.uint32(10).string(message.convId);
+    }
+    if (message.lastMsgSeq !== 0) {
+      writer.uint32(16).int64(message.lastMsgSeq);
+    }
+    if (message.limit !== 0) {
+      writer.uint32(24).int32(message.limit);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CReqHistory {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCReqHistory();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.convId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.lastMsgSeq = longToNumber(reader.int64() as Long);
+          continue;
+        case 3:
+          if (tag !== 24) {
+            break;
+          }
+
+          message.limit = reader.int32();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CReqHistory {
+    return {
+      convId: isSet(object.convId) ? globalThis.String(object.convId) : "",
+      lastMsgSeq: isSet(object.lastMsgSeq) ? globalThis.Number(object.lastMsgSeq) : 0,
+      limit: isSet(object.limit) ? globalThis.Number(object.limit) : 0,
+    };
+  },
+
+  toJSON(message: CReqHistory): unknown {
+    const obj: any = {};
+    if (message.convId !== "") {
+      obj.convId = message.convId;
+    }
+    if (message.lastMsgSeq !== 0) {
+      obj.lastMsgSeq = Math.round(message.lastMsgSeq);
+    }
+    if (message.limit !== 0) {
+      obj.limit = Math.round(message.limit);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CReqHistory>, I>>(base?: I): CReqHistory {
+    return CReqHistory.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CReqHistory>, I>>(object: I): CReqHistory {
+    const message = createBaseCReqHistory();
+    message.convId = object.convId ?? "";
+    message.lastMsgSeq = object.lastMsgSeq ?? 0;
+    message.limit = object.limit ?? 0;
+    return message;
+  },
+};
+
+function createBaseSReqHistory(): SReqHistory {
+  return { convId: "", messages: [], isEnd: false };
+}
+
+export const SReqHistory = {
+  encode(message: SReqHistory, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.convId !== "") {
+      writer.uint32(10).string(message.convId);
+    }
+    for (const v of message.messages) {
+      SChat.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.isEnd !== false) {
+      writer.uint32(24).bool(message.isEnd);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SReqHistory {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSReqHistory();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.convId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.messages.push(SChat.decode(reader, reader.uint32()));
+          continue;
+        case 3:
+          if (tag !== 24) {
+            break;
+          }
+
+          message.isEnd = reader.bool();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SReqHistory {
+    return {
+      convId: isSet(object.convId) ? globalThis.String(object.convId) : "",
+      messages: globalThis.Array.isArray(object?.messages) ? object.messages.map((e: any) => SChat.fromJSON(e)) : [],
+      isEnd: isSet(object.isEnd) ? globalThis.Boolean(object.isEnd) : false,
+    };
+  },
+
+  toJSON(message: SReqHistory): unknown {
+    const obj: any = {};
+    if (message.convId !== "") {
+      obj.convId = message.convId;
+    }
+    if (message.messages?.length) {
+      obj.messages = message.messages.map((e) => SChat.toJSON(e));
+    }
+    if (message.isEnd !== false) {
+      obj.isEnd = message.isEnd;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SReqHistory>, I>>(base?: I): SReqHistory {
+    return SReqHistory.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SReqHistory>, I>>(object: I): SReqHistory {
+    const message = createBaseSReqHistory();
+    message.convId = object.convId ?? "";
+    message.messages = object.messages?.map((e) => SChat.fromPartial(e)) || [];
+    message.isEnd = object.isEnd ?? false;
     return message;
   },
 };
@@ -3383,13 +3961,13 @@ export const CFetchOffline = {
 };
 
 function createBaseSMessageBatch(): SMessageBatch {
-  return { messages: [] };
+  return { batches: [] };
 }
 
 export const SMessageBatch = {
   encode(message: SMessageBatch, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.messages) {
-      SChat.encode(v!, writer.uint32(10).fork()).ldelim();
+    for (const v of message.batches) {
+      SMessageBatch_ConversationBatch.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
@@ -3406,7 +3984,7 @@ export const SMessageBatch = {
             break;
           }
 
-          message.messages.push(SChat.decode(reader, reader.uint32()));
+          message.batches.push(SMessageBatch_ConversationBatch.decode(reader, reader.uint32()));
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -3419,14 +3997,16 @@ export const SMessageBatch = {
 
   fromJSON(object: any): SMessageBatch {
     return {
-      messages: globalThis.Array.isArray(object?.messages) ? object.messages.map((e: any) => SChat.fromJSON(e)) : [],
+      batches: globalThis.Array.isArray(object?.batches)
+        ? object.batches.map((e: any) => SMessageBatch_ConversationBatch.fromJSON(e))
+        : [],
     };
   },
 
   toJSON(message: SMessageBatch): unknown {
     const obj: any = {};
-    if (message.messages?.length) {
-      obj.messages = message.messages.map((e) => SChat.toJSON(e));
+    if (message.batches?.length) {
+      obj.batches = message.batches.map((e) => SMessageBatch_ConversationBatch.toJSON(e));
     }
     return obj;
   },
@@ -3436,7 +4016,98 @@ export const SMessageBatch = {
   },
   fromPartial<I extends Exact<DeepPartial<SMessageBatch>, I>>(object: I): SMessageBatch {
     const message = createBaseSMessageBatch();
+    message.batches = object.batches?.map((e) => SMessageBatch_ConversationBatch.fromPartial(e)) || [];
+    return message;
+  },
+};
+
+function createBaseSMessageBatch_ConversationBatch(): SMessageBatch_ConversationBatch {
+  return { convId: "", messages: [], unreadCount: 0 };
+}
+
+export const SMessageBatch_ConversationBatch = {
+  encode(message: SMessageBatch_ConversationBatch, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.convId !== "") {
+      writer.uint32(10).string(message.convId);
+    }
+    for (const v of message.messages) {
+      SChat.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.unreadCount !== 0) {
+      writer.uint32(24).int32(message.unreadCount);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SMessageBatch_ConversationBatch {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSMessageBatch_ConversationBatch();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.convId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.messages.push(SChat.decode(reader, reader.uint32()));
+          continue;
+        case 3:
+          if (tag !== 24) {
+            break;
+          }
+
+          message.unreadCount = reader.int32();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SMessageBatch_ConversationBatch {
+    return {
+      convId: isSet(object.convId) ? globalThis.String(object.convId) : "",
+      messages: globalThis.Array.isArray(object?.messages) ? object.messages.map((e: any) => SChat.fromJSON(e)) : [],
+      unreadCount: isSet(object.unreadCount) ? globalThis.Number(object.unreadCount) : 0,
+    };
+  },
+
+  toJSON(message: SMessageBatch_ConversationBatch): unknown {
+    const obj: any = {};
+    if (message.convId !== "") {
+      obj.convId = message.convId;
+    }
+    if (message.messages?.length) {
+      obj.messages = message.messages.map((e) => SChat.toJSON(e));
+    }
+    if (message.unreadCount !== 0) {
+      obj.unreadCount = Math.round(message.unreadCount);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SMessageBatch_ConversationBatch>, I>>(base?: I): SMessageBatch_ConversationBatch {
+    return SMessageBatch_ConversationBatch.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SMessageBatch_ConversationBatch>, I>>(
+    object: I,
+  ): SMessageBatch_ConversationBatch {
+    const message = createBaseSMessageBatch_ConversationBatch();
+    message.convId = object.convId ?? "";
     message.messages = object.messages?.map((e) => SChat.fromPartial(e)) || [];
+    message.unreadCount = object.unreadCount ?? 0;
     return message;
   },
 };
@@ -5125,6 +5796,156 @@ export const SGroupInfo = {
       ? GroupInfo.fromPartial(object.group)
       : undefined;
     message.myRole = object.myRole ?? 0;
+    return message;
+  },
+};
+
+function createBaseCInviteFriend(): CInviteFriend {
+  return { groupId: "", friendUserIds: [] };
+}
+
+export const CInviteFriend = {
+  encode(message: CInviteFriend, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.groupId !== "") {
+      writer.uint32(10).string(message.groupId);
+    }
+    for (const v of message.friendUserIds) {
+      writer.uint32(18).string(v!);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CInviteFriend {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCInviteFriend();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.groupId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.friendUserIds.push(reader.string());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CInviteFriend {
+    return {
+      groupId: isSet(object.groupId) ? globalThis.String(object.groupId) : "",
+      friendUserIds: globalThis.Array.isArray(object?.friendUserIds)
+        ? object.friendUserIds.map((e: any) => globalThis.String(e))
+        : [],
+    };
+  },
+
+  toJSON(message: CInviteFriend): unknown {
+    const obj: any = {};
+    if (message.groupId !== "") {
+      obj.groupId = message.groupId;
+    }
+    if (message.friendUserIds?.length) {
+      obj.friendUserIds = message.friendUserIds;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CInviteFriend>, I>>(base?: I): CInviteFriend {
+    return CInviteFriend.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CInviteFriend>, I>>(object: I): CInviteFriend {
+    const message = createBaseCInviteFriend();
+    message.groupId = object.groupId ?? "";
+    message.friendUserIds = object.friendUserIds?.map((e) => e) || [];
+    return message;
+  },
+};
+
+function createBaseSInviteFriend(): SInviteFriend {
+  return { success: false, message: "" };
+}
+
+export const SInviteFriend = {
+  encode(message: SInviteFriend, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.success !== false) {
+      writer.uint32(8).bool(message.success);
+    }
+    if (message.message !== "") {
+      writer.uint32(18).string(message.message);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SInviteFriend {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSInviteFriend();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.success = reader.bool();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.message = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SInviteFriend {
+    return {
+      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
+      message: isSet(object.message) ? globalThis.String(object.message) : "",
+    };
+  },
+
+  toJSON(message: SInviteFriend): unknown {
+    const obj: any = {};
+    if (message.success !== false) {
+      obj.success = message.success;
+    }
+    if (message.message !== "") {
+      obj.message = message.message;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SInviteFriend>, I>>(base?: I): SInviteFriend {
+    return SInviteFriend.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SInviteFriend>, I>>(object: I): SInviteFriend {
+    const message = createBaseSInviteFriend();
+    message.success = object.success ?? false;
+    message.message = object.message ?? "";
     return message;
   },
 };

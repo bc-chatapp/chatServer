@@ -28,8 +28,10 @@ public:
     
 
 
-    static bool GetUser(const string& userId, UserInfo& userInfo);
-    static bool GetUserWithPassword(const string& userId, UserInfo& userInfo);
+    static bool GetUser(const string& userId, UserInfo& OUT userInfo);
+    static bool GetUserWithPassword(const string& userId, UserInfo& OUT userInfo);
+
+    static bool GetUserNameWithId(const string& userId, string& OUT userName);
 
     static bool UpdateAuthToken(const string& userId, const string& authToken);
     

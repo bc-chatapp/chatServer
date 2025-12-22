@@ -38,10 +38,11 @@ message Envelope {
       S_Chat                  s_chat                = 31;
       C_Ack                   c_ack                 = 32;
 
+      C_ReqHistory            c_req_history         = 33;
+      S_ReqHistory            s_req_history         = 34;
+
       C_UploadFile            c_upload_file         = 35;
       S_UploadFile            s_upload_file         = 36;
-
-
 
 
       // Freind
@@ -64,39 +65,22 @@ message Envelope {
   
       C_JoinGroup           c_join_group            = 54; 
       S_JoinGroup           s_join_group            = 55;
+
+
+      C_InviteFriend        c_invite_friend         = 56; // 번호는 순서에 맞게
+      S_InviteFriend        s_invite_friend         = 57;
   
-      C_LeaveGroup          c_leave_group           = 56;
-      S_LeaveGroup          s_leave_group           = 57;
+      C_LeaveGroup          c_leave_group           = 60;
+      S_LeaveGroup          s_leave_group           = 61;
   
-      C_GroupMemberList     c_group_member_list     = 58;
-      S_GroupMemberList     s_group_member_list     = 59;
+      C_GroupMemberList     c_group_member_list     = 62;
+      S_GroupMemberList     s_group_member_list     = 63;
 
 
   }
 }
 
-message ChatPayload {
-  oneof data {
-    TextMsg text   = 1;
-    ImageMsg image = 2;
-    FileMsg file   = 3;
-  }
-}
 
-message TextMsg { 
-    string message = 1; 
-}
-
-message ImageMsg { 
-    string url = 1; 
-    string thumbnail = 2; 
-}
-
-message FileMsg {
-    string url = 1; 
-    string filename = 2; 
-    int64 size = 3; 
-}
 
 
 /*-------------
@@ -166,7 +150,50 @@ message S_Login {
 
 
 
+/*-------------
+    채팅 
+---------------*/
 
+message ChatPayload {
+  oneof data {
+    Text        text   = 1;
+    Image       image  = 2;
+    Video       video  = 3;
+    File        file   = 4;
+    SystemMsg   system = 5;
+  }
+}
+
+message Text { 
+    string message = 1; 
+}
+
+message Image { 
+    string url = 1; 
+    string thumbnail = 2; 
+}
+
+message Video {
+  string    url = 1;
+  string    thumbnail = 2; 
+  int64     duration_sec = 3; 
+}
+
+message File {
+    string url = 1; 
+    string filename = 2; 
+    int64 size = 3; 
+    string mime_type = 4;
+}
+
+message SystemMsg {
+  string message = 1; 
+  int32 type = 2;                   // 0: 일반 알림, 1: 초대장(Invite)
+
+  string invite_group_id = 3;   
+  string invite_group_code = 4;
+  string invite_group_name = 5;
+}
 
 
 message C_Chat {
@@ -177,14 +204,28 @@ message C_Chat {
 }
 
 message S_Chat {
-  string conv_id       = 1;
-  int64 client_msg_id = 2;
-  int64 server_msg_id = 3;
-  string sender_id     = 4;
-  ChatPayload payload  = 5;
-  int64  ts_server     = 6;
+  string conv_id        = 1;
+  int64 client_msg_id   = 2;
+  int64 server_msg_id   = 3;
+  string sender_id      = 4;
+  string sender_name    = 5;
+
+  ChatPayload payload   = 6;
+  int64  ts_server      = 7;
 }
 
+
+message C_ReqHistory {
+  string conv_id = 1;
+  int64 last_msg_seq = 2; // 클라가 가지고 있는 가장 오래된 메시지 번호
+  int32 limit = 3;        // 보통 30~50개
+}
+
+message S_ReqHistory {
+  string conv_id = 1;
+  repeated S_Chat messages = 2;
+  bool is_end = 3;                 // 더 옛날 게 남아있는지 여부
+}
 
 
 /*-----------------------------
@@ -221,9 +262,19 @@ message C_Ack {
 message C_FetchOffline {
     int64 since_ts = 1; 
 } // 오프라인 메시지 동기화
+
+
+
 message S_MessageBatch {
-    repeated S_Chat messages = 1; 
+  message ConversationBatch {
+      string conv_id = 1;
+      repeated S_Chat messages = 2; // 최신 50개
+      int32 unread_count = 3;       // ★ 안 읽은 전체 개수 (배지 표시용)
+  }
+  repeated ConversationBatch batches = 1;
 }
+
+
 
 // 에러 코드 enum (클라이언트-서버 공통)
 enum ErrorCode {
@@ -430,6 +481,16 @@ message S_GroupInfo {
   GroupRole my_role = 2;       // 이 그룹에서 나의 역할
 }
 
+
+message C_InviteFriend {
+  string group_id = 1;
+  repeated string friend_user_ids = 2; // 여러 명 동시 초대 가능하게
+}
+
+message S_InviteFriend {
+  bool success = 1;
+  string message = 2;
+}
 
 
 message C_JoinGroup {

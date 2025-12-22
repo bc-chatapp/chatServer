@@ -16,14 +16,21 @@ public:
 	bool SendGroup(sessionPtr& senderSession, uint64 reqId, const string& groupId, const Protocol::C_Chat& pkt);
 	bool HandleAck(sessionPtr& session, uint64 reqId, const string& convId, int64 serverMsgId);
 
+	bool SendSystemMessage(const string& groupId, const string& message);
+
+	bool HandleReqHistory(sessionPtr& session, uint64 reqId, const Protocol::C_ReqHistory& pkt);
+
+
 protected:
-	static Protocol::S_Chat Build_S_Chat(const string& convId, const string& senderId, const Protocol::C_Chat& pkt);
+	/* Helpers */
+	static Protocol::S_Chat Build_S_Chat(const string& convId, const string& senderId, const string& senderName, const Protocol::C_Chat& pkt);
 	static void PushEnvelope(sessionPtr& session, uint64 reqId, const Protocol::S_Chat& pkt_s_chat);
-
-
+	string GetUserNameWithId(const string& userId);
 private:
 	UserManager& _userManager;
 	
+
+
 	// 에러 처리
 	void HandleErr(sessionPtr& session, uint64 reqId, Protocol::ErrorCode errorCode, const string& errMessage = "");
 };

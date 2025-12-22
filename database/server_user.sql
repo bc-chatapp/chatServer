@@ -14,6 +14,7 @@ FLUSH PRIVILEGES;
    
    
    SELECT * FROM conversations;
+   SELECT * FROM conversation_participants;
    SELECT * FROM messages;
    SELECT * FROM read_status;
    

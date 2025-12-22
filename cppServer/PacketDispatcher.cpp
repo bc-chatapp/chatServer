@@ -99,6 +99,10 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 		Dispatch_C_Ack(session, envelope.request_id(), envelope.c_ack());
 		break;
 
+	case Protocol::Envelope::kCReqHistory:
+		Dispatch_C_ReqHistory(session, envelope.request_id(), envelope.c_req_history());
+		break;
+
 	case Protocol::Envelope::kCUploadFile:
 		Dispatch_C_UploadFile(session, envelope.request_id(), envelope.c_upload_file());
 		break;
@@ -355,6 +359,20 @@ bool PacketDispatcher::Dispatch_C_Ack(sessionPtr& session, uint64 reqId, const P
 
 
 
+bool PacketDispatcher::Dispatch_C_ReqHistory(sessionPtr& session, uint64 reqId, const Protocol::C_ReqHistory& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED);
+		return false;
+	}
+
+	return GChatService->HandleReqHistory(session, reqId, pkt);
+}
+
+
+
 
 
 
@@ -428,49 +446,52 @@ bool PacketDispatcher::Dispatch_C_FetchFriendData(sessionPtr& session, uint64 re
 
 void PacketDispatcher::PushOfflineData(sessionPtr& session, const string& userId)
 {
-	cout << "[PacketDispatcher] PushOfflineData: userId=" << userId << endl;
-	
+	cout << "[PacketDispatcher] PushOfflineData: userId = " << userId << endl;
 	
 
-	
-	// 오프라인 메시지 푸시
-	// read_status 없이 단순하게: is_delivered = 0인 메시지만 조회
 	int totalMessages = 0;
+	const int INIT_LIMIT = 50;
+
 	auto conversations = MessageRepository::GetUserConversations(userId);
+	
+	Protocol::S_MessageBatch pkt_batch;
+
 	for (const auto& convId : conversations) {
-		// 오프라인 메시지 조회 (is_delivered = 0인 메시지)
-		auto unreadMessages = MessageRepository::GetUnreadMessages(userId, convId, 0);
-		
-		if (!unreadMessages.empty()) {
-			// S_MessageBatch 생성
-			Protocol::S_MessageBatch batch;
-			
-			for (const auto& msgInfo : unreadMessages) {
-				// Hex 문자열을 Protobuf 메시지로 역직렬화
-				Protocol::S_Chat sChat;
-				if (MessageRepository::DeserializeMessage(msgInfo.messageData, sChat)) {
-					// 메시지 전송 완료 처리
-					MessageRepository::MarkMessageAsDelivered(convId, msgInfo.msgSeq, userId);
-					
-					// 배치에 추가
-					*batch.add_messages() = sChat;
+		//auto unreadMessages = MessageRepository::GetUnreadMessages(userId, convId, 0);
+		auto recentMsgs = MessageRepository::GetRecentMessages(convId, INIT_LIMIT);
+		int unreadCount = MessageRepository::GetUnreadCount(userId, convId);
+
+		if (!recentMsgs.empty() || unreadCount > 0) {
+
+			auto* convBatch = pkt_batch.add_batches();
+			convBatch->set_conv_id(convId);
+			convBatch->set_unread_count(unreadCount);
+
+
+			for (const auto& msgInfo : recentMsgs) {
+				auto* sChat = convBatch->add_messages();
+
+				Protocol::S_Chat tempChat;
+				if (MessageRepository::DeserializeMessage(msgInfo.messageData, tempChat)) {
+					*sChat = tempChat;
+					sChat->set_server_msg_id(msgInfo.msgSeq);
 					totalMessages++;
 				}
 			}
-			
-			// 배치 전송 (메시지가 있는 경우만)
-			if (batch.messages_size() > 0) {
-				Protocol::Envelope env;
-				env.set_version(GProtoVersion);
-				env.set_request_id(0);  // 서버 푸시
-				*env.mutable_s_message_batch() = batch;
-				SendEnvelope(session, env);
-			}
 		}
 	}
+
+	if (pkt_batch.batches_size() > 0) {
+		Protocol::Envelope env;
+		env.set_version(GProtoVersion); 
+		env.set_request_id(0);          // 0 = Server Push
+		*env.mutable_s_message_batch() = pkt_batch;
+
+		SendEnvelope(session, env);
+	}
 	
-	cout << "[PacketDispatcher] PushOfflineData 완료: userId=" << userId 
-		 << ", offlineMessages=" << totalMessages << "개" << endl;
+	cout << "[PacketDispatcher] PushOfflineData 완료: userId = " << userId 
+		 << ", Messages=" << totalMessages << "개" << endl;
 }
 
 

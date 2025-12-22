@@ -78,7 +78,7 @@ bool UserRepository::EmailExists(const string& email)
 
 
 
-bool UserRepository::GetUser(const string& userId, UserInfo& userInfo) {
+bool UserRepository::GetUser(const string& userId, UserInfo& OUT userInfo) {
     try {
         auto& db = DBManager::GetInstance();
         auto schema = db.GetSchema();
@@ -139,7 +139,7 @@ bool UserRepository::GetUser(const string& userId, UserInfo& userInfo) {
     }
 }
 
-bool UserRepository::GetUserWithPassword(const string& userId, UserInfo& userInfo) {
+bool UserRepository::GetUserWithPassword(const string& userId, UserInfo& OUT userInfo) {
     try {
         auto& db = DBManager::GetInstance();
         auto schema = db.GetSchema();
@@ -199,6 +199,34 @@ bool UserRepository::GetUserWithPassword(const string& userId, UserInfo& userInf
         cerr << "[UserRepository] 사용자 정보 조회 실패: " << err.what() << endl;
         return false;
     }
+}
+
+bool UserRepository::GetUserNameWithId(const string& userId, string& OUT userName)
+{
+    try {
+        auto& db = DBManager::GetInstance();
+        auto schema = db.GetSchema();
+        auto users = schema.getTable("users");
+
+        // 이름만 조회 (최적화)
+        auto result = users.select("name")
+            .where("user_id = :uid")
+            .bind("uid", userId)
+            .execute();
+
+        auto row = result.fetchOne();
+        if (!row) return false;
+
+        if (!row[0].isNull()) {
+            userName = row[0].get<string>();
+            return true;
+        }
+    }
+    catch (const mysqlx::Error& err) {
+        cerr << "[UserRepository] 사용자 이름 조회 실패: " << err.what() << endl;
+        return false;
+    }
+    return false;
 }
 
 
