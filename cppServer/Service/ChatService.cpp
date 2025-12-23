@@ -60,7 +60,6 @@ bool ChatService::SendGroup(sessionPtr& senderSession, uint64 reqId, const strin
 
     string senderName = GetUserNameWithId(senderId);
 
-
     const string convId = "group:" + groupId;
     MessageRepository::CreateOrGetConversation(convId, "group");
   
@@ -93,15 +92,33 @@ bool ChatService::SendGroup(sessionPtr& senderSession, uint64 reqId, const strin
 
 
 
-bool ChatService::HandleAck(sessionPtr& session, uint64 reqId, const string& convId, int64 serverMsgId)
+bool ChatService::HandleAck(sessionPtr& session, uint64 reqId, bool bDirect, const string& targetId, int64 serverMsgId)
 {
     auto serverSession = static_pointer_cast<ServerSession>(session);
     const string userId = serverSession->GetUserId();
     if (userId.empty()) return false;
 
+    string dbConvId;
 
-    MessageRepository::UpdateReadStatus(userId, convId, serverMsgId);
+    if (bDirect) {
+        if (userId < targetId) {
+            dbConvId = "direct:" + userId + "_" + targetId;
+        }
+        else {
+            dbConvId = "direct:" + targetId + "_" + userId;
+        }
+    }
+    else {
+        dbConvId = "group:" + targetId;
+    }
 
+
+
+    bool success = MessageRepository::UpdateReadStatus(userId, dbConvId, serverMsgId);
+    if (!success) {
+        cout << "[ChatService] DB Update 실패" << endl;
+        return false;
+    }
     /* TODO 상대가 읽음 처리 */
 
     cout << "[ChatService] Ack 처리: User=" << userId << " ReadUpTo=" << serverMsgId << endl;

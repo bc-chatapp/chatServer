@@ -14,7 +14,7 @@ public:
 
 	bool SendDirect(sessionPtr& senderSession, uint64 reqId, const string& receiverId, const Protocol::C_Chat& pkt);
 	bool SendGroup(sessionPtr& senderSession, uint64 reqId, const string& groupId, const Protocol::C_Chat& pkt);
-	bool HandleAck(sessionPtr& session, uint64 reqId, const string& convId, int64 serverMsgId);
+	bool HandleAck(sessionPtr& session, uint64 reqId, bool bDirect, const string& targetId, int64 serverMsgId);
 
 	bool SendSystemMessage(const string& groupId, const string& message);
 

@@ -38,7 +38,7 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 	auto serverSession = static_pointer_cast<ServerSession>(session);
 	if (!passAuth) {
 		if (false == serverSession->IsAuthenticated(envelope.auth_token())) {
-			// 토큰 검증 실패 시 DB에서 토큰으로 사용자 조회
+
 			string userId;
 			if (UserRepository::GetUserIdByToken(envelope.auth_token(), userId)) {
 				// 토큰이 유효하면 세션 설정
@@ -47,23 +47,28 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 				GUserManager->UpsertSession(userId, session);
 				
 				// 오프라인 정보 푸시 (한 번만)
-				if (!serverSession->HasPushedOfflineData()) {
+				/*if (!serverSession->HasPushedOfflineData()) {
 					PushOfflineData(session, userId);
 					serverSession->SetHasPushedOfflineData(true);
-				}
+				}*/
+
+				// 이제는 클라이언트에서 요청
+
 			} else {
 				DispatchError(session, envelope.request_id(), ERR_INVALID_TOKEN);
 				return;
 			}
 		} else {
 			// 이미 인증된 세션이지만 오프라인 정보를 아직 푸시하지 않았다면 푸시
-			if (!serverSession->HasPushedOfflineData()) {
+			/*if (!serverSession->HasPushedOfflineData()) {
 				const string userId = serverSession->GetUserId();
 				if (!userId.empty()) {
 					PushOfflineData(session, userId);
 					serverSession->SetHasPushedOfflineData(true);
 				}
-			}
+			}*/
+
+			// 이제는 클라이언트에서 요청
 		}
 	}
 
@@ -90,11 +95,15 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 	case Protocol::Envelope::kCLogin:
 		Dispatch_C_Login(session, envelope.request_id(), envelope.c_login());
 		break;
+	case Protocol::Envelope::kCFetchOffline:
+		Dispatch_C_FetchOffline(session, envelope.request_id(), envelope.c_fetch_offline());
+		break;
 
 		/* 채팅 */
 	case Protocol::Envelope::kCChat:
 		Dispatch_C_Chat(session, envelope.request_id(), envelope.c_chat());
 		break;
+
 	case Protocol::Envelope::kCAck:
 		Dispatch_C_Ack(session, envelope.request_id(), envelope.c_ack());
 		break;
@@ -282,6 +291,26 @@ bool PacketDispatcher::Dispatch_C_Login(sessionPtr& session, uint64 reqId, const
 	return GAuthService->Login(session, reqId, userId, password);
 }
 
+
+bool PacketDispatcher::Dispatch_C_FetchOffline(sessionPtr& session, uint64 reqId, const Protocol::C_FetchOffline& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED);
+		return false;
+	}
+
+	PushOfflineData(session, reqId, userId);
+
+	serverSession->SetHasPushedOfflineData(true);
+
+	return true;
+}
+
+
+
+
 bool PacketDispatcher::Dispatch_C_Chat(sessionPtr& session, uint64 reqId, const Protocol::C_Chat& pkt)
 {
 	auto serverSession = static_pointer_cast<ServerSession>(session);
@@ -297,10 +326,9 @@ bool PacketDispatcher::Dispatch_C_Chat(sessionPtr& session, uint64 reqId, const 
 	}
 
 	/* TODO : Payload image/text/file 구분  */
+	string targetId;
+	ConvType type = ParseConvId(pkt.conv_id(), targetId);
 
-	const string convId = pkt.conv_id();
-	constexpr const char* pDirect = "direct:";
-	constexpr const char* pGroup = "group:";
 
 	string msgText = "[첨부]";
 	if (pkt.has_payload() && pkt.payload().has_text()) {
@@ -308,53 +336,40 @@ bool PacketDispatcher::Dispatch_C_Chat(sessionPtr& session, uint64 reqId, const 
 	}
 	cout << "[Server] C_Chat conv=" << pkt.conv_id() << " msg=\"" << msgText << "\"" << endl;
 
-	if (convId.rfind(pDirect, 0) == 0) {
-		const string receiverId = convId.substr(strlen(pDirect));
-		if (receiverId.empty()) {
-			DispatchError(session, reqId, ERR_INVALID_RECEIVER_ID);
-			return false;
-		}
 
-		return GChatService->SendDirect(session, reqId, receiverId, pkt);
+	if (type == ConvType::Direct) {
+		return GChatService->SendDirect(session, reqId, targetId, pkt);
 	}
-	else if (convId.rfind(pGroup, 0) == 0)
-	{
-		const string groupId = convId.substr(strlen(pGroup));
-		if (groupId.empty()) {
-			DispatchError(session, reqId, ERR_INVALID_RECEIVER_ID);
-			return false;
-		} 
-
-		return GChatService->SendGroup(session, reqId, groupId, pkt);
+	else if (type == ConvType::Group) {
+		return GChatService->SendGroup(session, reqId, targetId, pkt);
 	}
-
 
 	DispatchError(session, reqId, ERR_INVALID_CONV_ID);
 	return false;
 }
 
+
+
 bool PacketDispatcher::Dispatch_C_Ack(sessionPtr& session, uint64 reqId, const Protocol::C_Ack& pkt)
 {
 	auto serverSession = static_pointer_cast<ServerSession>(session);
-	const string userId = serverSession->GetUserId();
-	if (userId.empty()) {
+	const string senderId = serverSession->GetUserId();
+	if (senderId.empty()) {
 		DispatchError(session, reqId, ERR_UNAUTHORIZED);
 		return false;
 	}
 
-	const string convId = pkt.conv_id();
-	int64 serverMsgId = pkt.server_msg_id();
+	string targetId;
+	ConvType type = ParseConvId(pkt.conv_id(), targetId);
 
-	cout << "[Server] C_Ack 수신: userId=" << userId << ", convId=" << convId 
-		 << ", serverMsgId=" << serverMsgId << endl;
-
-	if (convId.empty() || serverMsgId <= 0) {
+	if (type == ConvType::Error || targetId.empty()) {
+		cout << "[Dispatcher] Ack 포맷 에러: " << pkt.conv_id() << endl;
 		DispatchError(session, reqId, ERR_INVALID_ACK);
 		return false;
 	}
 
-	// ChatService로 위임
-	return GChatService->HandleAck(session, reqId, convId, serverMsgId);
+	bool bDirect = (type == ConvType::Direct);
+	return GChatService->HandleAck(session, reqId, bDirect, targetId, pkt.server_msg_id());
 }
 
 
@@ -444,7 +459,7 @@ bool PacketDispatcher::Dispatch_C_FetchFriendData(sessionPtr& session, uint64 re
 
 
 
-void PacketDispatcher::PushOfflineData(sessionPtr& session, const string& userId)
+void PacketDispatcher::PushOfflineData(sessionPtr& session, uint64 reqId, const string& userId)
 {
 	cout << "[PacketDispatcher] PushOfflineData: userId = " << userId << endl;
 	
@@ -484,7 +499,7 @@ void PacketDispatcher::PushOfflineData(sessionPtr& session, const string& userId
 	if (pkt_batch.batches_size() > 0) {
 		Protocol::Envelope env;
 		env.set_version(GProtoVersion); 
-		env.set_request_id(0);          // 0 = Server Push
+		env.set_request_id(reqId);          // 0 = Server Push
 		*env.mutable_s_message_batch() = pkt_batch;
 
 		SendEnvelope(session, env);

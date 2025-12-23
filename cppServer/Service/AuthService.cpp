@@ -236,8 +236,10 @@ bool AuthService::Login(sessionPtr& session, uint64 reqId, const string& userId,
     cout << "[AuthService] 로그인 성공: userId=" << userId << endl;
     
     // 로그인 성공 후 오프라인 정보 푸시
-    PacketDispatcher::PushOfflineData(session, userId);
-    serverSession->SetHasPushedOfflineData(true);
+    /*PacketDispatcher::PushOfflineData(session, userId);
+    serverSession->SetHasPushedOfflineData(true);*/
+
+    // 이제는 클라에서 요청
     
     return true;
 }

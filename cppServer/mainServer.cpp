@@ -49,7 +49,7 @@ int main()
 		return 0;
 	}
 
-	wcout << L"[Server] Listening on 127.0.0.1:7777..." << endl;
+	wcout << L"[Server] Listening on 127.0.0.1:3000..." << endl;
 
 	// 5. 워커 스레드 생성 (CPU 코어 수만큼)
 	const int32 threadCount = thread::hardware_concurrency();
