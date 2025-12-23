@@ -44,7 +44,7 @@ public:
     static void DispatchError(sessionPtr& session, uint64 reqId, Protocol::ErrorCode errorCode, const string& errMessage = "");
     
     // 오프라인 정보 푸시
-    static void PushOfflineData(sessionPtr& session, const string& userId);
+    static void PushOfflineData(sessionPtr& session, uint64 reqId, const string& userId);
 
 
 protected:
@@ -52,6 +52,10 @@ protected:
     static bool Dispatch_C_CheckEmail(sessionPtr& session, uint64 reqId, const Protocol::C_CheckEmail& pkt);
     static bool Dispatch_C_SignUp(sessionPtr& session, uint64 reqId, const Protocol::C_SignUp& pkt);
     static bool Dispatch_C_Login(sessionPtr& session, uint64 reqId, const Protocol::C_Login& pkt);
+    static bool Dispatch_C_FetchOffline(sessionPtr& session, uint64 reqId, const Protocol::C_FetchOffline& pkt);
+    
+    
+    
     static bool Dispatch_C_Chat(sessionPtr& session, uint64 reqId, const Protocol::C_Chat& pkt);
     static bool Dispatch_C_Ack(sessionPtr& session, uint64 reqId, const Protocol::C_Ack& pkt);
     static bool Dispatch_C_ReqHistory(sessionPtr& session, uint64 reqId, const Protocol::C_ReqHistory& pkt);
@@ -75,8 +79,25 @@ protected:
     static bool Dispatch_C_LeaveGroup(sessionPtr& session, uint64 reqId, const Protocol::C_LeaveGroup& pkt);
     static bool Dispatch_C_GroupMemberList(sessionPtr& session, uint64 reqId, const Protocol::C_GroupMemberList& pkt);
     
-public:
+private:
 
+    enum class ConvType { Error = 0, Direct = 1, Group = 2 };
+    static ConvType ParseConvId(const string& rawConvId, string& outId)
+    {
+        constexpr const char* pDirect = "direct:";
+        constexpr const char* pGroup = "group:";
+
+        if (rawConvId.find(pDirect) == 0) {
+            outId = rawConvId.substr(strlen(pDirect));
+            return ConvType::Direct;
+        }
+        else if (rawConvId.find(pGroup) == 0) {
+            outId = rawConvId.substr(strlen(pGroup));
+            return ConvType::Group;
+        }
+
+        return ConvType::Error;
+    }
 };
 
 

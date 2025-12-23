@@ -22,7 +22,6 @@ FLUSH PRIVILEGES;
 	SELECT * FROM `group_members`;
    
    
-   TRUNCATE TABLE read_status;
    
    
 SET FOREIGN_KEY_CHECKS = 0; -- 검사 끄기
