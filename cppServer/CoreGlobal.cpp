@@ -6,6 +6,8 @@
 #include "Service/FriendService.h"
 #include "Service/GroupService.h"
 
+#include "Service/VerificationManager.h"
+
 #include "Service/AuthService.h"
 #include "Service/FileService.h"
 #include "Cloud/CloudStorageGCS.h"
@@ -24,6 +26,7 @@ UserManager* GUserManager = nullptr;
 ChatService* GChatService = nullptr;
 FriendService* GFriendService = nullptr;
 GroupService* GGroupService = nullptr;
+VerificationManager* GVerificationManager = nullptr;
 
 AuthService* GAuthService = nullptr;
 FileService* GFileService = nullptr;
@@ -101,6 +104,9 @@ CoreGlobal::CoreGlobal()
     _chatService = make_unique<ChatService>(*_userManager);
     _friendService = make_unique<FriendService>(*_userManager);
     _groupService = make_unique<GroupService>(*_userManager);
+    _verificationManager = make_unique<VerificationManager>(*_userManager);
+
+
     _authService = make_unique<AuthService>(*_userManager);
     
     // CloudStorage 초기화 (파일에서 설정 읽기)
@@ -124,6 +130,8 @@ CoreGlobal::CoreGlobal()
     GChatService = _chatService.get();
     GFriendService = _friendService.get();
     GGroupService = _groupService.get();
+    GVerificationManager = _verificationManager.get();
+
 
     GAuthService = _authService.get();
     GFileService = _fileService.get();
@@ -133,6 +141,8 @@ CoreGlobal::~CoreGlobal()
 {
     GFileService = nullptr;
     GAuthService = nullptr;
+
+    GVerificationManager = nullptr;
     GGroupService = nullptr;
     GFriendService = nullptr;
     GChatService = nullptr;
@@ -141,6 +151,9 @@ CoreGlobal::~CoreGlobal()
     _fileService.reset();
     _cloudStorage.reset();
     _authService.reset();
+
+    _verificationManager.reset();
+
     _groupService.reset();
     _friendService.reset();
     _chatService.reset();
@@ -154,6 +167,8 @@ void CoreGlobal::Reset()
     _authService.reset();
     _friendService.reset();
     _groupService.reset();
+    _verificationManager.reset();
+
     _chatService.reset();
     _userManager.reset();
 
@@ -161,6 +176,8 @@ void CoreGlobal::Reset()
     GAuthService = nullptr;
     GFriendService = nullptr;
     GGroupService = nullptr;
+    GVerificationManager = nullptr;
+
     GChatService = nullptr;
     GUserManager = nullptr;
 
@@ -168,6 +185,7 @@ void CoreGlobal::Reset()
     _chatService = make_unique<ChatService>(*_userManager);
     _friendService = make_unique<FriendService>(*_userManager);
     _groupService = make_unique<GroupService>(*_userManager);
+    _verificationManager = make_unique<VerificationManager>(*_userManager);
 
     _authService = make_unique<AuthService>(*_userManager);
     
@@ -192,6 +210,8 @@ void CoreGlobal::Reset()
     GChatService = _chatService.get();
     GFriendService = _friendService.get();
     GGroupService = _groupService.get();
+    GVerificationManager = _verificationManager.get();
+
     GAuthService = _authService.get();
     GFileService = _fileService.get();
 }

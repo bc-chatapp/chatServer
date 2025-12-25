@@ -21,6 +21,7 @@ bool DBManager::Initialize(const string& host, int port,
             mysqlx::SessionOption::DB, database
         );
 
+
         _session = make_unique<mysqlx::Session>(settings);
         _database = database;
 

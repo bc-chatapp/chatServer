@@ -6,6 +6,7 @@ class UserManager;
 class ChatService;
 class FriendService;
 class GroupService;
+class VerificationManager;
 
 class AuthService;
 class FileService;
@@ -21,6 +22,7 @@ extern UserManager* GUserManager;
 extern ChatService* GChatService;
 extern FriendService* GFriendService;
 extern GroupService* GGroupService;
+extern VerificationManager* GVerificationManager;
 
 extern AuthService* GAuthService;
 extern FileService* GFileService;
@@ -39,6 +41,7 @@ private:
     unique_ptr<ChatService> _chatService;
     unique_ptr<FriendService> _friendService;
     unique_ptr<GroupService> _groupService;
+    unique_ptr<VerificationManager> _verificationManager;
 
     unique_ptr<AuthService> _authService;
     unique_ptr<CloudStorage> _cloudStorage;

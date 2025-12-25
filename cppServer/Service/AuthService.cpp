@@ -7,6 +7,7 @@
 #include "../CoreGlobal.h"
 
 #include "VerificationManager.h"
+
 #include "TokenManager.h"
 #include <sstream>
 #include <iomanip>
@@ -57,51 +58,6 @@ bool AuthService::CheckEmailAvailable(sessionPtr& session, uint64 reqId, const s
 
 
 
-
-bool AuthService::RequestEmailVerification(sessionPtr& session, uint64 reqId, const string& email)
-{
-    if (UserRepository::EmailExists(email)) {
-        Protocol::S_RequestEmailVerify pkt;
-        pkt.set_success(false);
-        pkt.set_message("이미 가입된 이메일입니다.");
-
-        // 전송 로직... (SendEnvelope)
-        return false;
-    }
-
-    string code = VerificationManager::CreateVerificationCode(email);
-    cout << "[Email 발송] To: " << email << " | Code: [" << code << "]" << endl;
-
-    Protocol::S_RequestEmailVerify pkt;
-    pkt.set_success(true);
-    pkt.set_message("인증번호가 발송되었습니다.");
-
-    Protocol::Envelope env;
-    env.set_version(GProtoVersion);
-    env.set_request_id(reqId);
-    env.mutable_s_req_email_verify()->CopyFrom(pkt);
-    PacketDispatcher::SendEnvelope(session, env);
-
-    return true;
-}
-
-bool AuthService::ConfirmEmailVerification(sessionPtr& session, uint64 reqId, const string& email, const string& code)
-{
-    bool valid = VerificationManager::CheckVerificationCode(email, code);
-
-    Protocol::S_ConfirmEmailVerify pkt;
-    pkt.set_success(valid);
-
-    Protocol::Envelope env;
-    env.set_version(GProtoVersion);
-    env.set_request_id(reqId);
-    env.mutable_s_confirm_email_verify()->CopyFrom(pkt);
-    PacketDispatcher::SendEnvelope(session, env);
-
-    return valid;
-}
-
-
 /*--------------------
         SignUp
 ---------------------*/
@@ -150,6 +106,9 @@ bool AuthService::SignUp(sessionPtr& session, uint64 reqId, const string& userId
     env.set_version(GProtoVersion);
     env.set_request_id(reqId);
     env.mutable_s_signup()->CopyFrom(pkt_s_signup);
+
+
+    //GVerificationManager->();
     
     PacketDispatcher::SendEnvelope(session, env);
     return success;

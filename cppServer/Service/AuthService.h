@@ -15,9 +15,7 @@ public:
 
 	bool CheckIdAvailable(sessionPtr& session, uint64 reqId, const string& userId);
 	bool CheckEmailAvailable(sessionPtr& session, uint64 reqId, const string& email);
-	bool RequestEmailVerification(sessionPtr& session, uint64 reqId, const string& email);
-	bool ConfirmEmailVerification(sessionPtr& session, uint64 reqId, const string& email, const string& code);
-
+	
 
 	// 회원가입
 	bool SignUp(sessionPtr& session, uint64 reqId, const string& userId,
