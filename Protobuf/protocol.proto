@@ -17,6 +17,8 @@ message Envelope {
       S_RequestEmailVerify    s_req_email_verify        = 15;
       C_ConfirmEmailVerify    c_confirm_email_verify    = 16;
       S_ConfirmEmailVerify    s_confirm_email_verify    = 17;
+
+
       C_SignUp                c_signup                  = 18;
       S_SignUp                s_signup                  = 19;
 
