@@ -22,6 +22,9 @@ FLUSH PRIVILEGES;
 	SELECT * FROM `group_members`;
    
    
+INSERT INTO group_members (group_id, user_id, role, joined_at)
+VALUES ('1db53609e9b56272e11487c83a13d879', 'dummy001', 'member', now());
+   
    
    
 SET FOREIGN_KEY_CHECKS = 0; -- 검사 끄기
@@ -32,4 +35,8 @@ SET FOREIGN_KEY_CHECKS = 1; -- 다시 켜기
 DELETE FROM friends 
 WHERE (user_id = 'user01' AND friend_id = 'dummy001') 
    OR (user_id = 'dummy001' AND friend_id = 'user01');
+   
+   
+
+
    

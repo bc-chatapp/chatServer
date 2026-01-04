@@ -194,12 +194,59 @@ bool AuthService::Login(sessionPtr& session, uint64 reqId, const string& userId,
     
     cout << "[AuthService] 로그인 성공: userId=" << userId << endl;
     
-    // 로그인 성공 후 오프라인 정보 푸시
-    /*PacketDispatcher::PushOfflineData(session, userId);
-    serverSession->SetHasPushedOfflineData(true);*/
+    return true;
+}
 
-    // 이제는 클라에서 요청
-    
+bool AuthService::LoginByToken(sessionPtr& session, uint64 reqId, const string& token, const string& userId)
+{
+    cout << "[AuthService] Token Login 요청: ID=" << userId << endl;
+
+    string dbUserId;
+    if (token.empty() || !UserRepository::GetUserIdByToken(token, dbUserId)) {
+        HandleErr(session, reqId, ERR_INVALID_TOKEN);
+        return false;
+    }
+
+    if (dbUserId != userId) {
+        HandleErr(session, reqId, ERR_INVALID_TOKEN); 
+        return false;
+    }
+
+    UserInfo userInfo;
+    if (!UserRepository::GetUser(dbUserId, userInfo)) {
+        HandleErr(session, reqId, ERR_USER_NOT_FOUND);
+        return false;
+    }
+
+    UserRepository::UpdateLastSeen(dbUserId);
+
+    auto serverSession = static_pointer_cast<ServerSession>(session);
+    serverSession->SetUserId(userId);
+    serverSession->SetAuthToken(token);
+
+    // 기존 세션 확인 및 처리
+    if (auto logined = GUserManager->FindSession(userId)) {
+        if (logined != session) {
+            logined->Disconnect();
+        }
+    }
+    GUserManager->UpsertSession(userId, session);
+
+    Protocol::S_Login pkt_s_login;
+    pkt_s_login.set_user_id(userId);
+    pkt_s_login.set_auth_token(token);
+
+    pkt_s_login.set_name(userInfo.name);
+    pkt_s_login.set_email(userInfo.email);
+
+    Protocol::Envelope env;
+    env.set_version(GProtoVersion);
+    env.set_request_id(reqId);
+    env.mutable_s_login()->CopyFrom(pkt_s_login);
+    PacketDispatcher::SendEnvelope(session, env);
+
+    cout << "[AuthService] 로그인 성공: userId=" << userId << endl;
+
     return true;
 }
 

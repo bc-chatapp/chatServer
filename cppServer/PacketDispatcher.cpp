@@ -47,12 +47,6 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 				GUserManager->UpsertSession(userId, session);
 				
 				// 오프라인 정보 푸시 (한 번만)
-				/*if (!serverSession->HasPushedOfflineData()) {
-					PushOfflineData(session, userId);
-					serverSession->SetHasPushedOfflineData(true);
-				}*/
-
-				// 이제는 클라이언트에서 요청
 
 			} else {
 				DispatchError(session, envelope.request_id(), ERR_INVALID_TOKEN);
@@ -60,15 +54,7 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 			}
 		} else {
 			// 이미 인증된 세션이지만 오프라인 정보를 아직 푸시하지 않았다면 푸시
-			/*if (!serverSession->HasPushedOfflineData()) {
-				const string userId = serverSession->GetUserId();
-				if (!userId.empty()) {
-					PushOfflineData(session, userId);
-					serverSession->SetHasPushedOfflineData(true);
-				}
-			}*/
 
-			// 이제는 클라이언트에서 요청
 		}
 	}
 
@@ -93,7 +79,7 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 
 		/* 로그인*/
 	case Protocol::Envelope::kCLogin:
-		Dispatch_C_Login(session, envelope.request_id(), envelope.c_login());
+		Dispatch_C_Login(session, envelope.request_id(), envelope);
 		break;
 	case Protocol::Envelope::kCFetchOffline:
 		Dispatch_C_FetchOffline(session, envelope.request_id(), envelope.c_fetch_offline());
@@ -155,6 +141,7 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 	}
 }
 
+
 shared_ptr<SendBuffer> PacketDispatcher::MakeSendBuffer(Protocol::Envelope& envelope)
 {
 	string body;
@@ -186,6 +173,7 @@ void PacketDispatcher::DispatchError(sessionPtr& session, uint64 reqId, const st
 	// 하위 호환성을 위해 기본 에러 코드 사용
 	DispatchError(session, reqId, ERR_UNKNOWN, errMessage);
 }
+
 
 void PacketDispatcher::DispatchError(sessionPtr& session, uint64 reqId, ErrorCode errorCode, const string& errMessage)
 {
@@ -257,6 +245,96 @@ void PacketDispatcher::DispatchError(sessionPtr& session, uint64 reqId, ErrorCod
 	SendEnvelope(session, env);
 }
 
+
+
+void PacketDispatcher::PushOfflineData(sessionPtr& session, uint64 reqId, const string& userId, int64_t since_ts)
+{
+	cout << "[PacketDispatcher] PushOfflineData: userId = " << userId << endl;
+
+	int totalMessages = 0;
+	const int INIT_LIMIT = 50;
+	const int OFFLINE_LIMIT = 300;
+
+	Protocol::S_MessageBatch pkt_batch;
+
+	/* 1:1 채팅방 */
+	auto conversations = MessageRepository::GetUserConversations(userId);
+	for (const auto& convId : conversations) {
+		vector<MessageInfo> messages;
+
+		if (since_ts > 0) {
+			messages = MessageRepository::GetMessagesAfter(convId, since_ts, OFFLINE_LIMIT);
+		}
+		else {
+			messages = MessageRepository::GetRecentMessages(convId, INIT_LIMIT);
+		}
+
+		int unreadCount = MessageRepository::GetUnreadCount(userId, convId);
+
+		if (!messages.empty() || unreadCount > 0) {
+			auto* convBatch = pkt_batch.add_batches();
+			convBatch->set_conv_id(convId);
+			convBatch->set_unread_count(unreadCount);
+
+			for (const auto& msgInfo : messages) {
+				auto* sChat = convBatch->add_messages();
+				Protocol::S_Chat tempChat;
+
+				if (MessageRepository::DeserializeMessage(msgInfo.messageData, tempChat)) {
+					*sChat = tempChat;
+					sChat->set_server_msg_id(msgInfo.msgSeq);
+					totalMessages++;
+				}
+			}
+		}
+	}
+
+	/* 그룹 채팅방 */
+	auto groups = GroupRepository::GetUserGroups(userId);
+	for (const auto& group : groups) {
+		string convId = "group:" + group.groupId;
+
+		vector<MessageInfo> messages;
+
+		if (since_ts > 0) 
+			messages = MessageRepository::GetMessagesAfter(convId, since_ts, OFFLINE_LIMIT);
+		else 
+			messages = MessageRepository::GetRecentMessages(convId, INIT_LIMIT);
+		
+		int unreadCount = MessageRepository::GetUnreadCount(userId, convId);
+
+		if (!messages.empty() || unreadCount > 0) {
+			auto* convBatch = pkt_batch.add_batches();
+			convBatch->set_conv_id(convId);
+			convBatch->set_unread_count(unreadCount);
+
+			for (const auto& msgInfo : messages) {
+				auto* sChat = convBatch->add_messages();
+				Protocol::S_Chat tempChat;
+				if (MessageRepository::DeserializeMessage(msgInfo.messageData, tempChat)) {
+					*sChat = tempChat;
+					sChat->set_server_msg_id(msgInfo.msgSeq);
+					totalMessages++;
+				}
+			}
+		}
+	}
+
+	Protocol::Envelope env;
+	env.set_version(GProtoVersion);
+	env.set_request_id(reqId);
+	*env.mutable_s_message_batch() = pkt_batch;
+
+	SendEnvelope(session, env);
+	cout << "[PacketDispatcher] PushOfflineData 완료: Messages = " << totalMessages << "개" << endl;
+
+}
+
+
+
+
+
+
 bool PacketDispatcher::Dispatch_C_CheckId(sessionPtr& session, uint64 reqId, const Protocol::C_CheckId& pkt)
 {
 	const string userId = pkt.user_id();
@@ -264,12 +342,14 @@ bool PacketDispatcher::Dispatch_C_CheckId(sessionPtr& session, uint64 reqId, con
 	return GAuthService->CheckIdAvailable(session, reqId, userId);
 }
 
+
 bool PacketDispatcher::Dispatch_C_CheckEmail(sessionPtr& session, uint64 reqId, const Protocol::C_CheckEmail& pkt)
 {
 	const string email = pkt.email();
 
 	return GAuthService->CheckEmailAvailable(session, reqId, email);
 }
+
 
 bool PacketDispatcher::Dispatch_C_SignUp(sessionPtr& session, uint64 reqId, const Protocol::C_SignUp& pkt)
 {
@@ -282,13 +362,27 @@ bool PacketDispatcher::Dispatch_C_SignUp(sessionPtr& session, uint64 reqId, cons
 	return GAuthService->SignUp(session, reqId, userId, password, name, email);
 }
 
-bool PacketDispatcher::Dispatch_C_Login(sessionPtr& session, uint64 reqId, const Protocol::C_Login& pkt)
+
+
+bool PacketDispatcher::Dispatch_C_Login(sessionPtr& session, uint64 reqId, const Protocol::Envelope& envelope)
 {
+	auto pkt = envelope.c_login();
+
 	const string userId = pkt.user_id();
 	const string password = pkt.password();
+	const string reqToken = envelope.auth_token();
 
-	// AuthService로 위임
-	return GAuthService->Login(session, reqId, userId, password);
+	if (!reqToken.empty()&& password.empty()){
+		return GAuthService->LoginByToken(session, reqId, reqToken, userId);
+	} 
+
+	if (!userId.empty() && !password.empty()) {
+		return GAuthService->Login(session, reqId, userId, password);
+	}
+
+	// 그 외는 에러
+	DispatchError(session, reqId, ERR_UNAUTHORIZED);
+	return false;
 }
 
 
@@ -301,7 +395,9 @@ bool PacketDispatcher::Dispatch_C_FetchOffline(sessionPtr& session, uint64 reqId
 		return false;
 	}
 
-	PushOfflineData(session, reqId, userId);
+	int64_t sinceTs = pkt.since_ts();
+
+	PushOfflineData(session, reqId, userId, sinceTs);
 
 	serverSession->SetHasPushedOfflineData(true);
 
@@ -453,62 +549,6 @@ bool PacketDispatcher::Dispatch_C_FetchFriendData(sessionPtr& session, uint64 re
 
 	return GFriendService->FetchFriendData(session, reqId);
 }
-
-
-
-
-
-
-void PacketDispatcher::PushOfflineData(sessionPtr& session, uint64 reqId, const string& userId)
-{
-	cout << "[PacketDispatcher] PushOfflineData: userId = " << userId << endl;
-	
-
-	int totalMessages = 0;
-	const int INIT_LIMIT = 50;
-
-	auto conversations = MessageRepository::GetUserConversations(userId);
-	
-	Protocol::S_MessageBatch pkt_batch;
-
-	for (const auto& convId : conversations) {
-		//auto unreadMessages = MessageRepository::GetUnreadMessages(userId, convId, 0);
-		auto recentMsgs = MessageRepository::GetRecentMessages(convId, INIT_LIMIT);
-		int unreadCount = MessageRepository::GetUnreadCount(userId, convId);
-
-		if (!recentMsgs.empty() || unreadCount > 0) {
-
-			auto* convBatch = pkt_batch.add_batches();
-			convBatch->set_conv_id(convId);
-			convBatch->set_unread_count(unreadCount);
-
-
-			for (const auto& msgInfo : recentMsgs) {
-				auto* sChat = convBatch->add_messages();
-
-				Protocol::S_Chat tempChat;
-				if (MessageRepository::DeserializeMessage(msgInfo.messageData, tempChat)) {
-					*sChat = tempChat;
-					sChat->set_server_msg_id(msgInfo.msgSeq);
-					totalMessages++;
-				}
-			}
-		}
-	}
-
-	if (pkt_batch.batches_size() > 0) {
-		Protocol::Envelope env;
-		env.set_version(GProtoVersion); 
-		env.set_request_id(reqId);          // 0 = Server Push
-		*env.mutable_s_message_batch() = pkt_batch;
-
-		SendEnvelope(session, env);
-	}
-	
-	cout << "[PacketDispatcher] PushOfflineData 완료: userId = " << userId 
-		 << ", Messages=" << totalMessages << "개" << endl;
-}
-
 
 
 

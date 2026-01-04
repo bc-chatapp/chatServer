@@ -37,21 +37,21 @@ public:
     static shared_ptr<SendBuffer> MakeSendBuffer(Protocol::Envelope& envelope);
     static void SendEnvelope(sessionPtr& session, Protocol::Envelope& envelope);
 
-    // 에러 전송 (기존 방식 - 하위 호환성)
+    // 에러 전송 (기존 방식 )
     static void DispatchError(sessionPtr& session, uint64 reqId, const string& errMessage);
-    
-    // 에러 전송 (ErrorCode 사용 - 권장)
+    // 에러 전송 (ErrorCode 사용)
     static void DispatchError(sessionPtr& session, uint64 reqId, Protocol::ErrorCode errorCode, const string& errMessage = "");
     
     // 오프라인 정보 푸시
-    static void PushOfflineData(sessionPtr& session, uint64 reqId, const string& userId);
+    static void PushOfflineData(sessionPtr& session, uint64 reqId, const string& userId, int64_t since_ts);
 
 
 protected:
     static bool Dispatch_C_CheckId(sessionPtr& session, uint64 reqId, const Protocol::C_CheckId& pkt);
     static bool Dispatch_C_CheckEmail(sessionPtr& session, uint64 reqId, const Protocol::C_CheckEmail& pkt);
     static bool Dispatch_C_SignUp(sessionPtr& session, uint64 reqId, const Protocol::C_SignUp& pkt);
-    static bool Dispatch_C_Login(sessionPtr& session, uint64 reqId, const Protocol::C_Login& pkt);
+ 
+    static bool Dispatch_C_Login(sessionPtr& session, uint64 reqId, const Protocol::Envelope& envelope);
     static bool Dispatch_C_FetchOffline(sessionPtr& session, uint64 reqId, const Protocol::C_FetchOffline& pkt);
     
     
@@ -101,8 +101,3 @@ private:
 };
 
 
-
-
-
-
-/* 추가 내요 */

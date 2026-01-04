@@ -24,6 +24,7 @@ public:
 
 	// 로그인 (비밀번호 확인 포함)
 	bool Login(sessionPtr& session, uint64 reqId, const string& userId, const string& password);
+	bool LoginByToken(sessionPtr& session, uint64 reqId, const string& token, const string& userId);
 
 private:
 	UserManager& _userManager;

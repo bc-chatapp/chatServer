@@ -42,6 +42,7 @@ public:
     static int GetUnreadCount(const string& userId, const string& convId);
     static vector<string> GetUserConversations(const string& userId);
     static vector<MessageInfo> GetRecentMessages(const string& convId, int limit);
+    static vector<MessageInfo> GetMessagesAfter(const string& convId, int64_t timestamp, int limit);
     static vector<MessageInfo> GetHistoryMessages(string convId, int64 lastMsgSeq, int limit);
 
         

@@ -289,6 +289,54 @@ vector<MessageInfo> MessageRepository::GetRecentMessages(const string& convId, i
 }
 
 
+vector<MessageInfo> MessageRepository::GetMessagesAfter(const string& convId, int64_t timestamp, int limit)
+{
+    vector<MessageInfo> result;
+    try {
+        auto& db = DBManager::GetInstance();
+        auto& session = db.GetSession();
+
+        string query =
+            "SELECT m.conv_id, m.msg_seq, m.sender_id, m.message_data, m.timestamp, u.name "
+            "FROM messages m "
+            "LEFT JOIN users u ON m.sender_id = u.user_id "
+            "WHERE m.conv_id = ? AND m.timestamp > ? "
+            "ORDER BY m.timestamp ASC "
+            "LIMIT ?"; 
+
+        auto stmt = session.sql(query);
+        stmt.bind(convId, timestamp, limit); 
+        auto rows = stmt.execute();
+
+        for (auto row : rows) {
+            MessageInfo info;
+            info.convId = row[0].get<string>();
+            info.msgSeq = row[1].get<int64>();
+            info.senderId = row[2].get<string>();
+            info.messageData = row[3].get<string>();
+            info.timestamp = row[4].get<int64>();
+
+            string senderName = "Unknown";
+            if (!row[5].isNull()) senderName = row[5].get<string>();
+
+            // Deserialize 
+            Protocol::S_Chat sChat;
+            if (DeserializeMessage(info.messageData, sChat)) {
+                if (info.senderId != "SYSTEM") sChat.set_sender_name(senderName);
+                info.messageData = SerializeMessage(sChat);
+            }
+            result.push_back(info);
+        }
+
+    }
+    catch (const mysqlx::Error& err) {
+        cerr << "[MessageRepository] 메시지 조회 실패(After): " << err.what() << endl;
+    }
+    return result;
+}
+
+
+
 
 vector<MessageInfo> MessageRepository::GetHistoryMessages(string convId, int64 lastMsgSeq, int limit)
 {

@@ -70,7 +70,7 @@ bool GroupRepository::CreateGroup(const string& groupName, const string& creator
 
         auto groups = db.GetSchema().getTable("groups");
         groups.insert("group_id", "group_name", "group_code", "creator_id", "description", "group_image_url", "storage_limit", "storage_usage", "member_count")
-            .values(groupId, groupName, groupCode, creatorId, "", "", defaultLimit, 0, 1)
+            .values(groupId, groupName, groupCode, creatorId, "", "", defaultLimit, 0, 0)
             .execute();
 
         auto members = db.GetSchema().getTable("group_members");
@@ -334,6 +334,7 @@ bool GroupRepository::IsGroupCodeExists(const string& groupCode) {
                           .execute();
         
         return rows.count() > 0;
+
     } catch (const mysqlx::Error& err) {
         cerr << "[GroupRepository] IsGroupCodeExists Failed: " << err.what() << endl;
         return false;

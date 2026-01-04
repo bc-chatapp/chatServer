@@ -77,7 +77,7 @@ bool GroupService::GetGroupList(sessionPtr& session, uint64 reqId)
 
 		info->set_storage_capacity_bytes(g.storageLimit);
 		info->set_storage_usage_bytes(g.storageUsage);
-		info->set_member_count(1);
+		info->set_member_count(g.memberCount);
 	}
 	Protocol::Envelope env;
 	env.set_version(GProtoVersion);
@@ -87,6 +87,9 @@ bool GroupService::GetGroupList(sessionPtr& session, uint64 reqId)
 
 	return true;
 }
+
+
+
 
 bool GroupService::JoinGroup(sessionPtr& session, uint64 reqId, const string& groupCode)
 {
@@ -275,12 +278,6 @@ bool GroupService::GetGroupMemberList(sessionPtr& session, uint64 reqId, const s
 
 	return true;
 }
-
-
-
-
-
-
 
 
 
