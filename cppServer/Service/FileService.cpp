@@ -43,7 +43,6 @@ bool FileService::HandleUploadFileRequest(sessionPtr& session, uint64 reqId, con
 
     try {
         string fileId = GenerateFileId(pkt.filename());
-
         auto serverSession = static_pointer_cast<ServerSession>(session);
         string userId = serverSession->GetUserId();
 
@@ -54,9 +53,9 @@ bool FileService::HandleUploadFileRequest(sessionPtr& session, uint64 reqId, con
             extension = pkt.filename().substr(dotPos);
 
         string path = "files/" + userId + "/" + fileId + extension;
-
         /* signed Url */
         const int64 expiresTime = 3600;
+
         string uploadUrl = _cloudStorage->GenerateUploadUrl(fileId, path, pkt.mime_type(), expiresTime);
         string downloadUrl = _cloudStorage->GenerateDownloadUrl(path, expiresTime);
 
@@ -77,9 +76,12 @@ bool FileService::HandleUploadFileRequest(sessionPtr& session, uint64 reqId, con
         pkt_s_upload.set_path(path);
 
         if (pkt.is_image()) {
-            // TODO: 썸네일 생성 및 URL 생성
-            // string thumbnailPath = gcsPath + "_thumb";
-            // response.set_thumbnail_url(_cloudStorage->GenerateDownloadUrl(thumbnailPath, expiresInSeconds));
+            string thumbPath = "files/" + userId + "/" + fileId + "_thumb.jpg";
+            string thumbUploadUrl = _cloudStorage->GenerateUploadUrl(fileId + "_thumb", thumbPath, "image/jpeg", expiresTime);
+            string thumbDownloadUrl = _cloudStorage->GenerateDownloadUrl(thumbPath, expiresTime);
+
+            pkt_s_upload.set_thumb_upload_url(thumbUploadUrl);
+            pkt_s_upload.set_thumbnail_url(thumbDownloadUrl);
         }
 
         PushEnvelope(session, reqId, pkt_s_upload);
@@ -91,7 +93,6 @@ bool FileService::HandleUploadFileRequest(sessionPtr& session, uint64 reqId, con
         HandleErr(session, reqId, ERR_SERVER_INTERNAL, "Internal server error: " + string(e.what()));
         return false;
     }
-
 }
 
 string FileService::GenerateFileId(const string& filename)

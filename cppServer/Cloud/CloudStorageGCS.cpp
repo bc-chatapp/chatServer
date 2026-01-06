@@ -134,60 +134,26 @@ string CloudStorageGCS::GenerateUploadUrl(const string& fileId, const string& pa
 string CloudStorageGCS::GenerateDownloadUrl(const string& path, int64 expiresInSeconds)
 {
     try {
-        string timestamp, dateStr;
-        GetTimestamp(timestamp, dateStr);
-
-        string credentialScope = BuildCredentialScope(dateStr);
-
-        // 1. Canonical Path (Path-Style)
-        // 형식: /버킷명/파일경로
         string objectPath = NormalizeObjectPath(path);
-        string canonicalPath = CreateCanonicalPath(objectPath);
 
-        // 3. Canonical Headers
-        // GET 요청은 보통 'host'만 서명하면 충분합니다.
-        string canonicalHeaders = "host:storage.googleapis.com\n";
-        string signedHeaders = "host";
+        if (objectPath.empty()) return "";
 
-        // 4. Query Parameters (Canonical Query String)
-        // 알파벳 순서 정렬
-        string q_Algo = "X-Goog-Algorithm=GOOG4-RSA-SHA256";
-        string q_Cred = "X-Goog-Credential=" + UrlEncode(_serviceAccountEmail + "/" + credentialScope);
-        string q_Date = "X-Goog-Date=" + timestamp;
-        string q_Exp = "X-Goog-Expires=" + to_string(expiresInSeconds);
-        string q_Head = "X-Goog-SignedHeaders=" + UrlEncode(signedHeaders);
+        string publicUrl = "https://storage.googleapis.com/" + objectPath;
 
-        string canonicalQueryString = q_Algo + "&" + q_Cred + "&" + q_Date + "&" + q_Exp + "&" + q_Head;
+        cout << "[CloudStorageGCS] Public Download URL generated: " << publicUrl << endl;
 
-        // 5. Canonical Request 조립
-        string canonicalRequest = CreateCanonicalRequest(
-            "GET",
-            canonicalPath,
-            canonicalQueryString,
-            canonicalHeaders,
-            signedHeaders);
-
-        // 6. 서명 생성
-        string canonicalRequestHash = Sha256Hash(canonicalRequest);
-        string stringToSign = "GOOG4-RSA-SHA256\n" + string(timestamp) + "\n" + credentialScope + "\n" + canonicalRequestHash;
-
-        // [필수] Hex 서명 함수 사용 (업로드와 동일)
-        string signature = SignStringHex(stringToSign);
-
-        if (signature.empty()) return "";
-
-        // 7. 최종 URL 조합 (Path-Style)
-        // https://storage.googleapis.com/버킷명/파일경로?...
-        string signedUrl = "https://storage.googleapis.com/" + objectPath + "?" + canonicalQueryString + "&X-Goog-Signature=" + signature;
-
-        cout << "[CloudStorageGCS] Download URL generated." << endl;
-        return signedUrl;
+        return publicUrl;
     }
     catch (const exception& e) {
         HandleErr("GenerateDownloadUrl", e.what());
         return "";
     }
 }
+
+
+
+
+
 bool CloudStorageGCS::UploadFile(const string& path, const vector<uint8>& data, const string& mimeType)
 {
     if (!CheckValidToken()) {

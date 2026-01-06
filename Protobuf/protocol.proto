@@ -208,7 +208,8 @@ message C_Chat {
 message S_Chat {
   string conv_id        = 1;
   int64 client_msg_id   = 2;
-  int64 server_msg_id   = 3;
+  int64 msg_seq         = 3;
+
   string sender_id      = 4;
   string sender_name    = 5;
 
@@ -244,21 +245,23 @@ message C_UploadFile {
 
 message S_UploadFile {
     bool success = 1;
-    string message = 2;
-    string file_id = 3;           // 생성된 파일 ID
-    string upload_url = 4;        // GCS Signed Upload URL (PUT)
-    string download_url = 5;      // GCS Signed Download URL (GET)
-    string thumbnail_url = 6;     // 썸네일 다운로드 URL (이미지인 경우)
-    int64 expires_at = 7;        // URL 만료 시간 (Unix timestamp)
-    string path = 8;          // GCS 경로 (gs://bucket/path)
+    string message          = 2;
+    string file_id          = 3;           // 생성된 파일 ID
+    string upload_url       = 4;        // GCS Signed Upload URL (PUT)
+    string download_url     = 5;      // GCS Signed Download URL (GET)
+    string thumb_upload_url = 6;     // 썸네일 다운로드 URL (이미지인 경우)
+    string thumbnail_url    = 7;     // 썸네일 다운로드용 (GET) 이름 유지
+
+    int64 expires_at        = 8;        // URL 만료 시간 (Unix timestamp)
+    string path             = 9;          // GCS 경로 (gs://bucket/path)
 }
 
 
 
 
 message C_Ack { 
-    string conv_id = 1; 
-    int64 server_msg_id = 2; 
+    string conv_id  = 1; 
+    int64 msg_seq   = 2; 
 } // 수신확인/중복제거
 
 message C_FetchOffline {

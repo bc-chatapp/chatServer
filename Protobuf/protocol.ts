@@ -477,7 +477,7 @@ export interface CChat {
 export interface SChat {
   convId: string;
   clientMsgId: number;
-  serverMsgId: number;
+  msgSeq: number;
   senderId: string;
   senderName: string;
   payload: ChatPayload | undefined;
@@ -521,6 +521,8 @@ export interface SUploadFile {
   /** GCS Signed Download URL (GET) */
   downloadUrl: string;
   /** 썸네일 다운로드 URL (이미지인 경우) */
+  thumbUploadUrl: string;
+  /** 썸네일 다운로드용 (GET) 이름 유지 */
   thumbnailUrl: string;
   /** URL 만료 시간 (Unix timestamp) */
   expiresAt: number;
@@ -530,7 +532,7 @@ export interface SUploadFile {
 
 export interface CAck {
   convId: string;
-  serverMsgId: number;
+  msgSeq: number;
 }
 
 export interface CFetchOffline {
@@ -3224,7 +3226,7 @@ export const CChat = {
 };
 
 function createBaseSChat(): SChat {
-  return { convId: "", clientMsgId: 0, serverMsgId: 0, senderId: "", senderName: "", payload: undefined, tsServer: 0 };
+  return { convId: "", clientMsgId: 0, msgSeq: 0, senderId: "", senderName: "", payload: undefined, tsServer: 0 };
 }
 
 export const SChat = {
@@ -3235,8 +3237,8 @@ export const SChat = {
     if (message.clientMsgId !== 0) {
       writer.uint32(16).int64(message.clientMsgId);
     }
-    if (message.serverMsgId !== 0) {
-      writer.uint32(24).int64(message.serverMsgId);
+    if (message.msgSeq !== 0) {
+      writer.uint32(24).int64(message.msgSeq);
     }
     if (message.senderId !== "") {
       writer.uint32(34).string(message.senderId);
@@ -3279,7 +3281,7 @@ export const SChat = {
             break;
           }
 
-          message.serverMsgId = longToNumber(reader.int64() as Long);
+          message.msgSeq = longToNumber(reader.int64() as Long);
           continue;
         case 4:
           if (tag !== 34) {
@@ -3322,7 +3324,7 @@ export const SChat = {
     return {
       convId: isSet(object.convId) ? globalThis.String(object.convId) : "",
       clientMsgId: isSet(object.clientMsgId) ? globalThis.Number(object.clientMsgId) : 0,
-      serverMsgId: isSet(object.serverMsgId) ? globalThis.Number(object.serverMsgId) : 0,
+      msgSeq: isSet(object.msgSeq) ? globalThis.Number(object.msgSeq) : 0,
       senderId: isSet(object.senderId) ? globalThis.String(object.senderId) : "",
       senderName: isSet(object.senderName) ? globalThis.String(object.senderName) : "",
       payload: isSet(object.payload) ? ChatPayload.fromJSON(object.payload) : undefined,
@@ -3338,8 +3340,8 @@ export const SChat = {
     if (message.clientMsgId !== 0) {
       obj.clientMsgId = Math.round(message.clientMsgId);
     }
-    if (message.serverMsgId !== 0) {
-      obj.serverMsgId = Math.round(message.serverMsgId);
+    if (message.msgSeq !== 0) {
+      obj.msgSeq = Math.round(message.msgSeq);
     }
     if (message.senderId !== "") {
       obj.senderId = message.senderId;
@@ -3363,7 +3365,7 @@ export const SChat = {
     const message = createBaseSChat();
     message.convId = object.convId ?? "";
     message.clientMsgId = object.clientMsgId ?? 0;
-    message.serverMsgId = object.serverMsgId ?? 0;
+    message.msgSeq = object.msgSeq ?? 0;
     message.senderId = object.senderId ?? "";
     message.senderName = object.senderName ?? "";
     message.payload = (object.payload !== undefined && object.payload !== null)
@@ -3663,6 +3665,7 @@ function createBaseSUploadFile(): SUploadFile {
     fileId: "",
     uploadUrl: "",
     downloadUrl: "",
+    thumbUploadUrl: "",
     thumbnailUrl: "",
     expiresAt: 0,
     path: "",
@@ -3686,14 +3689,17 @@ export const SUploadFile = {
     if (message.downloadUrl !== "") {
       writer.uint32(42).string(message.downloadUrl);
     }
+    if (message.thumbUploadUrl !== "") {
+      writer.uint32(50).string(message.thumbUploadUrl);
+    }
     if (message.thumbnailUrl !== "") {
-      writer.uint32(50).string(message.thumbnailUrl);
+      writer.uint32(58).string(message.thumbnailUrl);
     }
     if (message.expiresAt !== 0) {
-      writer.uint32(56).int64(message.expiresAt);
+      writer.uint32(64).int64(message.expiresAt);
     }
     if (message.path !== "") {
-      writer.uint32(66).string(message.path);
+      writer.uint32(74).string(message.path);
     }
     return writer;
   },
@@ -3745,17 +3751,24 @@ export const SUploadFile = {
             break;
           }
 
-          message.thumbnailUrl = reader.string();
+          message.thumbUploadUrl = reader.string();
           continue;
         case 7:
-          if (tag !== 56) {
+          if (tag !== 58) {
+            break;
+          }
+
+          message.thumbnailUrl = reader.string();
+          continue;
+        case 8:
+          if (tag !== 64) {
             break;
           }
 
           message.expiresAt = longToNumber(reader.int64() as Long);
           continue;
-        case 8:
-          if (tag !== 66) {
+        case 9:
+          if (tag !== 74) {
             break;
           }
 
@@ -3777,6 +3790,7 @@ export const SUploadFile = {
       fileId: isSet(object.fileId) ? globalThis.String(object.fileId) : "",
       uploadUrl: isSet(object.uploadUrl) ? globalThis.String(object.uploadUrl) : "",
       downloadUrl: isSet(object.downloadUrl) ? globalThis.String(object.downloadUrl) : "",
+      thumbUploadUrl: isSet(object.thumbUploadUrl) ? globalThis.String(object.thumbUploadUrl) : "",
       thumbnailUrl: isSet(object.thumbnailUrl) ? globalThis.String(object.thumbnailUrl) : "",
       expiresAt: isSet(object.expiresAt) ? globalThis.Number(object.expiresAt) : 0,
       path: isSet(object.path) ? globalThis.String(object.path) : "",
@@ -3800,6 +3814,9 @@ export const SUploadFile = {
     if (message.downloadUrl !== "") {
       obj.downloadUrl = message.downloadUrl;
     }
+    if (message.thumbUploadUrl !== "") {
+      obj.thumbUploadUrl = message.thumbUploadUrl;
+    }
     if (message.thumbnailUrl !== "") {
       obj.thumbnailUrl = message.thumbnailUrl;
     }
@@ -3822,6 +3839,7 @@ export const SUploadFile = {
     message.fileId = object.fileId ?? "";
     message.uploadUrl = object.uploadUrl ?? "";
     message.downloadUrl = object.downloadUrl ?? "";
+    message.thumbUploadUrl = object.thumbUploadUrl ?? "";
     message.thumbnailUrl = object.thumbnailUrl ?? "";
     message.expiresAt = object.expiresAt ?? 0;
     message.path = object.path ?? "";
@@ -3830,7 +3848,7 @@ export const SUploadFile = {
 };
 
 function createBaseCAck(): CAck {
-  return { convId: "", serverMsgId: 0 };
+  return { convId: "", msgSeq: 0 };
 }
 
 export const CAck = {
@@ -3838,8 +3856,8 @@ export const CAck = {
     if (message.convId !== "") {
       writer.uint32(10).string(message.convId);
     }
-    if (message.serverMsgId !== 0) {
-      writer.uint32(16).int64(message.serverMsgId);
+    if (message.msgSeq !== 0) {
+      writer.uint32(16).int64(message.msgSeq);
     }
     return writer;
   },
@@ -3863,7 +3881,7 @@ export const CAck = {
             break;
           }
 
-          message.serverMsgId = longToNumber(reader.int64() as Long);
+          message.msgSeq = longToNumber(reader.int64() as Long);
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -3877,7 +3895,7 @@ export const CAck = {
   fromJSON(object: any): CAck {
     return {
       convId: isSet(object.convId) ? globalThis.String(object.convId) : "",
-      serverMsgId: isSet(object.serverMsgId) ? globalThis.Number(object.serverMsgId) : 0,
+      msgSeq: isSet(object.msgSeq) ? globalThis.Number(object.msgSeq) : 0,
     };
   },
 
@@ -3886,8 +3904,8 @@ export const CAck = {
     if (message.convId !== "") {
       obj.convId = message.convId;
     }
-    if (message.serverMsgId !== 0) {
-      obj.serverMsgId = Math.round(message.serverMsgId);
+    if (message.msgSeq !== 0) {
+      obj.msgSeq = Math.round(message.msgSeq);
     }
     return obj;
   },
@@ -3898,7 +3916,7 @@ export const CAck = {
   fromPartial<I extends Exact<DeepPartial<CAck>, I>>(object: I): CAck {
     const message = createBaseCAck();
     message.convId = object.convId ?? "";
-    message.serverMsgId = object.serverMsgId ?? 0;
+    message.msgSeq = object.msgSeq ?? 0;
     return message;
   },
 };

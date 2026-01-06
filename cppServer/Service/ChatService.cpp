@@ -19,9 +19,7 @@ bool ChatService::SendDirect(sessionPtr& senderSession, uint64 reqId, const stri
 {
     auto session = static_pointer_cast<ServerSession>(senderSession);
     const string senderId = session->GetUserId();
-
     string senderName = GetUserNameWithId(senderId);
-
 
     const string convId = MessageRepository::CreateConversationId(senderId, receiverId);
     MessageRepository::CreateOrGetConversation(convId, "direct", senderId, receiverId);
@@ -32,8 +30,7 @@ bool ChatService::SendDirect(sessionPtr& senderSession, uint64 reqId, const stri
     
     // server_msg_id를 실제 msg_seq로 설정
     if (msgSeq >= 0) {
-        pkt_s_chat.set_server_msg_id(msgSeq);
-
+        pkt_s_chat.set_msg_seq(msgSeq);
         MessageRepository::UpdateReadStatus(senderId, convId, msgSeq);
     }
 
@@ -44,10 +41,7 @@ bool ChatService::SendDirect(sessionPtr& senderSession, uint64 reqId, const stri
         if (auto target = _userManager.FindSession(receiverId)) {
             PushEnvelope(target, 0, pkt_s_chat);
         }
-
-       
     }
-
     return true;
 }
 
@@ -57,7 +51,6 @@ bool ChatService::SendGroup(sessionPtr& senderSession, uint64 reqId, const strin
 {
     auto session = static_pointer_cast<ServerSession>(senderSession);
     const string senderId = session->GetUserId();
-
     string senderName = GetUserNameWithId(senderId);
 
     const string convId = "group:" + groupId;
@@ -66,9 +59,8 @@ bool ChatService::SendGroup(sessionPtr& senderSession, uint64 reqId, const strin
     auto pkt_s_chat = Build_S_Chat(convId, senderId, senderName, pkt);
 
     int64 msgSeq = MessageRepository::SaveMessage(convId, senderId, pkt_s_chat);
-
     if (msgSeq >= 0) {
-        pkt_s_chat.set_server_msg_id(msgSeq);
+        pkt_s_chat.set_msg_seq(msgSeq);
 
         MessageRepository::UpdateReadStatus(senderId, convId, msgSeq);
     }
@@ -92,7 +84,46 @@ bool ChatService::SendGroup(sessionPtr& senderSession, uint64 reqId, const strin
 
 
 
-bool ChatService::HandleAck(sessionPtr& session, uint64 reqId, bool bDirect, const string& targetId, int64 serverMsgId)
+
+
+bool ChatService::SendSystemMessage(const string& groupId, const string& message)
+{
+    auto members = GroupRepository::GetGroupMembers(groupId);
+    if (members.empty()) return false;
+
+    Protocol::S_Chat sendPkt;
+    sendPkt.set_conv_id("group:" + groupId);
+    sendPkt.set_sender_id("SYSTEM");
+    sendPkt.set_sender_name("System"); // 클라이언트가 이름으로 쓸 것
+    sendPkt.set_ts_server(Nowts());
+
+    auto* sysPayload = sendPkt.mutable_payload()->mutable_system();
+    sysPayload->set_message(message);
+    sysPayload->set_type(0);
+
+    int64 msgSeq = MessageRepository::SaveMessage("group:" + groupId, "SYSTEM", sendPkt);
+    if (msgSeq > 0) sendPkt.set_msg_seq(msgSeq);
+
+    Protocol::Envelope env;
+    env.set_version(GProtoVersion);
+    env.set_request_id(0);
+    *env.mutable_s_chat() = sendPkt;
+
+    for (const auto& member : members) {
+        if (auto target = _userManager.FindSession(member.userId)) {
+            PacketDispatcher::SendEnvelope(target, env);
+        }
+    }
+
+    cout << "[ChatService] System Msg to Group(" << groupId << "): " << message << endl;
+    return true;
+}
+
+
+
+
+
+bool ChatService::HandleAck(sessionPtr& session, uint64 reqId, bool bDirect, const string& targetId, int64 msg_seq)
 {
     auto serverSession = static_pointer_cast<ServerSession>(session);
     const string userId = serverSession->GetUserId();
@@ -114,53 +145,19 @@ bool ChatService::HandleAck(sessionPtr& session, uint64 reqId, bool bDirect, con
 
 
 
-    bool success = MessageRepository::UpdateReadStatus(userId, dbConvId, serverMsgId);
+    bool success = MessageRepository::UpdateReadStatus(userId, dbConvId, msg_seq);
     if (!success) {
         cout << "[ChatService] DB Update 실패" << endl;
         return false;
     }
     /* TODO 상대가 읽음 처리 */
 
-    cout << "[ChatService] Ack 처리: User=" << userId << " ReadUpTo=" << serverMsgId << endl;
-    
+    cout << "[ChatService] Ack 처리: User=" << userId << " ReadUpTo=" << msg_seq << endl;
+
     return true;
 }
 
 
-
-
-bool ChatService::SendSystemMessage(const string& groupId, const string& message)
-{
-    auto members = GroupRepository::GetGroupMembers(groupId);
-    if (members.empty()) return false;
-
-    Protocol::S_Chat sendPkt;
-    sendPkt.set_conv_id("group:" + groupId);
-    sendPkt.set_sender_id("SYSTEM");
-    sendPkt.set_sender_name("System"); // 클라이언트가 이름으로 쓸 것
-    sendPkt.set_ts_server(Nowts());
-
-    auto* sysPayload = sendPkt.mutable_payload()->mutable_system();
-    sysPayload->set_message(message);
-    sysPayload->set_type(0);
-
-    int64 msgSeq = MessageRepository::SaveMessage("group:" + groupId, "SYSTEM", sendPkt);
-    if (msgSeq > 0) sendPkt.set_server_msg_id(msgSeq);
-
-    Protocol::Envelope env;
-    env.set_version(GProtoVersion);
-    env.set_request_id(0);
-    *env.mutable_s_chat() = sendPkt;
-
-    for (const auto& member : members) {
-        if (auto target = _userManager.FindSession(member.userId)) {
-            PacketDispatcher::SendEnvelope(target, env);
-        }
-    }
-
-    cout << "[ChatService] System Msg to Group(" << groupId << "): " << message << endl;
-    return true;
-}
 
 
 
@@ -179,14 +176,14 @@ bool ChatService::HandleReqHistory(sessionPtr& session, uint64 reqId, const Prot
 
     Protocol::S_ReqHistory res;
     res.set_conv_id(convId);
-
     res.set_is_end(history.size() < limit);
 
     for (const auto& msgInfo : history) {
         Protocol::S_Chat sChat;
-        if (MessageRepository::DeserializeMessage(msgInfo.messageData, sChat)) {
-            // 필요하다면 여기서 server_msg_id 다시 세팅
-            sChat.set_server_msg_id(msgInfo.msgSeq);
+
+        if (sChat.ParseFromString(msgInfo.messageData)) {
+            // 시퀀스 번호 재확인
+            sChat.set_msg_seq(msgInfo.msgSeq);
             *res.add_messages() = sChat;
         }
     }
@@ -212,15 +209,35 @@ Protocol::S_Chat ChatService::Build_S_Chat(const string& convId, const string& s
     Protocol::S_Chat pkt_s_chat;
     pkt_s_chat.set_conv_id(convId);
     pkt_s_chat.set_client_msg_id(pkt.client_msg_id());
-    pkt_s_chat.set_server_msg_id(0);  // 나중에 msg_seq로 설정됨
     pkt_s_chat.set_sender_id(senderId);
     pkt_s_chat.set_sender_name(senderName);
-
     pkt_s_chat.set_ts_server(Nowts());
-    pkt_s_chat.mutable_payload()->CopyFrom(pkt.payload());
+
+    if (pkt.has_payload()) {
+        auto* payload = pkt_s_chat.mutable_payload();
+        if (pkt.payload().has_text()) {
+            payload->mutable_text()->set_message(pkt.payload().text().message());
+        }
+        else if (pkt.payload().has_image()) {
+            payload->mutable_image()->set_url(pkt.payload().image().url());
+            payload->mutable_image()->set_thumbnail(pkt.payload().image().thumbnail());
+        }
+        else if (pkt.payload().has_video()) {
+            payload->mutable_video()->set_url(pkt.payload().video().url());
+            payload->mutable_video()->set_thumbnail(pkt.payload().video().thumbnail());
+        }
+        else if (pkt.payload().has_file()) {
+            payload->mutable_file()->set_url(pkt.payload().file().url());
+            payload->mutable_file()->set_filename(pkt.payload().file().filename());
+        }
+    }
 
     return pkt_s_chat;
 }
+
+
+
+
 
 void ChatService::PushEnvelope(sessionPtr& session, uint64 reqId, const Protocol::S_Chat& pkt_s_chat)
 {
@@ -234,15 +251,12 @@ void ChatService::PushEnvelope(sessionPtr& session, uint64 reqId, const Protocol
 
 
 
-
-
 string ChatService::GetUserNameWithId(const string& userId)
 {
     string name;
     if (UserRepository::GetUserNameWithId(userId, name)) {
         return name;
     }
-
     return userId;
 }
 

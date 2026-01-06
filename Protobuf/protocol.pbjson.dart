@@ -871,7 +871,7 @@ const S_Chat$json = {
   '2': [
     {'1': 'conv_id', '3': 1, '4': 1, '5': 9, '10': 'convId'},
     {'1': 'client_msg_id', '3': 2, '4': 1, '5': 3, '10': 'clientMsgId'},
-    {'1': 'server_msg_id', '3': 3, '4': 1, '5': 3, '10': 'serverMsgId'},
+    {'1': 'msg_seq', '3': 3, '4': 1, '5': 3, '10': 'msgSeq'},
     {'1': 'sender_id', '3': 4, '4': 1, '5': 9, '10': 'senderId'},
     {'1': 'sender_name', '3': 5, '4': 1, '5': 9, '10': 'senderName'},
     {
@@ -889,10 +889,10 @@ const S_Chat$json = {
 /// Descriptor for `S_Chat`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List s_ChatDescriptor = $convert.base64Decode(
     'CgZTX0NoYXQSFwoHY29udl9pZBgBIAEoCVIGY29udklkEiIKDWNsaWVudF9tc2dfaWQYAiABKA'
-    'NSC2NsaWVudE1zZ0lkEiIKDXNlcnZlcl9tc2dfaWQYAyABKANSC3NlcnZlck1zZ0lkEhsKCXNl'
-    'bmRlcl9pZBgEIAEoCVIIc2VuZGVySWQSHwoLc2VuZGVyX25hbWUYBSABKAlSCnNlbmRlck5hbW'
-    'USLwoHcGF5bG9hZBgGIAEoCzIVLlByb3RvY29sLkNoYXRQYXlsb2FkUgdwYXlsb2FkEhsKCXRz'
-    'X3NlcnZlchgHIAEoA1IIdHNTZXJ2ZXI=');
+    'NSC2NsaWVudE1zZ0lkEhcKB21zZ19zZXEYAyABKANSBm1zZ1NlcRIbCglzZW5kZXJfaWQYBCAB'
+    'KAlSCHNlbmRlcklkEh8KC3NlbmRlcl9uYW1lGAUgASgJUgpzZW5kZXJOYW1lEi8KB3BheWxvYW'
+    'QYBiABKAsyFS5Qcm90b2NvbC5DaGF0UGF5bG9hZFIHcGF5bG9hZBIbCgl0c19zZXJ2ZXIYByAB'
+    'KANSCHRzU2VydmVy');
 
 @$core.Deprecated('Use c_ReqHistoryDescriptor instead')
 const C_ReqHistory$json = {
@@ -957,9 +957,10 @@ const S_UploadFile$json = {
     {'1': 'file_id', '3': 3, '4': 1, '5': 9, '10': 'fileId'},
     {'1': 'upload_url', '3': 4, '4': 1, '5': 9, '10': 'uploadUrl'},
     {'1': 'download_url', '3': 5, '4': 1, '5': 9, '10': 'downloadUrl'},
-    {'1': 'thumbnail_url', '3': 6, '4': 1, '5': 9, '10': 'thumbnailUrl'},
-    {'1': 'expires_at', '3': 7, '4': 1, '5': 3, '10': 'expiresAt'},
-    {'1': 'path', '3': 8, '4': 1, '5': 9, '10': 'path'},
+    {'1': 'thumb_upload_url', '3': 6, '4': 1, '5': 9, '10': 'thumbUploadUrl'},
+    {'1': 'thumbnail_url', '3': 7, '4': 1, '5': 9, '10': 'thumbnailUrl'},
+    {'1': 'expires_at', '3': 8, '4': 1, '5': 3, '10': 'expiresAt'},
+    {'1': 'path', '3': 9, '4': 1, '5': 9, '10': 'path'},
   ],
 };
 
@@ -967,23 +968,24 @@ const S_UploadFile$json = {
 final $typed_data.Uint8List s_UploadFileDescriptor = $convert.base64Decode(
     'CgxTX1VwbG9hZEZpbGUSGAoHc3VjY2VzcxgBIAEoCFIHc3VjY2VzcxIYCgdtZXNzYWdlGAIgAS'
     'gJUgdtZXNzYWdlEhcKB2ZpbGVfaWQYAyABKAlSBmZpbGVJZBIdCgp1cGxvYWRfdXJsGAQgASgJ'
-    'Ugl1cGxvYWRVcmwSIQoMZG93bmxvYWRfdXJsGAUgASgJUgtkb3dubG9hZFVybBIjCg10aHVtYm'
-    '5haWxfdXJsGAYgASgJUgx0aHVtYm5haWxVcmwSHQoKZXhwaXJlc19hdBgHIAEoA1IJZXhwaXJl'
-    'c0F0EhIKBHBhdGgYCCABKAlSBHBhdGg=');
+    'Ugl1cGxvYWRVcmwSIQoMZG93bmxvYWRfdXJsGAUgASgJUgtkb3dubG9hZFVybBIoChB0aHVtYl'
+    '91cGxvYWRfdXJsGAYgASgJUg50aHVtYlVwbG9hZFVybBIjCg10aHVtYm5haWxfdXJsGAcgASgJ'
+    'Ugx0aHVtYm5haWxVcmwSHQoKZXhwaXJlc19hdBgIIAEoA1IJZXhwaXJlc0F0EhIKBHBhdGgYCS'
+    'ABKAlSBHBhdGg=');
 
 @$core.Deprecated('Use c_AckDescriptor instead')
 const C_Ack$json = {
   '1': 'C_Ack',
   '2': [
     {'1': 'conv_id', '3': 1, '4': 1, '5': 9, '10': 'convId'},
-    {'1': 'server_msg_id', '3': 2, '4': 1, '5': 3, '10': 'serverMsgId'},
+    {'1': 'msg_seq', '3': 2, '4': 1, '5': 3, '10': 'msgSeq'},
   ],
 };
 
 /// Descriptor for `C_Ack`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List c_AckDescriptor = $convert.base64Decode(
-    'CgVDX0FjaxIXCgdjb252X2lkGAEgASgJUgZjb252SWQSIgoNc2VydmVyX21zZ19pZBgCIAEoA1'
-    'ILc2VydmVyTXNnSWQ=');
+    'CgVDX0FjaxIXCgdjb252X2lkGAEgASgJUgZjb252SWQSFwoHbXNnX3NlcRgCIAEoA1IGbXNnU2'
+    'Vx');
 
 @$core.Deprecated('Use c_FetchOfflineDescriptor instead')
 const C_FetchOffline$json = {

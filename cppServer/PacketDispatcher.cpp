@@ -280,9 +280,10 @@ void PacketDispatcher::PushOfflineData(sessionPtr& session, uint64 reqId, const 
 				auto* sChat = convBatch->add_messages();
 				Protocol::S_Chat tempChat;
 
-				if (MessageRepository::DeserializeMessage(msgInfo.messageData, tempChat)) {
+				if (tempChat.ParseFromString(msgInfo.messageData)) {
 					*sChat = tempChat;
-					sChat->set_server_msg_id(msgInfo.msgSeq);
+					// 시퀀스 번호 재확인
+					sChat->set_msg_seq(msgInfo.msgSeq);
 					totalMessages++;
 				}
 			}
@@ -311,9 +312,9 @@ void PacketDispatcher::PushOfflineData(sessionPtr& session, uint64 reqId, const 
 			for (const auto& msgInfo : messages) {
 				auto* sChat = convBatch->add_messages();
 				Protocol::S_Chat tempChat;
-				if (MessageRepository::DeserializeMessage(msgInfo.messageData, tempChat)) {
+				if (tempChat.ParseFromString(msgInfo.messageData)) {
 					*sChat = tempChat;
-					sChat->set_server_msg_id(msgInfo.msgSeq);
+					sChat->set_msg_seq(msgInfo.msgSeq);
 					totalMessages++;
 				}
 			}
@@ -465,7 +466,7 @@ bool PacketDispatcher::Dispatch_C_Ack(sessionPtr& session, uint64 reqId, const P
 	}
 
 	bool bDirect = (type == ConvType::Direct);
-	return GChatService->HandleAck(session, reqId, bDirect, targetId, pkt.server_msg_id());
+	return GChatService->HandleAck(session, reqId, bDirect, targetId, pkt.msg_seq());
 }
 
 

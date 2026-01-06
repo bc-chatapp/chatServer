@@ -2376,7 +2376,7 @@ class S_Chat extends $pb.GeneratedMessage {
   factory S_Chat({
     $core.String? convId,
     $fixnum.Int64? clientMsgId,
-    $fixnum.Int64? serverMsgId,
+    $fixnum.Int64? msgSeq,
     $core.String? senderId,
     $core.String? senderName,
     ChatPayload? payload,
@@ -2385,7 +2385,7 @@ class S_Chat extends $pb.GeneratedMessage {
     final result = create();
     if (convId != null) result.convId = convId;
     if (clientMsgId != null) result.clientMsgId = clientMsgId;
-    if (serverMsgId != null) result.serverMsgId = serverMsgId;
+    if (msgSeq != null) result.msgSeq = msgSeq;
     if (senderId != null) result.senderId = senderId;
     if (senderName != null) result.senderName = senderName;
     if (payload != null) result.payload = payload;
@@ -2408,7 +2408,7 @@ class S_Chat extends $pb.GeneratedMessage {
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'convId')
     ..aInt64(2, _omitFieldNames ? '' : 'clientMsgId')
-    ..aInt64(3, _omitFieldNames ? '' : 'serverMsgId')
+    ..aInt64(3, _omitFieldNames ? '' : 'msgSeq')
     ..aOS(4, _omitFieldNames ? '' : 'senderId')
     ..aOS(5, _omitFieldNames ? '' : 'senderName')
     ..aOM<ChatPayload>(6, _omitFieldNames ? '' : 'payload',
@@ -2453,13 +2453,13 @@ class S_Chat extends $pb.GeneratedMessage {
   void clearClientMsgId() => $_clearField(2);
 
   @$pb.TagNumber(3)
-  $fixnum.Int64 get serverMsgId => $_getI64(2);
+  $fixnum.Int64 get msgSeq => $_getI64(2);
   @$pb.TagNumber(3)
-  set serverMsgId($fixnum.Int64 value) => $_setInt64(2, value);
+  set msgSeq($fixnum.Int64 value) => $_setInt64(2, value);
   @$pb.TagNumber(3)
-  $core.bool hasServerMsgId() => $_has(2);
+  $core.bool hasMsgSeq() => $_has(2);
   @$pb.TagNumber(3)
-  void clearServerMsgId() => $_clearField(3);
+  void clearMsgSeq() => $_clearField(3);
 
   @$pb.TagNumber(4)
   $core.String get senderId => $_getSZ(3);
@@ -2749,6 +2749,7 @@ class S_UploadFile extends $pb.GeneratedMessage {
     $core.String? fileId,
     $core.String? uploadUrl,
     $core.String? downloadUrl,
+    $core.String? thumbUploadUrl,
     $core.String? thumbnailUrl,
     $fixnum.Int64? expiresAt,
     $core.String? path,
@@ -2759,6 +2760,7 @@ class S_UploadFile extends $pb.GeneratedMessage {
     if (fileId != null) result.fileId = fileId;
     if (uploadUrl != null) result.uploadUrl = uploadUrl;
     if (downloadUrl != null) result.downloadUrl = downloadUrl;
+    if (thumbUploadUrl != null) result.thumbUploadUrl = thumbUploadUrl;
     if (thumbnailUrl != null) result.thumbnailUrl = thumbnailUrl;
     if (expiresAt != null) result.expiresAt = expiresAt;
     if (path != null) result.path = path;
@@ -2783,9 +2785,10 @@ class S_UploadFile extends $pb.GeneratedMessage {
     ..aOS(3, _omitFieldNames ? '' : 'fileId')
     ..aOS(4, _omitFieldNames ? '' : 'uploadUrl')
     ..aOS(5, _omitFieldNames ? '' : 'downloadUrl')
-    ..aOS(6, _omitFieldNames ? '' : 'thumbnailUrl')
-    ..aInt64(7, _omitFieldNames ? '' : 'expiresAt')
-    ..aOS(8, _omitFieldNames ? '' : 'path')
+    ..aOS(6, _omitFieldNames ? '' : 'thumbUploadUrl')
+    ..aOS(7, _omitFieldNames ? '' : 'thumbnailUrl')
+    ..aInt64(8, _omitFieldNames ? '' : 'expiresAt')
+    ..aOS(9, _omitFieldNames ? '' : 'path')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -2853,41 +2856,50 @@ class S_UploadFile extends $pb.GeneratedMessage {
   void clearDownloadUrl() => $_clearField(5);
 
   @$pb.TagNumber(6)
-  $core.String get thumbnailUrl => $_getSZ(5);
+  $core.String get thumbUploadUrl => $_getSZ(5);
   @$pb.TagNumber(6)
-  set thumbnailUrl($core.String value) => $_setString(5, value);
+  set thumbUploadUrl($core.String value) => $_setString(5, value);
   @$pb.TagNumber(6)
-  $core.bool hasThumbnailUrl() => $_has(5);
+  $core.bool hasThumbUploadUrl() => $_has(5);
   @$pb.TagNumber(6)
-  void clearThumbnailUrl() => $_clearField(6);
+  void clearThumbUploadUrl() => $_clearField(6);
 
   @$pb.TagNumber(7)
-  $fixnum.Int64 get expiresAt => $_getI64(6);
+  $core.String get thumbnailUrl => $_getSZ(6);
   @$pb.TagNumber(7)
-  set expiresAt($fixnum.Int64 value) => $_setInt64(6, value);
+  set thumbnailUrl($core.String value) => $_setString(6, value);
   @$pb.TagNumber(7)
-  $core.bool hasExpiresAt() => $_has(6);
+  $core.bool hasThumbnailUrl() => $_has(6);
   @$pb.TagNumber(7)
-  void clearExpiresAt() => $_clearField(7);
+  void clearThumbnailUrl() => $_clearField(7);
 
   @$pb.TagNumber(8)
-  $core.String get path => $_getSZ(7);
+  $fixnum.Int64 get expiresAt => $_getI64(7);
   @$pb.TagNumber(8)
-  set path($core.String value) => $_setString(7, value);
+  set expiresAt($fixnum.Int64 value) => $_setInt64(7, value);
   @$pb.TagNumber(8)
-  $core.bool hasPath() => $_has(7);
+  $core.bool hasExpiresAt() => $_has(7);
   @$pb.TagNumber(8)
-  void clearPath() => $_clearField(8);
+  void clearExpiresAt() => $_clearField(8);
+
+  @$pb.TagNumber(9)
+  $core.String get path => $_getSZ(8);
+  @$pb.TagNumber(9)
+  set path($core.String value) => $_setString(8, value);
+  @$pb.TagNumber(9)
+  $core.bool hasPath() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearPath() => $_clearField(9);
 }
 
 class C_Ack extends $pb.GeneratedMessage {
   factory C_Ack({
     $core.String? convId,
-    $fixnum.Int64? serverMsgId,
+    $fixnum.Int64? msgSeq,
   }) {
     final result = create();
     if (convId != null) result.convId = convId;
-    if (serverMsgId != null) result.serverMsgId = serverMsgId;
+    if (msgSeq != null) result.msgSeq = msgSeq;
     return result;
   }
 
@@ -2905,7 +2917,7 @@ class C_Ack extends $pb.GeneratedMessage {
       package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'convId')
-    ..aInt64(2, _omitFieldNames ? '' : 'serverMsgId')
+    ..aInt64(2, _omitFieldNames ? '' : 'msgSeq')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -2936,13 +2948,13 @@ class C_Ack extends $pb.GeneratedMessage {
   void clearConvId() => $_clearField(1);
 
   @$pb.TagNumber(2)
-  $fixnum.Int64 get serverMsgId => $_getI64(1);
+  $fixnum.Int64 get msgSeq => $_getI64(1);
   @$pb.TagNumber(2)
-  set serverMsgId($fixnum.Int64 value) => $_setInt64(1, value);
+  set msgSeq($fixnum.Int64 value) => $_setInt64(1, value);
   @$pb.TagNumber(2)
-  $core.bool hasServerMsgId() => $_has(1);
+  $core.bool hasMsgSeq() => $_has(1);
   @$pb.TagNumber(2)
-  void clearServerMsgId() => $_clearField(2);
+  void clearMsgSeq() => $_clearField(2);
 }
 
 class C_FetchOffline extends $pb.GeneratedMessage {

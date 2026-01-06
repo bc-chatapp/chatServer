@@ -4707,7 +4707,7 @@ class S_Chat final :
     kSenderNameFieldNumber = 5,
     kPayloadFieldNumber = 6,
     kClientMsgIdFieldNumber = 2,
-    kServerMsgIdFieldNumber = 3,
+    kMsgSeqFieldNumber = 3,
     kTsServerFieldNumber = 7,
   };
   // string conv_id = 1;
@@ -4779,13 +4779,13 @@ class S_Chat final :
   void _internal_set_client_msg_id(::PROTOBUF_NAMESPACE_ID::int64 value);
   public:
 
-  // int64 server_msg_id = 3;
-  void clear_server_msg_id();
-  ::PROTOBUF_NAMESPACE_ID::int64 server_msg_id() const;
-  void set_server_msg_id(::PROTOBUF_NAMESPACE_ID::int64 value);
+  // int64 msg_seq = 3;
+  void clear_msg_seq();
+  ::PROTOBUF_NAMESPACE_ID::int64 msg_seq() const;
+  void set_msg_seq(::PROTOBUF_NAMESPACE_ID::int64 value);
   private:
-  ::PROTOBUF_NAMESPACE_ID::int64 _internal_server_msg_id() const;
-  void _internal_set_server_msg_id(::PROTOBUF_NAMESPACE_ID::int64 value);
+  ::PROTOBUF_NAMESPACE_ID::int64 _internal_msg_seq() const;
+  void _internal_set_msg_seq(::PROTOBUF_NAMESPACE_ID::int64 value);
   public:
 
   // int64 ts_server = 7;
@@ -4809,7 +4809,7 @@ class S_Chat final :
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr sender_name_;
   ::Protocol::ChatPayload* payload_;
   ::PROTOBUF_NAMESPACE_ID::int64 client_msg_id_;
-  ::PROTOBUF_NAMESPACE_ID::int64 server_msg_id_;
+  ::PROTOBUF_NAMESPACE_ID::int64 msg_seq_;
   ::PROTOBUF_NAMESPACE_ID::int64 ts_server_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_protocol_2eproto;
@@ -5430,9 +5430,10 @@ class S_UploadFile final :
     kFileIdFieldNumber = 3,
     kUploadUrlFieldNumber = 4,
     kDownloadUrlFieldNumber = 5,
-    kThumbnailUrlFieldNumber = 6,
-    kPathFieldNumber = 8,
-    kExpiresAtFieldNumber = 7,
+    kThumbUploadUrlFieldNumber = 6,
+    kThumbnailUrlFieldNumber = 7,
+    kPathFieldNumber = 9,
+    kExpiresAtFieldNumber = 8,
     kSuccessFieldNumber = 1,
   };
   // string message = 2;
@@ -5491,7 +5492,21 @@ class S_UploadFile final :
   std::string* _internal_mutable_download_url();
   public:
 
-  // string thumbnail_url = 6;
+  // string thumb_upload_url = 6;
+  void clear_thumb_upload_url();
+  const std::string& thumb_upload_url() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_thumb_upload_url(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_thumb_upload_url();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_thumb_upload_url();
+  void set_allocated_thumb_upload_url(std::string* thumb_upload_url);
+  private:
+  const std::string& _internal_thumb_upload_url() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_thumb_upload_url(const std::string& value);
+  std::string* _internal_mutable_thumb_upload_url();
+  public:
+
+  // string thumbnail_url = 7;
   void clear_thumbnail_url();
   const std::string& thumbnail_url() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -5505,7 +5520,7 @@ class S_UploadFile final :
   std::string* _internal_mutable_thumbnail_url();
   public:
 
-  // string path = 8;
+  // string path = 9;
   void clear_path();
   const std::string& path() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -5519,7 +5534,7 @@ class S_UploadFile final :
   std::string* _internal_mutable_path();
   public:
 
-  // int64 expires_at = 7;
+  // int64 expires_at = 8;
   void clear_expires_at();
   ::PROTOBUF_NAMESPACE_ID::int64 expires_at() const;
   void set_expires_at(::PROTOBUF_NAMESPACE_ID::int64 value);
@@ -5548,6 +5563,7 @@ class S_UploadFile final :
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr file_id_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr upload_url_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr download_url_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr thumb_upload_url_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr thumbnail_url_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr path_;
   ::PROTOBUF_NAMESPACE_ID::int64 expires_at_;
@@ -5666,7 +5682,7 @@ class C_Ack final :
 
   enum : int {
     kConvIdFieldNumber = 1,
-    kServerMsgIdFieldNumber = 2,
+    kMsgSeqFieldNumber = 2,
   };
   // string conv_id = 1;
   void clear_conv_id();
@@ -5682,13 +5698,13 @@ class C_Ack final :
   std::string* _internal_mutable_conv_id();
   public:
 
-  // int64 server_msg_id = 2;
-  void clear_server_msg_id();
-  ::PROTOBUF_NAMESPACE_ID::int64 server_msg_id() const;
-  void set_server_msg_id(::PROTOBUF_NAMESPACE_ID::int64 value);
+  // int64 msg_seq = 2;
+  void clear_msg_seq();
+  ::PROTOBUF_NAMESPACE_ID::int64 msg_seq() const;
+  void set_msg_seq(::PROTOBUF_NAMESPACE_ID::int64 value);
   private:
-  ::PROTOBUF_NAMESPACE_ID::int64 _internal_server_msg_id() const;
-  void _internal_set_server_msg_id(::PROTOBUF_NAMESPACE_ID::int64 value);
+  ::PROTOBUF_NAMESPACE_ID::int64 _internal_msg_seq() const;
+  void _internal_set_msg_seq(::PROTOBUF_NAMESPACE_ID::int64 value);
   public:
 
   // @@protoc_insertion_point(class_scope:Protocol.C_Ack)
@@ -5699,7 +5715,7 @@ class C_Ack final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr conv_id_;
-  ::PROTOBUF_NAMESPACE_ID::int64 server_msg_id_;
+  ::PROTOBUF_NAMESPACE_ID::int64 msg_seq_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_protocol_2eproto;
 };
@@ -16051,24 +16067,24 @@ inline void S_Chat::set_client_msg_id(::PROTOBUF_NAMESPACE_ID::int64 value) {
   // @@protoc_insertion_point(field_set:Protocol.S_Chat.client_msg_id)
 }
 
-// int64 server_msg_id = 3;
-inline void S_Chat::clear_server_msg_id() {
-  server_msg_id_ = int64_t{0};
+// int64 msg_seq = 3;
+inline void S_Chat::clear_msg_seq() {
+  msg_seq_ = int64_t{0};
 }
-inline ::PROTOBUF_NAMESPACE_ID::int64 S_Chat::_internal_server_msg_id() const {
-  return server_msg_id_;
+inline ::PROTOBUF_NAMESPACE_ID::int64 S_Chat::_internal_msg_seq() const {
+  return msg_seq_;
 }
-inline ::PROTOBUF_NAMESPACE_ID::int64 S_Chat::server_msg_id() const {
-  // @@protoc_insertion_point(field_get:Protocol.S_Chat.server_msg_id)
-  return _internal_server_msg_id();
+inline ::PROTOBUF_NAMESPACE_ID::int64 S_Chat::msg_seq() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_Chat.msg_seq)
+  return _internal_msg_seq();
 }
-inline void S_Chat::_internal_set_server_msg_id(::PROTOBUF_NAMESPACE_ID::int64 value) {
+inline void S_Chat::_internal_set_msg_seq(::PROTOBUF_NAMESPACE_ID::int64 value) {
   
-  server_msg_id_ = value;
+  msg_seq_ = value;
 }
-inline void S_Chat::set_server_msg_id(::PROTOBUF_NAMESPACE_ID::int64 value) {
-  _internal_set_server_msg_id(value);
-  // @@protoc_insertion_point(field_set:Protocol.S_Chat.server_msg_id)
+inline void S_Chat::set_msg_seq(::PROTOBUF_NAMESPACE_ID::int64 value) {
+  _internal_set_msg_seq(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_Chat.msg_seq)
 }
 
 // string sender_id = 4;
@@ -16799,7 +16815,52 @@ inline void S_UploadFile::set_allocated_download_url(std::string* download_url) 
   // @@protoc_insertion_point(field_set_allocated:Protocol.S_UploadFile.download_url)
 }
 
-// string thumbnail_url = 6;
+// string thumb_upload_url = 6;
+inline void S_UploadFile::clear_thumb_upload_url() {
+  thumb_upload_url_.ClearToEmpty();
+}
+inline const std::string& S_UploadFile::thumb_upload_url() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_UploadFile.thumb_upload_url)
+  return _internal_thumb_upload_url();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void S_UploadFile::set_thumb_upload_url(ArgT0&& arg0, ArgT... args) {
+ 
+ thumb_upload_url_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.S_UploadFile.thumb_upload_url)
+}
+inline std::string* S_UploadFile::mutable_thumb_upload_url() {
+  // @@protoc_insertion_point(field_mutable:Protocol.S_UploadFile.thumb_upload_url)
+  return _internal_mutable_thumb_upload_url();
+}
+inline const std::string& S_UploadFile::_internal_thumb_upload_url() const {
+  return thumb_upload_url_.Get();
+}
+inline void S_UploadFile::_internal_set_thumb_upload_url(const std::string& value) {
+  
+  thumb_upload_url_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* S_UploadFile::_internal_mutable_thumb_upload_url() {
+  
+  return thumb_upload_url_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* S_UploadFile::release_thumb_upload_url() {
+  // @@protoc_insertion_point(field_release:Protocol.S_UploadFile.thumb_upload_url)
+  return thumb_upload_url_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void S_UploadFile::set_allocated_thumb_upload_url(std::string* thumb_upload_url) {
+  if (thumb_upload_url != nullptr) {
+    
+  } else {
+    
+  }
+  thumb_upload_url_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), thumb_upload_url,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.S_UploadFile.thumb_upload_url)
+}
+
+// string thumbnail_url = 7;
 inline void S_UploadFile::clear_thumbnail_url() {
   thumbnail_url_.ClearToEmpty();
 }
@@ -16844,7 +16905,7 @@ inline void S_UploadFile::set_allocated_thumbnail_url(std::string* thumbnail_url
   // @@protoc_insertion_point(field_set_allocated:Protocol.S_UploadFile.thumbnail_url)
 }
 
-// int64 expires_at = 7;
+// int64 expires_at = 8;
 inline void S_UploadFile::clear_expires_at() {
   expires_at_ = int64_t{0};
 }
@@ -16864,7 +16925,7 @@ inline void S_UploadFile::set_expires_at(::PROTOBUF_NAMESPACE_ID::int64 value) {
   // @@protoc_insertion_point(field_set:Protocol.S_UploadFile.expires_at)
 }
 
-// string path = 8;
+// string path = 9;
 inline void S_UploadFile::clear_path() {
   path_.ClearToEmpty();
 }
@@ -16958,24 +17019,24 @@ inline void C_Ack::set_allocated_conv_id(std::string* conv_id) {
   // @@protoc_insertion_point(field_set_allocated:Protocol.C_Ack.conv_id)
 }
 
-// int64 server_msg_id = 2;
-inline void C_Ack::clear_server_msg_id() {
-  server_msg_id_ = int64_t{0};
+// int64 msg_seq = 2;
+inline void C_Ack::clear_msg_seq() {
+  msg_seq_ = int64_t{0};
 }
-inline ::PROTOBUF_NAMESPACE_ID::int64 C_Ack::_internal_server_msg_id() const {
-  return server_msg_id_;
+inline ::PROTOBUF_NAMESPACE_ID::int64 C_Ack::_internal_msg_seq() const {
+  return msg_seq_;
 }
-inline ::PROTOBUF_NAMESPACE_ID::int64 C_Ack::server_msg_id() const {
-  // @@protoc_insertion_point(field_get:Protocol.C_Ack.server_msg_id)
-  return _internal_server_msg_id();
+inline ::PROTOBUF_NAMESPACE_ID::int64 C_Ack::msg_seq() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_Ack.msg_seq)
+  return _internal_msg_seq();
 }
-inline void C_Ack::_internal_set_server_msg_id(::PROTOBUF_NAMESPACE_ID::int64 value) {
+inline void C_Ack::_internal_set_msg_seq(::PROTOBUF_NAMESPACE_ID::int64 value) {
   
-  server_msg_id_ = value;
+  msg_seq_ = value;
 }
-inline void C_Ack::set_server_msg_id(::PROTOBUF_NAMESPACE_ID::int64 value) {
-  _internal_set_server_msg_id(value);
-  // @@protoc_insertion_point(field_set:Protocol.C_Ack.server_msg_id)
+inline void C_Ack::set_msg_seq(::PROTOBUF_NAMESPACE_ID::int64 value) {
+  _internal_set_msg_seq(value);
+  // @@protoc_insertion_point(field_set:Protocol.C_Ack.msg_seq)
 }
 
 // -------------------------------------------------------------------

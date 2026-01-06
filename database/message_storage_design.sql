@@ -32,11 +32,21 @@ CREATE TABLE messages (
     conv_id VARCHAR(100) NOT NULL,
     msg_seq BIGINT NOT NULL,       -- ★ 이 컬럼이 없어서 에러가 난 것임
     sender_id VARCHAR(50) NOT NULL,
-    message_data LONGTEXT,         -- Protobuf 직렬화 데이터 (Hex String)
-    timestamp BIGINT,              -- 서버 시간 (milliseconds)
     
-    -- 조회 속도 향상을 위한 인덱스
-    INDEX idx_conv_seq (conv_id, msg_seq)
+    -- 메시지 타입 (0: Text, 1: Image, 2: Video, 3: File 등)
+    msg_type TINYINT DEFAULT 0,
+    
+    message TEXT,                   
+    -- 첨부파일 정보 (고정 다운로드 URL 저장)
+    media_url TEXT,                 -- 원본 이미지/비디오/파일 URL
+    thumbnail_url TEXT,             -- 썸네일 URL (이미지/비디오용)
+    -- 원본 파일명이나 파일 크기 등 추가 정보가 필요하면 활용
+    file_name VARCHAR(255),
+    file_size BIGINT DEFAULT 0,
+
+    timestamp BIGINT,               
+    INDEX idx_conv_seq (conv_id, msg_seq),
+    INDEX idx_msg_type (msg_type) -- 나중에 사진만 모아보기 할 때 매우 빠름
 );
 
 -- 5. 읽음 상태
