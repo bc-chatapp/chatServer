@@ -10,15 +10,9 @@ class UserManager {
 public:
     UserManager() = default;
 
-    void UpsertSession(const string& userId, const shared_ptr<Session>& s) {
-        WRITE_LOCK_IDX(0);
-        _sessions[userId] = s;
-    }
+    void UpsertSession(const string& userId, const shared_ptr<Session>& newSession);
 
-    void RemoveSession(const string& userId) {
-        WRITE_LOCK_IDX(0);
-        _sessions.erase(userId);
-    }
+    void RemoveSession(const string& userId, SessionPtr session);
 
     shared_ptr<Session> FindSession(const string& userId) {
         WRITE_LOCK_IDX(0); // 읽기에도 같은 락 사용(간단/보수적)
@@ -29,7 +23,6 @@ public:
 
 
     /*  Group  */
-
     void SetGroupMembers(const string& groupId, unordered_set<string> members) {
         WRITE_LOCK_IDX(1);
         _groups[groupId] = std::move(members);

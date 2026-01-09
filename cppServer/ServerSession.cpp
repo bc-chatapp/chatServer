@@ -15,12 +15,16 @@ void ServerSession::OnDisconnected()
 	cout << "OnDisconnected.." << endl;
 
 	if (!_userId.empty() && GUserManager) {
-		GUserManager->RemoveSession(_userId);
+		// 자기 자신을 인자로 넘김
+		auto myself = static_pointer_cast<Session>(shared_from_this());
+		GUserManager->RemoveSession(_userId, myself);
 	}
 }
 
 void ServerSession::OnRecv(BYTE* buffer, int32 len)
 {
+	SetLastActiveTime();	// 하트비트
+
 	if (len < 4) { Disconnect(); return; }
 
 	uint32 bodyPos = 0;

@@ -150,6 +150,8 @@ bool Session::RegisterDisconnect()
 		if (errCode != WSA_IO_PENDING) 
 		{
 			_disconnectEvent.owner = nullptr;
+
+			ProcessDisconnect();
 			return false;
 		}
 	}
@@ -255,6 +257,7 @@ void Session::ProcessDisconnect()
 
 void Session::ProcessRecv(int32 Bytes)
 {
+	_recvEvent.owner = nullptr;
 	if (Bytes == 0) {
 		Disconnect();
 		return;

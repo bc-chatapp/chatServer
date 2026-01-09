@@ -6,7 +6,9 @@
 #include "NetAddress.h"
 
 #include "CoreGlobal.h"
+#include "Service/UserManager.h"
 #include "DB/DBManager.h"
+
 
 int main()
 {
@@ -22,8 +24,6 @@ int main()
 	wcout << L"[Server] Database connected successfully" << endl;
 
 
-
-	// 1. Winsock 초기화
 	WSADATA wsa;
 	if (::WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
 	{
@@ -31,10 +31,9 @@ int main()
 		return 0;
 	}
 
-	// 2. IocpCore 생성
 	auto iocpCore = make_shared<IocpCore>();
 
-	// 3. Service 생성 (ServerSession을 만들도록 팩토리 지정)
+	// Service 생성 (ServerSession을 만들도록 팩토리 지정)
 	auto service = make_shared<Service>(
 		ServiceType::Server,
 		NetAddress(L"127.0.0.1", 3000), // 리스닝할 주소
@@ -42,16 +41,15 @@ int main()
 		[]() { return make_shared<ServerSession>(); }
 	);
 
-	// 4. 리스닝 시작
+	// 리스닝 시작
 	if (service->Start() == false)
 	{
 		wcout << L"[Error] Service 시작 실패" << endl;
 		return 0;
 	}
-
 	wcout << L"[Server] Listening on 127.0.0.1:3000..." << endl;
 
-	// 5. 워커 스레드 생성 (CPU 코어 수만큼)
+	// 워커 스레드 생성 (CPU 코어 수만큼)
 	const int32 threadCount = thread::hardware_concurrency();
 	vector<thread> threads;
 
@@ -59,7 +57,6 @@ int main()
 	{
 		threads.emplace_back([iocpCore]()
 			{
-				// 각 스레드에서 무한루프로 Dispatch 실행
 				while (true)
 				{
 					iocpCore->Dispatch();
@@ -67,10 +64,29 @@ int main()
 			});
 	}
 
+	// 
+	thread heartbeat([&]()
+		{
+			while (true)
+			{
+				this_thread::sleep_for(chrono::seconds(10));
+				if (GUserManager)
+				{
+					// 타임아웃된 세션 강제 종료
+					GUserManager->CheckDeadSessions();
+				}
+			}
+		});
+
 	// 6. 메인 스레드 대기
 	for (thread& t : threads)
 	{
 		t.join();
+	}
+
+	if (heartbeat.joinable())
+	{
+		heartbeat.join();
 	}
 
 	::WSACleanup();
