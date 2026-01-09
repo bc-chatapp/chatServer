@@ -24,9 +24,9 @@ public:
 
 protected:
 	/* Helpers */
-	static Protocol::S_Chat Build_S_Chat(const string& convId, const string& senderId, const string& senderName, const Protocol::C_Chat& pkt);
+	static Protocol::S_Chat Build_S_Chat(const string& convId, const string& senderId, int64& OUT fileSize, string& OUT fileType, const Protocol::C_Chat& pkt);
 	static void PushEnvelope(sessionPtr& session, uint64 reqId, const Protocol::S_Chat& pkt_s_chat);
-	string GetUserNameWithId(const string& userId);
+	static string GetUserNameWithId(const string& userId);
 private:
 	UserManager& _userManager;
 	

@@ -147,6 +147,67 @@ bool GroupRepository::RemoveMember(const string& groupId, const string& userId)
 
 
 
+
+
+bool GroupRepository::SaveGroupAsset(const string& groupId, const string& userId, int64 msgSeq, int64 fileSize, const string& fileType)
+{
+    if (fileSize <= 0) return false;
+
+    try {
+        auto& db = DBManager::GetInstance();
+        auto& session = db.GetSession();
+
+        // group_assets에 INSERT (자동으로 트리거가 작동하여 groups.storage_usage 업데이트)
+        session.sql("INSERT INTO group_assets (group_id, user_id, msg_seq, file_size, file_type) VALUES (?, ?, ?, ?, ?)")
+            .bind(groupId, userId, msgSeq, fileSize, fileType)
+            .execute();
+
+        cout << "[DB] Group Asset 저장 완료: Group=" << groupId << ", Size=" << fileSize << " bytes" << endl;
+        return true;
+    }
+    catch (const mysqlx::Error& err) {
+        cerr << "[GroupRepository] 에셋 기록 실패: " << err.what() << endl;
+        return false;
+    }
+}
+
+
+
+bool GroupRepository::UpdateGroupInfo(const string& groupId, const string& newName, const string& newImageUrl)
+{
+    try {
+        auto& db = DBManager::GetInstance();
+        auto& session = db.GetSession();
+
+        auto result = session.sql("UPDATE groups SET group_name = ?, group_image_url = ? WHERE group_id = ?")
+            .bind(newName, newImageUrl, groupId)
+            .execute();
+
+
+        if (result.getAffectedItemsCount() > 0) {
+            cout << "[DB] 그룹 정보 업데이트 성공: " << groupId << endl;
+            return true;
+        }
+        else {
+            cout << "[DB] 그룹 정보 업데이트: 변경사항 없음 또는 대상 없음 (ID: " << groupId << ")" << endl;
+            return false;
+        }
+    }
+    catch (const mysqlx::Error& err) {
+        cerr << "[GroupRepository] Update Error: " << err.what() << endl;
+        return false;
+    }
+    catch (const std::exception& e) {
+        cerr << "[GroupRepository] Std Exception: " << e.what() << endl;
+        return false;
+    }
+}
+
+
+
+
+
+
 /*---------------------
         Queries
 ----------------------*/
@@ -196,7 +257,7 @@ vector<cGroupInfo> GroupRepository::GetUserGroups(const string& userId)
 
 
 
-bool GroupRepository::GetGroupByCode(const string& groupCode, cGroupInfo& OUT info)
+bool GroupRepository::GetGroupInfoById(const string& groupId, cGroupInfo& OUT info)
 {
     try {
         auto& db = DBManager::GetInstance();
@@ -206,8 +267,8 @@ bool GroupRepository::GetGroupByCode(const string& groupCode, cGroupInfo& OUT in
         auto rows = groups.select("group_id", "group_name", "group_code", "creator_id",
             "description", "group_image_url",
             "storage_usage", "storage_limit", "member_count", "created_at")
-            .where("group_code = :code")
-            .bind("code", groupCode)
+            .where("group_id = :id")
+            .bind("id", groupId)
             .execute();
 
         if (rows.count() == 0) return false;

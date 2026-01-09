@@ -47,7 +47,7 @@ struct TableStruct_protocol_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[57]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[59]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -73,6 +73,9 @@ extern C_ConfirmEmailVerifyDefaultTypeInternal _C_ConfirmEmailVerify_default_ins
 class C_CreateGroup;
 struct C_CreateGroupDefaultTypeInternal;
 extern C_CreateGroupDefaultTypeInternal _C_CreateGroup_default_instance_;
+class C_EditGroup;
+struct C_EditGroupDefaultTypeInternal;
+extern C_EditGroupDefaultTypeInternal _C_EditGroup_default_instance_;
 class C_FetchFriendData;
 struct C_FetchFriendDataDefaultTypeInternal;
 extern C_FetchFriendDataDefaultTypeInternal _C_FetchFriendData_default_instance_;
@@ -160,6 +163,9 @@ extern S_ConfirmEmailVerifyDefaultTypeInternal _S_ConfirmEmailVerify_default_ins
 class S_CreateGroup;
 struct S_CreateGroupDefaultTypeInternal;
 extern S_CreateGroupDefaultTypeInternal _S_CreateGroup_default_instance_;
+class S_EditGroup;
+struct S_EditGroupDefaultTypeInternal;
+extern S_EditGroupDefaultTypeInternal _S_EditGroup_default_instance_;
 class S_Error;
 struct S_ErrorDefaultTypeInternal;
 extern S_ErrorDefaultTypeInternal _S_Error_default_instance_;
@@ -234,6 +240,7 @@ template<> ::Protocol::C_CheckEmail* Arena::CreateMaybeMessage<::Protocol::C_Che
 template<> ::Protocol::C_CheckId* Arena::CreateMaybeMessage<::Protocol::C_CheckId>(Arena*);
 template<> ::Protocol::C_ConfirmEmailVerify* Arena::CreateMaybeMessage<::Protocol::C_ConfirmEmailVerify>(Arena*);
 template<> ::Protocol::C_CreateGroup* Arena::CreateMaybeMessage<::Protocol::C_CreateGroup>(Arena*);
+template<> ::Protocol::C_EditGroup* Arena::CreateMaybeMessage<::Protocol::C_EditGroup>(Arena*);
 template<> ::Protocol::C_FetchFriendData* Arena::CreateMaybeMessage<::Protocol::C_FetchFriendData>(Arena*);
 template<> ::Protocol::C_FetchOffline* Arena::CreateMaybeMessage<::Protocol::C_FetchOffline>(Arena*);
 template<> ::Protocol::C_FriendAction* Arena::CreateMaybeMessage<::Protocol::C_FriendAction>(Arena*);
@@ -263,6 +270,7 @@ template<> ::Protocol::S_CheckEmail* Arena::CreateMaybeMessage<::Protocol::S_Che
 template<> ::Protocol::S_CheckId* Arena::CreateMaybeMessage<::Protocol::S_CheckId>(Arena*);
 template<> ::Protocol::S_ConfirmEmailVerify* Arena::CreateMaybeMessage<::Protocol::S_ConfirmEmailVerify>(Arena*);
 template<> ::Protocol::S_CreateGroup* Arena::CreateMaybeMessage<::Protocol::S_CreateGroup>(Arena*);
+template<> ::Protocol::S_EditGroup* Arena::CreateMaybeMessage<::Protocol::S_EditGroup>(Arena*);
 template<> ::Protocol::S_Error* Arena::CreateMaybeMessage<::Protocol::S_Error>(Arena*);
 template<> ::Protocol::S_FetchFriendData* Arena::CreateMaybeMessage<::Protocol::S_FetchFriendData>(Arena*);
 template<> ::Protocol::S_FriendAction* Arena::CreateMaybeMessage<::Protocol::S_FriendAction>(Arena*);
@@ -288,6 +296,33 @@ template<> ::Protocol::Video* Arena::CreateMaybeMessage<::Protocol::Video>(Arena
 PROTOBUF_NAMESPACE_CLOSE
 namespace Protocol {
 
+enum C_UploadFile_UploadType : int {
+  C_UploadFile_UploadType_DIRECT_CHAT = 0,
+  C_UploadFile_UploadType_GROUP_CHAT = 1,
+  C_UploadFile_UploadType_PROFILE_IMG = 2,
+  C_UploadFile_UploadType_GROUP_PROFILE_IMG = 3,
+  C_UploadFile_UploadType_C_UploadFile_UploadType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
+  C_UploadFile_UploadType_C_UploadFile_UploadType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
+};
+bool C_UploadFile_UploadType_IsValid(int value);
+constexpr C_UploadFile_UploadType C_UploadFile_UploadType_UploadType_MIN = C_UploadFile_UploadType_DIRECT_CHAT;
+constexpr C_UploadFile_UploadType C_UploadFile_UploadType_UploadType_MAX = C_UploadFile_UploadType_GROUP_PROFILE_IMG;
+constexpr int C_UploadFile_UploadType_UploadType_ARRAYSIZE = C_UploadFile_UploadType_UploadType_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* C_UploadFile_UploadType_descriptor();
+template<typename T>
+inline const std::string& C_UploadFile_UploadType_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, C_UploadFile_UploadType>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function C_UploadFile_UploadType_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    C_UploadFile_UploadType_descriptor(), enum_t_value);
+}
+inline bool C_UploadFile_UploadType_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, C_UploadFile_UploadType* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<C_UploadFile_UploadType>(
+    C_UploadFile_UploadType_descriptor(), name, value);
+}
 enum C_FriendAction_ActionType : int {
   C_FriendAction_ActionType_SEND_REQUEST = 0,
   C_FriendAction_ActionType_CANCEL_REQUEST = 1,
@@ -374,12 +409,14 @@ enum ErrorCode : int {
   ERR_MIME_TYPE_REQUIRED = 404,
   ERR_FAILED_TO_GENERATE_URL = 405,
   ERR_INVALID_FILE_URL = 406,
+  ERR_INVALID_ARGUMENT = 407,
+  ERR_NO_PERMISSION = 500,
   ErrorCode_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
   ErrorCode_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
 };
 bool ErrorCode_IsValid(int value);
 constexpr ErrorCode ErrorCode_MIN = ERR_SUCCESS;
-constexpr ErrorCode ErrorCode_MAX = ERR_INVALID_FILE_URL;
+constexpr ErrorCode ErrorCode_MAX = ERR_NO_PERMISSION;
 constexpr int ErrorCode_ARRAYSIZE = ErrorCode_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ErrorCode_descriptor();
@@ -507,6 +544,10 @@ class Envelope final :
     kSLeaveGroup = 61,
     kCGroupMemberList = 62,
     kSGroupMemberList = 63,
+    kCGroupInfo = 64,
+    kSGroupInfo = 65,
+    kCEditGroup = 66,
+    kSEditGroup = 67,
     BODY_NOT_SET = 0,
   };
 
@@ -625,6 +666,10 @@ class Envelope final :
     kSLeaveGroupFieldNumber = 61,
     kCGroupMemberListFieldNumber = 62,
     kSGroupMemberListFieldNumber = 63,
+    kCGroupInfoFieldNumber = 64,
+    kSGroupInfoFieldNumber = 65,
+    kCEditGroupFieldNumber = 66,
+    kSEditGroupFieldNumber = 67,
   };
   // string auth_token = 3;
   void clear_auth_token();
@@ -1432,6 +1477,78 @@ class Envelope final :
       ::Protocol::S_GroupMemberList* s_group_member_list);
   ::Protocol::S_GroupMemberList* unsafe_arena_release_s_group_member_list();
 
+  // .Protocol.C_GroupInfo c_group_info = 64;
+  bool has_c_group_info() const;
+  private:
+  bool _internal_has_c_group_info() const;
+  public:
+  void clear_c_group_info();
+  const ::Protocol::C_GroupInfo& c_group_info() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::Protocol::C_GroupInfo* release_c_group_info();
+  ::Protocol::C_GroupInfo* mutable_c_group_info();
+  void set_allocated_c_group_info(::Protocol::C_GroupInfo* c_group_info);
+  private:
+  const ::Protocol::C_GroupInfo& _internal_c_group_info() const;
+  ::Protocol::C_GroupInfo* _internal_mutable_c_group_info();
+  public:
+  void unsafe_arena_set_allocated_c_group_info(
+      ::Protocol::C_GroupInfo* c_group_info);
+  ::Protocol::C_GroupInfo* unsafe_arena_release_c_group_info();
+
+  // .Protocol.S_GroupInfo s_group_info = 65;
+  bool has_s_group_info() const;
+  private:
+  bool _internal_has_s_group_info() const;
+  public:
+  void clear_s_group_info();
+  const ::Protocol::S_GroupInfo& s_group_info() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::Protocol::S_GroupInfo* release_s_group_info();
+  ::Protocol::S_GroupInfo* mutable_s_group_info();
+  void set_allocated_s_group_info(::Protocol::S_GroupInfo* s_group_info);
+  private:
+  const ::Protocol::S_GroupInfo& _internal_s_group_info() const;
+  ::Protocol::S_GroupInfo* _internal_mutable_s_group_info();
+  public:
+  void unsafe_arena_set_allocated_s_group_info(
+      ::Protocol::S_GroupInfo* s_group_info);
+  ::Protocol::S_GroupInfo* unsafe_arena_release_s_group_info();
+
+  // .Protocol.C_EditGroup c_edit_group = 66;
+  bool has_c_edit_group() const;
+  private:
+  bool _internal_has_c_edit_group() const;
+  public:
+  void clear_c_edit_group();
+  const ::Protocol::C_EditGroup& c_edit_group() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::Protocol::C_EditGroup* release_c_edit_group();
+  ::Protocol::C_EditGroup* mutable_c_edit_group();
+  void set_allocated_c_edit_group(::Protocol::C_EditGroup* c_edit_group);
+  private:
+  const ::Protocol::C_EditGroup& _internal_c_edit_group() const;
+  ::Protocol::C_EditGroup* _internal_mutable_c_edit_group();
+  public:
+  void unsafe_arena_set_allocated_c_edit_group(
+      ::Protocol::C_EditGroup* c_edit_group);
+  ::Protocol::C_EditGroup* unsafe_arena_release_c_edit_group();
+
+  // .Protocol.S_EditGroup s_edit_group = 67;
+  bool has_s_edit_group() const;
+  private:
+  bool _internal_has_s_edit_group() const;
+  public:
+  void clear_s_edit_group();
+  const ::Protocol::S_EditGroup& s_edit_group() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::Protocol::S_EditGroup* release_s_edit_group();
+  ::Protocol::S_EditGroup* mutable_s_edit_group();
+  void set_allocated_s_edit_group(::Protocol::S_EditGroup* s_edit_group);
+  private:
+  const ::Protocol::S_EditGroup& _internal_s_edit_group() const;
+  ::Protocol::S_EditGroup* _internal_mutable_s_edit_group();
+  public:
+  void unsafe_arena_set_allocated_s_edit_group(
+      ::Protocol::S_EditGroup* s_edit_group);
+  ::Protocol::S_EditGroup* unsafe_arena_release_s_edit_group();
+
   void clear_body();
   BodyCase body_case() const;
   // @@protoc_insertion_point(class_scope:Protocol.Envelope)
@@ -1480,6 +1597,10 @@ class Envelope final :
   void set_has_s_leave_group();
   void set_has_c_group_member_list();
   void set_has_s_group_member_list();
+  void set_has_c_group_info();
+  void set_has_s_group_info();
+  void set_has_c_edit_group();
+  void set_has_s_edit_group();
 
   inline bool has_body() const;
   inline void clear_has_body();
@@ -1536,6 +1657,10 @@ class Envelope final :
     ::Protocol::S_LeaveGroup* s_leave_group_;
     ::Protocol::C_GroupMemberList* c_group_member_list_;
     ::Protocol::S_GroupMemberList* s_group_member_list_;
+    ::Protocol::C_GroupInfo* c_group_info_;
+    ::Protocol::S_GroupInfo* s_group_info_;
+    ::Protocol::C_EditGroup* c_edit_group_;
+    ::Protocol::S_EditGroup* s_edit_group_;
   } body_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::uint32 _oneof_case_[1];
@@ -3832,6 +3957,7 @@ class Image final :
   enum : int {
     kUrlFieldNumber = 1,
     kThumbnailFieldNumber = 2,
+    kSizeFieldNumber = 3,
   };
   // string url = 1;
   void clear_url();
@@ -3861,6 +3987,15 @@ class Image final :
   std::string* _internal_mutable_thumbnail();
   public:
 
+  // int64 size = 3;
+  void clear_size();
+  ::PROTOBUF_NAMESPACE_ID::int64 size() const;
+  void set_size(::PROTOBUF_NAMESPACE_ID::int64 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int64 _internal_size() const;
+  void _internal_set_size(::PROTOBUF_NAMESPACE_ID::int64 value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Protocol.Image)
  private:
   class _Internal;
@@ -3870,6 +4005,7 @@ class Image final :
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr url_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr thumbnail_;
+  ::PROTOBUF_NAMESPACE_ID::int64 size_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_protocol_2eproto;
 };
@@ -3986,6 +4122,7 @@ class Video final :
     kUrlFieldNumber = 1,
     kThumbnailFieldNumber = 2,
     kDurationSecFieldNumber = 3,
+    kSizeFieldNumber = 4,
   };
   // string url = 1;
   void clear_url();
@@ -4024,6 +4161,15 @@ class Video final :
   void _internal_set_duration_sec(::PROTOBUF_NAMESPACE_ID::int64 value);
   public:
 
+  // int64 size = 4;
+  void clear_size();
+  ::PROTOBUF_NAMESPACE_ID::int64 size() const;
+  void set_size(::PROTOBUF_NAMESPACE_ID::int64 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int64 _internal_size() const;
+  void _internal_set_size(::PROTOBUF_NAMESPACE_ID::int64 value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Protocol.Video)
  private:
   class _Internal;
@@ -4034,6 +4180,7 @@ class Video final :
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr url_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr thumbnail_;
   ::PROTOBUF_NAMESPACE_ID::int64 duration_sec_;
+  ::PROTOBUF_NAMESPACE_ID::int64 size_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_protocol_2eproto;
 };
@@ -5248,13 +5395,49 @@ class C_UploadFile final :
 
   // nested types ----------------------------------------------------
 
+  typedef C_UploadFile_UploadType UploadType;
+  static constexpr UploadType DIRECT_CHAT =
+    C_UploadFile_UploadType_DIRECT_CHAT;
+  static constexpr UploadType GROUP_CHAT =
+    C_UploadFile_UploadType_GROUP_CHAT;
+  static constexpr UploadType PROFILE_IMG =
+    C_UploadFile_UploadType_PROFILE_IMG;
+  static constexpr UploadType GROUP_PROFILE_IMG =
+    C_UploadFile_UploadType_GROUP_PROFILE_IMG;
+  static inline bool UploadType_IsValid(int value) {
+    return C_UploadFile_UploadType_IsValid(value);
+  }
+  static constexpr UploadType UploadType_MIN =
+    C_UploadFile_UploadType_UploadType_MIN;
+  static constexpr UploadType UploadType_MAX =
+    C_UploadFile_UploadType_UploadType_MAX;
+  static constexpr int UploadType_ARRAYSIZE =
+    C_UploadFile_UploadType_UploadType_ARRAYSIZE;
+  static inline const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor*
+  UploadType_descriptor() {
+    return C_UploadFile_UploadType_descriptor();
+  }
+  template<typename T>
+  static inline const std::string& UploadType_Name(T enum_t_value) {
+    static_assert(::std::is_same<T, UploadType>::value ||
+      ::std::is_integral<T>::value,
+      "Incorrect type passed to function UploadType_Name.");
+    return C_UploadFile_UploadType_Name(enum_t_value);
+  }
+  static inline bool UploadType_Parse(::PROTOBUF_NAMESPACE_ID::ConstStringParam name,
+      UploadType* value) {
+    return C_UploadFile_UploadType_Parse(name, value);
+  }
+
   // accessors -------------------------------------------------------
 
   enum : int {
     kFilenameFieldNumber = 1,
     kMimeTypeFieldNumber = 3,
+    kTargetIdFieldNumber = 6,
     kSizeFieldNumber = 2,
     kIsImageFieldNumber = 4,
+    kUploadTypeFieldNumber = 5,
   };
   // string filename = 1;
   void clear_filename();
@@ -5284,6 +5467,20 @@ class C_UploadFile final :
   std::string* _internal_mutable_mime_type();
   public:
 
+  // string target_id = 6;
+  void clear_target_id();
+  const std::string& target_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_target_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_target_id();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_target_id();
+  void set_allocated_target_id(std::string* target_id);
+  private:
+  const std::string& _internal_target_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_target_id(const std::string& value);
+  std::string* _internal_mutable_target_id();
+  public:
+
   // int64 size = 2;
   void clear_size();
   ::PROTOBUF_NAMESPACE_ID::int64 size() const;
@@ -5302,6 +5499,15 @@ class C_UploadFile final :
   void _internal_set_is_image(bool value);
   public:
 
+  // .Protocol.C_UploadFile.UploadType upload_type = 5;
+  void clear_upload_type();
+  ::Protocol::C_UploadFile_UploadType upload_type() const;
+  void set_upload_type(::Protocol::C_UploadFile_UploadType value);
+  private:
+  ::Protocol::C_UploadFile_UploadType _internal_upload_type() const;
+  void _internal_set_upload_type(::Protocol::C_UploadFile_UploadType value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Protocol.C_UploadFile)
  private:
   class _Internal;
@@ -5311,8 +5517,10 @@ class C_UploadFile final :
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr filename_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr mime_type_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr target_id_;
   ::PROTOBUF_NAMESPACE_ID::int64 size_;
   bool is_image_;
+  int upload_type_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_protocol_2eproto;
 };
@@ -10626,6 +10834,343 @@ class S_LeaveGroup final :
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_protocol_2eproto;
 };
+// -------------------------------------------------------------------
+
+class C_EditGroup final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.C_EditGroup) */ {
+ public:
+  inline C_EditGroup() : C_EditGroup(nullptr) {}
+  ~C_EditGroup() override;
+  explicit constexpr C_EditGroup(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  C_EditGroup(const C_EditGroup& from);
+  C_EditGroup(C_EditGroup&& from) noexcept
+    : C_EditGroup() {
+    *this = ::std::move(from);
+  }
+
+  inline C_EditGroup& operator=(const C_EditGroup& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline C_EditGroup& operator=(C_EditGroup&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const C_EditGroup& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const C_EditGroup* internal_default_instance() {
+    return reinterpret_cast<const C_EditGroup*>(
+               &_C_EditGroup_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    57;
+
+  friend void swap(C_EditGroup& a, C_EditGroup& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(C_EditGroup* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(C_EditGroup* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline C_EditGroup* New() const final {
+    return new C_EditGroup();
+  }
+
+  C_EditGroup* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<C_EditGroup>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const C_EditGroup& from);
+  void MergeFrom(const C_EditGroup& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(C_EditGroup* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.C_EditGroup";
+  }
+  protected:
+  explicit C_EditGroup(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kGroupIdFieldNumber = 1,
+    kNewNameFieldNumber = 2,
+    kNewImageUrlFieldNumber = 3,
+  };
+  // string group_id = 1;
+  void clear_group_id();
+  const std::string& group_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_group_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_group_id();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_group_id();
+  void set_allocated_group_id(std::string* group_id);
+  private:
+  const std::string& _internal_group_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_group_id(const std::string& value);
+  std::string* _internal_mutable_group_id();
+  public:
+
+  // string new_name = 2;
+  void clear_new_name();
+  const std::string& new_name() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_new_name(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_new_name();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_new_name();
+  void set_allocated_new_name(std::string* new_name);
+  private:
+  const std::string& _internal_new_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_new_name(const std::string& value);
+  std::string* _internal_mutable_new_name();
+  public:
+
+  // string new_image_url = 3;
+  void clear_new_image_url();
+  const std::string& new_image_url() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_new_image_url(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_new_image_url();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_new_image_url();
+  void set_allocated_new_image_url(std::string* new_image_url);
+  private:
+  const std::string& _internal_new_image_url() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_new_image_url(const std::string& value);
+  std::string* _internal_mutable_new_image_url();
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.C_EditGroup)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr group_id_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr new_name_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr new_image_url_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class S_EditGroup final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S_EditGroup) */ {
+ public:
+  inline S_EditGroup() : S_EditGroup(nullptr) {}
+  ~S_EditGroup() override;
+  explicit constexpr S_EditGroup(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  S_EditGroup(const S_EditGroup& from);
+  S_EditGroup(S_EditGroup&& from) noexcept
+    : S_EditGroup() {
+    *this = ::std::move(from);
+  }
+
+  inline S_EditGroup& operator=(const S_EditGroup& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline S_EditGroup& operator=(S_EditGroup&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const S_EditGroup& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const S_EditGroup* internal_default_instance() {
+    return reinterpret_cast<const S_EditGroup*>(
+               &_S_EditGroup_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    58;
+
+  friend void swap(S_EditGroup& a, S_EditGroup& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(S_EditGroup* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(S_EditGroup* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline S_EditGroup* New() const final {
+    return new S_EditGroup();
+  }
+
+  S_EditGroup* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<S_EditGroup>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const S_EditGroup& from);
+  void MergeFrom(const S_EditGroup& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(S_EditGroup* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.S_EditGroup";
+  }
+  protected:
+  explicit S_EditGroup(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kMessageFieldNumber = 2,
+    kGroupFieldNumber = 3,
+    kSuccessFieldNumber = 1,
+  };
+  // string message = 2;
+  void clear_message();
+  const std::string& message() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_message(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_message();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_message();
+  void set_allocated_message(std::string* message);
+  private:
+  const std::string& _internal_message() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_message(const std::string& value);
+  std::string* _internal_mutable_message();
+  public:
+
+  // .Protocol.GroupInfo group = 3;
+  bool has_group() const;
+  private:
+  bool _internal_has_group() const;
+  public:
+  void clear_group();
+  const ::Protocol::GroupInfo& group() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::Protocol::GroupInfo* release_group();
+  ::Protocol::GroupInfo* mutable_group();
+  void set_allocated_group(::Protocol::GroupInfo* group);
+  private:
+  const ::Protocol::GroupInfo& _internal_group() const;
+  ::Protocol::GroupInfo* _internal_mutable_group();
+  public:
+  void unsafe_arena_set_allocated_group(
+      ::Protocol::GroupInfo* group);
+  ::Protocol::GroupInfo* unsafe_arena_release_group();
+
+  // bool success = 1;
+  void clear_success();
+  bool success() const;
+  void set_success(bool value);
+  private:
+  bool _internal_success() const;
+  void _internal_set_success(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.S_EditGroup)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
+  ::Protocol::GroupInfo* group_;
+  bool success_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_protocol_2eproto;
+};
 // ===================================================================
 
 
@@ -13861,6 +14406,298 @@ inline ::Protocol::S_GroupMemberList* Envelope::mutable_s_group_member_list() {
   return _internal_mutable_s_group_member_list();
 }
 
+// .Protocol.C_GroupInfo c_group_info = 64;
+inline bool Envelope::_internal_has_c_group_info() const {
+  return body_case() == kCGroupInfo;
+}
+inline bool Envelope::has_c_group_info() const {
+  return _internal_has_c_group_info();
+}
+inline void Envelope::set_has_c_group_info() {
+  _oneof_case_[0] = kCGroupInfo;
+}
+inline void Envelope::clear_c_group_info() {
+  if (_internal_has_c_group_info()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete body_.c_group_info_;
+    }
+    clear_has_body();
+  }
+}
+inline ::Protocol::C_GroupInfo* Envelope::release_c_group_info() {
+  // @@protoc_insertion_point(field_release:Protocol.Envelope.c_group_info)
+  if (_internal_has_c_group_info()) {
+    clear_has_body();
+      ::Protocol::C_GroupInfo* temp = body_.c_group_info_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    body_.c_group_info_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::Protocol::C_GroupInfo& Envelope::_internal_c_group_info() const {
+  return _internal_has_c_group_info()
+      ? *body_.c_group_info_
+      : reinterpret_cast< ::Protocol::C_GroupInfo&>(::Protocol::_C_GroupInfo_default_instance_);
+}
+inline const ::Protocol::C_GroupInfo& Envelope::c_group_info() const {
+  // @@protoc_insertion_point(field_get:Protocol.Envelope.c_group_info)
+  return _internal_c_group_info();
+}
+inline ::Protocol::C_GroupInfo* Envelope::unsafe_arena_release_c_group_info() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:Protocol.Envelope.c_group_info)
+  if (_internal_has_c_group_info()) {
+    clear_has_body();
+    ::Protocol::C_GroupInfo* temp = body_.c_group_info_;
+    body_.c_group_info_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Envelope::unsafe_arena_set_allocated_c_group_info(::Protocol::C_GroupInfo* c_group_info) {
+  clear_body();
+  if (c_group_info) {
+    set_has_c_group_info();
+    body_.c_group_info_ = c_group_info;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.Envelope.c_group_info)
+}
+inline ::Protocol::C_GroupInfo* Envelope::_internal_mutable_c_group_info() {
+  if (!_internal_has_c_group_info()) {
+    clear_body();
+    set_has_c_group_info();
+    body_.c_group_info_ = CreateMaybeMessage< ::Protocol::C_GroupInfo >(GetArenaForAllocation());
+  }
+  return body_.c_group_info_;
+}
+inline ::Protocol::C_GroupInfo* Envelope::mutable_c_group_info() {
+  // @@protoc_insertion_point(field_mutable:Protocol.Envelope.c_group_info)
+  return _internal_mutable_c_group_info();
+}
+
+// .Protocol.S_GroupInfo s_group_info = 65;
+inline bool Envelope::_internal_has_s_group_info() const {
+  return body_case() == kSGroupInfo;
+}
+inline bool Envelope::has_s_group_info() const {
+  return _internal_has_s_group_info();
+}
+inline void Envelope::set_has_s_group_info() {
+  _oneof_case_[0] = kSGroupInfo;
+}
+inline void Envelope::clear_s_group_info() {
+  if (_internal_has_s_group_info()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete body_.s_group_info_;
+    }
+    clear_has_body();
+  }
+}
+inline ::Protocol::S_GroupInfo* Envelope::release_s_group_info() {
+  // @@protoc_insertion_point(field_release:Protocol.Envelope.s_group_info)
+  if (_internal_has_s_group_info()) {
+    clear_has_body();
+      ::Protocol::S_GroupInfo* temp = body_.s_group_info_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    body_.s_group_info_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::Protocol::S_GroupInfo& Envelope::_internal_s_group_info() const {
+  return _internal_has_s_group_info()
+      ? *body_.s_group_info_
+      : reinterpret_cast< ::Protocol::S_GroupInfo&>(::Protocol::_S_GroupInfo_default_instance_);
+}
+inline const ::Protocol::S_GroupInfo& Envelope::s_group_info() const {
+  // @@protoc_insertion_point(field_get:Protocol.Envelope.s_group_info)
+  return _internal_s_group_info();
+}
+inline ::Protocol::S_GroupInfo* Envelope::unsafe_arena_release_s_group_info() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:Protocol.Envelope.s_group_info)
+  if (_internal_has_s_group_info()) {
+    clear_has_body();
+    ::Protocol::S_GroupInfo* temp = body_.s_group_info_;
+    body_.s_group_info_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Envelope::unsafe_arena_set_allocated_s_group_info(::Protocol::S_GroupInfo* s_group_info) {
+  clear_body();
+  if (s_group_info) {
+    set_has_s_group_info();
+    body_.s_group_info_ = s_group_info;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.Envelope.s_group_info)
+}
+inline ::Protocol::S_GroupInfo* Envelope::_internal_mutable_s_group_info() {
+  if (!_internal_has_s_group_info()) {
+    clear_body();
+    set_has_s_group_info();
+    body_.s_group_info_ = CreateMaybeMessage< ::Protocol::S_GroupInfo >(GetArenaForAllocation());
+  }
+  return body_.s_group_info_;
+}
+inline ::Protocol::S_GroupInfo* Envelope::mutable_s_group_info() {
+  // @@protoc_insertion_point(field_mutable:Protocol.Envelope.s_group_info)
+  return _internal_mutable_s_group_info();
+}
+
+// .Protocol.C_EditGroup c_edit_group = 66;
+inline bool Envelope::_internal_has_c_edit_group() const {
+  return body_case() == kCEditGroup;
+}
+inline bool Envelope::has_c_edit_group() const {
+  return _internal_has_c_edit_group();
+}
+inline void Envelope::set_has_c_edit_group() {
+  _oneof_case_[0] = kCEditGroup;
+}
+inline void Envelope::clear_c_edit_group() {
+  if (_internal_has_c_edit_group()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete body_.c_edit_group_;
+    }
+    clear_has_body();
+  }
+}
+inline ::Protocol::C_EditGroup* Envelope::release_c_edit_group() {
+  // @@protoc_insertion_point(field_release:Protocol.Envelope.c_edit_group)
+  if (_internal_has_c_edit_group()) {
+    clear_has_body();
+      ::Protocol::C_EditGroup* temp = body_.c_edit_group_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    body_.c_edit_group_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::Protocol::C_EditGroup& Envelope::_internal_c_edit_group() const {
+  return _internal_has_c_edit_group()
+      ? *body_.c_edit_group_
+      : reinterpret_cast< ::Protocol::C_EditGroup&>(::Protocol::_C_EditGroup_default_instance_);
+}
+inline const ::Protocol::C_EditGroup& Envelope::c_edit_group() const {
+  // @@protoc_insertion_point(field_get:Protocol.Envelope.c_edit_group)
+  return _internal_c_edit_group();
+}
+inline ::Protocol::C_EditGroup* Envelope::unsafe_arena_release_c_edit_group() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:Protocol.Envelope.c_edit_group)
+  if (_internal_has_c_edit_group()) {
+    clear_has_body();
+    ::Protocol::C_EditGroup* temp = body_.c_edit_group_;
+    body_.c_edit_group_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Envelope::unsafe_arena_set_allocated_c_edit_group(::Protocol::C_EditGroup* c_edit_group) {
+  clear_body();
+  if (c_edit_group) {
+    set_has_c_edit_group();
+    body_.c_edit_group_ = c_edit_group;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.Envelope.c_edit_group)
+}
+inline ::Protocol::C_EditGroup* Envelope::_internal_mutable_c_edit_group() {
+  if (!_internal_has_c_edit_group()) {
+    clear_body();
+    set_has_c_edit_group();
+    body_.c_edit_group_ = CreateMaybeMessage< ::Protocol::C_EditGroup >(GetArenaForAllocation());
+  }
+  return body_.c_edit_group_;
+}
+inline ::Protocol::C_EditGroup* Envelope::mutable_c_edit_group() {
+  // @@protoc_insertion_point(field_mutable:Protocol.Envelope.c_edit_group)
+  return _internal_mutable_c_edit_group();
+}
+
+// .Protocol.S_EditGroup s_edit_group = 67;
+inline bool Envelope::_internal_has_s_edit_group() const {
+  return body_case() == kSEditGroup;
+}
+inline bool Envelope::has_s_edit_group() const {
+  return _internal_has_s_edit_group();
+}
+inline void Envelope::set_has_s_edit_group() {
+  _oneof_case_[0] = kSEditGroup;
+}
+inline void Envelope::clear_s_edit_group() {
+  if (_internal_has_s_edit_group()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete body_.s_edit_group_;
+    }
+    clear_has_body();
+  }
+}
+inline ::Protocol::S_EditGroup* Envelope::release_s_edit_group() {
+  // @@protoc_insertion_point(field_release:Protocol.Envelope.s_edit_group)
+  if (_internal_has_s_edit_group()) {
+    clear_has_body();
+      ::Protocol::S_EditGroup* temp = body_.s_edit_group_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    body_.s_edit_group_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::Protocol::S_EditGroup& Envelope::_internal_s_edit_group() const {
+  return _internal_has_s_edit_group()
+      ? *body_.s_edit_group_
+      : reinterpret_cast< ::Protocol::S_EditGroup&>(::Protocol::_S_EditGroup_default_instance_);
+}
+inline const ::Protocol::S_EditGroup& Envelope::s_edit_group() const {
+  // @@protoc_insertion_point(field_get:Protocol.Envelope.s_edit_group)
+  return _internal_s_edit_group();
+}
+inline ::Protocol::S_EditGroup* Envelope::unsafe_arena_release_s_edit_group() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:Protocol.Envelope.s_edit_group)
+  if (_internal_has_s_edit_group()) {
+    clear_has_body();
+    ::Protocol::S_EditGroup* temp = body_.s_edit_group_;
+    body_.s_edit_group_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Envelope::unsafe_arena_set_allocated_s_edit_group(::Protocol::S_EditGroup* s_edit_group) {
+  clear_body();
+  if (s_edit_group) {
+    set_has_s_edit_group();
+    body_.s_edit_group_ = s_edit_group;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.Envelope.s_edit_group)
+}
+inline ::Protocol::S_EditGroup* Envelope::_internal_mutable_s_edit_group() {
+  if (!_internal_has_s_edit_group()) {
+    clear_body();
+    set_has_s_edit_group();
+    body_.s_edit_group_ = CreateMaybeMessage< ::Protocol::S_EditGroup >(GetArenaForAllocation());
+  }
+  return body_.s_edit_group_;
+}
+inline ::Protocol::S_EditGroup* Envelope::mutable_s_edit_group() {
+  // @@protoc_insertion_point(field_mutable:Protocol.Envelope.s_edit_group)
+  return _internal_mutable_s_edit_group();
+}
+
 inline bool Envelope::has_body() const {
   return body_case() != BODY_NOT_SET;
 }
@@ -15349,6 +16186,26 @@ inline void Image::set_allocated_thumbnail(std::string* thumbnail) {
   // @@protoc_insertion_point(field_set_allocated:Protocol.Image.thumbnail)
 }
 
+// int64 size = 3;
+inline void Image::clear_size() {
+  size_ = int64_t{0};
+}
+inline ::PROTOBUF_NAMESPACE_ID::int64 Image::_internal_size() const {
+  return size_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int64 Image::size() const {
+  // @@protoc_insertion_point(field_get:Protocol.Image.size)
+  return _internal_size();
+}
+inline void Image::_internal_set_size(::PROTOBUF_NAMESPACE_ID::int64 value) {
+  
+  size_ = value;
+}
+inline void Image::set_size(::PROTOBUF_NAMESPACE_ID::int64 value) {
+  _internal_set_size(value);
+  // @@protoc_insertion_point(field_set:Protocol.Image.size)
+}
+
 // -------------------------------------------------------------------
 
 // Video
@@ -15461,6 +16318,26 @@ inline void Video::_internal_set_duration_sec(::PROTOBUF_NAMESPACE_ID::int64 val
 inline void Video::set_duration_sec(::PROTOBUF_NAMESPACE_ID::int64 value) {
   _internal_set_duration_sec(value);
   // @@protoc_insertion_point(field_set:Protocol.Video.duration_sec)
+}
+
+// int64 size = 4;
+inline void Video::clear_size() {
+  size_ = int64_t{0};
+}
+inline ::PROTOBUF_NAMESPACE_ID::int64 Video::_internal_size() const {
+  return size_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int64 Video::size() const {
+  // @@protoc_insertion_point(field_get:Protocol.Video.size)
+  return _internal_size();
+}
+inline void Video::_internal_set_size(::PROTOBUF_NAMESPACE_ID::int64 value) {
+  
+  size_ = value;
+}
+inline void Video::set_size(::PROTOBUF_NAMESPACE_ID::int64 value) {
+  _internal_set_size(value);
+  // @@protoc_insertion_point(field_set:Protocol.Video.size)
 }
 
 // -------------------------------------------------------------------
@@ -16609,6 +17486,71 @@ inline void C_UploadFile::_internal_set_is_image(bool value) {
 inline void C_UploadFile::set_is_image(bool value) {
   _internal_set_is_image(value);
   // @@protoc_insertion_point(field_set:Protocol.C_UploadFile.is_image)
+}
+
+// .Protocol.C_UploadFile.UploadType upload_type = 5;
+inline void C_UploadFile::clear_upload_type() {
+  upload_type_ = 0;
+}
+inline ::Protocol::C_UploadFile_UploadType C_UploadFile::_internal_upload_type() const {
+  return static_cast< ::Protocol::C_UploadFile_UploadType >(upload_type_);
+}
+inline ::Protocol::C_UploadFile_UploadType C_UploadFile::upload_type() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_UploadFile.upload_type)
+  return _internal_upload_type();
+}
+inline void C_UploadFile::_internal_set_upload_type(::Protocol::C_UploadFile_UploadType value) {
+  
+  upload_type_ = value;
+}
+inline void C_UploadFile::set_upload_type(::Protocol::C_UploadFile_UploadType value) {
+  _internal_set_upload_type(value);
+  // @@protoc_insertion_point(field_set:Protocol.C_UploadFile.upload_type)
+}
+
+// string target_id = 6;
+inline void C_UploadFile::clear_target_id() {
+  target_id_.ClearToEmpty();
+}
+inline const std::string& C_UploadFile::target_id() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_UploadFile.target_id)
+  return _internal_target_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void C_UploadFile::set_target_id(ArgT0&& arg0, ArgT... args) {
+ 
+ target_id_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.C_UploadFile.target_id)
+}
+inline std::string* C_UploadFile::mutable_target_id() {
+  // @@protoc_insertion_point(field_mutable:Protocol.C_UploadFile.target_id)
+  return _internal_mutable_target_id();
+}
+inline const std::string& C_UploadFile::_internal_target_id() const {
+  return target_id_.Get();
+}
+inline void C_UploadFile::_internal_set_target_id(const std::string& value) {
+  
+  target_id_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* C_UploadFile::_internal_mutable_target_id() {
+  
+  return target_id_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* C_UploadFile::release_target_id() {
+  // @@protoc_insertion_point(field_release:Protocol.C_UploadFile.target_id)
+  return target_id_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void C_UploadFile::set_allocated_target_id(std::string* target_id) {
+  if (target_id != nullptr) {
+    
+  } else {
+    
+  }
+  target_id_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), target_id,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C_UploadFile.target_id)
 }
 
 // -------------------------------------------------------------------
@@ -20018,9 +20960,304 @@ inline void S_LeaveGroup::set_allocated_message(std::string* message) {
   // @@protoc_insertion_point(field_set_allocated:Protocol.S_LeaveGroup.message)
 }
 
+// -------------------------------------------------------------------
+
+// C_EditGroup
+
+// string group_id = 1;
+inline void C_EditGroup::clear_group_id() {
+  group_id_.ClearToEmpty();
+}
+inline const std::string& C_EditGroup::group_id() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_EditGroup.group_id)
+  return _internal_group_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void C_EditGroup::set_group_id(ArgT0&& arg0, ArgT... args) {
+ 
+ group_id_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.C_EditGroup.group_id)
+}
+inline std::string* C_EditGroup::mutable_group_id() {
+  // @@protoc_insertion_point(field_mutable:Protocol.C_EditGroup.group_id)
+  return _internal_mutable_group_id();
+}
+inline const std::string& C_EditGroup::_internal_group_id() const {
+  return group_id_.Get();
+}
+inline void C_EditGroup::_internal_set_group_id(const std::string& value) {
+  
+  group_id_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* C_EditGroup::_internal_mutable_group_id() {
+  
+  return group_id_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* C_EditGroup::release_group_id() {
+  // @@protoc_insertion_point(field_release:Protocol.C_EditGroup.group_id)
+  return group_id_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void C_EditGroup::set_allocated_group_id(std::string* group_id) {
+  if (group_id != nullptr) {
+    
+  } else {
+    
+  }
+  group_id_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), group_id,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C_EditGroup.group_id)
+}
+
+// string new_name = 2;
+inline void C_EditGroup::clear_new_name() {
+  new_name_.ClearToEmpty();
+}
+inline const std::string& C_EditGroup::new_name() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_EditGroup.new_name)
+  return _internal_new_name();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void C_EditGroup::set_new_name(ArgT0&& arg0, ArgT... args) {
+ 
+ new_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.C_EditGroup.new_name)
+}
+inline std::string* C_EditGroup::mutable_new_name() {
+  // @@protoc_insertion_point(field_mutable:Protocol.C_EditGroup.new_name)
+  return _internal_mutable_new_name();
+}
+inline const std::string& C_EditGroup::_internal_new_name() const {
+  return new_name_.Get();
+}
+inline void C_EditGroup::_internal_set_new_name(const std::string& value) {
+  
+  new_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* C_EditGroup::_internal_mutable_new_name() {
+  
+  return new_name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* C_EditGroup::release_new_name() {
+  // @@protoc_insertion_point(field_release:Protocol.C_EditGroup.new_name)
+  return new_name_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void C_EditGroup::set_allocated_new_name(std::string* new_name) {
+  if (new_name != nullptr) {
+    
+  } else {
+    
+  }
+  new_name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), new_name,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C_EditGroup.new_name)
+}
+
+// string new_image_url = 3;
+inline void C_EditGroup::clear_new_image_url() {
+  new_image_url_.ClearToEmpty();
+}
+inline const std::string& C_EditGroup::new_image_url() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_EditGroup.new_image_url)
+  return _internal_new_image_url();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void C_EditGroup::set_new_image_url(ArgT0&& arg0, ArgT... args) {
+ 
+ new_image_url_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.C_EditGroup.new_image_url)
+}
+inline std::string* C_EditGroup::mutable_new_image_url() {
+  // @@protoc_insertion_point(field_mutable:Protocol.C_EditGroup.new_image_url)
+  return _internal_mutable_new_image_url();
+}
+inline const std::string& C_EditGroup::_internal_new_image_url() const {
+  return new_image_url_.Get();
+}
+inline void C_EditGroup::_internal_set_new_image_url(const std::string& value) {
+  
+  new_image_url_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* C_EditGroup::_internal_mutable_new_image_url() {
+  
+  return new_image_url_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* C_EditGroup::release_new_image_url() {
+  // @@protoc_insertion_point(field_release:Protocol.C_EditGroup.new_image_url)
+  return new_image_url_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void C_EditGroup::set_allocated_new_image_url(std::string* new_image_url) {
+  if (new_image_url != nullptr) {
+    
+  } else {
+    
+  }
+  new_image_url_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), new_image_url,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C_EditGroup.new_image_url)
+}
+
+// -------------------------------------------------------------------
+
+// S_EditGroup
+
+// bool success = 1;
+inline void S_EditGroup::clear_success() {
+  success_ = false;
+}
+inline bool S_EditGroup::_internal_success() const {
+  return success_;
+}
+inline bool S_EditGroup::success() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_EditGroup.success)
+  return _internal_success();
+}
+inline void S_EditGroup::_internal_set_success(bool value) {
+  
+  success_ = value;
+}
+inline void S_EditGroup::set_success(bool value) {
+  _internal_set_success(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_EditGroup.success)
+}
+
+// string message = 2;
+inline void S_EditGroup::clear_message() {
+  message_.ClearToEmpty();
+}
+inline const std::string& S_EditGroup::message() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_EditGroup.message)
+  return _internal_message();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void S_EditGroup::set_message(ArgT0&& arg0, ArgT... args) {
+ 
+ message_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.S_EditGroup.message)
+}
+inline std::string* S_EditGroup::mutable_message() {
+  // @@protoc_insertion_point(field_mutable:Protocol.S_EditGroup.message)
+  return _internal_mutable_message();
+}
+inline const std::string& S_EditGroup::_internal_message() const {
+  return message_.Get();
+}
+inline void S_EditGroup::_internal_set_message(const std::string& value) {
+  
+  message_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* S_EditGroup::_internal_mutable_message() {
+  
+  return message_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* S_EditGroup::release_message() {
+  // @@protoc_insertion_point(field_release:Protocol.S_EditGroup.message)
+  return message_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void S_EditGroup::set_allocated_message(std::string* message) {
+  if (message != nullptr) {
+    
+  } else {
+    
+  }
+  message_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), message,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.S_EditGroup.message)
+}
+
+// .Protocol.GroupInfo group = 3;
+inline bool S_EditGroup::_internal_has_group() const {
+  return this != internal_default_instance() && group_ != nullptr;
+}
+inline bool S_EditGroup::has_group() const {
+  return _internal_has_group();
+}
+inline void S_EditGroup::clear_group() {
+  if (GetArenaForAllocation() == nullptr && group_ != nullptr) {
+    delete group_;
+  }
+  group_ = nullptr;
+}
+inline const ::Protocol::GroupInfo& S_EditGroup::_internal_group() const {
+  const ::Protocol::GroupInfo* p = group_;
+  return p != nullptr ? *p : reinterpret_cast<const ::Protocol::GroupInfo&>(
+      ::Protocol::_GroupInfo_default_instance_);
+}
+inline const ::Protocol::GroupInfo& S_EditGroup::group() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_EditGroup.group)
+  return _internal_group();
+}
+inline void S_EditGroup::unsafe_arena_set_allocated_group(
+    ::Protocol::GroupInfo* group) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(group_);
+  }
+  group_ = group;
+  if (group) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.S_EditGroup.group)
+}
+inline ::Protocol::GroupInfo* S_EditGroup::release_group() {
+  
+  ::Protocol::GroupInfo* temp = group_;
+  group_ = nullptr;
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+  return temp;
+}
+inline ::Protocol::GroupInfo* S_EditGroup::unsafe_arena_release_group() {
+  // @@protoc_insertion_point(field_release:Protocol.S_EditGroup.group)
+  
+  ::Protocol::GroupInfo* temp = group_;
+  group_ = nullptr;
+  return temp;
+}
+inline ::Protocol::GroupInfo* S_EditGroup::_internal_mutable_group() {
+  
+  if (group_ == nullptr) {
+    auto* p = CreateMaybeMessage<::Protocol::GroupInfo>(GetArenaForAllocation());
+    group_ = p;
+  }
+  return group_;
+}
+inline ::Protocol::GroupInfo* S_EditGroup::mutable_group() {
+  // @@protoc_insertion_point(field_mutable:Protocol.S_EditGroup.group)
+  return _internal_mutable_group();
+}
+inline void S_EditGroup::set_allocated_group(::Protocol::GroupInfo* group) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete group_;
+  }
+  if (group) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::Protocol::GroupInfo>::GetOwningArena(group);
+    if (message_arena != submessage_arena) {
+      group = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, group, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  group_ = group;
+  // @@protoc_insertion_point(field_set_allocated:Protocol.S_EditGroup.group)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
@@ -20140,6 +21377,11 @@ inline void S_LeaveGroup::set_allocated_message(std::string* message) {
 
 PROTOBUF_NAMESPACE_OPEN
 
+template <> struct is_proto_enum< ::Protocol::C_UploadFile_UploadType> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::Protocol::C_UploadFile_UploadType>() {
+  return ::Protocol::C_UploadFile_UploadType_descriptor();
+}
 template <> struct is_proto_enum< ::Protocol::C_FriendAction_ActionType> : ::std::true_type {};
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::Protocol::C_FriendAction_ActionType>() {

@@ -78,6 +78,11 @@ message Envelope {
       C_GroupMemberList     c_group_member_list     = 62;
       S_GroupMemberList     s_group_member_list     = 63;
 
+      C_GroupInfo           c_group_info            = 64;
+      S_GroupInfo           s_group_info            = 65;
+
+      C_EditGroup           c_edit_group            = 66;
+      S_EditGroup           s_edit_group            = 67;
 
   }
 }
@@ -173,12 +178,14 @@ message Text {
 message Image { 
     string url = 1; 
     string thumbnail = 2; 
+    int64 size = 3;
 }
 
 message Video {
   string    url = 1;
   string    thumbnail = 2; 
   int64     duration_sec = 3; 
+  int64     size = 4;
 }
 
 message File {
@@ -241,19 +248,28 @@ message C_UploadFile {
     int64 size = 2;          // 파일 크기 (bytes)
     string mime_type = 3;    // MIME 타입 (image/jpeg, application/pdf 등)
     bool is_image = 4;       // 이미지 여부 (썸네일 생성 여부 결정)
+
+    enum UploadType {
+        DIRECT_CHAT = 0;       // 개인 채팅
+        GROUP_CHAT = 1;        // 그룹 채팅
+        PROFILE_IMG = 2;       // 프로필 이미지
+        GROUP_PROFILE_IMG = 3;
+    }
+    UploadType upload_type = 5; 
+    string target_id = 6;     // 그룹일 경우 groupId
 }
 
 message S_UploadFile {
     bool success = 1;
     string message          = 2;
-    string file_id          = 3;           // 생성된 파일 ID
-    string upload_url       = 4;        // GCS Signed Upload URL (PUT)
+    string file_id          = 3;      // 생성된 파일 ID
+    string upload_url       = 4;      // GCS Signed Upload URL (PUT)
     string download_url     = 5;      // GCS Signed Download URL (GET)
-    string thumb_upload_url = 6;     // 썸네일 다운로드 URL (이미지인 경우)
-    string thumbnail_url    = 7;     // 썸네일 다운로드용 (GET) 이름 유지
+    string thumb_upload_url = 6;      // 썸네일 다운로드 URL (이미지인 경우)
+    string thumbnail_url    = 7;      // 썸네일 다운로드용 (GET) 이름 유지
 
-    int64 expires_at        = 8;        // URL 만료 시간 (Unix timestamp)
-    string path             = 9;          // GCS 경로 (gs://bucket/path)
+    int64 expires_at        = 8;      // URL 만료 시간 (Unix timestamp)
+    string path             = 9;      // GCS 경로 (gs://bucket/path)
 }
 
 
@@ -319,11 +335,17 @@ enum ErrorCode {
     // 400~499: 파일 업로드 관련
     ERR_FILE_SERVICE_NOT_INITIALIZED = 400; // 파일 서비스가 초기화되지 않음
     ERR_CLOUD_STORAGE_NOT_INITIALIZED = 401; // 클라우드 스토리지가 초기화되지 않음
-    ERR_FILENAME_REQUIRED = 402;  // 파일명이 필요함
-    ERR_INVALID_FILE_SIZE = 403;  // 파일 크기가 유효하지 않음
-    ERR_MIME_TYPE_REQUIRED = 404;  // MIME 타입이 필요함
+    ERR_FILENAME_REQUIRED = 402;      // 파일명이 필요함
+    ERR_INVALID_FILE_SIZE = 403;      // 파일 크기가 유효하지 않음
+    ERR_MIME_TYPE_REQUIRED = 404;     // MIME 타입이 필요함
     ERR_FAILED_TO_GENERATE_URL = 405; // URL 생성 실패
-    ERR_INVALID_FILE_URL = 406;   // 파일 URL이 유효하지 않음
+    ERR_INVALID_FILE_URL = 406;       // 파일 URL이 유효하지 않음
+    ERR_INVALID_ARGUMENT = 407;       // 잘못된 인자 (예: Group ID 누락)
+
+
+    //500 그룹관련
+    ERR_NO_PERMISSION =500;
+
 }
 
 message S_Error {
@@ -445,6 +467,7 @@ message GroupInfo {
   int64 storage_usage_bytes = 8;    // 현재 사용량
 }
 
+
 message GroupMemberInfo {
   string user_id = 1;
   string name = 2;
@@ -528,4 +551,18 @@ message C_LeaveGroup {
 message S_LeaveGroup {
   bool success = 1;
   string message = 2;
+}
+
+
+
+message C_EditGroup {
+  string group_id = 1;
+  string new_name = 2;
+  string new_image_url = 3;
+}
+
+message S_EditGroup {
+  bool success = 1;
+  string message = 2;
+  GroupInfo group = 3;
 }

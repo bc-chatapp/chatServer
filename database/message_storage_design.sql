@@ -1,11 +1,14 @@
 
 USE chat_server;
 
+SET FOREIGN_KEY_CHECKS = 0;
 
 DROP TABLE IF EXISTS conversations;
 DROP TABLE IF EXISTS conversation_participants;
 DROP TABLE IF EXISTS messages;
 DROP TABLE IF EXISTS read_status;
+
+SET FOREIGN_KEY_CHECKS = 1;
 
 
 -- 1. 대화방 테이블 (참여자 컬럼 제거)
