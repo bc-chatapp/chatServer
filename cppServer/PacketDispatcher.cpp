@@ -134,6 +134,12 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 	case Protocol::Envelope::kCGroupMemberList:
 		Dispatch_C_GroupMemberList(session, envelope.request_id(), envelope.c_group_member_list());
 		break;
+	case Protocol::Envelope::kCGroupInfo:
+		Dispatch_C_GroupInfo(session, envelope.request_id(), envelope.c_group_info());
+		break;
+	case Protocol::Envelope::kCEditGroup:
+		Dispatch_C_EditGroup(session, envelope.request_id(), envelope.c_edit_group());
+		break;
 
 	default:
 		DispatchError(session, envelope.request_id(), ERR_INVALID_PACKET);
@@ -626,5 +632,32 @@ bool PacketDispatcher::Dispatch_C_GroupMemberList(sessionPtr& session, uint64 re
 		return false;
 	}
 	return GGroupService->GetGroupMemberList(session, reqId, pkt.group_id());
+}
+
+
+
+
+bool PacketDispatcher::Dispatch_C_GroupInfo(sessionPtr& session, uint64 reqId, const Protocol::C_GroupInfo& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED, "인증이 필요합니다.");
+		return false;
+	}
+
+	return GGroupService->GetGroupInfo(session, reqId, pkt.group_id());
+}
+
+bool PacketDispatcher::Dispatch_C_EditGroup(sessionPtr& session, uint64 reqId, const Protocol::C_EditGroup& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED, "인증이 필요합니다.");
+		return false;
+	}
+
+	return GGroupService->UpdateGroupInfo(session, reqId, const_cast<Protocol::C_EditGroup&>(pkt));
 }
 

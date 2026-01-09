@@ -20,7 +20,7 @@ FLUSH PRIVILEGES;
    
 	SELECT * FROM `groups`;
 	SELECT * FROM `group_members`;
-   
+	SELECT * FROM `group_assets`;
    
 INSERT INTO group_members (group_id, user_id, role, joined_at)
 VALUES ('1db53609e9b56272e11487c83a13d879', 'dummy001', 'member', now());

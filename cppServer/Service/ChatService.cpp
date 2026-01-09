@@ -24,8 +24,9 @@ bool ChatService::SendDirect(sessionPtr& senderSession, uint64 reqId, const stri
     const string convId = MessageRepository::CreateConversationId(senderId, receiverId);
     MessageRepository::CreateOrGetConversation(convId, "direct", senderId, receiverId);
     
-    auto pkt_s_chat = Build_S_Chat(convId, senderId, senderName, pkt);
-
+    int64 fileSize = 0;
+    string fileType;
+    auto pkt_s_chat = Build_S_Chat(convId, senderId, fileSize, fileType, pkt);
     int64 msgSeq = MessageRepository::SaveMessage(convId, senderId, pkt_s_chat);
     
     // server_msg_id를 실제 msg_seq로 설정
@@ -47,6 +48,9 @@ bool ChatService::SendDirect(sessionPtr& senderSession, uint64 reqId, const stri
 
 
 
+
+
+
 bool ChatService::SendGroup(sessionPtr& senderSession, uint64 reqId, const string& groupId, const Protocol::C_Chat& pkt)
 {
     auto session = static_pointer_cast<ServerSession>(senderSession);
@@ -56,13 +60,19 @@ bool ChatService::SendGroup(sessionPtr& senderSession, uint64 reqId, const strin
     const string convId = "group:" + groupId;
     MessageRepository::CreateOrGetConversation(convId, "group");
   
-    auto pkt_s_chat = Build_S_Chat(convId, senderId, senderName, pkt);
+    int64 fileSize = 0;
+    string fileType;
+    auto pkt_s_chat = Build_S_Chat(convId, senderId, fileSize, fileType, pkt);
 
     int64 msgSeq = MessageRepository::SaveMessage(convId, senderId, pkt_s_chat);
     if (msgSeq >= 0) {
         pkt_s_chat.set_msg_seq(msgSeq);
 
         MessageRepository::UpdateReadStatus(senderId, convId, msgSeq);
+
+        if (fileSize > 0) {
+            GroupRepository::SaveGroupAsset(groupId, senderId, msgSeq, fileSize, fileType);
+        }
     }
 
     PushEnvelope(senderSession, reqId, pkt_s_chat); /* Ack to self */
@@ -111,7 +121,7 @@ bool ChatService::SendSystemMessage(const string& groupId, const string& message
 
     for (const auto& member : members) {
         if (auto target = _userManager.FindSession(member.userId)) {
-            PacketDispatcher::SendEnvelope(target, env);
+            PushEnvelope(target, 0, sendPkt);
         }
     }
 
@@ -201,11 +211,10 @@ bool ChatService::HandleReqHistory(sessionPtr& session, uint64 reqId, const Prot
 
 
 
-
-
-
-Protocol::S_Chat ChatService::Build_S_Chat(const string& convId, const string& senderId, const string& senderName, const Protocol::C_Chat& pkt)
+Protocol::S_Chat ChatService::Build_S_Chat(const string& convId, const string& senderId, int64& OUT fileSize, string& OUT fileType, const Protocol::C_Chat& pkt)
 {
+    string senderName = GetUserNameWithId(senderId);
+
     Protocol::S_Chat pkt_s_chat;
     pkt_s_chat.set_conv_id(convId);
     pkt_s_chat.set_client_msg_id(pkt.client_msg_id());
@@ -221,23 +230,29 @@ Protocol::S_Chat ChatService::Build_S_Chat(const string& convId, const string& s
         else if (pkt.payload().has_image()) {
             payload->mutable_image()->set_url(pkt.payload().image().url());
             payload->mutable_image()->set_thumbnail(pkt.payload().image().thumbnail());
+            payload->mutable_image()->set_size(pkt.payload().image().size());
+            fileSize = pkt.payload().image().size(); 
+            fileType = "image";
         }
         else if (pkt.payload().has_video()) {
             payload->mutable_video()->set_url(pkt.payload().video().url());
             payload->mutable_video()->set_thumbnail(pkt.payload().video().thumbnail());
+            payload->mutable_video()->set_size(pkt.payload().video().size());
+            payload->mutable_video()->set_thumbnail(pkt.payload().video().thumbnail());
+            fileSize = pkt.payload().video().size(); 
+            fileType = "video";
         }
         else if (pkt.payload().has_file()) {
             payload->mutable_file()->set_url(pkt.payload().file().url());
             payload->mutable_file()->set_filename(pkt.payload().file().filename());
+            payload->mutable_file()->set_size(pkt.payload().file().size());
+            fileSize = pkt.payload().file().size(); 
+            fileType = "file";
         }
     }
 
     return pkt_s_chat;
 }
-
-
-
-
 
 void ChatService::PushEnvelope(sessionPtr& session, uint64 reqId, const Protocol::S_Chat& pkt_s_chat)
 {

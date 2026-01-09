@@ -37,6 +37,7 @@ public:
     /* 저장 */ //저장된 msg_seq (실패 시 -1)
     static int64 SaveMessage(const string& convId, const string& senderId, const Protocol::S_Chat& sChat);
     
+
     /* 조회 */
     static int64 GetNextMessageSeq(const string& convId);
 

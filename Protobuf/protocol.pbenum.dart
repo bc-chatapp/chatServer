@@ -88,6 +88,12 @@ class ErrorCode extends $pb.ProtobufEnum {
       ErrorCode._(405, _omitEnumNames ? '' : 'ERR_FAILED_TO_GENERATE_URL');
   static const ErrorCode ERR_INVALID_FILE_URL =
       ErrorCode._(406, _omitEnumNames ? '' : 'ERR_INVALID_FILE_URL');
+  static const ErrorCode ERR_INVALID_ARGUMENT =
+      ErrorCode._(407, _omitEnumNames ? '' : 'ERR_INVALID_ARGUMENT');
+
+  /// 500 그룹관련
+  static const ErrorCode ERR_NO_PERMISSION =
+      ErrorCode._(500, _omitEnumNames ? '' : 'ERR_NO_PERMISSION');
 
   static const $core.List<ErrorCode> values = <ErrorCode>[
     ERR_SUCCESS,
@@ -121,6 +127,8 @@ class ErrorCode extends $pb.ProtobufEnum {
     ERR_MIME_TYPE_REQUIRED,
     ERR_FAILED_TO_GENERATE_URL,
     ERR_INVALID_FILE_URL,
+    ERR_INVALID_ARGUMENT,
+    ERR_NO_PERMISSION,
   ];
 
   static final $core.Map<$core.int, ErrorCode> _byValue =
@@ -148,6 +156,32 @@ class GroupRole extends $pb.ProtobufEnum {
       value < 0 || value >= _byValue.length ? null : _byValue[value];
 
   const GroupRole._(super.value, super.name);
+}
+
+class C_UploadFile_UploadType extends $pb.ProtobufEnum {
+  static const C_UploadFile_UploadType DIRECT_CHAT =
+      C_UploadFile_UploadType._(0, _omitEnumNames ? '' : 'DIRECT_CHAT');
+  static const C_UploadFile_UploadType GROUP_CHAT =
+      C_UploadFile_UploadType._(1, _omitEnumNames ? '' : 'GROUP_CHAT');
+  static const C_UploadFile_UploadType PROFILE_IMG =
+      C_UploadFile_UploadType._(2, _omitEnumNames ? '' : 'PROFILE_IMG');
+  static const C_UploadFile_UploadType GROUP_PROFILE_IMG =
+      C_UploadFile_UploadType._(3, _omitEnumNames ? '' : 'GROUP_PROFILE_IMG');
+
+  static const $core.List<C_UploadFile_UploadType> values =
+      <C_UploadFile_UploadType>[
+    DIRECT_CHAT,
+    GROUP_CHAT,
+    PROFILE_IMG,
+    GROUP_PROFILE_IMG,
+  ];
+
+  static final $core.List<C_UploadFile_UploadType?> _byValue =
+      $pb.ProtobufEnum.$_initByValueList(values, 3);
+  static C_UploadFile_UploadType? valueOf($core.int value) =>
+      value < 0 || value >= _byValue.length ? null : _byValue[value];
+
+  const C_UploadFile_UploadType._(super.value, super.name);
 }
 
 class C_FriendAction_ActionType extends $pb.ProtobufEnum {

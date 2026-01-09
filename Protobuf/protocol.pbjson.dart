@@ -49,6 +49,8 @@ const ErrorCode$json = {
     {'1': 'ERR_MIME_TYPE_REQUIRED', '2': 404},
     {'1': 'ERR_FAILED_TO_GENERATE_URL', '2': 405},
     {'1': 'ERR_INVALID_FILE_URL', '2': 406},
+    {'1': 'ERR_INVALID_ARGUMENT', '2': 407},
+    {'1': 'ERR_NO_PERMISSION', '2': 500},
   ],
 };
 
@@ -69,7 +71,8 @@ final $typed_data.Uint8List errorCodeDescriptor = $convert.base64Decode(
     'VURfU1RPUkFHRV9OT1RfSU5JVElBTElaRUQQkQMSGgoVRVJSX0ZJTEVOQU1FX1JFUVVJUkVEEJ'
     'IDEhoKFUVSUl9JTlZBTElEX0ZJTEVfU0laRRCTAxIbChZFUlJfTUlNRV9UWVBFX1JFUVVJUkVE'
     'EJQDEh8KGkVSUl9GQUlMRURfVE9fR0VORVJBVEVfVVJMEJUDEhkKFEVSUl9JTlZBTElEX0ZJTE'
-    'VfVVJMEJYD');
+    'VfVVJMEJYDEhkKFEVSUl9JTlZBTElEX0FSR1VNRU5UEJcDEhYKEUVSUl9OT19QRVJNSVNTSU9O'
+    'EPQD');
 
 @$core.Deprecated('Use groupRoleDescriptor instead')
 const GroupRole$json = {
@@ -479,6 +482,42 @@ const Envelope$json = {
       '9': 0,
       '10': 'sGroupMemberList'
     },
+    {
+      '1': 'c_group_info',
+      '3': 64,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.C_GroupInfo',
+      '9': 0,
+      '10': 'cGroupInfo'
+    },
+    {
+      '1': 's_group_info',
+      '3': 65,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.S_GroupInfo',
+      '9': 0,
+      '10': 'sGroupInfo'
+    },
+    {
+      '1': 'c_edit_group',
+      '3': 66,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.C_EditGroup',
+      '9': 0,
+      '10': 'cEditGroup'
+    },
+    {
+      '1': 's_edit_group',
+      '3': 67,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.S_EditGroup',
+      '9': 0,
+      '10': 'sEditGroup'
+    },
   ],
   '8': [
     {'1': 'body'},
@@ -537,7 +576,11 @@ final $typed_data.Uint8List envelopeDescriptor = $convert.base64Decode(
     '91cEgAUgtzTGVhdmVHcm91cBJMChNjX2dyb3VwX21lbWJlcl9saXN0GD4gASgLMhsuUHJvdG9j'
     'b2wuQ19Hcm91cE1lbWJlckxpc3RIAFIQY0dyb3VwTWVtYmVyTGlzdBJMChNzX2dyb3VwX21lbW'
     'Jlcl9saXN0GD8gASgLMhsuUHJvdG9jb2wuU19Hcm91cE1lbWJlckxpc3RIAFIQc0dyb3VwTWVt'
-    'YmVyTGlzdEIGCgRib2R5');
+    'YmVyTGlzdBI5CgxjX2dyb3VwX2luZm8YQCABKAsyFS5Qcm90b2NvbC5DX0dyb3VwSW5mb0gAUg'
+    'pjR3JvdXBJbmZvEjkKDHNfZ3JvdXBfaW5mbxhBIAEoCzIVLlByb3RvY29sLlNfR3JvdXBJbmZv'
+    'SABSCnNHcm91cEluZm8SOQoMY19lZGl0X2dyb3VwGEIgASgLMhUuUHJvdG9jb2wuQ19FZGl0R3'
+    'JvdXBIAFIKY0VkaXRHcm91cBI5CgxzX2VkaXRfZ3JvdXAYQyABKAsyFS5Qcm90b2NvbC5TX0Vk'
+    'aXRHcm91cEgAUgpzRWRpdEdyb3VwQgYKBGJvZHk=');
 
 @$core.Deprecated('Use c_CheckIdDescriptor instead')
 const C_CheckId$json = {
@@ -783,13 +826,14 @@ const Image$json = {
   '2': [
     {'1': 'url', '3': 1, '4': 1, '5': 9, '10': 'url'},
     {'1': 'thumbnail', '3': 2, '4': 1, '5': 9, '10': 'thumbnail'},
+    {'1': 'size', '3': 3, '4': 1, '5': 3, '10': 'size'},
   ],
 };
 
 /// Descriptor for `Image`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List imageDescriptor = $convert.base64Decode(
-    'CgVJbWFnZRIQCgN1cmwYASABKAlSA3VybBIcCgl0aHVtYm5haWwYAiABKAlSCXRodW1ibmFpbA'
-    '==');
+    'CgVJbWFnZRIQCgN1cmwYASABKAlSA3VybBIcCgl0aHVtYm5haWwYAiABKAlSCXRodW1ibmFpbB'
+    'ISCgRzaXplGAMgASgDUgRzaXpl');
 
 @$core.Deprecated('Use videoDescriptor instead')
 const Video$json = {
@@ -798,13 +842,14 @@ const Video$json = {
     {'1': 'url', '3': 1, '4': 1, '5': 9, '10': 'url'},
     {'1': 'thumbnail', '3': 2, '4': 1, '5': 9, '10': 'thumbnail'},
     {'1': 'duration_sec', '3': 3, '4': 1, '5': 3, '10': 'durationSec'},
+    {'1': 'size', '3': 4, '4': 1, '5': 3, '10': 'size'},
   ],
 };
 
 /// Descriptor for `Video`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List videoDescriptor = $convert.base64Decode(
     'CgVWaWRlbxIQCgN1cmwYASABKAlSA3VybBIcCgl0aHVtYm5haWwYAiABKAlSCXRodW1ibmFpbB'
-    'IhCgxkdXJhdGlvbl9zZWMYAyABKANSC2R1cmF0aW9uU2Vj');
+    'IhCgxkdXJhdGlvbl9zZWMYAyABKANSC2R1cmF0aW9uU2VjEhIKBHNpemUYBCABKANSBHNpemU=');
 
 @$core.Deprecated('Use fileDescriptor instead')
 const File$json = {
@@ -939,6 +984,27 @@ const C_UploadFile$json = {
     {'1': 'size', '3': 2, '4': 1, '5': 3, '10': 'size'},
     {'1': 'mime_type', '3': 3, '4': 1, '5': 9, '10': 'mimeType'},
     {'1': 'is_image', '3': 4, '4': 1, '5': 8, '10': 'isImage'},
+    {
+      '1': 'upload_type',
+      '3': 5,
+      '4': 1,
+      '5': 14,
+      '6': '.Protocol.C_UploadFile.UploadType',
+      '10': 'uploadType'
+    },
+    {'1': 'target_id', '3': 6, '4': 1, '5': 9, '10': 'targetId'},
+  ],
+  '4': [C_UploadFile_UploadType$json],
+};
+
+@$core.Deprecated('Use c_UploadFileDescriptor instead')
+const C_UploadFile_UploadType$json = {
+  '1': 'UploadType',
+  '2': [
+    {'1': 'DIRECT_CHAT', '2': 0},
+    {'1': 'GROUP_CHAT', '2': 1},
+    {'1': 'PROFILE_IMG', '2': 2},
+    {'1': 'GROUP_PROFILE_IMG', '2': 3},
   ],
 };
 
@@ -946,7 +1012,10 @@ const C_UploadFile$json = {
 final $typed_data.Uint8List c_UploadFileDescriptor = $convert.base64Decode(
     'CgxDX1VwbG9hZEZpbGUSGgoIZmlsZW5hbWUYASABKAlSCGZpbGVuYW1lEhIKBHNpemUYAiABKA'
     'NSBHNpemUSGwoJbWltZV90eXBlGAMgASgJUghtaW1lVHlwZRIZCghpc19pbWFnZRgEIAEoCFIH'
-    'aXNJbWFnZQ==');
+    'aXNJbWFnZRJCCgt1cGxvYWRfdHlwZRgFIAEoDjIhLlByb3RvY29sLkNfVXBsb2FkRmlsZS5VcG'
+    'xvYWRUeXBlUgp1cGxvYWRUeXBlEhsKCXRhcmdldF9pZBgGIAEoCVIIdGFyZ2V0SWQiVQoKVXBs'
+    'b2FkVHlwZRIPCgtESVJFQ1RfQ0hBVBAAEg4KCkdST1VQX0NIQVQQARIPCgtQUk9GSUxFX0lNRx'
+    'ACEhUKEUdST1VQX1BST0ZJTEVfSU1HEAM=');
 
 @$core.Deprecated('Use s_UploadFileDescriptor instead')
 const S_UploadFile$json = {
@@ -1591,3 +1660,40 @@ const S_LeaveGroup$json = {
 final $typed_data.Uint8List s_LeaveGroupDescriptor = $convert.base64Decode(
     'CgxTX0xlYXZlR3JvdXASGAoHc3VjY2VzcxgBIAEoCFIHc3VjY2VzcxIYCgdtZXNzYWdlGAIgAS'
     'gJUgdtZXNzYWdl');
+
+@$core.Deprecated('Use c_EditGroupDescriptor instead')
+const C_EditGroup$json = {
+  '1': 'C_EditGroup',
+  '2': [
+    {'1': 'group_id', '3': 1, '4': 1, '5': 9, '10': 'groupId'},
+    {'1': 'new_name', '3': 2, '4': 1, '5': 9, '10': 'newName'},
+    {'1': 'new_image_url', '3': 3, '4': 1, '5': 9, '10': 'newImageUrl'},
+  ],
+};
+
+/// Descriptor for `C_EditGroup`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List c_EditGroupDescriptor = $convert.base64Decode(
+    'CgtDX0VkaXRHcm91cBIZCghncm91cF9pZBgBIAEoCVIHZ3JvdXBJZBIZCghuZXdfbmFtZRgCIA'
+    'EoCVIHbmV3TmFtZRIiCg1uZXdfaW1hZ2VfdXJsGAMgASgJUgtuZXdJbWFnZVVybA==');
+
+@$core.Deprecated('Use s_EditGroupDescriptor instead')
+const S_EditGroup$json = {
+  '1': 'S_EditGroup',
+  '2': [
+    {'1': 'success', '3': 1, '4': 1, '5': 8, '10': 'success'},
+    {'1': 'message', '3': 2, '4': 1, '5': 9, '10': 'message'},
+    {
+      '1': 'group',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.GroupInfo',
+      '10': 'group'
+    },
+  ],
+};
+
+/// Descriptor for `S_EditGroup`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List s_EditGroupDescriptor = $convert.base64Decode(
+    'CgtTX0VkaXRHcm91cBIYCgdzdWNjZXNzGAEgASgIUgdzdWNjZXNzEhgKB21lc3NhZ2UYAiABKA'
+    'lSB21lc3NhZ2USKQoFZ3JvdXAYAyABKAsyEy5Qcm90b2NvbC5Hcm91cEluZm9SBWdyb3Vw');

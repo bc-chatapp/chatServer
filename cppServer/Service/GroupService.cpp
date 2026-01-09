@@ -98,7 +98,7 @@ bool GroupService::JoinGroup(sessionPtr& session, uint64 reqId, const string& gr
 	if (userId.empty()) return false;
 
 	cGroupInfo dbInfo;
-	if (!GroupRepository::GetGroupByCode(groupCode, dbInfo)) {
+	if (!GroupRepository::GetGroupInfoById(groupCode, dbInfo)) {
 		HandleErr(session, reqId, Protocol::ERR_INVALID_PACKET, "유효하지 않은 초대 코드입니다.");
 		return false;
 	}
@@ -181,6 +181,87 @@ bool GroupService::LeaveGroup(sessionPtr& session, uint64 reqId, const string& g
 
 
 
+bool GroupService::GetGroupInfo(sessionPtr& session, uint64 reqId, const string& groupId)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) return false;
+
+
+	cGroupInfo dbInfo;
+	if (!GroupRepository::GetGroupInfoById(groupId, dbInfo)) {
+		// HandleErr(session, reqId, ERR_GROUP_NOT_FOUND);
+		return false;
+	}
+
+	Protocol::S_GroupInfo pkt_groupInfo;
+	auto* info = pkt_groupInfo.mutable_group();
+
+	info->set_group_id(dbInfo.groupId);
+	info->set_group_name(dbInfo.groupName);
+	info->set_group_code(dbInfo.groupCode);
+	info->set_description(dbInfo.description);
+	info->set_group_image_url(dbInfo.groupImageUrl);
+	info->set_member_count(dbInfo.memberCount);
+
+	info->set_storage_capacity_bytes(dbInfo.storageLimit);
+	info->set_storage_usage_bytes(dbInfo.storageUsage);
+
+
+	Protocol::Envelope env;
+	env.set_version(GProtoVersion);
+	env.set_request_id(reqId);
+	env.mutable_s_group_info()->CopyFrom(pkt_groupInfo);
+
+	PacketDispatcher::SendEnvelope(session, env);
+	return true;
+}
+
+
+
+bool GroupService::UpdateGroupInfo(sessionPtr& session, uint64 reqId, Protocol::C_EditGroup& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) return false;
+
+	string role = GroupRepository::GetMemberRole(pkt.group_id(), userId);
+	if (role != "owner" && role != "admin") { // admin도 있다면 추가
+		HandleErr(session, reqId, ERR_NO_PERMISSION, "관리자 권한이 필요합니다.");
+		return false;
+	}
+
+	if (GroupRepository::UpdateGroupInfo(pkt.group_id(), pkt.new_name(), pkt.new_image_url()))
+	{
+		cGroupInfo groupInfo;
+		GroupRepository::GetGroupInfoById(pkt.group_id(), groupInfo);
+
+		Protocol::S_EditGroup pkt;
+		pkt.set_success(true);
+		pkt.set_message("성공적으로 수정되었습니다. ");
+		
+		auto groupData = pkt.mutable_group();
+		groupData->set_group_id(groupInfo.groupId);
+		groupData->set_group_name(groupInfo.groupName);
+		groupData->set_group_image_url(groupInfo.groupImageUrl);
+
+		Protocol::Envelope env;
+		env.set_version(GProtoVersion);
+		env.set_request_id(reqId);
+		*env.mutable_s_edit_group() = pkt;
+		PacketDispatcher::SendEnvelope(session, env);
+
+		/* TODO Notify */
+
+
+		return true;
+	}
+	
+	return false;
+}
+
+
+
 
 
 bool GroupService::InviteFriend(sessionPtr& session, const Protocol::C_InviteFriend& pkt)
@@ -197,7 +278,7 @@ bool GroupService::InviteFriend(sessionPtr& session, const Protocol::C_InviteFri
 
 	string groupId = pkt.group_id();
 	cGroupInfo groupInfo;
-	if (!GroupRepository::GetGroupByCode(groupId, groupInfo)) {
+	if (!GroupRepository::GetGroupInfoById(groupId, groupInfo)) {
 		// 실패 응답
 		return false;
 	}

@@ -65,6 +65,10 @@ enum Envelope_Body {
   sLeaveGroup,
   cGroupMemberList,
   sGroupMemberList,
+  cGroupInfo,
+  sGroupInfo,
+  cEditGroup,
+  sEditGroup,
   notSet
 }
 
@@ -116,6 +120,10 @@ class Envelope extends $pb.GeneratedMessage {
     S_LeaveGroup? sLeaveGroup,
     C_GroupMemberList? cGroupMemberList,
     S_GroupMemberList? sGroupMemberList,
+    C_GroupInfo? cGroupInfo,
+    S_GroupInfo? sGroupInfo,
+    C_EditGroup? cEditGroup,
+    S_EditGroup? sEditGroup,
   }) {
     final result = create();
     if (version != null) result.version = version;
@@ -166,6 +174,10 @@ class Envelope extends $pb.GeneratedMessage {
     if (sLeaveGroup != null) result.sLeaveGroup = sLeaveGroup;
     if (cGroupMemberList != null) result.cGroupMemberList = cGroupMemberList;
     if (sGroupMemberList != null) result.sGroupMemberList = sGroupMemberList;
+    if (cGroupInfo != null) result.cGroupInfo = cGroupInfo;
+    if (sGroupInfo != null) result.sGroupInfo = sGroupInfo;
+    if (cEditGroup != null) result.cEditGroup = cEditGroup;
+    if (sEditGroup != null) result.sEditGroup = sEditGroup;
     return result;
   }
 
@@ -222,6 +234,10 @@ class Envelope extends $pb.GeneratedMessage {
     61: Envelope_Body.sLeaveGroup,
     62: Envelope_Body.cGroupMemberList,
     63: Envelope_Body.sGroupMemberList,
+    64: Envelope_Body.cGroupInfo,
+    65: Envelope_Body.sGroupInfo,
+    66: Envelope_Body.cEditGroup,
+    67: Envelope_Body.sEditGroup,
     0: Envelope_Body.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
@@ -271,7 +287,11 @@ class Envelope extends $pb.GeneratedMessage {
       60,
       61,
       62,
-      63
+      63,
+      64,
+      65,
+      66,
+      67
     ])
     ..aI(1, _omitFieldNames ? '' : 'version', fieldType: $pb.PbFieldType.OU3)
     ..a<$fixnum.Int64>(
@@ -363,6 +383,14 @@ class Envelope extends $pb.GeneratedMessage {
         subBuilder: C_GroupMemberList.create)
     ..aOM<S_GroupMemberList>(63, _omitFieldNames ? '' : 'sGroupMemberList',
         subBuilder: S_GroupMemberList.create)
+    ..aOM<C_GroupInfo>(64, _omitFieldNames ? '' : 'cGroupInfo',
+        subBuilder: C_GroupInfo.create)
+    ..aOM<S_GroupInfo>(65, _omitFieldNames ? '' : 'sGroupInfo',
+        subBuilder: S_GroupInfo.create)
+    ..aOM<C_EditGroup>(66, _omitFieldNames ? '' : 'cEditGroup',
+        subBuilder: C_EditGroup.create)
+    ..aOM<S_EditGroup>(67, _omitFieldNames ? '' : 'sEditGroup',
+        subBuilder: S_EditGroup.create)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -426,6 +454,10 @@ class Envelope extends $pb.GeneratedMessage {
   @$pb.TagNumber(61)
   @$pb.TagNumber(62)
   @$pb.TagNumber(63)
+  @$pb.TagNumber(64)
+  @$pb.TagNumber(65)
+  @$pb.TagNumber(66)
+  @$pb.TagNumber(67)
   Envelope_Body whichBody() => _Envelope_BodyByTag[$_whichOneof(0)]!;
   @$pb.TagNumber(10)
   @$pb.TagNumber(11)
@@ -470,6 +502,10 @@ class Envelope extends $pb.GeneratedMessage {
   @$pb.TagNumber(61)
   @$pb.TagNumber(62)
   @$pb.TagNumber(63)
+  @$pb.TagNumber(64)
+  @$pb.TagNumber(65)
+  @$pb.TagNumber(66)
+  @$pb.TagNumber(67)
   void clearBody() => $_clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
@@ -976,6 +1012,50 @@ class Envelope extends $pb.GeneratedMessage {
   void clearSGroupMemberList() => $_clearField(63);
   @$pb.TagNumber(63)
   S_GroupMemberList ensureSGroupMemberList() => $_ensure(45);
+
+  @$pb.TagNumber(64)
+  C_GroupInfo get cGroupInfo => $_getN(46);
+  @$pb.TagNumber(64)
+  set cGroupInfo(C_GroupInfo value) => $_setField(64, value);
+  @$pb.TagNumber(64)
+  $core.bool hasCGroupInfo() => $_has(46);
+  @$pb.TagNumber(64)
+  void clearCGroupInfo() => $_clearField(64);
+  @$pb.TagNumber(64)
+  C_GroupInfo ensureCGroupInfo() => $_ensure(46);
+
+  @$pb.TagNumber(65)
+  S_GroupInfo get sGroupInfo => $_getN(47);
+  @$pb.TagNumber(65)
+  set sGroupInfo(S_GroupInfo value) => $_setField(65, value);
+  @$pb.TagNumber(65)
+  $core.bool hasSGroupInfo() => $_has(47);
+  @$pb.TagNumber(65)
+  void clearSGroupInfo() => $_clearField(65);
+  @$pb.TagNumber(65)
+  S_GroupInfo ensureSGroupInfo() => $_ensure(47);
+
+  @$pb.TagNumber(66)
+  C_EditGroup get cEditGroup => $_getN(48);
+  @$pb.TagNumber(66)
+  set cEditGroup(C_EditGroup value) => $_setField(66, value);
+  @$pb.TagNumber(66)
+  $core.bool hasCEditGroup() => $_has(48);
+  @$pb.TagNumber(66)
+  void clearCEditGroup() => $_clearField(66);
+  @$pb.TagNumber(66)
+  C_EditGroup ensureCEditGroup() => $_ensure(48);
+
+  @$pb.TagNumber(67)
+  S_EditGroup get sEditGroup => $_getN(49);
+  @$pb.TagNumber(67)
+  set sEditGroup(S_EditGroup value) => $_setField(67, value);
+  @$pb.TagNumber(67)
+  $core.bool hasSEditGroup() => $_has(49);
+  @$pb.TagNumber(67)
+  void clearSEditGroup() => $_clearField(67);
+  @$pb.TagNumber(67)
+  S_EditGroup ensureSEditGroup() => $_ensure(49);
 }
 
 /// -------------
@@ -1952,10 +2032,12 @@ class Image extends $pb.GeneratedMessage {
   factory Image({
     $core.String? url,
     $core.String? thumbnail,
+    $fixnum.Int64? size,
   }) {
     final result = create();
     if (url != null) result.url = url;
     if (thumbnail != null) result.thumbnail = thumbnail;
+    if (size != null) result.size = size;
     return result;
   }
 
@@ -1974,6 +2056,7 @@ class Image extends $pb.GeneratedMessage {
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'url')
     ..aOS(2, _omitFieldNames ? '' : 'thumbnail')
+    ..aInt64(3, _omitFieldNames ? '' : 'size')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -2011,6 +2094,15 @@ class Image extends $pb.GeneratedMessage {
   $core.bool hasThumbnail() => $_has(1);
   @$pb.TagNumber(2)
   void clearThumbnail() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $fixnum.Int64 get size => $_getI64(2);
+  @$pb.TagNumber(3)
+  set size($fixnum.Int64 value) => $_setInt64(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasSize() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearSize() => $_clearField(3);
 }
 
 class Video extends $pb.GeneratedMessage {
@@ -2018,11 +2110,13 @@ class Video extends $pb.GeneratedMessage {
     $core.String? url,
     $core.String? thumbnail,
     $fixnum.Int64? durationSec,
+    $fixnum.Int64? size,
   }) {
     final result = create();
     if (url != null) result.url = url;
     if (thumbnail != null) result.thumbnail = thumbnail;
     if (durationSec != null) result.durationSec = durationSec;
+    if (size != null) result.size = size;
     return result;
   }
 
@@ -2042,6 +2136,7 @@ class Video extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'url')
     ..aOS(2, _omitFieldNames ? '' : 'thumbnail')
     ..aInt64(3, _omitFieldNames ? '' : 'durationSec')
+    ..aInt64(4, _omitFieldNames ? '' : 'size')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -2088,6 +2183,15 @@ class Video extends $pb.GeneratedMessage {
   $core.bool hasDurationSec() => $_has(2);
   @$pb.TagNumber(3)
   void clearDurationSec() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $fixnum.Int64 get size => $_getI64(3);
+  @$pb.TagNumber(4)
+  set size($fixnum.Int64 value) => $_setInt64(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasSize() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearSize() => $_clearField(4);
 }
 
 class File extends $pb.GeneratedMessage {
@@ -2658,12 +2762,16 @@ class C_UploadFile extends $pb.GeneratedMessage {
     $fixnum.Int64? size,
     $core.String? mimeType,
     $core.bool? isImage,
+    C_UploadFile_UploadType? uploadType,
+    $core.String? targetId,
   }) {
     final result = create();
     if (filename != null) result.filename = filename;
     if (size != null) result.size = size;
     if (mimeType != null) result.mimeType = mimeType;
     if (isImage != null) result.isImage = isImage;
+    if (uploadType != null) result.uploadType = uploadType;
+    if (targetId != null) result.targetId = targetId;
     return result;
   }
 
@@ -2684,6 +2792,9 @@ class C_UploadFile extends $pb.GeneratedMessage {
     ..aInt64(2, _omitFieldNames ? '' : 'size')
     ..aOS(3, _omitFieldNames ? '' : 'mimeType')
     ..aOB(4, _omitFieldNames ? '' : 'isImage')
+    ..aE<C_UploadFile_UploadType>(5, _omitFieldNames ? '' : 'uploadType',
+        enumValues: C_UploadFile_UploadType.values)
+    ..aOS(6, _omitFieldNames ? '' : 'targetId')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -2740,6 +2851,24 @@ class C_UploadFile extends $pb.GeneratedMessage {
   $core.bool hasIsImage() => $_has(3);
   @$pb.TagNumber(4)
   void clearIsImage() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  C_UploadFile_UploadType get uploadType => $_getN(4);
+  @$pb.TagNumber(5)
+  set uploadType(C_UploadFile_UploadType value) => $_setField(5, value);
+  @$pb.TagNumber(5)
+  $core.bool hasUploadType() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearUploadType() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.String get targetId => $_getSZ(5);
+  @$pb.TagNumber(6)
+  set targetId($core.String value) => $_setString(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasTargetId() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearTargetId() => $_clearField(6);
 }
 
 class S_UploadFile extends $pb.GeneratedMessage {
@@ -5095,6 +5224,165 @@ class S_LeaveGroup extends $pb.GeneratedMessage {
   $core.bool hasMessage() => $_has(1);
   @$pb.TagNumber(2)
   void clearMessage() => $_clearField(2);
+}
+
+class C_EditGroup extends $pb.GeneratedMessage {
+  factory C_EditGroup({
+    $core.String? groupId,
+    $core.String? newName,
+    $core.String? newImageUrl,
+  }) {
+    final result = create();
+    if (groupId != null) result.groupId = groupId;
+    if (newName != null) result.newName = newName;
+    if (newImageUrl != null) result.newImageUrl = newImageUrl;
+    return result;
+  }
+
+  C_EditGroup._();
+
+  factory C_EditGroup.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory C_EditGroup.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'C_EditGroup',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'groupId')
+    ..aOS(2, _omitFieldNames ? '' : 'newName')
+    ..aOS(3, _omitFieldNames ? '' : 'newImageUrl')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_EditGroup clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_EditGroup copyWith(void Function(C_EditGroup) updates) =>
+      super.copyWith((message) => updates(message as C_EditGroup))
+          as C_EditGroup;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static C_EditGroup create() => C_EditGroup._();
+  @$core.override
+  C_EditGroup createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static C_EditGroup getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<C_EditGroup>(create);
+  static C_EditGroup? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get groupId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set groupId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasGroupId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearGroupId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get newName => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set newName($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasNewName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearNewName() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get newImageUrl => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set newImageUrl($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasNewImageUrl() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearNewImageUrl() => $_clearField(3);
+}
+
+class S_EditGroup extends $pb.GeneratedMessage {
+  factory S_EditGroup({
+    $core.bool? success,
+    $core.String? message,
+    GroupInfo? group,
+  }) {
+    final result = create();
+    if (success != null) result.success = success;
+    if (message != null) result.message = message;
+    if (group != null) result.group = group;
+    return result;
+  }
+
+  S_EditGroup._();
+
+  factory S_EditGroup.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory S_EditGroup.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'S_EditGroup',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'success')
+    ..aOS(2, _omitFieldNames ? '' : 'message')
+    ..aOM<GroupInfo>(3, _omitFieldNames ? '' : 'group',
+        subBuilder: GroupInfo.create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_EditGroup clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_EditGroup copyWith(void Function(S_EditGroup) updates) =>
+      super.copyWith((message) => updates(message as S_EditGroup))
+          as S_EditGroup;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static S_EditGroup create() => S_EditGroup._();
+  @$core.override
+  S_EditGroup createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static S_EditGroup getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<S_EditGroup>(create);
+  static S_EditGroup? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get success => $_getBF(0);
+  @$pb.TagNumber(1)
+  set success($core.bool value) => $_setBool(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasSuccess() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSuccess() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get message => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set message($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasMessage() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearMessage() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  GroupInfo get group => $_getN(2);
+  @$pb.TagNumber(3)
+  set group(GroupInfo value) => $_setField(3, value);
+  @$pb.TagNumber(3)
+  $core.bool hasGroup() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearGroup() => $_clearField(3);
+  @$pb.TagNumber(3)
+  GroupInfo ensureGroup() => $_ensure(2);
 }
 
 const $core.bool _omitFieldNames =

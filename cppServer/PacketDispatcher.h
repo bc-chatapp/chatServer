@@ -78,7 +78,9 @@ protected:
     static bool Dispatch_C_JoinGroup(sessionPtr& session, uint64 reqId, const Protocol::C_JoinGroup& pkt);
     static bool Dispatch_C_LeaveGroup(sessionPtr& session, uint64 reqId, const Protocol::C_LeaveGroup& pkt);
     static bool Dispatch_C_GroupMemberList(sessionPtr& session, uint64 reqId, const Protocol::C_GroupMemberList& pkt);
-    
+    static bool Dispatch_C_GroupInfo(sessionPtr& session, uint64 reqId, const Protocol::C_GroupInfo& pkt);
+    static bool Dispatch_C_EditGroup(sessionPtr& session, uint64 reqId, const Protocol::C_EditGroup& pkt);
+
 private:
 
     enum class ConvType { Error = 0, Direct = 1, Group = 2 };

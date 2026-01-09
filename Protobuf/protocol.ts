@@ -74,6 +74,10 @@ export enum ErrorCode {
   ERR_FAILED_TO_GENERATE_URL = 405,
   /** ERR_INVALID_FILE_URL - 파일 URL이 유효하지 않음 */
   ERR_INVALID_FILE_URL = 406,
+  /** ERR_INVALID_ARGUMENT - 잘못된 인자 (예: Group ID 누락) */
+  ERR_INVALID_ARGUMENT = 407,
+  /** ERR_NO_PERMISSION - 500 그룹관련 */
+  ERR_NO_PERMISSION = 500,
   UNRECOGNIZED = -1,
 }
 
@@ -172,6 +176,12 @@ export function errorCodeFromJSON(object: any): ErrorCode {
     case 406:
     case "ERR_INVALID_FILE_URL":
       return ErrorCode.ERR_INVALID_FILE_URL;
+    case 407:
+    case "ERR_INVALID_ARGUMENT":
+      return ErrorCode.ERR_INVALID_ARGUMENT;
+    case 500:
+    case "ERR_NO_PERMISSION":
+      return ErrorCode.ERR_NO_PERMISSION;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -243,6 +253,10 @@ export function errorCodeToJSON(object: ErrorCode): string {
       return "ERR_FAILED_TO_GENERATE_URL";
     case ErrorCode.ERR_INVALID_FILE_URL:
       return "ERR_INVALID_FILE_URL";
+    case ErrorCode.ERR_INVALID_ARGUMENT:
+      return "ERR_INVALID_ARGUMENT";
+    case ErrorCode.ERR_NO_PERMISSION:
+      return "ERR_NO_PERMISSION";
     case ErrorCode.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
@@ -357,6 +371,10 @@ export interface Envelope {
   sLeaveGroup?: SLeaveGroup | undefined;
   cGroupMemberList?: CGroupMemberList | undefined;
   sGroupMemberList?: SGroupMemberList | undefined;
+  cGroupInfo?: CGroupInfo | undefined;
+  sGroupInfo?: SGroupInfo | undefined;
+  cEditGroup?: CEditGroup | undefined;
+  sEditGroup?: SEditGroup | undefined;
 }
 
 /**
@@ -443,12 +461,14 @@ export interface Text {
 export interface Image {
   url: string;
   thumbnail: string;
+  size: number;
 }
 
 export interface Video {
   url: string;
   thumbnail: string;
   durationSec: number;
+  size: number;
 }
 
 export interface File {
@@ -509,6 +529,57 @@ export interface CUploadFile {
   mimeType: string;
   /** 이미지 여부 (썸네일 생성 여부 결정) */
   isImage: boolean;
+  uploadType: CUploadFile_UploadType;
+  /** 그룹일 경우 groupId */
+  targetId: string;
+}
+
+export enum CUploadFile_UploadType {
+  /** DIRECT_CHAT - 개인 채팅 */
+  DIRECT_CHAT = 0,
+  /** GROUP_CHAT - 그룹 채팅 */
+  GROUP_CHAT = 1,
+  /** PROFILE_IMG - 프로필 이미지 */
+  PROFILE_IMG = 2,
+  GROUP_PROFILE_IMG = 3,
+  UNRECOGNIZED = -1,
+}
+
+export function cUploadFile_UploadTypeFromJSON(object: any): CUploadFile_UploadType {
+  switch (object) {
+    case 0:
+    case "DIRECT_CHAT":
+      return CUploadFile_UploadType.DIRECT_CHAT;
+    case 1:
+    case "GROUP_CHAT":
+      return CUploadFile_UploadType.GROUP_CHAT;
+    case 2:
+    case "PROFILE_IMG":
+      return CUploadFile_UploadType.PROFILE_IMG;
+    case 3:
+    case "GROUP_PROFILE_IMG":
+      return CUploadFile_UploadType.GROUP_PROFILE_IMG;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return CUploadFile_UploadType.UNRECOGNIZED;
+  }
+}
+
+export function cUploadFile_UploadTypeToJSON(object: CUploadFile_UploadType): string {
+  switch (object) {
+    case CUploadFile_UploadType.DIRECT_CHAT:
+      return "DIRECT_CHAT";
+    case CUploadFile_UploadType.GROUP_CHAT:
+      return "GROUP_CHAT";
+    case CUploadFile_UploadType.PROFILE_IMG:
+      return "PROFILE_IMG";
+    case CUploadFile_UploadType.GROUP_PROFILE_IMG:
+      return "GROUP_PROFILE_IMG";
+    case CUploadFile_UploadType.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
 }
 
 export interface SUploadFile {
@@ -829,6 +900,18 @@ export interface SLeaveGroup {
   message: string;
 }
 
+export interface CEditGroup {
+  groupId: string;
+  newName: string;
+  newImageUrl: string;
+}
+
+export interface SEditGroup {
+  success: boolean;
+  message: string;
+  group: GroupInfo | undefined;
+}
+
 function createBaseEnvelope(): Envelope {
   return {
     version: 0,
@@ -877,6 +960,10 @@ function createBaseEnvelope(): Envelope {
     sLeaveGroup: undefined,
     cGroupMemberList: undefined,
     sGroupMemberList: undefined,
+    cGroupInfo: undefined,
+    sGroupInfo: undefined,
+    cEditGroup: undefined,
+    sEditGroup: undefined,
   };
 }
 
@@ -1019,6 +1106,18 @@ export const Envelope = {
     }
     if (message.sGroupMemberList !== undefined) {
       SGroupMemberList.encode(message.sGroupMemberList, writer.uint32(506).fork()).ldelim();
+    }
+    if (message.cGroupInfo !== undefined) {
+      CGroupInfo.encode(message.cGroupInfo, writer.uint32(514).fork()).ldelim();
+    }
+    if (message.sGroupInfo !== undefined) {
+      SGroupInfo.encode(message.sGroupInfo, writer.uint32(522).fork()).ldelim();
+    }
+    if (message.cEditGroup !== undefined) {
+      CEditGroup.encode(message.cEditGroup, writer.uint32(530).fork()).ldelim();
+    }
+    if (message.sEditGroup !== undefined) {
+      SEditGroup.encode(message.sEditGroup, writer.uint32(538).fork()).ldelim();
     }
     return writer;
   },
@@ -1352,6 +1451,34 @@ export const Envelope = {
 
           message.sGroupMemberList = SGroupMemberList.decode(reader, reader.uint32());
           continue;
+        case 64:
+          if (tag !== 514) {
+            break;
+          }
+
+          message.cGroupInfo = CGroupInfo.decode(reader, reader.uint32());
+          continue;
+        case 65:
+          if (tag !== 522) {
+            break;
+          }
+
+          message.sGroupInfo = SGroupInfo.decode(reader, reader.uint32());
+          continue;
+        case 66:
+          if (tag !== 530) {
+            break;
+          }
+
+          message.cEditGroup = CEditGroup.decode(reader, reader.uint32());
+          continue;
+        case 67:
+          if (tag !== 538) {
+            break;
+          }
+
+          message.sEditGroup = SEditGroup.decode(reader, reader.uint32());
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -1413,6 +1540,10 @@ export const Envelope = {
       sLeaveGroup: isSet(object.sLeaveGroup) ? SLeaveGroup.fromJSON(object.sLeaveGroup) : undefined,
       cGroupMemberList: isSet(object.cGroupMemberList) ? CGroupMemberList.fromJSON(object.cGroupMemberList) : undefined,
       sGroupMemberList: isSet(object.sGroupMemberList) ? SGroupMemberList.fromJSON(object.sGroupMemberList) : undefined,
+      cGroupInfo: isSet(object.cGroupInfo) ? CGroupInfo.fromJSON(object.cGroupInfo) : undefined,
+      sGroupInfo: isSet(object.sGroupInfo) ? SGroupInfo.fromJSON(object.sGroupInfo) : undefined,
+      cEditGroup: isSet(object.cEditGroup) ? CEditGroup.fromJSON(object.cEditGroup) : undefined,
+      sEditGroup: isSet(object.sEditGroup) ? SEditGroup.fromJSON(object.sEditGroup) : undefined,
     };
   },
 
@@ -1556,6 +1687,18 @@ export const Envelope = {
     if (message.sGroupMemberList !== undefined) {
       obj.sGroupMemberList = SGroupMemberList.toJSON(message.sGroupMemberList);
     }
+    if (message.cGroupInfo !== undefined) {
+      obj.cGroupInfo = CGroupInfo.toJSON(message.cGroupInfo);
+    }
+    if (message.sGroupInfo !== undefined) {
+      obj.sGroupInfo = SGroupInfo.toJSON(message.sGroupInfo);
+    }
+    if (message.cEditGroup !== undefined) {
+      obj.cEditGroup = CEditGroup.toJSON(message.cEditGroup);
+    }
+    if (message.sEditGroup !== undefined) {
+      obj.sEditGroup = SEditGroup.toJSON(message.sEditGroup);
+    }
     return obj;
   },
 
@@ -1689,6 +1832,18 @@ export const Envelope = {
       : undefined;
     message.sGroupMemberList = (object.sGroupMemberList !== undefined && object.sGroupMemberList !== null)
       ? SGroupMemberList.fromPartial(object.sGroupMemberList)
+      : undefined;
+    message.cGroupInfo = (object.cGroupInfo !== undefined && object.cGroupInfo !== null)
+      ? CGroupInfo.fromPartial(object.cGroupInfo)
+      : undefined;
+    message.sGroupInfo = (object.sGroupInfo !== undefined && object.sGroupInfo !== null)
+      ? SGroupInfo.fromPartial(object.sGroupInfo)
+      : undefined;
+    message.cEditGroup = (object.cEditGroup !== undefined && object.cEditGroup !== null)
+      ? CEditGroup.fromPartial(object.cEditGroup)
+      : undefined;
+    message.sEditGroup = (object.sEditGroup !== undefined && object.sEditGroup !== null)
+      ? SEditGroup.fromPartial(object.sEditGroup)
       : undefined;
     return message;
   },
@@ -2734,7 +2889,7 @@ export const Text = {
 };
 
 function createBaseImage(): Image {
-  return { url: "", thumbnail: "" };
+  return { url: "", thumbnail: "", size: 0 };
 }
 
 export const Image = {
@@ -2744,6 +2899,9 @@ export const Image = {
     }
     if (message.thumbnail !== "") {
       writer.uint32(18).string(message.thumbnail);
+    }
+    if (message.size !== 0) {
+      writer.uint32(24).int64(message.size);
     }
     return writer;
   },
@@ -2769,6 +2927,13 @@ export const Image = {
 
           message.thumbnail = reader.string();
           continue;
+        case 3:
+          if (tag !== 24) {
+            break;
+          }
+
+          message.size = longToNumber(reader.int64() as Long);
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -2782,6 +2947,7 @@ export const Image = {
     return {
       url: isSet(object.url) ? globalThis.String(object.url) : "",
       thumbnail: isSet(object.thumbnail) ? globalThis.String(object.thumbnail) : "",
+      size: isSet(object.size) ? globalThis.Number(object.size) : 0,
     };
   },
 
@@ -2793,6 +2959,9 @@ export const Image = {
     if (message.thumbnail !== "") {
       obj.thumbnail = message.thumbnail;
     }
+    if (message.size !== 0) {
+      obj.size = Math.round(message.size);
+    }
     return obj;
   },
 
@@ -2803,12 +2972,13 @@ export const Image = {
     const message = createBaseImage();
     message.url = object.url ?? "";
     message.thumbnail = object.thumbnail ?? "";
+    message.size = object.size ?? 0;
     return message;
   },
 };
 
 function createBaseVideo(): Video {
-  return { url: "", thumbnail: "", durationSec: 0 };
+  return { url: "", thumbnail: "", durationSec: 0, size: 0 };
 }
 
 export const Video = {
@@ -2821,6 +2991,9 @@ export const Video = {
     }
     if (message.durationSec !== 0) {
       writer.uint32(24).int64(message.durationSec);
+    }
+    if (message.size !== 0) {
+      writer.uint32(32).int64(message.size);
     }
     return writer;
   },
@@ -2853,6 +3026,13 @@ export const Video = {
 
           message.durationSec = longToNumber(reader.int64() as Long);
           continue;
+        case 4:
+          if (tag !== 32) {
+            break;
+          }
+
+          message.size = longToNumber(reader.int64() as Long);
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -2867,6 +3047,7 @@ export const Video = {
       url: isSet(object.url) ? globalThis.String(object.url) : "",
       thumbnail: isSet(object.thumbnail) ? globalThis.String(object.thumbnail) : "",
       durationSec: isSet(object.durationSec) ? globalThis.Number(object.durationSec) : 0,
+      size: isSet(object.size) ? globalThis.Number(object.size) : 0,
     };
   },
 
@@ -2881,6 +3062,9 @@ export const Video = {
     if (message.durationSec !== 0) {
       obj.durationSec = Math.round(message.durationSec);
     }
+    if (message.size !== 0) {
+      obj.size = Math.round(message.size);
+    }
     return obj;
   },
 
@@ -2892,6 +3076,7 @@ export const Video = {
     message.url = object.url ?? "";
     message.thumbnail = object.thumbnail ?? "";
     message.durationSec = object.durationSec ?? 0;
+    message.size = object.size ?? 0;
     return message;
   },
 };
@@ -3555,7 +3740,7 @@ export const SReqHistory = {
 };
 
 function createBaseCUploadFile(): CUploadFile {
-  return { filename: "", size: 0, mimeType: "", isImage: false };
+  return { filename: "", size: 0, mimeType: "", isImage: false, uploadType: 0, targetId: "" };
 }
 
 export const CUploadFile = {
@@ -3571,6 +3756,12 @@ export const CUploadFile = {
     }
     if (message.isImage !== false) {
       writer.uint32(32).bool(message.isImage);
+    }
+    if (message.uploadType !== 0) {
+      writer.uint32(40).int32(message.uploadType);
+    }
+    if (message.targetId !== "") {
+      writer.uint32(50).string(message.targetId);
     }
     return writer;
   },
@@ -3610,6 +3801,20 @@ export const CUploadFile = {
 
           message.isImage = reader.bool();
           continue;
+        case 5:
+          if (tag !== 40) {
+            break;
+          }
+
+          message.uploadType = reader.int32() as any;
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.targetId = reader.string();
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -3625,6 +3830,8 @@ export const CUploadFile = {
       size: isSet(object.size) ? globalThis.Number(object.size) : 0,
       mimeType: isSet(object.mimeType) ? globalThis.String(object.mimeType) : "",
       isImage: isSet(object.isImage) ? globalThis.Boolean(object.isImage) : false,
+      uploadType: isSet(object.uploadType) ? cUploadFile_UploadTypeFromJSON(object.uploadType) : 0,
+      targetId: isSet(object.targetId) ? globalThis.String(object.targetId) : "",
     };
   },
 
@@ -3642,6 +3849,12 @@ export const CUploadFile = {
     if (message.isImage !== false) {
       obj.isImage = message.isImage;
     }
+    if (message.uploadType !== 0) {
+      obj.uploadType = cUploadFile_UploadTypeToJSON(message.uploadType);
+    }
+    if (message.targetId !== "") {
+      obj.targetId = message.targetId;
+    }
     return obj;
   },
 
@@ -3654,6 +3867,8 @@ export const CUploadFile = {
     message.size = object.size ?? 0;
     message.mimeType = object.mimeType ?? "";
     message.isImage = object.isImage ?? false;
+    message.uploadType = object.uploadType ?? 0;
+    message.targetId = object.targetId ?? "";
     return message;
   },
 };
@@ -6376,6 +6591,186 @@ export const SLeaveGroup = {
     const message = createBaseSLeaveGroup();
     message.success = object.success ?? false;
     message.message = object.message ?? "";
+    return message;
+  },
+};
+
+function createBaseCEditGroup(): CEditGroup {
+  return { groupId: "", newName: "", newImageUrl: "" };
+}
+
+export const CEditGroup = {
+  encode(message: CEditGroup, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.groupId !== "") {
+      writer.uint32(10).string(message.groupId);
+    }
+    if (message.newName !== "") {
+      writer.uint32(18).string(message.newName);
+    }
+    if (message.newImageUrl !== "") {
+      writer.uint32(26).string(message.newImageUrl);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CEditGroup {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCEditGroup();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.groupId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.newName = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.newImageUrl = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CEditGroup {
+    return {
+      groupId: isSet(object.groupId) ? globalThis.String(object.groupId) : "",
+      newName: isSet(object.newName) ? globalThis.String(object.newName) : "",
+      newImageUrl: isSet(object.newImageUrl) ? globalThis.String(object.newImageUrl) : "",
+    };
+  },
+
+  toJSON(message: CEditGroup): unknown {
+    const obj: any = {};
+    if (message.groupId !== "") {
+      obj.groupId = message.groupId;
+    }
+    if (message.newName !== "") {
+      obj.newName = message.newName;
+    }
+    if (message.newImageUrl !== "") {
+      obj.newImageUrl = message.newImageUrl;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CEditGroup>, I>>(base?: I): CEditGroup {
+    return CEditGroup.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CEditGroup>, I>>(object: I): CEditGroup {
+    const message = createBaseCEditGroup();
+    message.groupId = object.groupId ?? "";
+    message.newName = object.newName ?? "";
+    message.newImageUrl = object.newImageUrl ?? "";
+    return message;
+  },
+};
+
+function createBaseSEditGroup(): SEditGroup {
+  return { success: false, message: "", group: undefined };
+}
+
+export const SEditGroup = {
+  encode(message: SEditGroup, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.success !== false) {
+      writer.uint32(8).bool(message.success);
+    }
+    if (message.message !== "") {
+      writer.uint32(18).string(message.message);
+    }
+    if (message.group !== undefined) {
+      GroupInfo.encode(message.group, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SEditGroup {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSEditGroup();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.success = reader.bool();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.message = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.group = GroupInfo.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SEditGroup {
+    return {
+      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
+      message: isSet(object.message) ? globalThis.String(object.message) : "",
+      group: isSet(object.group) ? GroupInfo.fromJSON(object.group) : undefined,
+    };
+  },
+
+  toJSON(message: SEditGroup): unknown {
+    const obj: any = {};
+    if (message.success !== false) {
+      obj.success = message.success;
+    }
+    if (message.message !== "") {
+      obj.message = message.message;
+    }
+    if (message.group !== undefined) {
+      obj.group = GroupInfo.toJSON(message.group);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SEditGroup>, I>>(base?: I): SEditGroup {
+    return SEditGroup.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SEditGroup>, I>>(object: I): SEditGroup {
+    const message = createBaseSEditGroup();
+    message.success = object.success ?? false;
+    message.message = object.message ?? "";
+    message.group = (object.group !== undefined && object.group !== null)
+      ? GroupInfo.fromPartial(object.group)
+      : undefined;
     return message;
   },
 };

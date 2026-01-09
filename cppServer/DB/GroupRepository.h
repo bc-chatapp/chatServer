@@ -41,10 +41,12 @@ public:
     static bool CreateGroup(const string& groupName, const string& creatorId, cGroupInfo& OUT groupInfo);
     static bool AddMember(const string& groupId, const string& userId, const string& role);
     static bool RemoveMember(const string& groupId, const string& userId);
+    static bool SaveGroupAsset(const string& groupId, const string& userId, int64 msgSeq, int64 fileSize, const string& fileType);
+    static bool UpdateGroupInfo(const string& groupId, const string& newName, const string& newImageUrl);
 
     /* Query */
     static vector<cGroupInfo> GetUserGroups(const string& userId);
-    static bool GetGroupByCode(const string& groupCode, cGroupInfo& OUT Info);
+    static bool GetGroupInfoById(const string& groupId, cGroupInfo& OUT Info);
 
     static bool IsMember(const string& groupId, const string& userId);
     static string GetMemberRole(const string& groupId, const string& userId);
