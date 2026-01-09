@@ -14,7 +14,8 @@ class Session : public IocpObject
 
 	enum
 	{
-		BUFFER_SIZE = 0x10000, // 64KB
+		//BUFFER_SIZE = 0x10000, // 64KB
+		BUFFER_SIZE = 8192, // 8KB
 	};
 
 public:

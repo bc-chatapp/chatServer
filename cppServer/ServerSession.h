@@ -8,7 +8,7 @@ public:
 
 	~ServerSession()
 	{
-		wcout << "~ServerSession" << endl;
+		wcout << "~ServerSession()" << endl;
 	}
 	
 public:
