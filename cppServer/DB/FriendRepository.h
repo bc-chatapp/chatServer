@@ -50,8 +50,8 @@ public:
     /** Helpers */
     static uint64 ParseTimestamp(const mysqlx::Value& value);
 
-    static Protocol::FriendInfo ToProtocolFriendInfo(const cFriendInfo& info);
-    static Protocol::FriendRequest ToProtocolFriendRequest(const FriendRequestInfo& info);
+    static Protocol::UserInfo ToProtocolUserInfo(const cFriendInfo& info);
+    static Protocol::FriendRequest ToProtocolFriendRequest(const FriendRequestInfo& info, bool isReceived);
 
 };
 

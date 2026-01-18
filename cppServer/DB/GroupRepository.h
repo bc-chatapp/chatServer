@@ -14,6 +14,7 @@ struct cGroupInfo {
 
     string description;
     string groupImageUrl;
+    //string groupThumbUrl;
 
     int64 storageUsage = 0;
     int64 storageLimit = 0;

@@ -14,6 +14,20 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
+@$core.Deprecated('Use groupRoleDescriptor instead')
+const GroupRole$json = {
+  '1': 'GroupRole',
+  '2': [
+    {'1': 'MEMBER', '2': 0},
+    {'1': 'ADMIN', '2': 1},
+    {'1': 'OWNER', '2': 2},
+  ],
+};
+
+/// Descriptor for `GroupRole`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List groupRoleDescriptor = $convert.base64Decode(
+    'CglHcm91cFJvbGUSCgoGTUVNQkVSEAASCQoFQURNSU4QARIJCgVPV05FUhAC');
+
 @$core.Deprecated('Use errorCodeDescriptor instead')
 const ErrorCode$json = {
   '1': 'ErrorCode',
@@ -73,20 +87,6 @@ final $typed_data.Uint8List errorCodeDescriptor = $convert.base64Decode(
     'EJQDEh8KGkVSUl9GQUlMRURfVE9fR0VORVJBVEVfVVJMEJUDEhkKFEVSUl9JTlZBTElEX0ZJTE'
     'VfVVJMEJYDEhkKFEVSUl9JTlZBTElEX0FSR1VNRU5UEJcDEhYKEUVSUl9OT19QRVJNSVNTSU9O'
     'EPQD');
-
-@$core.Deprecated('Use groupRoleDescriptor instead')
-const GroupRole$json = {
-  '1': 'GroupRole',
-  '2': [
-    {'1': 'MEMBER', '2': 0},
-    {'1': 'ADMIN', '2': 1},
-    {'1': 'OWNER', '2': 2},
-  ],
-};
-
-/// Descriptor for `GroupRole`. Decode as a `google.protobuf.EnumDescriptorProto`.
-final $typed_data.Uint8List groupRoleDescriptor = $convert.base64Decode(
-    'CglHcm91cFJvbGUSCgoGTUVNQkVSEAASCQoFQURNSU4QARIJCgVPV05FUhAC');
 
 @$core.Deprecated('Use envelopeDescriptor instead')
 const Envelope$json = {
@@ -204,53 +204,44 @@ const Envelope$json = {
       '10': 'sLogin'
     },
     {
-      '1': 'c_fetch_offline',
-      '3': 22,
+      '1': 'c_fetch_my_info',
+      '3': 30,
       '4': 1,
       '5': 11,
-      '6': '.Protocol.C_FetchOffline',
+      '6': '.Protocol.C_FetchMyInfo',
       '9': 0,
-      '10': 'cFetchOffline'
+      '10': 'cFetchMyInfo'
     },
     {
-      '1': 's_message_batch',
-      '3': 23,
+      '1': 's_fetch_my_info',
+      '3': 31,
       '4': 1,
       '5': 11,
-      '6': '.Protocol.S_MessageBatch',
+      '6': '.Protocol.S_FetchMyInfo',
       '9': 0,
-      '10': 'sMessageBatch'
+      '10': 'sFetchMyInfo'
     },
     {
-      '1': 's_error',
-      '3': 27,
+      '1': 'c_edit_my_info',
+      '3': 32,
       '4': 1,
       '5': 11,
-      '6': '.Protocol.S_Error',
+      '6': '.Protocol.C_EditMyInfo',
       '9': 0,
-      '10': 'sError'
+      '10': 'cEditMyInfo'
     },
     {
-      '1': 'c_heartbeat',
-      '3': 28,
+      '1': 's_edit_my_info',
+      '3': 33,
       '4': 1,
       '5': 11,
-      '6': '.Protocol.C_Heartbeat',
+      '6': '.Protocol.S_EditMyInfo',
       '9': 0,
-      '10': 'cHeartbeat'
-    },
-    {
-      '1': 's_heartbeat',
-      '3': 29,
-      '4': 1,
-      '5': 11,
-      '6': '.Protocol.S_Heartbeat',
-      '9': 0,
-      '10': 'sHeartbeat'
+      '10': 'sEditMyInfo'
     },
     {
       '1': 'c_chat',
-      '3': 30,
+      '3': 40,
       '4': 1,
       '5': 11,
       '6': '.Protocol.C_Chat',
@@ -259,7 +250,7 @@ const Envelope$json = {
     },
     {
       '1': 's_chat',
-      '3': 31,
+      '3': 41,
       '4': 1,
       '5': 11,
       '6': '.Protocol.S_Chat',
@@ -268,7 +259,7 @@ const Envelope$json = {
     },
     {
       '1': 'c_ack',
-      '3': 32,
+      '3': 42,
       '4': 1,
       '5': 11,
       '6': '.Protocol.C_Ack',
@@ -277,7 +268,7 @@ const Envelope$json = {
     },
     {
       '1': 'c_req_history',
-      '3': 33,
+      '3': 43,
       '4': 1,
       '5': 11,
       '6': '.Protocol.C_ReqHistory',
@@ -286,7 +277,7 @@ const Envelope$json = {
     },
     {
       '1': 's_req_history',
-      '3': 34,
+      '3': 44,
       '4': 1,
       '5': 11,
       '6': '.Protocol.S_ReqHistory',
@@ -294,8 +285,26 @@ const Envelope$json = {
       '10': 'sReqHistory'
     },
     {
+      '1': 'c_fetch_offline',
+      '3': 45,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.C_FetchOffline',
+      '9': 0,
+      '10': 'cFetchOffline'
+    },
+    {
+      '1': 's_message_batch',
+      '3': 46,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.S_MessageBatch',
+      '9': 0,
+      '10': 'sMessageBatch'
+    },
+    {
       '1': 'c_upload_file',
-      '3': 35,
+      '3': 47,
       '4': 1,
       '5': 11,
       '6': '.Protocol.C_UploadFile',
@@ -304,7 +313,7 @@ const Envelope$json = {
     },
     {
       '1': 's_upload_file',
-      '3': 36,
+      '3': 48,
       '4': 1,
       '5': 11,
       '6': '.Protocol.S_UploadFile',
@@ -313,7 +322,7 @@ const Envelope$json = {
     },
     {
       '1': 'c_search_user',
-      '3': 40,
+      '3': 60,
       '4': 1,
       '5': 11,
       '6': '.Protocol.C_SearchUser',
@@ -322,7 +331,7 @@ const Envelope$json = {
     },
     {
       '1': 's_search_user',
-      '3': 41,
+      '3': 61,
       '4': 1,
       '5': 11,
       '6': '.Protocol.S_SearchUser',
@@ -331,7 +340,7 @@ const Envelope$json = {
     },
     {
       '1': 'c_friend_action',
-      '3': 42,
+      '3': 62,
       '4': 1,
       '5': 11,
       '6': '.Protocol.C_FriendAction',
@@ -340,7 +349,7 @@ const Envelope$json = {
     },
     {
       '1': 's_friend_action',
-      '3': 43,
+      '3': 63,
       '4': 1,
       '5': 11,
       '6': '.Protocol.S_FriendAction',
@@ -349,7 +358,7 @@ const Envelope$json = {
     },
     {
       '1': 'c_fetch_friend_data',
-      '3': 44,
+      '3': 64,
       '4': 1,
       '5': 11,
       '6': '.Protocol.C_FetchFriendData',
@@ -358,7 +367,7 @@ const Envelope$json = {
     },
     {
       '1': 's_fetch_friend_data',
-      '3': 45,
+      '3': 65,
       '4': 1,
       '5': 11,
       '6': '.Protocol.S_FetchFriendData',
@@ -367,7 +376,7 @@ const Envelope$json = {
     },
     {
       '1': 's_friend_push',
-      '3': 46,
+      '3': 66,
       '4': 1,
       '5': 11,
       '6': '.Protocol.S_FriendPush',
@@ -376,7 +385,7 @@ const Envelope$json = {
     },
     {
       '1': 'c_create_group',
-      '3': 50,
+      '3': 80,
       '4': 1,
       '5': 11,
       '6': '.Protocol.C_CreateGroup',
@@ -385,7 +394,7 @@ const Envelope$json = {
     },
     {
       '1': 's_create_group',
-      '3': 51,
+      '3': 81,
       '4': 1,
       '5': 11,
       '6': '.Protocol.S_CreateGroup',
@@ -394,7 +403,7 @@ const Envelope$json = {
     },
     {
       '1': 'c_group_list',
-      '3': 52,
+      '3': 82,
       '4': 1,
       '5': 11,
       '6': '.Protocol.C_GroupList',
@@ -403,7 +412,7 @@ const Envelope$json = {
     },
     {
       '1': 's_group_list',
-      '3': 53,
+      '3': 83,
       '4': 1,
       '5': 11,
       '6': '.Protocol.S_GroupList',
@@ -412,7 +421,7 @@ const Envelope$json = {
     },
     {
       '1': 'c_join_group',
-      '3': 54,
+      '3': 84,
       '4': 1,
       '5': 11,
       '6': '.Protocol.C_JoinGroup',
@@ -421,7 +430,7 @@ const Envelope$json = {
     },
     {
       '1': 's_join_group',
-      '3': 55,
+      '3': 85,
       '4': 1,
       '5': 11,
       '6': '.Protocol.S_JoinGroup',
@@ -430,7 +439,7 @@ const Envelope$json = {
     },
     {
       '1': 'c_invite_friend',
-      '3': 56,
+      '3': 86,
       '4': 1,
       '5': 11,
       '6': '.Protocol.C_InviteFriend',
@@ -439,7 +448,7 @@ const Envelope$json = {
     },
     {
       '1': 's_invite_friend',
-      '3': 57,
+      '3': 87,
       '4': 1,
       '5': 11,
       '6': '.Protocol.S_InviteFriend',
@@ -448,7 +457,7 @@ const Envelope$json = {
     },
     {
       '1': 'c_leave_group',
-      '3': 60,
+      '3': 88,
       '4': 1,
       '5': 11,
       '6': '.Protocol.C_LeaveGroup',
@@ -457,7 +466,7 @@ const Envelope$json = {
     },
     {
       '1': 's_leave_group',
-      '3': 61,
+      '3': 89,
       '4': 1,
       '5': 11,
       '6': '.Protocol.S_LeaveGroup',
@@ -466,7 +475,7 @@ const Envelope$json = {
     },
     {
       '1': 'c_group_member_list',
-      '3': 62,
+      '3': 90,
       '4': 1,
       '5': 11,
       '6': '.Protocol.C_GroupMemberList',
@@ -475,7 +484,7 @@ const Envelope$json = {
     },
     {
       '1': 's_group_member_list',
-      '3': 63,
+      '3': 91,
       '4': 1,
       '5': 11,
       '6': '.Protocol.S_GroupMemberList',
@@ -484,7 +493,7 @@ const Envelope$json = {
     },
     {
       '1': 'c_group_info',
-      '3': 64,
+      '3': 92,
       '4': 1,
       '5': 11,
       '6': '.Protocol.C_GroupInfo',
@@ -493,7 +502,7 @@ const Envelope$json = {
     },
     {
       '1': 's_group_info',
-      '3': 65,
+      '3': 93,
       '4': 1,
       '5': 11,
       '6': '.Protocol.S_GroupInfo',
@@ -502,7 +511,7 @@ const Envelope$json = {
     },
     {
       '1': 'c_edit_group',
-      '3': 66,
+      '3': 94,
       '4': 1,
       '5': 11,
       '6': '.Protocol.C_EditGroup',
@@ -511,12 +520,39 @@ const Envelope$json = {
     },
     {
       '1': 's_edit_group',
-      '3': 67,
+      '3': 95,
       '4': 1,
       '5': 11,
       '6': '.Protocol.S_EditGroup',
       '9': 0,
       '10': 'sEditGroup'
+    },
+    {
+      '1': 's_error',
+      '3': 100,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.S_Error',
+      '9': 0,
+      '10': 'sError'
+    },
+    {
+      '1': 'c_heartbeat',
+      '3': 101,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.C_Heartbeat',
+      '9': 0,
+      '10': 'cHeartbeat'
+    },
+    {
+      '1': 's_heartbeat',
+      '3': 102,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.S_Heartbeat',
+      '9': 0,
+      '10': 'sHeartbeat'
     },
   ],
   '8': [
@@ -541,46 +577,99 @@ final $typed_data.Uint8List envelopeDescriptor = $convert.base64Decode(
     'c2lnbnVwGBIgASgLMhIuUHJvdG9jb2wuQ19TaWduVXBIAFIHY1NpZ251cBIvCghzX3NpZ251cB'
     'gTIAEoCzISLlByb3RvY29sLlNfU2lnblVwSABSB3NTaWdudXASLAoHY19sb2dpbhgUIAEoCzIR'
     'LlByb3RvY29sLkNfTG9naW5IAFIGY0xvZ2luEiwKB3NfbG9naW4YFSABKAsyES5Qcm90b2NvbC'
-    '5TX0xvZ2luSABSBnNMb2dpbhJCCg9jX2ZldGNoX29mZmxpbmUYFiABKAsyGC5Qcm90b2NvbC5D'
-    'X0ZldGNoT2ZmbGluZUgAUg1jRmV0Y2hPZmZsaW5lEkIKD3NfbWVzc2FnZV9iYXRjaBgXIAEoCz'
-    'IYLlByb3RvY29sLlNfTWVzc2FnZUJhdGNoSABSDXNNZXNzYWdlQmF0Y2gSLAoHc19lcnJvchgb'
-    'IAEoCzIRLlByb3RvY29sLlNfRXJyb3JIAFIGc0Vycm9yEjgKC2NfaGVhcnRiZWF0GBwgASgLMh'
-    'UuUHJvdG9jb2wuQ19IZWFydGJlYXRIAFIKY0hlYXJ0YmVhdBI4CgtzX2hlYXJ0YmVhdBgdIAEo'
-    'CzIVLlByb3RvY29sLlNfSGVhcnRiZWF0SABSCnNIZWFydGJlYXQSKQoGY19jaGF0GB4gASgLMh'
-    'AuUHJvdG9jb2wuQ19DaGF0SABSBWNDaGF0EikKBnNfY2hhdBgfIAEoCzIQLlByb3RvY29sLlNf'
-    'Q2hhdEgAUgVzQ2hhdBImCgVjX2FjaxggIAEoCzIPLlByb3RvY29sLkNfQWNrSABSBGNBY2sSPA'
-    'oNY19yZXFfaGlzdG9yeRghIAEoCzIWLlByb3RvY29sLkNfUmVxSGlzdG9yeUgAUgtjUmVxSGlz'
-    'dG9yeRI8Cg1zX3JlcV9oaXN0b3J5GCIgASgLMhYuUHJvdG9jb2wuU19SZXFIaXN0b3J5SABSC3'
-    'NSZXFIaXN0b3J5EjwKDWNfdXBsb2FkX2ZpbGUYIyABKAsyFi5Qcm90b2NvbC5DX1VwbG9hZEZp'
-    'bGVIAFILY1VwbG9hZEZpbGUSPAoNc191cGxvYWRfZmlsZRgkIAEoCzIWLlByb3RvY29sLlNfVX'
-    'Bsb2FkRmlsZUgAUgtzVXBsb2FkRmlsZRI8Cg1jX3NlYXJjaF91c2VyGCggASgLMhYuUHJvdG9j'
-    'b2wuQ19TZWFyY2hVc2VySABSC2NTZWFyY2hVc2VyEjwKDXNfc2VhcmNoX3VzZXIYKSABKAsyFi'
-    '5Qcm90b2NvbC5TX1NlYXJjaFVzZXJIAFILc1NlYXJjaFVzZXISQgoPY19mcmllbmRfYWN0aW9u'
-    'GCogASgLMhguUHJvdG9jb2wuQ19GcmllbmRBY3Rpb25IAFINY0ZyaWVuZEFjdGlvbhJCCg9zX2'
-    'ZyaWVuZF9hY3Rpb24YKyABKAsyGC5Qcm90b2NvbC5TX0ZyaWVuZEFjdGlvbkgAUg1zRnJpZW5k'
-    'QWN0aW9uEkwKE2NfZmV0Y2hfZnJpZW5kX2RhdGEYLCABKAsyGy5Qcm90b2NvbC5DX0ZldGNoRn'
-    'JpZW5kRGF0YUgAUhBjRmV0Y2hGcmllbmREYXRhEkwKE3NfZmV0Y2hfZnJpZW5kX2RhdGEYLSAB'
-    'KAsyGy5Qcm90b2NvbC5TX0ZldGNoRnJpZW5kRGF0YUgAUhBzRmV0Y2hGcmllbmREYXRhEjwKDX'
-    'NfZnJpZW5kX3B1c2gYLiABKAsyFi5Qcm90b2NvbC5TX0ZyaWVuZFB1c2hIAFILc0ZyaWVuZFB1'
-    'c2gSPwoOY19jcmVhdGVfZ3JvdXAYMiABKAsyFy5Qcm90b2NvbC5DX0NyZWF0ZUdyb3VwSABSDG'
-    'NDcmVhdGVHcm91cBI/Cg5zX2NyZWF0ZV9ncm91cBgzIAEoCzIXLlByb3RvY29sLlNfQ3JlYXRl'
-    'R3JvdXBIAFIMc0NyZWF0ZUdyb3VwEjkKDGNfZ3JvdXBfbGlzdBg0IAEoCzIVLlByb3RvY29sLk'
-    'NfR3JvdXBMaXN0SABSCmNHcm91cExpc3QSOQoMc19ncm91cF9saXN0GDUgASgLMhUuUHJvdG9j'
-    'b2wuU19Hcm91cExpc3RIAFIKc0dyb3VwTGlzdBI5CgxjX2pvaW5fZ3JvdXAYNiABKAsyFS5Qcm'
-    '90b2NvbC5DX0pvaW5Hcm91cEgAUgpjSm9pbkdyb3VwEjkKDHNfam9pbl9ncm91cBg3IAEoCzIV'
-    'LlByb3RvY29sLlNfSm9pbkdyb3VwSABSCnNKb2luR3JvdXASQgoPY19pbnZpdGVfZnJpZW5kGD'
-    'ggASgLMhguUHJvdG9jb2wuQ19JbnZpdGVGcmllbmRIAFINY0ludml0ZUZyaWVuZBJCCg9zX2lu'
-    'dml0ZV9mcmllbmQYOSABKAsyGC5Qcm90b2NvbC5TX0ludml0ZUZyaWVuZEgAUg1zSW52aXRlRn'
-    'JpZW5kEjwKDWNfbGVhdmVfZ3JvdXAYPCABKAsyFi5Qcm90b2NvbC5DX0xlYXZlR3JvdXBIAFIL'
-    'Y0xlYXZlR3JvdXASPAoNc19sZWF2ZV9ncm91cBg9IAEoCzIWLlByb3RvY29sLlNfTGVhdmVHcm'
-    '91cEgAUgtzTGVhdmVHcm91cBJMChNjX2dyb3VwX21lbWJlcl9saXN0GD4gASgLMhsuUHJvdG9j'
-    'b2wuQ19Hcm91cE1lbWJlckxpc3RIAFIQY0dyb3VwTWVtYmVyTGlzdBJMChNzX2dyb3VwX21lbW'
-    'Jlcl9saXN0GD8gASgLMhsuUHJvdG9jb2wuU19Hcm91cE1lbWJlckxpc3RIAFIQc0dyb3VwTWVt'
-    'YmVyTGlzdBI5CgxjX2dyb3VwX2luZm8YQCABKAsyFS5Qcm90b2NvbC5DX0dyb3VwSW5mb0gAUg'
-    'pjR3JvdXBJbmZvEjkKDHNfZ3JvdXBfaW5mbxhBIAEoCzIVLlByb3RvY29sLlNfR3JvdXBJbmZv'
-    'SABSCnNHcm91cEluZm8SOQoMY19lZGl0X2dyb3VwGEIgASgLMhUuUHJvdG9jb2wuQ19FZGl0R3'
-    'JvdXBIAFIKY0VkaXRHcm91cBI5CgxzX2VkaXRfZ3JvdXAYQyABKAsyFS5Qcm90b2NvbC5TX0Vk'
-    'aXRHcm91cEgAUgpzRWRpdEdyb3VwQgYKBGJvZHk=');
+    '5TX0xvZ2luSABSBnNMb2dpbhJACg9jX2ZldGNoX215X2luZm8YHiABKAsyFy5Qcm90b2NvbC5D'
+    'X0ZldGNoTXlJbmZvSABSDGNGZXRjaE15SW5mbxJACg9zX2ZldGNoX215X2luZm8YHyABKAsyFy'
+    '5Qcm90b2NvbC5TX0ZldGNoTXlJbmZvSABSDHNGZXRjaE15SW5mbxI9Cg5jX2VkaXRfbXlfaW5m'
+    'bxggIAEoCzIWLlByb3RvY29sLkNfRWRpdE15SW5mb0gAUgtjRWRpdE15SW5mbxI9Cg5zX2VkaX'
+    'RfbXlfaW5mbxghIAEoCzIWLlByb3RvY29sLlNfRWRpdE15SW5mb0gAUgtzRWRpdE15SW5mbxIp'
+    'CgZjX2NoYXQYKCABKAsyEC5Qcm90b2NvbC5DX0NoYXRIAFIFY0NoYXQSKQoGc19jaGF0GCkgAS'
+    'gLMhAuUHJvdG9jb2wuU19DaGF0SABSBXNDaGF0EiYKBWNfYWNrGCogASgLMg8uUHJvdG9jb2wu'
+    'Q19BY2tIAFIEY0FjaxI8Cg1jX3JlcV9oaXN0b3J5GCsgASgLMhYuUHJvdG9jb2wuQ19SZXFIaX'
+    'N0b3J5SABSC2NSZXFIaXN0b3J5EjwKDXNfcmVxX2hpc3RvcnkYLCABKAsyFi5Qcm90b2NvbC5T'
+    'X1JlcUhpc3RvcnlIAFILc1JlcUhpc3RvcnkSQgoPY19mZXRjaF9vZmZsaW5lGC0gASgLMhguUH'
+    'JvdG9jb2wuQ19GZXRjaE9mZmxpbmVIAFINY0ZldGNoT2ZmbGluZRJCCg9zX21lc3NhZ2VfYmF0'
+    'Y2gYLiABKAsyGC5Qcm90b2NvbC5TX01lc3NhZ2VCYXRjaEgAUg1zTWVzc2FnZUJhdGNoEjwKDW'
+    'NfdXBsb2FkX2ZpbGUYLyABKAsyFi5Qcm90b2NvbC5DX1VwbG9hZEZpbGVIAFILY1VwbG9hZEZp'
+    'bGUSPAoNc191cGxvYWRfZmlsZRgwIAEoCzIWLlByb3RvY29sLlNfVXBsb2FkRmlsZUgAUgtzVX'
+    'Bsb2FkRmlsZRI8Cg1jX3NlYXJjaF91c2VyGDwgASgLMhYuUHJvdG9jb2wuQ19TZWFyY2hVc2Vy'
+    'SABSC2NTZWFyY2hVc2VyEjwKDXNfc2VhcmNoX3VzZXIYPSABKAsyFi5Qcm90b2NvbC5TX1NlYX'
+    'JjaFVzZXJIAFILc1NlYXJjaFVzZXISQgoPY19mcmllbmRfYWN0aW9uGD4gASgLMhguUHJvdG9j'
+    'b2wuQ19GcmllbmRBY3Rpb25IAFINY0ZyaWVuZEFjdGlvbhJCCg9zX2ZyaWVuZF9hY3Rpb24YPy'
+    'ABKAsyGC5Qcm90b2NvbC5TX0ZyaWVuZEFjdGlvbkgAUg1zRnJpZW5kQWN0aW9uEkwKE2NfZmV0'
+    'Y2hfZnJpZW5kX2RhdGEYQCABKAsyGy5Qcm90b2NvbC5DX0ZldGNoRnJpZW5kRGF0YUgAUhBjRm'
+    'V0Y2hGcmllbmREYXRhEkwKE3NfZmV0Y2hfZnJpZW5kX2RhdGEYQSABKAsyGy5Qcm90b2NvbC5T'
+    'X0ZldGNoRnJpZW5kRGF0YUgAUhBzRmV0Y2hGcmllbmREYXRhEjwKDXNfZnJpZW5kX3B1c2gYQi'
+    'ABKAsyFi5Qcm90b2NvbC5TX0ZyaWVuZFB1c2hIAFILc0ZyaWVuZFB1c2gSPwoOY19jcmVhdGVf'
+    'Z3JvdXAYUCABKAsyFy5Qcm90b2NvbC5DX0NyZWF0ZUdyb3VwSABSDGNDcmVhdGVHcm91cBI/Cg'
+    '5zX2NyZWF0ZV9ncm91cBhRIAEoCzIXLlByb3RvY29sLlNfQ3JlYXRlR3JvdXBIAFIMc0NyZWF0'
+    'ZUdyb3VwEjkKDGNfZ3JvdXBfbGlzdBhSIAEoCzIVLlByb3RvY29sLkNfR3JvdXBMaXN0SABSCm'
+    'NHcm91cExpc3QSOQoMc19ncm91cF9saXN0GFMgASgLMhUuUHJvdG9jb2wuU19Hcm91cExpc3RI'
+    'AFIKc0dyb3VwTGlzdBI5CgxjX2pvaW5fZ3JvdXAYVCABKAsyFS5Qcm90b2NvbC5DX0pvaW5Hcm'
+    '91cEgAUgpjSm9pbkdyb3VwEjkKDHNfam9pbl9ncm91cBhVIAEoCzIVLlByb3RvY29sLlNfSm9p'
+    'bkdyb3VwSABSCnNKb2luR3JvdXASQgoPY19pbnZpdGVfZnJpZW5kGFYgASgLMhguUHJvdG9jb2'
+    'wuQ19JbnZpdGVGcmllbmRIAFINY0ludml0ZUZyaWVuZBJCCg9zX2ludml0ZV9mcmllbmQYVyAB'
+    'KAsyGC5Qcm90b2NvbC5TX0ludml0ZUZyaWVuZEgAUg1zSW52aXRlRnJpZW5kEjwKDWNfbGVhdm'
+    'VfZ3JvdXAYWCABKAsyFi5Qcm90b2NvbC5DX0xlYXZlR3JvdXBIAFILY0xlYXZlR3JvdXASPAoN'
+    'c19sZWF2ZV9ncm91cBhZIAEoCzIWLlByb3RvY29sLlNfTGVhdmVHcm91cEgAUgtzTGVhdmVHcm'
+    '91cBJMChNjX2dyb3VwX21lbWJlcl9saXN0GFogASgLMhsuUHJvdG9jb2wuQ19Hcm91cE1lbWJl'
+    'ckxpc3RIAFIQY0dyb3VwTWVtYmVyTGlzdBJMChNzX2dyb3VwX21lbWJlcl9saXN0GFsgASgLMh'
+    'suUHJvdG9jb2wuU19Hcm91cE1lbWJlckxpc3RIAFIQc0dyb3VwTWVtYmVyTGlzdBI5CgxjX2dy'
+    'b3VwX2luZm8YXCABKAsyFS5Qcm90b2NvbC5DX0dyb3VwSW5mb0gAUgpjR3JvdXBJbmZvEjkKDH'
+    'NfZ3JvdXBfaW5mbxhdIAEoCzIVLlByb3RvY29sLlNfR3JvdXBJbmZvSABSCnNHcm91cEluZm8S'
+    'OQoMY19lZGl0X2dyb3VwGF4gASgLMhUuUHJvdG9jb2wuQ19FZGl0R3JvdXBIAFIKY0VkaXRHcm'
+    '91cBI5CgxzX2VkaXRfZ3JvdXAYXyABKAsyFS5Qcm90b2NvbC5TX0VkaXRHcm91cEgAUgpzRWRp'
+    'dEdyb3VwEiwKB3NfZXJyb3IYZCABKAsyES5Qcm90b2NvbC5TX0Vycm9ySABSBnNFcnJvchI4Cg'
+    'tjX2hlYXJ0YmVhdBhlIAEoCzIVLlByb3RvY29sLkNfSGVhcnRiZWF0SABSCmNIZWFydGJlYXQS'
+    'OAoLc19oZWFydGJlYXQYZiABKAsyFS5Qcm90b2NvbC5TX0hlYXJ0YmVhdEgAUgpzSGVhcnRiZW'
+    'F0QgYKBGJvZHk=');
+
+@$core.Deprecated('Use userInfoDescriptor instead')
+const UserInfo$json = {
+  '1': 'UserInfo',
+  '2': [
+    {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'status_message', '3': 3, '4': 1, '5': 9, '10': 'statusMessage'},
+    {'1': 'profile_image_url', '3': 4, '4': 1, '5': 9, '10': 'profileImageUrl'},
+    {
+      '1': 'background_image_url',
+      '3': 5,
+      '4': 1,
+      '5': 9,
+      '10': 'backgroundImageUrl'
+    },
+    {'1': 'email', '3': 6, '4': 1, '5': 9, '10': 'email'},
+    {'1': 'phone', '3': 7, '4': 1, '5': 9, '10': 'phone'},
+    {'1': 'sub_grade', '3': 8, '4': 1, '5': 3, '10': 'subGrade'},
+    {
+      '1': 'storage_capacity_bytes',
+      '3': 9,
+      '4': 1,
+      '5': 3,
+      '10': 'storageCapacityBytes'
+    },
+    {
+      '1': 'storage_usage_bytes',
+      '3': 10,
+      '4': 1,
+      '5': 3,
+      '10': 'storageUsageBytes'
+    },
+    {'1': 'last_seen', '3': 11, '4': 1, '5': 3, '10': 'lastSeen'},
+    {'1': 'status', '3': 12, '4': 1, '5': 9, '10': 'status'},
+  ],
+};
+
+/// Descriptor for `UserInfo`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List userInfoDescriptor = $convert.base64Decode(
+    'CghVc2VySW5mbxIXCgd1c2VyX2lkGAEgASgJUgZ1c2VySWQSEgoEbmFtZRgCIAEoCVIEbmFtZR'
+    'IlCg5zdGF0dXNfbWVzc2FnZRgDIAEoCVINc3RhdHVzTWVzc2FnZRIqChFwcm9maWxlX2ltYWdl'
+    'X3VybBgEIAEoCVIPcHJvZmlsZUltYWdlVXJsEjAKFGJhY2tncm91bmRfaW1hZ2VfdXJsGAUgAS'
+    'gJUhJiYWNrZ3JvdW5kSW1hZ2VVcmwSFAoFZW1haWwYBiABKAlSBWVtYWlsEhQKBXBob25lGAcg'
+    'ASgJUgVwaG9uZRIbCglzdWJfZ3JhZGUYCCABKANSCHN1YkdyYWRlEjQKFnN0b3JhZ2VfY2FwYW'
+    'NpdHlfYnl0ZXMYCSABKANSFHN0b3JhZ2VDYXBhY2l0eUJ5dGVzEi4KE3N0b3JhZ2VfdXNhZ2Vf'
+    'Ynl0ZXMYCiABKANSEXN0b3JhZ2VVc2FnZUJ5dGVzEhsKCWxhc3Rfc2VlbhgLIAEoA1IIbGFzdF'
+    'NlZW4SFgoGc3RhdHVzGAwgASgJUgZzdGF0dXM=');
 
 @$core.Deprecated('Use c_CheckIdDescriptor instead')
 const C_CheckId$json = {
@@ -733,80 +822,100 @@ final $typed_data.Uint8List c_LoginDescriptor = $convert.base64Decode(
 const S_Login$json = {
   '1': 'S_Login',
   '2': [
-    {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
+    {'1': 'success', '3': 1, '4': 1, '5': 8, '10': 'success'},
     {'1': 'auth_token', '3': 2, '4': 1, '5': 9, '10': 'authToken'},
-    {'1': 'name', '3': 3, '4': 1, '5': 9, '10': 'name'},
-    {'1': 'email', '3': 4, '4': 1, '5': 9, '10': 'email'},
+    {
+      '1': 'my_info',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.UserInfo',
+      '10': 'myInfo'
+    },
   ],
 };
 
 /// Descriptor for `S_Login`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List s_LoginDescriptor = $convert.base64Decode(
-    'CgdTX0xvZ2luEhcKB3VzZXJfaWQYASABKAlSBnVzZXJJZBIdCgphdXRoX3Rva2VuGAIgASgJUg'
-    'lhdXRoVG9rZW4SEgoEbmFtZRgDIAEoCVIEbmFtZRIUCgVlbWFpbBgEIAEoCVIFZW1haWw=');
+    'CgdTX0xvZ2luEhgKB3N1Y2Nlc3MYASABKAhSB3N1Y2Nlc3MSHQoKYXV0aF90b2tlbhgCIAEoCV'
+    'IJYXV0aFRva2VuEisKB215X2luZm8YAyABKAsyEi5Qcm90b2NvbC5Vc2VySW5mb1IGbXlJbmZv');
 
-@$core.Deprecated('Use chatPayloadDescriptor instead')
-const ChatPayload$json = {
-  '1': 'ChatPayload',
+@$core.Deprecated('Use c_FetchMyInfoDescriptor instead')
+const C_FetchMyInfo$json = {
+  '1': 'C_FetchMyInfo',
+};
+
+/// Descriptor for `C_FetchMyInfo`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List c_FetchMyInfoDescriptor =
+    $convert.base64Decode('Cg1DX0ZldGNoTXlJbmZv');
+
+@$core.Deprecated('Use s_FetchMyInfoDescriptor instead')
+const S_FetchMyInfo$json = {
+  '1': 'S_FetchMyInfo',
   '2': [
     {
-      '1': 'text',
+      '1': 'my_info',
       '3': 1,
       '4': 1,
       '5': 11,
-      '6': '.Protocol.Text',
-      '9': 0,
-      '10': 'text'
+      '6': '.Protocol.UserInfo',
+      '10': 'myInfo'
     },
-    {
-      '1': 'image',
-      '3': 2,
-      '4': 1,
-      '5': 11,
-      '6': '.Protocol.Image',
-      '9': 0,
-      '10': 'image'
-    },
-    {
-      '1': 'video',
-      '3': 3,
-      '4': 1,
-      '5': 11,
-      '6': '.Protocol.Video',
-      '9': 0,
-      '10': 'video'
-    },
-    {
-      '1': 'file',
-      '3': 4,
-      '4': 1,
-      '5': 11,
-      '6': '.Protocol.File',
-      '9': 0,
-      '10': 'file'
-    },
-    {
-      '1': 'system',
-      '3': 5,
-      '4': 1,
-      '5': 11,
-      '6': '.Protocol.SystemMsg',
-      '9': 0,
-      '10': 'system'
-    },
-  ],
-  '8': [
-    {'1': 'data'},
   ],
 };
 
-/// Descriptor for `ChatPayload`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List chatPayloadDescriptor = $convert.base64Decode(
-    'CgtDaGF0UGF5bG9hZBIkCgR0ZXh0GAEgASgLMg4uUHJvdG9jb2wuVGV4dEgAUgR0ZXh0EicKBW'
-    'ltYWdlGAIgASgLMg8uUHJvdG9jb2wuSW1hZ2VIAFIFaW1hZ2USJwoFdmlkZW8YAyABKAsyDy5Q'
-    'cm90b2NvbC5WaWRlb0gAUgV2aWRlbxIkCgRmaWxlGAQgASgLMg4uUHJvdG9jb2wuRmlsZUgAUg'
-    'RmaWxlEi0KBnN5c3RlbRgFIAEoCzITLlByb3RvY29sLlN5c3RlbU1zZ0gAUgZzeXN0ZW1CBgoE'
-    'ZGF0YQ==');
+/// Descriptor for `S_FetchMyInfo`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List s_FetchMyInfoDescriptor = $convert.base64Decode(
+    'Cg1TX0ZldGNoTXlJbmZvEisKB215X2luZm8YASABKAsyEi5Qcm90b2NvbC5Vc2VySW5mb1IGbX'
+    'lJbmZv');
+
+@$core.Deprecated('Use c_EditMyInfoDescriptor instead')
+const C_EditMyInfo$json = {
+  '1': 'C_EditMyInfo',
+  '2': [
+    {'1': 'name', '3': 1, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'status_message', '3': 2, '4': 1, '5': 9, '10': 'statusMessage'},
+    {'1': 'profile_image_url', '3': 3, '4': 1, '5': 9, '10': 'profileImageUrl'},
+    {
+      '1': 'background_image_url',
+      '3': 4,
+      '4': 1,
+      '5': 9,
+      '10': 'backgroundImageUrl'
+    },
+    {'1': 'phone', '3': 5, '4': 1, '5': 9, '10': 'phone'},
+  ],
+};
+
+/// Descriptor for `C_EditMyInfo`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List c_EditMyInfoDescriptor = $convert.base64Decode(
+    'CgxDX0VkaXRNeUluZm8SEgoEbmFtZRgBIAEoCVIEbmFtZRIlCg5zdGF0dXNfbWVzc2FnZRgCIA'
+    'EoCVINc3RhdHVzTWVzc2FnZRIqChFwcm9maWxlX2ltYWdlX3VybBgDIAEoCVIPcHJvZmlsZUlt'
+    'YWdlVXJsEjAKFGJhY2tncm91bmRfaW1hZ2VfdXJsGAQgASgJUhJiYWNrZ3JvdW5kSW1hZ2VVcm'
+    'wSFAoFcGhvbmUYBSABKAlSBXBob25l');
+
+@$core.Deprecated('Use s_EditMyInfoDescriptor instead')
+const S_EditMyInfo$json = {
+  '1': 'S_EditMyInfo',
+  '2': [
+    {'1': 'success', '3': 1, '4': 1, '5': 8, '10': 'success'},
+    {'1': 'message', '3': 2, '4': 1, '5': 9, '10': 'message'},
+    {
+      '1': 'updated_info',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.UserInfo',
+      '10': 'updatedInfo'
+    },
+  ],
+};
+
+/// Descriptor for `S_EditMyInfo`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List s_EditMyInfoDescriptor = $convert.base64Decode(
+    'CgxTX0VkaXRNeUluZm8SGAoHc3VjY2VzcxgBIAEoCFIHc3VjY2VzcxIYCgdtZXNzYWdlGAIgAS'
+    'gJUgdtZXNzYWdlEjUKDHVwZGF0ZWRfaW5mbxgDIAEoCzISLlByb3RvY29sLlVzZXJJbmZvUgt1'
+    'cGRhdGVkSW5mbw==');
 
 @$core.Deprecated('Use textDescriptor instead')
 const Text$json = {
@@ -872,19 +981,78 @@ const SystemMsg$json = {
   '1': 'SystemMsg',
   '2': [
     {'1': 'message', '3': 1, '4': 1, '5': 9, '10': 'message'},
-    {'1': 'type', '3': 2, '4': 1, '5': 5, '10': 'type'},
+    {'1': 'type', '3': 2, '4': 1, '5': 3, '10': 'type'},
     {'1': 'invite_group_id', '3': 3, '4': 1, '5': 9, '10': 'inviteGroupId'},
-    {'1': 'invite_group_code', '3': 4, '4': 1, '5': 9, '10': 'inviteGroupCode'},
-    {'1': 'invite_group_name', '3': 5, '4': 1, '5': 9, '10': 'inviteGroupName'},
   ],
 };
 
 /// Descriptor for `SystemMsg`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List systemMsgDescriptor = $convert.base64Decode(
-    'CglTeXN0ZW1Nc2cSGAoHbWVzc2FnZRgBIAEoCVIHbWVzc2FnZRISCgR0eXBlGAIgASgFUgR0eX'
-    'BlEiYKD2ludml0ZV9ncm91cF9pZBgDIAEoCVINaW52aXRlR3JvdXBJZBIqChFpbnZpdGVfZ3Jv'
-    'dXBfY29kZRgEIAEoCVIPaW52aXRlR3JvdXBDb2RlEioKEWludml0ZV9ncm91cF9uYW1lGAUgAS'
-    'gJUg9pbnZpdGVHcm91cE5hbWU=');
+    'CglTeXN0ZW1Nc2cSGAoHbWVzc2FnZRgBIAEoCVIHbWVzc2FnZRISCgR0eXBlGAIgASgDUgR0eX'
+    'BlEiYKD2ludml0ZV9ncm91cF9pZBgDIAEoCVINaW52aXRlR3JvdXBJZA==');
+
+@$core.Deprecated('Use chatPayloadDescriptor instead')
+const ChatPayload$json = {
+  '1': 'ChatPayload',
+  '2': [
+    {
+      '1': 'text',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.Text',
+      '9': 0,
+      '10': 'text'
+    },
+    {
+      '1': 'image',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.Image',
+      '9': 0,
+      '10': 'image'
+    },
+    {
+      '1': 'video',
+      '3': 3,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.Video',
+      '9': 0,
+      '10': 'video'
+    },
+    {
+      '1': 'file',
+      '3': 4,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.File',
+      '9': 0,
+      '10': 'file'
+    },
+    {
+      '1': 'system',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.SystemMsg',
+      '9': 0,
+      '10': 'system'
+    },
+  ],
+  '8': [
+    {'1': 'data'},
+  ],
+};
+
+/// Descriptor for `ChatPayload`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List chatPayloadDescriptor = $convert.base64Decode(
+    'CgtDaGF0UGF5bG9hZBIkCgR0ZXh0GAEgASgLMg4uUHJvdG9jb2wuVGV4dEgAUgR0ZXh0EicKBW'
+    'ltYWdlGAIgASgLMg8uUHJvdG9jb2wuSW1hZ2VIAFIFaW1hZ2USJwoFdmlkZW8YAyABKAsyDy5Q'
+    'cm90b2NvbC5WaWRlb0gAUgV2aWRlbxIkCgRmaWxlGAQgASgLMg4uUHJvdG9jb2wuRmlsZUgAUg'
+    'RmaWxlEi0KBnN5c3RlbRgFIAEoCzITLlByb3RvY29sLlN5c3RlbU1zZ0gAUgZzeXN0ZW1CBgoE'
+    'ZGF0YQ==');
 
 @$core.Deprecated('Use c_ChatDescriptor instead')
 const C_Chat$json = {
@@ -901,6 +1069,7 @@ const C_Chat$json = {
       '10': 'payload'
     },
     {'1': 'ts_client', '3': 4, '4': 1, '5': 3, '10': 'tsClient'},
+    {'1': 'reply_to_seq', '3': 5, '4': 1, '5': 3, '10': 'replyToSeq'},
   ],
 };
 
@@ -908,7 +1077,8 @@ const C_Chat$json = {
 final $typed_data.Uint8List c_ChatDescriptor = $convert.base64Decode(
     'CgZDX0NoYXQSFwoHY29udl9pZBgBIAEoCVIGY29udklkEiIKDWNsaWVudF9tc2dfaWQYAiABKA'
     'NSC2NsaWVudE1zZ0lkEi8KB3BheWxvYWQYAyABKAsyFS5Qcm90b2NvbC5DaGF0UGF5bG9hZFIH'
-    'cGF5bG9hZBIbCgl0c19jbGllbnQYBCABKANSCHRzQ2xpZW50');
+    'cGF5bG9hZBIbCgl0c19jbGllbnQYBCABKANSCHRzQ2xpZW50EiAKDHJlcGx5X3RvX3NlcRgFIA'
+    'EoA1IKcmVwbHlUb1NlcQ==');
 
 @$core.Deprecated('Use s_ChatDescriptor instead')
 const S_Chat$json = {
@@ -928,6 +1098,7 @@ const S_Chat$json = {
       '10': 'payload'
     },
     {'1': 'ts_server', '3': 7, '4': 1, '5': 3, '10': 'tsServer'},
+    {'1': 'reply_to_seq', '3': 8, '4': 1, '5': 3, '10': 'replyToSeq'},
   ],
 };
 
@@ -937,7 +1108,7 @@ final $typed_data.Uint8List s_ChatDescriptor = $convert.base64Decode(
     'NSC2NsaWVudE1zZ0lkEhcKB21zZ19zZXEYAyABKANSBm1zZ1NlcRIbCglzZW5kZXJfaWQYBCAB'
     'KAlSCHNlbmRlcklkEh8KC3NlbmRlcl9uYW1lGAUgASgJUgpzZW5kZXJOYW1lEi8KB3BheWxvYW'
     'QYBiABKAsyFS5Qcm90b2NvbC5DaGF0UGF5bG9hZFIHcGF5bG9hZBIbCgl0c19zZXJ2ZXIYByAB'
-    'KANSCHRzU2VydmVy');
+    'KANSCHRzU2VydmVyEiAKDHJlcGx5X3RvX3NlcRgIIAEoA1IKcmVwbHlUb1NlcQ==');
 
 @$core.Deprecated('Use c_ReqHistoryDescriptor instead')
 const C_ReqHistory$json = {
@@ -945,14 +1116,14 @@ const C_ReqHistory$json = {
   '2': [
     {'1': 'conv_id', '3': 1, '4': 1, '5': 9, '10': 'convId'},
     {'1': 'last_msg_seq', '3': 2, '4': 1, '5': 3, '10': 'lastMsgSeq'},
-    {'1': 'limit', '3': 3, '4': 1, '5': 5, '10': 'limit'},
+    {'1': 'limit', '3': 3, '4': 1, '5': 3, '10': 'limit'},
   ],
 };
 
 /// Descriptor for `C_ReqHistory`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List c_ReqHistoryDescriptor = $convert.base64Decode(
     'CgxDX1JlcUhpc3RvcnkSFwoHY29udl9pZBgBIAEoCVIGY29udklkEiAKDGxhc3RfbXNnX3NlcR'
-    'gCIAEoA1IKbGFzdE1zZ1NlcRIUCgVsaW1pdBgDIAEoBVIFbGltaXQ=');
+    'gCIAEoA1IKbGFzdE1zZ1NlcRIUCgVsaW1pdBgDIAEoA1IFbGltaXQ=');
 
 @$core.Deprecated('Use s_ReqHistoryDescriptor instead')
 const S_ReqHistory$json = {
@@ -1097,7 +1268,7 @@ const S_MessageBatch_ConversationBatch$json = {
       '6': '.Protocol.S_Chat',
       '10': 'messages'
     },
-    {'1': 'unread_count', '3': 3, '4': 1, '5': 5, '10': 'unreadCount'},
+    {'1': 'unread_count', '3': 3, '4': 1, '5': 3, '10': 'unreadCount'},
   ],
 };
 
@@ -1106,87 +1277,30 @@ final $typed_data.Uint8List s_MessageBatchDescriptor = $convert.base64Decode(
     'Cg5TX01lc3NhZ2VCYXRjaBJECgdiYXRjaGVzGAEgAygLMiouUHJvdG9jb2wuU19NZXNzYWdlQm'
     'F0Y2guQ29udmVyc2F0aW9uQmF0Y2hSB2JhdGNoZXMafQoRQ29udmVyc2F0aW9uQmF0Y2gSFwoH'
     'Y29udl9pZBgBIAEoCVIGY29udklkEiwKCG1lc3NhZ2VzGAIgAygLMhAuUHJvdG9jb2wuU19DaG'
-    'F0UghtZXNzYWdlcxIhCgx1bnJlYWRfY291bnQYAyABKAVSC3VucmVhZENvdW50');
-
-@$core.Deprecated('Use s_ErrorDescriptor instead')
-const S_Error$json = {
-  '1': 'S_Error',
-  '2': [
-    {
-      '1': 'error_code',
-      '3': 1,
-      '4': 1,
-      '5': 14,
-      '6': '.Protocol.ErrorCode',
-      '10': 'errorCode'
-    },
-    {'1': 'code', '3': 2, '4': 1, '5': 13, '10': 'code'},
-    {'1': 'message', '3': 3, '4': 1, '5': 9, '10': 'message'},
-  ],
-};
-
-/// Descriptor for `S_Error`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List s_ErrorDescriptor = $convert.base64Decode(
-    'CgdTX0Vycm9yEjIKCmVycm9yX2NvZGUYASABKA4yEy5Qcm90b2NvbC5FcnJvckNvZGVSCWVycm'
-    '9yQ29kZRISCgRjb2RlGAIgASgNUgRjb2RlEhgKB21lc3NhZ2UYAyABKAlSB21lc3NhZ2U=');
-
-@$core.Deprecated('Use c_HeartbeatDescriptor instead')
-const C_Heartbeat$json = {
-  '1': 'C_Heartbeat',
-};
-
-/// Descriptor for `C_Heartbeat`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List c_HeartbeatDescriptor =
-    $convert.base64Decode('CgtDX0hlYXJ0YmVhdA==');
-
-@$core.Deprecated('Use s_HeartbeatDescriptor instead')
-const S_Heartbeat$json = {
-  '1': 'S_Heartbeat',
-};
-
-/// Descriptor for `S_Heartbeat`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List s_HeartbeatDescriptor =
-    $convert.base64Decode('CgtTX0hlYXJ0YmVhdA==');
-
-@$core.Deprecated('Use friendInfoDescriptor instead')
-const FriendInfo$json = {
-  '1': 'FriendInfo',
-  '2': [
-    {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
-    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
-    {'1': 'status_message', '3': 3, '4': 1, '5': 9, '10': 'statusMessage'},
-    {'1': 'profile_image_url', '3': 4, '4': 1, '5': 9, '10': 'profileImageUrl'},
-    {'1': 'last_seen', '3': 5, '4': 1, '5': 3, '10': 'lastSeen'},
-    {'1': 'status', '3': 6, '4': 1, '5': 9, '10': 'status'},
-  ],
-};
-
-/// Descriptor for `FriendInfo`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List friendInfoDescriptor = $convert.base64Decode(
-    'CgpGcmllbmRJbmZvEhcKB3VzZXJfaWQYASABKAlSBnVzZXJJZBISCgRuYW1lGAIgASgJUgRuYW'
-    '1lEiUKDnN0YXR1c19tZXNzYWdlGAMgASgJUg1zdGF0dXNNZXNzYWdlEioKEXByb2ZpbGVfaW1h'
-    'Z2VfdXJsGAQgASgJUg9wcm9maWxlSW1hZ2VVcmwSGwoJbGFzdF9zZWVuGAUgASgDUghsYXN0U2'
-    'VlbhIWCgZzdGF0dXMYBiABKAlSBnN0YXR1cw==');
+    'F0UghtZXNzYWdlcxIhCgx1bnJlYWRfY291bnQYAyABKANSC3VucmVhZENvdW50');
 
 @$core.Deprecated('Use friendRequestDescriptor instead')
 const FriendRequest$json = {
   '1': 'FriendRequest',
   '2': [
-    {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
-    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
-    {'1': 'status_message', '3': 3, '4': 1, '5': 9, '10': 'statusMessage'},
-    {'1': 'profile_image_url', '3': 4, '4': 1, '5': 9, '10': 'profileImageUrl'},
-    {'1': 'requested_at', '3': 5, '4': 1, '5': 3, '10': 'requestedAt'},
-    {'1': 'is_received', '3': 6, '4': 1, '5': 8, '10': 'isReceived'},
+    {
+      '1': 'requester',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.UserInfo',
+      '10': 'requester'
+    },
+    {'1': 'requested_at', '3': 2, '4': 1, '5': 3, '10': 'requestedAt'},
+    {'1': 'is_received', '3': 3, '4': 1, '5': 8, '10': 'isReceived'},
   ],
 };
 
 /// Descriptor for `FriendRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List friendRequestDescriptor = $convert.base64Decode(
-    'Cg1GcmllbmRSZXF1ZXN0EhcKB3VzZXJfaWQYASABKAlSBnVzZXJJZBISCgRuYW1lGAIgASgJUg'
-    'RuYW1lEiUKDnN0YXR1c19tZXNzYWdlGAMgASgJUg1zdGF0dXNNZXNzYWdlEioKEXByb2ZpbGVf'
-    'aW1hZ2VfdXJsGAQgASgJUg9wcm9maWxlSW1hZ2VVcmwSIQoMcmVxdWVzdGVkX2F0GAUgASgDUg'
-    'tyZXF1ZXN0ZWRBdBIfCgtpc19yZWNlaXZlZBgGIAEoCFIKaXNSZWNlaXZlZA==');
+    'Cg1GcmllbmRSZXF1ZXN0EjAKCXJlcXVlc3RlchgBIAEoCzISLlByb3RvY29sLlVzZXJJbmZvUg'
+    'lyZXF1ZXN0ZXISIQoMcmVxdWVzdGVkX2F0GAIgASgDUgtyZXF1ZXN0ZWRBdBIfCgtpc19yZWNl'
+    'aXZlZBgDIAEoCFIKaXNSZWNlaXZlZA==');
 
 @$core.Deprecated('Use c_SearchUserDescriptor instead')
 const C_SearchUser$json = {
@@ -1210,7 +1324,7 @@ const S_SearchUser$json = {
       '3': 2,
       '4': 1,
       '5': 11,
-      '6': '.Protocol.FriendInfo',
+      '6': '.Protocol.UserInfo',
       '10': 'userInfo'
     },
     {'1': 'is_friend', '3': 3, '4': 1, '5': 8, '10': 'isFriend'},
@@ -1220,9 +1334,9 @@ const S_SearchUser$json = {
 
 /// Descriptor for `S_SearchUser`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List s_SearchUserDescriptor = $convert.base64Decode(
-    'CgxTX1NlYXJjaFVzZXISGAoHc3VjY2VzcxgBIAEoCFIHc3VjY2VzcxIxCgl1c2VyX2luZm8YAi'
-    'ABKAsyFC5Qcm90b2NvbC5GcmllbmRJbmZvUgh1c2VySW5mbxIbCglpc19mcmllbmQYAyABKAhS'
-    'CGlzRnJpZW5kEigKEGhhc19zZW50X3JlcXVlc3QYBCABKAhSDmhhc1NlbnRSZXF1ZXN0');
+    'CgxTX1NlYXJjaFVzZXISGAoHc3VjY2VzcxgBIAEoCFIHc3VjY2VzcxIvCgl1c2VyX2luZm8YAi'
+    'ABKAsyEi5Qcm90b2NvbC5Vc2VySW5mb1IIdXNlckluZm8SGwoJaXNfZnJpZW5kGAMgASgIUghp'
+    'c0ZyaWVuZBIoChBoYXNfc2VudF9yZXF1ZXN0GAQgASgIUg5oYXNTZW50UmVxdWVzdA==');
 
 @$core.Deprecated('Use c_FriendActionDescriptor instead')
 const C_FriendAction$json = {
@@ -1272,7 +1386,7 @@ const S_FriendAction$json = {
       '3': 3,
       '4': 1,
       '5': 11,
-      '6': '.Protocol.FriendInfo',
+      '6': '.Protocol.UserInfo',
       '10': 'updatedFriend'
     },
   ],
@@ -1281,8 +1395,8 @@ const S_FriendAction$json = {
 /// Descriptor for `S_FriendAction`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List s_FriendActionDescriptor = $convert.base64Decode(
     'Cg5TX0ZyaWVuZEFjdGlvbhIYCgdzdWNjZXNzGAEgASgIUgdzdWNjZXNzEhgKB21lc3NhZ2UYAi'
-    'ABKAlSB21lc3NhZ2USOwoOdXBkYXRlZF9mcmllbmQYAyABKAsyFC5Qcm90b2NvbC5GcmllbmRJ'
-    'bmZvUg11cGRhdGVkRnJpZW5k');
+    'ABKAlSB21lc3NhZ2USOQoOdXBkYXRlZF9mcmllbmQYAyABKAsyEi5Qcm90b2NvbC5Vc2VySW5m'
+    'b1INdXBkYXRlZEZyaWVuZA==');
 
 @$core.Deprecated('Use c_FetchFriendDataDescriptor instead')
 const C_FetchFriendData$json = {
@@ -1302,7 +1416,7 @@ const S_FetchFriendData$json = {
       '3': 1,
       '4': 3,
       '5': 11,
-      '6': '.Protocol.FriendInfo',
+      '6': '.Protocol.UserInfo',
       '10': 'friends'
     },
     {
@@ -1326,10 +1440,10 @@ const S_FetchFriendData$json = {
 
 /// Descriptor for `S_FetchFriendData`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List s_FetchFriendDataDescriptor = $convert.base64Decode(
-    'ChFTX0ZldGNoRnJpZW5kRGF0YRIuCgdmcmllbmRzGAEgAygLMhQuUHJvdG9jb2wuRnJpZW5kSW'
-    '5mb1IHZnJpZW5kcxJEChFyZWNlaXZlZF9yZXF1ZXN0cxgCIAMoCzIXLlByb3RvY29sLkZyaWVu'
-    'ZFJlcXVlc3RSEHJlY2VpdmVkUmVxdWVzdHMSPAoNc2VudF9yZXF1ZXN0cxgDIAMoCzIXLlByb3'
-    'RvY29sLkZyaWVuZFJlcXVlc3RSDHNlbnRSZXF1ZXN0cw==');
+    'ChFTX0ZldGNoRnJpZW5kRGF0YRIsCgdmcmllbmRzGAEgAygLMhIuUHJvdG9jb2wuVXNlckluZm'
+    '9SB2ZyaWVuZHMSRAoRcmVjZWl2ZWRfcmVxdWVzdHMYAiADKAsyFy5Qcm90b2NvbC5GcmllbmRS'
+    'ZXF1ZXN0UhByZWNlaXZlZFJlcXVlc3RzEjwKDXNlbnRfcmVxdWVzdHMYAyADKAsyFy5Qcm90b2'
+    'NvbC5GcmllbmRSZXF1ZXN0UgxzZW50UmVxdWVzdHM=');
 
 @$core.Deprecated('Use s_FriendPushDescriptor instead')
 const S_FriendPush$json = {
@@ -1348,7 +1462,7 @@ const S_FriendPush$json = {
       '3': 2,
       '4': 1,
       '5': 11,
-      '6': '.Protocol.FriendInfo',
+      '6': '.Protocol.UserInfo',
       '10': 'userInfo'
     },
   ],
@@ -1360,17 +1474,47 @@ const S_FriendPush_PushType$json = {
   '1': 'PushType',
   '2': [
     {'1': 'NEW_REQUEST', '2': 0},
-    {'1': 'REQUEST_ACCEPTED', '2': 1},
-    {'1': 'FRIEND_DELETED', '2': 2},
+    {'1': 'ACCEPTED', '2': 1},
+    {'1': 'DELETED', '2': 2},
   ],
 };
 
 /// Descriptor for `S_FriendPush`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List s_FriendPushDescriptor = $convert.base64Decode(
     'CgxTX0ZyaWVuZFB1c2gSMwoEdHlwZRgBIAEoDjIfLlByb3RvY29sLlNfRnJpZW5kUHVzaC5QdX'
-    'NoVHlwZVIEdHlwZRIxCgl1c2VyX2luZm8YAiABKAsyFC5Qcm90b2NvbC5GcmllbmRJbmZvUgh1'
-    'c2VySW5mbyJFCghQdXNoVHlwZRIPCgtORVdfUkVRVUVTVBAAEhQKEFJFUVVFU1RfQUNDRVBURU'
-    'QQARISCg5GUklFTkRfREVMRVRFRBAC');
+    'NoVHlwZVIEdHlwZRIvCgl1c2VyX2luZm8YAiABKAsyEi5Qcm90b2NvbC5Vc2VySW5mb1IIdXNl'
+    'ckluZm8iNgoIUHVzaFR5cGUSDwoLTkVXX1JFUVVFU1QQABIMCghBQ0NFUFRFRBABEgsKB0RFTE'
+    'VURUQQAg==');
+
+@$core.Deprecated('Use groupMemberInfoDescriptor instead')
+const GroupMemberInfo$json = {
+  '1': 'GroupMemberInfo',
+  '2': [
+    {
+      '1': 'user_info',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.UserInfo',
+      '10': 'userInfo'
+    },
+    {
+      '1': 'role',
+      '3': 2,
+      '4': 1,
+      '5': 14,
+      '6': '.Protocol.GroupRole',
+      '10': 'role'
+    },
+    {'1': 'joined_at', '3': 3, '4': 1, '5': 3, '10': 'joinedAt'},
+  ],
+};
+
+/// Descriptor for `GroupMemberInfo`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List groupMemberInfoDescriptor = $convert.base64Decode(
+    'Cg9Hcm91cE1lbWJlckluZm8SLwoJdXNlcl9pbmZvGAEgASgLMhIuUHJvdG9jb2wuVXNlckluZm'
+    '9SCHVzZXJJbmZvEicKBHJvbGUYAiABKA4yEy5Qcm90b2NvbC5Hcm91cFJvbGVSBHJvbGUSGwoJ'
+    'am9pbmVkX2F0GAMgASgDUghqb2luZWRBdA==');
 
 @$core.Deprecated('Use groupInfoDescriptor instead')
 const GroupInfo$json = {
@@ -1408,35 +1552,6 @@ final $typed_data.Uint8List groupInfoDescriptor = $convert.base64Decode(
     'YXBhY2l0eV9ieXRlcxgHIAEoA1IUc3RvcmFnZUNhcGFjaXR5Qnl0ZXMSLgoTc3RvcmFnZV91c2'
     'FnZV9ieXRlcxgIIAEoA1IRc3RvcmFnZVVzYWdlQnl0ZXM=');
 
-@$core.Deprecated('Use groupMemberInfoDescriptor instead')
-const GroupMemberInfo$json = {
-  '1': 'GroupMemberInfo',
-  '2': [
-    {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
-    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
-    {'1': 'profile_image_url', '3': 3, '4': 1, '5': 9, '10': 'profileImageUrl'},
-    {'1': 'status_message', '3': 4, '4': 1, '5': 9, '10': 'statusMessage'},
-    {
-      '1': 'role',
-      '3': 5,
-      '4': 1,
-      '5': 14,
-      '6': '.Protocol.GroupRole',
-      '10': 'role'
-    },
-    {'1': 'joined_at', '3': 6, '4': 1, '5': 3, '10': 'joinedAt'},
-    {'1': 'last_active_at', '3': 7, '4': 1, '5': 3, '10': 'lastActiveAt'},
-  ],
-};
-
-/// Descriptor for `GroupMemberInfo`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List groupMemberInfoDescriptor = $convert.base64Decode(
-    'Cg9Hcm91cE1lbWJlckluZm8SFwoHdXNlcl9pZBgBIAEoCVIGdXNlcklkEhIKBG5hbWUYAiABKA'
-    'lSBG5hbWUSKgoRcHJvZmlsZV9pbWFnZV91cmwYAyABKAlSD3Byb2ZpbGVJbWFnZVVybBIlCg5z'
-    'dGF0dXNfbWVzc2FnZRgEIAEoCVINc3RhdHVzTWVzc2FnZRInCgRyb2xlGAUgASgOMhMuUHJvdG'
-    '9jb2wuR3JvdXBSb2xlUgRyb2xlEhsKCWpvaW5lZF9hdBgGIAEoA1IIam9pbmVkQXQSJAoObGFz'
-    'dF9hY3RpdmVfYXQYByABKANSDGxhc3RBY3RpdmVBdA==');
-
 @$core.Deprecated('Use c_CreateGroupDescriptor instead')
 const C_CreateGroup$json = {
   '1': 'C_CreateGroup',
@@ -1454,10 +1569,9 @@ const S_CreateGroup$json = {
   '1': 'S_CreateGroup',
   '2': [
     {'1': 'success', '3': 1, '4': 1, '5': 8, '10': 'success'},
-    {'1': 'message', '3': 2, '4': 1, '5': 9, '10': 'message'},
     {
       '1': 'group',
-      '3': 3,
+      '3': 2,
       '4': 1,
       '5': 11,
       '6': '.Protocol.GroupInfo',
@@ -1468,8 +1582,8 @@ const S_CreateGroup$json = {
 
 /// Descriptor for `S_CreateGroup`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List s_CreateGroupDescriptor = $convert.base64Decode(
-    'Cg1TX0NyZWF0ZUdyb3VwEhgKB3N1Y2Nlc3MYASABKAhSB3N1Y2Nlc3MSGAoHbWVzc2FnZRgCIA'
-    'EoCVIHbWVzc2FnZRIpCgVncm91cBgDIAEoCzITLlByb3RvY29sLkdyb3VwSW5mb1IFZ3JvdXA=');
+    'Cg1TX0NyZWF0ZUdyb3VwEhgKB3N1Y2Nlc3MYASABKAhSB3N1Y2Nlc3MSKQoFZ3JvdXAYAiABKA'
+    'syEy5Qcm90b2NvbC5Hcm91cEluZm9SBWdyb3Vw');
 
 @$core.Deprecated('Use c_GroupListDescriptor instead')
 const C_GroupList$json = {
@@ -1559,14 +1673,12 @@ const S_InviteFriend$json = {
   '1': 'S_InviteFriend',
   '2': [
     {'1': 'success', '3': 1, '4': 1, '5': 8, '10': 'success'},
-    {'1': 'message', '3': 2, '4': 1, '5': 9, '10': 'message'},
   ],
 };
 
 /// Descriptor for `S_InviteFriend`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List s_InviteFriendDescriptor = $convert.base64Decode(
-    'Cg5TX0ludml0ZUZyaWVuZBIYCgdzdWNjZXNzGAEgASgIUgdzdWNjZXNzEhgKB21lc3NhZ2UYAi'
-    'ABKAlSB21lc3NhZ2U=');
+final $typed_data.Uint8List s_InviteFriendDescriptor = $convert
+    .base64Decode('Cg5TX0ludml0ZUZyaWVuZBIYCgdzdWNjZXNzGAEgASgIUgdzdWNjZXNz');
 
 @$core.Deprecated('Use c_JoinGroupDescriptor instead')
 const C_JoinGroup$json = {
@@ -1585,10 +1697,9 @@ const S_JoinGroup$json = {
   '1': 'S_JoinGroup',
   '2': [
     {'1': 'success', '3': 1, '4': 1, '5': 8, '10': 'success'},
-    {'1': 'message', '3': 2, '4': 1, '5': 9, '10': 'message'},
     {
       '1': 'group',
-      '3': 3,
+      '3': 2,
       '4': 1,
       '5': 11,
       '6': '.Protocol.GroupInfo',
@@ -1599,8 +1710,8 @@ const S_JoinGroup$json = {
 
 /// Descriptor for `S_JoinGroup`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List s_JoinGroupDescriptor = $convert.base64Decode(
-    'CgtTX0pvaW5Hcm91cBIYCgdzdWNjZXNzGAEgASgIUgdzdWNjZXNzEhgKB21lc3NhZ2UYAiABKA'
-    'lSB21lc3NhZ2USKQoFZ3JvdXAYAyABKAsyEy5Qcm90b2NvbC5Hcm91cEluZm9SBWdyb3Vw');
+    'CgtTX0pvaW5Hcm91cBIYCgdzdWNjZXNzGAEgASgIUgdzdWNjZXNzEikKBWdyb3VwGAIgASgLMh'
+    'MuUHJvdG9jb2wuR3JvdXBJbmZvUgVncm91cA==');
 
 @$core.Deprecated('Use c_GroupMemberListDescriptor instead')
 const C_GroupMemberList$json = {
@@ -1652,14 +1763,12 @@ const S_LeaveGroup$json = {
   '1': 'S_LeaveGroup',
   '2': [
     {'1': 'success', '3': 1, '4': 1, '5': 8, '10': 'success'},
-    {'1': 'message', '3': 2, '4': 1, '5': 9, '10': 'message'},
   ],
 };
 
 /// Descriptor for `S_LeaveGroup`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List s_LeaveGroupDescriptor = $convert.base64Decode(
-    'CgxTX0xlYXZlR3JvdXASGAoHc3VjY2VzcxgBIAEoCFIHc3VjY2VzcxIYCgdtZXNzYWdlGAIgAS'
-    'gJUgdtZXNzYWdl');
+final $typed_data.Uint8List s_LeaveGroupDescriptor = $convert
+    .base64Decode('CgxTX0xlYXZlR3JvdXASGAoHc3VjY2VzcxgBIAEoCFIHc3VjY2Vzcw==');
 
 @$core.Deprecated('Use c_EditGroupDescriptor instead')
 const C_EditGroup$json = {
@@ -1667,24 +1776,25 @@ const C_EditGroup$json = {
   '2': [
     {'1': 'group_id', '3': 1, '4': 1, '5': 9, '10': 'groupId'},
     {'1': 'new_name', '3': 2, '4': 1, '5': 9, '10': 'newName'},
-    {'1': 'new_image_url', '3': 3, '4': 1, '5': 9, '10': 'newImageUrl'},
+    {'1': 'new_description', '3': 3, '4': 1, '5': 9, '10': 'newDescription'},
+    {'1': 'new_image_url', '3': 4, '4': 1, '5': 9, '10': 'newImageUrl'},
   ],
 };
 
 /// Descriptor for `C_EditGroup`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List c_EditGroupDescriptor = $convert.base64Decode(
     'CgtDX0VkaXRHcm91cBIZCghncm91cF9pZBgBIAEoCVIHZ3JvdXBJZBIZCghuZXdfbmFtZRgCIA'
-    'EoCVIHbmV3TmFtZRIiCg1uZXdfaW1hZ2VfdXJsGAMgASgJUgtuZXdJbWFnZVVybA==');
+    'EoCVIHbmV3TmFtZRInCg9uZXdfZGVzY3JpcHRpb24YAyABKAlSDm5ld0Rlc2NyaXB0aW9uEiIK'
+    'DW5ld19pbWFnZV91cmwYBCABKAlSC25ld0ltYWdlVXJs');
 
 @$core.Deprecated('Use s_EditGroupDescriptor instead')
 const S_EditGroup$json = {
   '1': 'S_EditGroup',
   '2': [
     {'1': 'success', '3': 1, '4': 1, '5': 8, '10': 'success'},
-    {'1': 'message', '3': 2, '4': 1, '5': 9, '10': 'message'},
     {
       '1': 'group',
-      '3': 3,
+      '3': 2,
       '4': 1,
       '5': 11,
       '6': '.Protocol.GroupInfo',
@@ -1695,5 +1805,45 @@ const S_EditGroup$json = {
 
 /// Descriptor for `S_EditGroup`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List s_EditGroupDescriptor = $convert.base64Decode(
-    'CgtTX0VkaXRHcm91cBIYCgdzdWNjZXNzGAEgASgIUgdzdWNjZXNzEhgKB21lc3NhZ2UYAiABKA'
-    'lSB21lc3NhZ2USKQoFZ3JvdXAYAyABKAsyEy5Qcm90b2NvbC5Hcm91cEluZm9SBWdyb3Vw');
+    'CgtTX0VkaXRHcm91cBIYCgdzdWNjZXNzGAEgASgIUgdzdWNjZXNzEikKBWdyb3VwGAIgASgLMh'
+    'MuUHJvdG9jb2wuR3JvdXBJbmZvUgVncm91cA==');
+
+@$core.Deprecated('Use s_ErrorDescriptor instead')
+const S_Error$json = {
+  '1': 'S_Error',
+  '2': [
+    {
+      '1': 'error_code',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.Protocol.ErrorCode',
+      '10': 'errorCode'
+    },
+    {'1': 'code', '3': 2, '4': 1, '5': 13, '10': 'code'},
+    {'1': 'message', '3': 3, '4': 1, '5': 9, '10': 'message'},
+  ],
+};
+
+/// Descriptor for `S_Error`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List s_ErrorDescriptor = $convert.base64Decode(
+    'CgdTX0Vycm9yEjIKCmVycm9yX2NvZGUYASABKA4yEy5Qcm90b2NvbC5FcnJvckNvZGVSCWVycm'
+    '9yQ29kZRISCgRjb2RlGAIgASgNUgRjb2RlEhgKB21lc3NhZ2UYAyABKAlSB21lc3NhZ2U=');
+
+@$core.Deprecated('Use c_HeartbeatDescriptor instead')
+const C_Heartbeat$json = {
+  '1': 'C_Heartbeat',
+};
+
+/// Descriptor for `C_Heartbeat`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List c_HeartbeatDescriptor =
+    $convert.base64Decode('CgtDX0hlYXJ0YmVhdA==');
+
+@$core.Deprecated('Use s_HeartbeatDescriptor instead')
+const S_Heartbeat$json = {
+  '1': 'S_Heartbeat',
+};
+
+/// Descriptor for `S_Heartbeat`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List s_HeartbeatDescriptor =
+    $convert.base64Decode('CgtTX0hlYXJ0YmVhdA==');

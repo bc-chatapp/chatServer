@@ -22,7 +22,7 @@ public:
 	bool HandleFriendAction(sessionPtr& session, uint64 reqId, Protocol::C_FriendAction::ActionType action, const string& targetId);
 
 	// [4] 실시간 푸시 알림 헬퍼 (static)
-	static void PushFriendEvent(const string& targetUserId, Protocol::S_FriendPush::PushType type, const Protocol::FriendInfo* info = nullptr);
+	static void PushFriendEvent(const string& targetUserId, Protocol::S_FriendPush::PushType type, const Protocol::UserInfo* info = nullptr);
 	
 
 protected:

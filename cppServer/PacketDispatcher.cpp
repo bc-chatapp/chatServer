@@ -85,6 +85,14 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 		Dispatch_C_FetchOffline(session, envelope.request_id(), envelope.c_fetch_offline());
 		break;
 
+		/* ★ 내 정보 관리(MyInfo) 추가 */
+	case Protocol::Envelope::kCFetchMyInfo:
+		Dispatch_C_FetchMyInfo(session, envelope.request_id(), envelope.c_fetch_my_info());
+		break;
+	case Protocol::Envelope::kCEditMyInfo:
+		Dispatch_C_EditMyInfo(session, envelope.request_id(), envelope.c_edit_my_info());
+		break;
+
 		/* 채팅 */
 	case Protocol::Envelope::kCChat:
 		Dispatch_C_Chat(session, envelope.request_id(), envelope.c_chat());
@@ -409,6 +417,34 @@ bool PacketDispatcher::Dispatch_C_FetchOffline(sessionPtr& session, uint64 reqId
 	serverSession->SetHasPushedOfflineData(true);
 
 	return true;
+}
+
+
+bool PacketDispatcher::Dispatch_C_FetchMyInfo(sessionPtr& session, uint64 reqId, const Protocol::C_FetchMyInfo& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED);
+		return false;
+	}
+
+	// TODO: GUserManager 또는 GMyInfoService를 통해 UserInfo 조회 후 전송
+	//return GUserManager->FetchMyInfo(session, reqId, userId);
+}
+
+
+bool PacketDispatcher::Dispatch_C_EditMyInfo(sessionPtr& session, uint64 reqId, const Protocol::C_EditMyInfo& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED);
+		return false;
+	}
+
+	// pkt(C_EditMyInfo)에 담긴 이름, 상태메시지, 폰번호 등을 업데이트
+	//return GUserManager->EditMyInfo(session, reqId, userId, pkt);
 }
 
 

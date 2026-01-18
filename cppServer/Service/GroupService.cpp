@@ -25,7 +25,6 @@ bool GroupService::CreateGroup(sessionPtr& session, uint64 reqId, Protocol::C_Cr
 	}
 
 
-	
 	cGroupInfo groupInfo;
 	if (!GroupRepository::CreateGroup(pkt.group_name(), userId, groupInfo))
 	{
@@ -33,9 +32,9 @@ bool GroupService::CreateGroup(sessionPtr& session, uint64 reqId, Protocol::C_Cr
 		return false;
 	}
 
+
 	Protocol::S_CreateGroup pkt_s_createGroup;
 	pkt_s_createGroup.set_success(true);
-	pkt_s_createGroup.set_message("그룹이 생성되었습니다.");
 
 	auto* info = pkt_s_createGroup.mutable_group();
 	info->set_group_id(groupInfo.groupId);
@@ -97,34 +96,33 @@ bool GroupService::JoinGroup(sessionPtr& session, uint64 reqId, const string& gr
 	const string userId = serverSession->GetUserId();
 	if (userId.empty()) return false;
 
-	cGroupInfo dbInfo;
-	if (!GroupRepository::GetGroupInfoById(groupCode, dbInfo)) {
+	cGroupInfo groupInfo;
+	if (!GroupRepository::GetGroupInfoById(groupCode, groupInfo)) {
 		HandleErr(session, reqId, Protocol::ERR_INVALID_PACKET, "유효하지 않은 초대 코드입니다.");
 		return false;
 	}
 
-	if (GroupRepository::IsMember(dbInfo.groupId, userId)) {
+	if (GroupRepository::IsMember(groupInfo.groupId, userId)) {
 		HandleErr(session, reqId, Protocol::ERR_INVALID_PACKET, "이미 가입된 그룹입니다.");
 		return false;
 	}
 
-	if (!GroupRepository::AddMember(dbInfo.groupId, userId, "member")) {
+	if (!GroupRepository::AddMember(groupInfo.groupId, userId, "member")) {
 		HandleErr(session, reqId, Protocol::ERR_SERVER_INTERNAL, "입장 실패");
 		return false;
 	}
 
 	Protocol::S_JoinGroup pkt_s_join;
 	pkt_s_join.set_success(true);
-	pkt_s_join.set_message("그룹에 입장했습니다.");
 
 	auto* info = pkt_s_join.mutable_group();
-	info->set_group_id(dbInfo.groupId);
-	info->set_group_name(dbInfo.groupName);
-	info->set_group_code(dbInfo.groupCode);
-	info->set_description(dbInfo.description);
-	info->set_group_image_url(dbInfo.groupImageUrl);
-	info->set_storage_capacity_bytes(dbInfo.storageLimit);
-	info->set_storage_usage_bytes(dbInfo.storageUsage);
+	info->set_group_id(groupInfo.groupId);
+	info->set_group_name(groupInfo.groupName);
+	info->set_group_code(groupInfo.groupCode);
+	info->set_description(groupInfo.description);
+	info->set_group_image_url(groupInfo.groupImageUrl);
+	info->set_storage_capacity_bytes(groupInfo.storageLimit);
+	info->set_storage_usage_bytes(groupInfo.storageUsage);
 
 	Protocol::Envelope env;
 	env.set_version(GProtoVersion);
@@ -132,9 +130,9 @@ bool GroupService::JoinGroup(sessionPtr& session, uint64 reqId, const string& gr
 	*env.mutable_s_join_group() = pkt_s_join;
 	PacketDispatcher::SendEnvelope(session, env);
 
-	cout << "[GroupService] User(" << userId << ") Joined Group(" << dbInfo.groupId << ")" << endl;
+	cout << "[GroupService] User(" << userId << ") Joined Group(" << groupInfo.groupId << ")" << endl;
 
-	GChatService->SendSystemMessage(dbInfo.groupId, userId + " 님이 입장하셨습니다.");
+	GChatService->SendSystemMessage(groupInfo.groupId, userId + " 님이 입장하셨습니다.");
 
 	return true;
 }
@@ -166,7 +164,6 @@ bool GroupService::LeaveGroup(sessionPtr& session, uint64 reqId, const string& g
 
 	Protocol::S_LeaveGroup pkt_leave;
 	pkt_leave.set_success(true);
-	pkt_leave.set_message("그룹을 떠났습니다.");
 
 	Protocol::Envelope env;
 	env.set_version(GProtoVersion);
@@ -231,6 +228,9 @@ bool GroupService::UpdateGroupInfo(sessionPtr& session, uint64 reqId, Protocol::
 		return false;
 	}
 
+	cout << "[GroupService] Update : " << pkt.new_name() << endl;
+	cout << "[GroupService] Update : " << pkt.new_image_url() << endl;
+
 	if (GroupRepository::UpdateGroupInfo(pkt.group_id(), pkt.new_name(), pkt.new_image_url()))
 	{
 		cGroupInfo groupInfo;
@@ -238,7 +238,6 @@ bool GroupService::UpdateGroupInfo(sessionPtr& session, uint64 reqId, Protocol::
 
 		Protocol::S_EditGroup pkt;
 		pkt.set_success(true);
-		pkt.set_message("성공적으로 수정되었습니다. ");
 		
 		auto groupData = pkt.mutable_group();
 		groupData->set_group_id(groupInfo.groupId);
@@ -270,48 +269,7 @@ bool GroupService::InviteFriend(sessionPtr& session, const Protocol::C_InviteFri
 	const string userId = serverSession->GetUserId();
 	if (userId.empty()) return false;
 
-	string senderName = "";
-	if (!UserRepository::GetUserNameWithId(userId, senderName))
-	{
-		return false;
-	}
-
-	string groupId = pkt.group_id();
-	cGroupInfo groupInfo;
-	if (!GroupRepository::GetGroupInfoById(groupId, groupInfo)) {
-		// 실패 응답
-		return false;
-	}
-
-	for (const string& friendId : pkt.friend_user_ids()) {
-
-		if (GroupRepository::IsMember(groupId, friendId)) continue;
-
-		Protocol::S_Chat pkt_invite;
-		string convId = MessageRepository::CreateConversationId(userId, friendId); // 1:1 방 ID 계산
-		pkt_invite.set_conv_id(convId);
-		pkt_invite.set_sender_id(userId); // 내가 보낸 것처럼
-		pkt_invite.set_sender_name(senderName);
-		pkt_invite.set_ts_server(Nowts());
-
-		// ★ Payload: System 타입 (Invite)
-		auto* sysPayload = pkt_invite.mutable_payload()->mutable_system();
-		sysPayload->set_message(senderName + " 님이 '" + groupInfo.groupName + "' 그룹에 초대했습니다.");
-		sysPayload->set_type(1); // 1 = 초대장
-		sysPayload->set_invite_group_id(groupId);
-		sysPayload->set_invite_group_code(groupInfo.groupCode);
-		sysPayload->set_invite_group_name(groupInfo.groupName);
-
-		// DB 저장 & 전송 (ChatService 기능 재사용 권장)
-		// 여기선 개념적으로 작성:
-		// MessageRepository::SaveMessage(convId, senderId, friendId, inviteMsg);
-		// 타겟 유저가 온라인이면 PushEnvelope(targetSession, inviteMsg);
-	}
-
-	// 성공 응답 전송
-	Protocol::S_InviteFriend res;
-	res.set_success(true);
-	// SendEnvelope(session, res);
+	// 
 
 	return true;
 }
@@ -333,28 +291,30 @@ bool GroupService::GetGroupMemberList(sessionPtr& session, uint64 reqId, const s
 	}
 
 	auto members = GroupRepository::GetGroupMembers(groupId);
-	Protocol::S_GroupMemberList pkt_s_list;
-	pkt_s_list.set_group_id(groupId);
+	Protocol::S_GroupMemberList pkt_res;
+	pkt_res.set_group_id(groupId);
 
 	for (const auto& m : members) {
-		auto* info = pkt_s_list.add_members();
-		info->set_user_id(m.userId);
-		info->set_name(m.name);
-		info->set_profile_image_url(m.profileImageUrl);
-		info->set_status_message(m.statusMessage);
+		auto* memberInfo = pkt_res.add_members();
+
+		auto* userInfo = memberInfo->mutable_user_info();
+		userInfo->set_user_id(m.userId);
+		userInfo->set_name(m.name);
+		userInfo->set_profile_image_url(m.profileImageUrl);
+		userInfo->set_status_message(m.statusMessage);
 
 		// String Role -> Proto Enum Role 변환
-		if (m.role == "owner") info->set_role(Protocol::GroupRole::OWNER);
-		else if (m.role == "admin") info->set_role(Protocol::GroupRole::ADMIN);
-		else info->set_role(Protocol::GroupRole::MEMBER);
+		if (m.role == "owner") memberInfo->set_role(Protocol::GroupRole::OWNER);
+		else if (m.role == "admin") memberInfo->set_role(Protocol::GroupRole::ADMIN);
+		else memberInfo->set_role(Protocol::GroupRole::MEMBER);
 
-		info->set_joined_at(m.joinedAt);
+		memberInfo->set_joined_at(m.joinedAt);
 	}
 
 	Protocol::Envelope env;
 	env.set_version(GProtoVersion);
 	env.set_request_id(reqId);
-	*env.mutable_s_group_member_list() = pkt_s_list;
+	*env.mutable_s_group_member_list() = pkt_res;
 	PacketDispatcher::SendEnvelope(session, env);
 
 	return true;

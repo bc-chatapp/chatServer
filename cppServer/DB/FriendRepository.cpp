@@ -390,23 +390,32 @@ bool FriendRepository::HasSentRequest(const string& userId, const string& reques
 
 
 
-Protocol::FriendInfo FriendRepository::ToProtocolFriendInfo(const cFriendInfo& info) {
-	Protocol::FriendInfo friendInfo;
-	friendInfo.set_user_id(info.friendId);
-	friendInfo.set_name(info.name);
-	friendInfo.set_status_message(info.statusMessage);
-	friendInfo.set_profile_image_url(info.profileImageUrl);
-	friendInfo.set_last_seen(info.lastSeen);
-	friendInfo.set_status(info.status);
-	return friendInfo;
+Protocol::UserInfo FriendRepository::ToProtocolUserInfo(const cFriendInfo& info) {
+	Protocol::UserInfo userInfo;
+	userInfo.set_user_id(info.friendId);
+	userInfo.set_name(info.name);
+	userInfo.set_status_message(info.statusMessage);
+	userInfo.set_profile_image_url(info.profileImageUrl);
+	userInfo.set_last_seen(info.lastSeen);
+	userInfo.set_status(info.status);
+
+	return userInfo;
 }
 
-Protocol::FriendRequest FriendRepository::ToProtocolFriendRequest(const FriendRequestInfo& info) {
+
+
+Protocol::FriendRequest FriendRepository::ToProtocolFriendRequest(const FriendRequestInfo& info, bool isReceived) 
+{
 	Protocol::FriendRequest req;
-	req.set_user_id(info.userId);
-	req.set_name(info.name);
-	req.set_status_message(info.statusMessage);
-	req.set_profile_image_url(info.profileImageUrl);
+
+	Protocol::UserInfo* requester = req.mutable_requester();
+	requester->set_user_id(info.userId);
+	requester->set_name(info.name);
+	requester->set_status_message(info.statusMessage);
+	requester->set_profile_image_url(info.profileImageUrl);
+
 	req.set_requested_at(info.requestedAt);
+	req.set_is_received(isReceived);
+
 	return req;
 }

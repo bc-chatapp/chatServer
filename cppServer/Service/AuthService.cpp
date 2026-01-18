@@ -15,6 +15,9 @@
 
 using namespace Protocol;
 
+
+
+
 bool AuthService::CheckIdAvailable(sessionPtr& session, uint64 reqId, const string& userId)
 {
     bool exists = UserRepository::UserExists(userId);
@@ -35,6 +38,10 @@ bool AuthService::CheckIdAvailable(sessionPtr& session, uint64 reqId, const stri
     return !exists;
 }
 
+
+
+
+
 bool AuthService::CheckEmailAvailable(sessionPtr& session, uint64 reqId, const string& email)
 {
     bool exists = UserRepository::EmailExists(email);
@@ -54,6 +61,8 @@ bool AuthService::CheckEmailAvailable(sessionPtr& session, uint64 reqId, const s
     return !exists;
 
 }
+
+
 
 
 
@@ -148,7 +157,7 @@ bool AuthService::Login(sessionPtr& session, uint64 reqId, const string& userId,
         return false;
     }
     
-    UserInfo userInfo;
+    cUserInfo userInfo;
     if (!UserRepository::GetUserWithPassword(userId, userInfo)) {
         HandleErr(session, reqId, ERR_USER_NOT_FOUND);
         return false;
@@ -180,22 +189,28 @@ bool AuthService::Login(sessionPtr& session, uint64 reqId, const string& userId,
     
 
     Protocol::S_Login pkt_s_login;
-    pkt_s_login.set_user_id(userId);
+    pkt_s_login.set_success(true);
     pkt_s_login.set_auth_token(authToken);
 
-    pkt_s_login.set_name(userInfo.name);
-    pkt_s_login.set_email(userInfo.email);
-    
+    Protocol::UserInfo* myInfo = pkt_s_login.mutable_my_info();
+    UserRepository::ConvertToProto(userInfo, myInfo);
+
     Protocol::Envelope env;
     env.set_version(GProtoVersion);
     env.set_request_id(reqId);
     env.mutable_s_login()->CopyFrom(pkt_s_login);
+
     PacketDispatcher::SendEnvelope(session, env);
     
     cout << "[AuthService] 로그인 성공: userId=" << userId << endl;
-    
     return true;
 }
+
+
+
+
+
+
 
 bool AuthService::LoginByToken(sessionPtr& session, uint64 reqId, const string& token, const string& userId)
 {
@@ -212,7 +227,7 @@ bool AuthService::LoginByToken(sessionPtr& session, uint64 reqId, const string& 
         return false;
     }
 
-    UserInfo userInfo;
+    cUserInfo userInfo;
     if (!UserRepository::GetUser(dbUserId, userInfo)) {
         HandleErr(session, reqId, ERR_USER_NOT_FOUND);
         return false;
@@ -233,11 +248,11 @@ bool AuthService::LoginByToken(sessionPtr& session, uint64 reqId, const string& 
     GUserManager->UpsertSession(userId, session);
 
     Protocol::S_Login pkt_s_login;
-    pkt_s_login.set_user_id(userId);
+    pkt_s_login.set_success(true);
     pkt_s_login.set_auth_token(token);
 
-    pkt_s_login.set_name(userInfo.name);
-    pkt_s_login.set_email(userInfo.email);
+    Protocol::UserInfo* myInfo = pkt_s_login.mutable_my_info();
+    UserRepository::ConvertToProto(userInfo, myInfo);
 
     Protocol::Envelope env;
     env.set_version(GProtoVersion);

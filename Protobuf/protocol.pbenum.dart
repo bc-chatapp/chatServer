@@ -14,6 +14,26 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+class GroupRole extends $pb.ProtobufEnum {
+  static const GroupRole MEMBER =
+      GroupRole._(0, _omitEnumNames ? '' : 'MEMBER');
+  static const GroupRole ADMIN = GroupRole._(1, _omitEnumNames ? '' : 'ADMIN');
+  static const GroupRole OWNER = GroupRole._(2, _omitEnumNames ? '' : 'OWNER');
+
+  static const $core.List<GroupRole> values = <GroupRole>[
+    MEMBER,
+    ADMIN,
+    OWNER,
+  ];
+
+  static final $core.List<GroupRole?> _byValue =
+      $pb.ProtobufEnum.$_initByValueList(values, 2);
+  static GroupRole? valueOf($core.int value) =>
+      value < 0 || value >= _byValue.length ? null : _byValue[value];
+
+  const GroupRole._(super.value, super.name);
+}
+
 /// 에러 코드 enum (클라이언트-서버 공통)
 class ErrorCode extends $pb.ProtobufEnum {
   static const ErrorCode ERR_SUCCESS =
@@ -138,26 +158,6 @@ class ErrorCode extends $pb.ProtobufEnum {
   const ErrorCode._(super.value, super.name);
 }
 
-class GroupRole extends $pb.ProtobufEnum {
-  static const GroupRole MEMBER =
-      GroupRole._(0, _omitEnumNames ? '' : 'MEMBER');
-  static const GroupRole ADMIN = GroupRole._(1, _omitEnumNames ? '' : 'ADMIN');
-  static const GroupRole OWNER = GroupRole._(2, _omitEnumNames ? '' : 'OWNER');
-
-  static const $core.List<GroupRole> values = <GroupRole>[
-    MEMBER,
-    ADMIN,
-    OWNER,
-  ];
-
-  static final $core.List<GroupRole?> _byValue =
-      $pb.ProtobufEnum.$_initByValueList(values, 2);
-  static GroupRole? valueOf($core.int value) =>
-      value < 0 || value >= _byValue.length ? null : _byValue[value];
-
-  const GroupRole._(super.value, super.name);
-}
-
 class C_UploadFile_UploadType extends $pb.ProtobufEnum {
   static const C_UploadFile_UploadType DIRECT_CHAT =
       C_UploadFile_UploadType._(0, _omitEnumNames ? '' : 'DIRECT_CHAT');
@@ -216,16 +216,16 @@ class C_FriendAction_ActionType extends $pb.ProtobufEnum {
 class S_FriendPush_PushType extends $pb.ProtobufEnum {
   static const S_FriendPush_PushType NEW_REQUEST =
       S_FriendPush_PushType._(0, _omitEnumNames ? '' : 'NEW_REQUEST');
-  static const S_FriendPush_PushType REQUEST_ACCEPTED =
-      S_FriendPush_PushType._(1, _omitEnumNames ? '' : 'REQUEST_ACCEPTED');
-  static const S_FriendPush_PushType FRIEND_DELETED =
-      S_FriendPush_PushType._(2, _omitEnumNames ? '' : 'FRIEND_DELETED');
+  static const S_FriendPush_PushType ACCEPTED =
+      S_FriendPush_PushType._(1, _omitEnumNames ? '' : 'ACCEPTED');
+  static const S_FriendPush_PushType DELETED =
+      S_FriendPush_PushType._(2, _omitEnumNames ? '' : 'DELETED');
 
   static const $core.List<S_FriendPush_PushType> values =
       <S_FriendPush_PushType>[
     NEW_REQUEST,
-    REQUEST_ACCEPTED,
-    FRIEND_DELETED,
+    ACCEPTED,
+    DELETED,
   ];
 
   static final $core.List<S_FriendPush_PushType?> _byValue =

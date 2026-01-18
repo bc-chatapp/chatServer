@@ -17,7 +17,7 @@ void UserManager::UpsertSession(const string& userId, const shared_ptr<Session>&
 
 		if (oldSession && oldSession != newSession)
 		{
-			cout << "[UserManager] 중복 로그인 감지! (타인) -> 기존 세션 종료: " << userId << endl;
+			cout << "[UserManager] 중복 로그인 감지! 기존 세션 종료: " << userId << endl;
 			oldSession->Disconnect();
 		}
 		else if (oldSession == newSession)
@@ -66,11 +66,8 @@ void UserManager::CheckDeadSessions()
 		for (auto it = _sessions.begin(); it != _sessions.end(); ) {
 			SessionPtr session = it->second.lock();
 
-			cout << "검사중" << endl;
-
 			if (session == nullptr) {
 				it = _sessions.erase(it);
-				cout << "삭제!" << endl;
 				continue;
 			}
 

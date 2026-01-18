@@ -1,5 +1,6 @@
 ﻿#include "pch.h"
 #include "UserRepository.h"
+#include "FriendRepository.h"
 #include "DBManager.h"
 #include <iostream>
 #include <ctime>
@@ -78,59 +79,37 @@ bool UserRepository::EmailExists(const string& email)
 
 
 
-bool UserRepository::GetUser(const string& userId, UserInfo& OUT userInfo) {
+bool UserRepository::GetUser(const string& userId, cUserInfo& OUT userInfo) {
     try {
         auto& db = DBManager::GetInstance();
         auto schema = db.GetSchema();
         auto users = schema.getTable("users");
         
-        auto result = users.select("user_id", "auth_token", "name", "email",
-                                    "status_message", "profile_image_url", "last_seen")
-                     .where("user_id = :uid")
-                     .bind("uid", userId)
-                     .execute();
-        
+        auto result = users.select("user_id", "auth_token", "name", "email", "phone",
+            "status_message", "profile_image_url", "background_image_url",
+            "sub_grade", "storage_capacity_bytes", "storage_usage_bytes", "last_seen")
+            .where("user_id = :uid")
+            .bind("uid", userId)
+            .execute();
+
         auto row = result.fetchOne();
         if (!row) return false;
+
         
         userInfo.userId = row[0].get<string>();
         if (!row[1].isNull()) userInfo.authToken = row[1].get<string>();
         if (!row[2].isNull()) userInfo.name = row[2].get<string>();
-        if (!row[3].isNull()) userInfo.email = row[3].get<string>(); 
-
-        if (!row[4].isNull()) userInfo.status_message = row[4].get<string>();
-        if (!row[5].isNull()) userInfo.profileImageUrl = row[5].get<string>();
+        if (!row[3].isNull()) userInfo.email = row[3].get<string>();
+        if (!row[4].isNull()) userInfo.phone = row[4].get<string>();
+        if (!row[5].isNull()) userInfo.status_message = row[5].get<string>();
+        if (!row[6].isNull()) userInfo.profileImageUrl = row[6].get<string>();
+        if (!row[7].isNull()) userInfo.backgroundImageUrl = row[7].get<string>();
         
+        userInfo.subGrade = row[8].get<int64>();
+        userInfo.storageCapacity = row[9].get<int64>();
+        userInfo.storageUsage = row[10].get<int64>();
+        userInfo.lastSeen = row[11].isNull() ? 0 : FriendRepository::ParseTimestamp(row[11]);
         
-        // last_seen 파싱
-        if (!row[5].isNull()) {
-            try {
-                auto tsValue = row[5];
-                if (tsValue.getType() == mysqlx::Value::STRING) {
-                    string tsStr = tsValue.get<string>();
-                    struct tm timeinfo = {};
-                    int year, mon, day, hour, min, sec;
-                    if (sscanf_s(tsStr.c_str(), "%d-%d-%d %d:%d:%d",
-                            &year, &mon, &day, &hour, &min, &sec) == 6) {
-                        timeinfo.tm_year = year - 1900;
-                        timeinfo.tm_mon = mon - 1;
-                        timeinfo.tm_mday = day;
-                        timeinfo.tm_hour = hour;
-                        timeinfo.tm_min = min;
-                        timeinfo.tm_sec = sec;
-                        userInfo.lastSeen = mktime(&timeinfo) * 1000;  // Milliseconds
-                    } else {
-                        userInfo.lastSeen = 0;
-                    }
-                } else {
-                    userInfo.lastSeen = 0;
-                }
-            } catch (...) {
-                userInfo.lastSeen = 0;
-            }
-        } else {
-            userInfo.lastSeen = 0;
-        }
         
         return true;
     } catch (const mysqlx::Error& err) {
@@ -139,17 +118,22 @@ bool UserRepository::GetUser(const string& userId, UserInfo& OUT userInfo) {
     }
 }
 
-bool UserRepository::GetUserWithPassword(const string& userId, UserInfo& OUT userInfo) {
+
+
+
+
+bool UserRepository::GetUserWithPassword(const string& userId, cUserInfo& OUT userInfo) {
     try {
         auto& db = DBManager::GetInstance();
         auto schema = db.GetSchema();
         auto users = schema.getTable("users");
         
-        auto result = users.select("user_id", "password_hash", "auth_token", "name", 
-                                   "status_message", "profile_image_url", "last_seen")
-                     .where("user_id = :uid")
-                     .bind("uid", userId)
-                     .execute();
+        auto result = users.select("user_id", "password_hash", "auth_token", "name", "email", "phone",
+            "status_message", "profile_image_url", "background_image_url",
+            "sub_grade", "storage_capacity_bytes", "storage_usage_bytes", "last_seen")
+            .where("user_id = :uid")
+            .bind("uid", userId)
+            .execute();
         
         auto row = result.fetchOne();
         if (!row) {
@@ -160,39 +144,16 @@ bool UserRepository::GetUserWithPassword(const string& userId, UserInfo& OUT use
         userInfo.passwordHash = row[1].get<string>();
         if (!row[2].isNull()) userInfo.authToken = row[2].get<string>();
         if (!row[3].isNull()) userInfo.name = row[3].get<string>();
-        if (!row[4].isNull()) userInfo.email = row[4].get<string>(); 
-        if (!row[5].isNull()) userInfo.profileImageUrl = row[5].get<string>();
-        
-        
-        // last_seen 파싱
-        if (!row[6].isNull()) {
-            try {
-                auto tsValue = row[6];
-                if (tsValue.getType() == mysqlx::Value::STRING) {
-                    string tsStr = tsValue.get<string>();
-                    struct tm timeinfo = {};
-                    int year, mon, day, hour, min, sec;
-                    if (sscanf_s(tsStr.c_str(), "%d-%d-%d %d:%d:%d",
-                            &year, &mon, &day, &hour, &min, &sec) == 6) {
-                        timeinfo.tm_year = year - 1900;
-                        timeinfo.tm_mon = mon - 1;
-                        timeinfo.tm_mday = day;
-                        timeinfo.tm_hour = hour;
-                        timeinfo.tm_min = min;
-                        timeinfo.tm_sec = sec;
-                        userInfo.lastSeen = mktime(&timeinfo) * 1000;  // Milliseconds
-                    } else {
-                        userInfo.lastSeen = 0;
-                    }
-                } else {
-                    userInfo.lastSeen = 0;
-                }
-            } catch (...) {
-                userInfo.lastSeen = 0;
-            }
-        } else {
-            userInfo.lastSeen = 0;
-        }
+        if (!row[4].isNull()) userInfo.email = row[4].get<string>();
+        if (!row[5].isNull()) userInfo.phone = row[5].get<string>();
+        if (!row[6].isNull()) userInfo.status_message = row[6].get<string>();
+        if (!row[7].isNull()) userInfo.profileImageUrl = row[7].get<string>();
+        if (!row[8].isNull()) userInfo.backgroundImageUrl = row[8].get<string>();
+
+        userInfo.subGrade = row[9].get<int64>();
+        userInfo.storageCapacity = row[10].get<int64>();
+        userInfo.storageUsage = row[11].get<int64>();
+        userInfo.lastSeen = row[12].isNull() ? 0 : FriendRepository::ParseTimestamp(row[12]);
         
         return true;
     } catch (const mysqlx::Error& err) {
@@ -200,6 +161,10 @@ bool UserRepository::GetUserWithPassword(const string& userId, UserInfo& OUT use
         return false;
     }
 }
+
+
+
+
 
 bool UserRepository::GetUserNameWithId(const string& userId, string& OUT userName)
 {
@@ -307,5 +272,27 @@ bool UserRepository::GetUserIdByToken(const string& authToken, string& userId) {
         cerr << "[UserRepository] 토큰으로 사용자 ID 조회 실패: " << err.what() << endl;
         return false;
     }
+}
+
+
+
+
+void UserRepository::ConvertToProto(const cUserInfo& dbUser, Protocol::UserInfo* outProto)
+{
+    if (!outProto) return;
+
+    outProto->set_user_id(dbUser.userId);
+    outProto->set_name(dbUser.name);
+    outProto->set_email(dbUser.email); // 필요 시에만 세팅하거나, 호출하는 쪽에서 제어
+    outProto->set_phone(dbUser.phone);
+    outProto->set_status_message(dbUser.status_message);
+    outProto->set_profile_image_url(dbUser.profileImageUrl);
+    outProto->set_background_image_url(dbUser.backgroundImageUrl);
+
+    outProto->set_sub_grade(dbUser.subGrade);
+    outProto->set_storage_capacity_bytes(dbUser.storageCapacity);
+    outProto->set_storage_usage_bytes(dbUser.storageUsage);
+
+    // passwordHash나 authToken은 절대 넣지 않음!
 }
 

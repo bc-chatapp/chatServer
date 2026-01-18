@@ -38,3 +38,5 @@ WHERE (user_id = 'user01' AND friend_id = 'dummy001')
    
    
 
+
+

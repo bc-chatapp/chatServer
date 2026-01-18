@@ -54,6 +54,10 @@ protected:
     static bool Dispatch_C_Login(sessionPtr& session, uint64 reqId, const Protocol::Envelope& envelope);
     static bool Dispatch_C_FetchOffline(sessionPtr& session, uint64 reqId, const Protocol::C_FetchOffline& pkt);
     
+
+    static bool Dispatch_C_FetchMyInfo(sessionPtr& session, uint64 reqId, const Protocol::C_FetchMyInfo& pkt);
+    static bool Dispatch_C_EditMyInfo(sessionPtr& session, uint64 reqId, const Protocol::C_EditMyInfo& pkt);
+
     
     
     static bool Dispatch_C_Chat(sessionPtr& session, uint64 reqId, const Protocol::C_Chat& pkt);

@@ -179,7 +179,7 @@ bool GroupRepository::UpdateGroupInfo(const string& groupId, const string& newNa
         auto& db = DBManager::GetInstance();
         auto& session = db.GetSession();
 
-        auto result = session.sql("UPDATE groups SET group_name = ?, group_image_url = ? WHERE group_id = ?")
+        auto result = session.sql("UPDATE `groups` SET group_name = ?, group_image_url = ? WHERE group_id = ?")
             .bind(newName, newImageUrl, groupId)
             .execute();
 
@@ -222,10 +222,12 @@ vector<cGroupInfo> GroupRepository::GetUserGroups(const string& userId)
 
         string query = "SELECT g.group_id, g.group_name, g.group_code, g.creator_id, "
             "g.description, g.group_image_url, "
-            "g.storage_usage, g.storage_limit, g.member_count, g.created_at "
+            "g.storage_usage_bytes, g.storage_capacity_bytes, g.member_count, g.created_at "
             "FROM `groups` g "
             "JOIN group_members m ON g.group_id = m.group_id "
             "WHERE m.user_id = ?";
+
+
 
         auto rows = session.sql(query).bind(userId).execute();
 
@@ -243,7 +245,6 @@ vector<cGroupInfo> GroupRepository::GetUserGroups(const string& userId)
             info.storageLimit = row[7].get<int64_t>();
             info.memberCount = row[8].get<int>();
             info.createdAt = ParseTimestamp(row[9]);
-
             result.push_back(info);
         }
     }

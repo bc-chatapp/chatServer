@@ -3,27 +3,30 @@
 USE chat_server;
 
 
-CREATE TABLE `groups` (
-    `group_id` VARCHAR(100) NOT NULL,
+
+CREATE TABLE IF NOT EXISTS `groups` (
+    `group_id` VARCHAR(100) PRIMARY KEY,
     `group_name` VARCHAR(100) NOT NULL,
-    `group_code` VARCHAR(20) NOT NULL,
+    `group_code` VARCHAR(20) NOT NULL UNIQUE,
     `creator_id` VARCHAR(100) NOT NULL,
     `description` TEXT,
-    `group_image_url` VARCHAR(255) DEFAULT '', 
-    `storage_limit` BIGINT DEFAULT 1073741824, -- 기본 1GB
-    `storage_usage` BIGINT DEFAULT 0,
-    `member_count` INT DEFAULT 0,              -- 멤버 수 캐싱
+    `group_image_url` VARCHAR(255) DEFAULT '',
+    `group_thumbnail_url` VARCHAR(255) DEFAULT '', 
+    
+    -- 공유 스토리지 (기본 1GB)
+    `storage_capacity_bytes` BIGINT DEFAULT 1073741824, 
+    `storage_usage_bytes` BIGINT DEFAULT 0,
+    
+    `member_count` INT DEFAULT 0,      -- 트리거를 통한 실시간 관리
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     
-    PRIMARY KEY (`group_id`),
-    UNIQUE KEY `uk_group_code` (`group_code`),
     INDEX `idx_creator` (`creator_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 
 
-CREATE TABLE `group_members` (
+CREATE TABLE IF NOT EXISTS `group_members` (
     `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
     `group_id` VARCHAR(100) NOT NULL,
     `user_id` VARCHAR(100) NOT NULL,
@@ -31,7 +34,8 @@ CREATE TABLE `group_members` (
     `joined_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     
     UNIQUE KEY `uk_group_user` (`group_id`, `user_id`),
-    CONSTRAINT `fk_group_members_group` FOREIGN KEY (`group_id`) REFERENCES `groups` (`group_id`) ON DELETE CASCADE
+    CONSTRAINT `fk_group_members_group` FOREIGN KEY (`group_id`) REFERENCES `groups` (`group_id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_group_members_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -58,7 +62,9 @@ END$$
 DELIMITER ;
 
 
-
+-- groups 테이블에 썸네일 URL 컬럼 추가
+ALTER TABLE `groups` 
+ADD COLUMN `group_thumbnail_url` VARCHAR(255) DEFAULT '' AFTER `group_image_url`;
 
 SHOW TABLES;
 DESCRIBE `groups`;

@@ -78,7 +78,7 @@ int main()
 			}
 		});
 
-	// 6. 메인 스레드 대기
+	// 메인 스레드 대기
 	for (thread& t : threads)
 	{
 		t.join();

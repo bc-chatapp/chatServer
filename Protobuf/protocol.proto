@@ -1,127 +1,124 @@
 syntax = "proto3";
 package Protocol;
 
+
+
 message Envelope {
-  uint32 version         = 1; // 버전 고정
+  uint32 version         = 1; // 버전
   uint64 request_id      = 2; // 요청-응답 매칭(0이면 서버푸시)
   string auth_token      = 3; // JWT 인증 토큰
 
+
+
   oneof body {
-      // AUTH
+      // ─── AUTH / LOGIN (10 ~ 29) ───
       C_CheckId               c_check_id                = 10;
       S_CheckId               s_check_id                = 11;
       C_CheckEmail            c_check_email             = 12;
       S_CheckEmail            s_check_email             = 13;
-
       C_RequestEmailVerify    c_req_email_verify        = 14;
       S_RequestEmailVerify    s_req_email_verify        = 15;
       C_ConfirmEmailVerify    c_confirm_email_verify    = 16;
       S_ConfirmEmailVerify    s_confirm_email_verify    = 17;
-
-
       C_SignUp                c_signup                  = 18;
       S_SignUp                s_signup                  = 19;
+      C_Login                 c_login                   = 20;
+      S_Login                 s_login                   = 21;
 
-      //LOGIN
-      C_Login                 c_login              = 20;
-      S_Login                 s_login              = 21;
-      
-      C_FetchOffline          c_fetch_offline      = 22;
-      S_MessageBatch          s_message_batch      = 23;
+      // ─── MY INFO / SETTINGS (30 ~ 39) ───
+      C_FetchMyInfo           c_fetch_my_info           = 30;
+      S_FetchMyInfo           s_fetch_my_info           = 31;
+      C_EditMyInfo            c_edit_my_info            = 32;
+      S_EditMyInfo            s_edit_my_info            = 33;
 
-      S_Error                 s_error              = 27;
-      C_Heartbeat             c_heartbeat          = 28;
-      S_Heartbeat             s_heartbeat          = 29;
+      // ─── CHAT / DATA / FILE (40 ~ 59) ───
+      C_Chat                  c_chat                    = 40;
+      S_Chat                  s_chat                    = 41;
+      C_Ack                   c_ack                     = 42;
+      C_ReqHistory            c_req_history             = 43;
+      S_ReqHistory            s_req_history             = 44;
+      C_FetchOffline          c_fetch_offline           = 45;
+      S_MessageBatch          s_message_batch           = 46;
+      C_UploadFile            c_upload_file             = 47; 
+      S_UploadFile            s_upload_file             = 48;
 
+      // ─── FRIENDS (60 ~ 79) ───
+      C_SearchUser            c_search_user             = 60;
+      S_SearchUser            s_search_user             = 61;
+      C_FriendAction          c_friend_action           = 62;
+      S_FriendAction          s_friend_action           = 63;
+      C_FetchFriendData       c_fetch_friend_data       = 64;
+      S_FetchFriendData       s_fetch_friend_data       = 65;
+      S_FriendPush            s_friend_push             = 66;
 
+      // ─── GROUPS (80 ~ 99) ───
+      C_CreateGroup           c_create_group            = 80;
+      S_CreateGroup           s_create_group            = 81;
+      C_GroupList             c_group_list              = 82;
+      S_GroupList             s_group_list              = 83;
+      C_JoinGroup             c_join_group              = 84;
+      S_JoinGroup             s_join_group              = 85;
+      C_InviteFriend          c_invite_friend           = 86;
+      S_InviteFriend          s_invite_friend           = 87;
+      C_LeaveGroup            c_leave_group             = 88;
+      S_LeaveGroup            s_leave_group             = 89;
+      C_GroupMemberList       c_group_member_list       = 90;
+      S_GroupMemberList       s_group_member_list       = 91;
+      C_GroupInfo             c_group_info              = 92;
+      S_GroupInfo             s_group_info              = 93;
+      C_EditGroup             c_edit_group              = 94;
+      S_EditGroup             s_edit_group              = 95;
 
-      // Chat, Data(File)
-      C_Chat                  c_chat                = 30;
-      S_Chat                  s_chat                = 31;
-      C_Ack                   c_ack                 = 32;
-
-      C_ReqHistory            c_req_history         = 33;
-      S_ReqHistory            s_req_history         = 34;
-
-      C_UploadFile            c_upload_file         = 35;
-      S_UploadFile            s_upload_file         = 36;
-
-
-      // Freind
-      C_SearchUser          c_search_user           = 40;
-      S_SearchUser          s_search_user           = 41;
-      C_FriendAction        c_friend_action         = 42;
-      S_FriendAction        s_friend_action         = 43;
-      C_FetchFriendData     c_fetch_friend_data     = 44;
-      S_FetchFriendData     s_fetch_friend_data     = 45;
-      S_FriendPush          s_friend_push           = 46;
-  
-
-
-
-      // Group
-      C_CreateGroup         c_create_group          = 50;
-      S_CreateGroup         s_create_group          = 51;
-      C_GroupList           c_group_list            = 52;
-      S_GroupList           s_group_list            = 53;
-  
-      C_JoinGroup           c_join_group            = 54; 
-      S_JoinGroup           s_join_group            = 55;
-
-
-      C_InviteFriend        c_invite_friend         = 56; // 번호는 순서에 맞게
-      S_InviteFriend        s_invite_friend         = 57;
-  
-      C_LeaveGroup          c_leave_group           = 60;
-      S_LeaveGroup          s_leave_group           = 61;
-  
-      C_GroupMemberList     c_group_member_list     = 62;
-      S_GroupMemberList     s_group_member_list     = 63;
-
-      C_GroupInfo           c_group_info            = 64;
-      S_GroupInfo           s_group_info            = 65;
-
-      C_EditGroup           c_edit_group            = 66;
-      S_EditGroup           s_edit_group            = 67;
-
+      // ─── SYSTEM (100 ~ ) ───
+      S_Error                 s_error                   = 100;
+      C_Heartbeat             c_heartbeat               = 101;
+      S_Heartbeat             s_heartbeat               = 102;
   }
 }
 
 
 
 
-/*-------------
-    회원가입 
----------------*/
-message C_CheckId {
-    string user_id = 1;
-}
-message S_CheckId {
-    bool is_available = 1; 
+// 통합 사용자 정보 (본인, 친구, 그룹원 공통 사용)
+message UserInfo {
+    string user_id              = 1;
+    string name                 = 2;
+    string status_message       = 3;
+    string profile_image_url    = 4;
+    string background_image_url = 5;
+
+
+    string email                = 6;
+    string phone                = 7;
+    int64  sub_grade            = 8; // 구독 등급 (0: 일반, 1: 프로 등)
+    int64  storage_capacity_bytes = 9;
+    int64  storage_usage_bytes    = 10;
+    int64  last_seen            = 11;
+    string status               = 12; // "online", "offline"
 }
 
-message C_CheckEmail {
-    string email = 1;
-}
-message S_CheckEmail {
-    bool is_available = 1; 
-}
 
-message C_RequestEmailVerify {
-    string email = 1;
-}
-message S_RequestEmailVerify {
-    bool success = 1;
-    string message = 2; 
-}
 
-message C_ConfirmEmailVerify {
-    string email = 1;
-    string code = 2;
-}
-message S_ConfirmEmailVerify {
-    bool success = 1;
-}
+
+
+
+
+
+/*-----------------------------
+      회원가입 및 인증
+-----------------------------*/
+
+message C_CheckId { string user_id = 1; }
+message S_CheckId { bool is_available = 1; }
+
+message C_CheckEmail { string email = 1; }
+message S_CheckEmail { bool is_available = 1; }
+
+message C_RequestEmailVerify { string email = 1; }
+message S_RequestEmailVerify { bool success = 1; string message = 2; }
+
+message C_ConfirmEmailVerify { string email = 1; string code = 2; }
+message S_ConfirmEmailVerify { bool success = 1; }
 
 message C_SignUp {
     string user_id = 1;        
@@ -139,96 +136,95 @@ message S_SignUp {
 
 
 /*-------------
-    로그인 
+      로그인
 ---------------*/
-message C_Login {
-    string user_id = 1; 
-    string password = 2; 
-}
 
-
+message C_Login { string user_id = 1; string password = 2; }
 message S_Login {
-    string user_id = 1; 
-    string auth_token = 2;
-    string name = 3;
-    string email = 4;
+    bool     success    = 1;
+    string   auth_token = 2;
+    UserInfo my_info    = 3; // 로그인 시 내 정보를 한꺼번에 동기화
 }
+
+
+
+
+
+/*-----------------------------
+      내 정보 관리 (UserInfo)
+-----------------------------*/
+
+message C_FetchMyInfo {}
+message S_FetchMyInfo { UserInfo my_info = 1; }
+
+message C_EditMyInfo {
+    // 수정하고 싶은 필드만 담아서 전송 (서버에서 Optional 처리)
+    string name                 = 1;
+    string status_message       = 2;
+    string profile_image_url    = 3;
+    string background_image_url = 4;
+    string phone                = 5;
+}
+message S_EditMyInfo { 
+    bool success = 1; 
+    string message = 2; 
+    UserInfo updated_info = 3; 
+}
+
 
 
 
 
 /*-------------
-    채팅 
+      채팅
 ---------------*/
+
+message Text { string message = 1; }
+message Image { string url = 1; string thumbnail = 2; int64 size = 3; }
+message Video { string url = 1; string thumbnail = 2; int64 duration_sec = 3; int64 size = 4; }
+message File { string url = 1; string filename = 2; int64 size = 3; string mime_type = 4; }
+
+message SystemMsg {
+  string message = 1;
+  int64  type    = 2; // 0: 일반, 1: 초대장
+  string invite_group_id = 3;
+}
 
 message ChatPayload {
   oneof data {
-    Text        text   = 1;
-    Image       image  = 2;
-    Video       video  = 3;
-    File        file   = 4;
-    SystemMsg   system = 5;
+    Text text = 1; 
+    Image image = 2; 
+    Video video = 3; 
+    File file = 4; 
+    SystemMsg system = 5;
   }
 }
 
-message Text { 
-    string message = 1; 
-}
-
-message Image { 
-    string url = 1; 
-    string thumbnail = 2; 
-    int64 size = 3;
-}
-
-message Video {
-  string    url = 1;
-  string    thumbnail = 2; 
-  int64     duration_sec = 3; 
-  int64     size = 4;
-}
-
-message File {
-    string url = 1; 
-    string filename = 2; 
-    int64 size = 3; 
-    string mime_type = 4;
-}
-
-message SystemMsg {
-  string message = 1; 
-  int32 type = 2;                   // 0: 일반 알림, 1: 초대장(Invite)
-
-  string invite_group_id = 3;   
-  string invite_group_code = 4;
-  string invite_group_name = 5;
-}
-
-
 message C_Chat {
-  string conv_id       = 1;
-  int64 client_msg_id = 2;
-  ChatPayload payload  = 3; 
-  int64  ts_client     = 4;
+  string      conv_id       = 1;
+  int64       client_msg_id = 2;
+  ChatPayload payload       = 3;
+  int64       ts_client     = 4;
+  int64       reply_to_seq  = 5; // 답장 대상 seq
 }
 
 message S_Chat {
-  string conv_id        = 1;
-  int64 client_msg_id   = 2;
-  int64 msg_seq         = 3;
-
-  string sender_id      = 4;
-  string sender_name    = 5;
-
-  ChatPayload payload   = 6;
-  int64  ts_server      = 7;
+  string      conv_id       = 1;
+  int64       client_msg_id = 2;
+  int64       msg_seq       = 3;
+  string      sender_id     = 4;
+  string      sender_name   = 5;
+  ChatPayload payload       = 6;
+  int64       ts_server     = 7;
+  int64       reply_to_seq  = 8;
 }
+
 
 
 message C_ReqHistory {
   string conv_id = 1;
   int64 last_msg_seq = 2; // 클라가 가지고 있는 가장 오래된 메시지 번호
-  int32 limit = 3;        // 보통 30~50개
+  int64 limit = 3;        // 30~50개
 }
 
 message S_ReqHistory {
@@ -247,6 +243,7 @@ message C_UploadFile {
     string filename = 1;      // 원본 파일명
     int64 size = 2;          // 파일 크기 (bytes)
     string mime_type = 3;    // MIME 타입 (image/jpeg, application/pdf 등)
+
     bool is_image = 4;       // 이미지 여부 (썸네일 생성 여부 결정)
 
     enum UploadType {
@@ -256,6 +253,7 @@ message C_UploadFile {
         GROUP_PROFILE_IMG = 3;
     }
     UploadType upload_type = 5; 
+
     string target_id = 6;     // 그룹일 경우 groupId
 }
 
@@ -285,16 +283,166 @@ message C_FetchOffline {
 } // 오프라인 메시지 동기화
 
 
-
 message S_MessageBatch {
   message ConversationBatch {
       string conv_id = 1;
       repeated S_Chat messages = 2; // 최신 50개
-      int32 unread_count = 3;       // ★ 안 읽은 전체 개수 (배지 표시용)
+      int64 unread_count = 3;       // 안 읽은 전체 개수 (배지 표시용)
   }
   repeated ConversationBatch batches = 1;
 }
 
+
+
+
+
+
+
+
+
+
+/*-----------------------------
+            Friends 
+-----------------------------*/
+message FriendRequest {
+  UserInfo requester      = 1;
+  int64    requested_at   = 2;
+  bool     is_received    = 3; // true: 받은거, false: 보낸거
+}
+
+
+
+message C_SearchUser { string user_id = 1; }
+message S_SearchUser {
+  bool success = 1;
+  UserInfo user_info = 2;
+  bool is_friend = 3;
+  bool has_sent_request = 4;
+}
+
+
+// --- 친구 관리 액션 (요청, 수락, 거절, 삭제) ---
+message C_FriendAction {
+  enum ActionType {
+    SEND_REQUEST = 0;
+    CANCEL_REQUEST = 1;
+    ACCEPT_REQUEST = 2;
+    REJECT_REQUEST = 3;
+    DELETE_FRIEND = 4;
+  }
+  ActionType action = 1;
+  string target_user_id = 2;
+}
+
+message S_FriendAction { 
+    bool success = 1; 
+    string message = 2; 
+    UserInfo updated_friend = 3; 
+}
+
+message C_FetchFriendData {}
+message S_FetchFriendData { 
+    repeated UserInfo friends = 1; 
+    repeated FriendRequest received_requests = 2; 
+    repeated FriendRequest sent_requests = 3; 
+}
+message S_FriendPush {
+    enum PushType { 
+        NEW_REQUEST = 0; 
+        ACCEPTED = 1; 
+        DELETED = 2; 
+    } 
+    PushType type = 1; 
+    UserInfo user_info = 2; 
+}
+
+
+
+
+
+
+
+/*-----------------------------
+            Groups 
+-----------------------------*/
+
+enum GroupRole { MEMBER = 0; ADMIN = 1; OWNER = 2; }
+
+// [그룹 멤버 상세 정보]
+message GroupMemberInfo {
+    UserInfo  user_info = 1; // 유저 기본 정보 포함
+    GroupRole role      = 2; // 멤버 권한
+    int64     joined_at = 3; // 가입 타임스탬프
+}
+
+// [그룹 정보]
+message GroupInfo {
+  string group_id             = 1;
+  string group_name           = 2;
+  string group_code           = 3;
+  string description          = 4;
+  string group_image_url      = 5;
+  int32  member_count         = 6;
+
+  int64  storage_capacity_bytes = 7;        // 총 용량 (예: 10GB = 10737418240)
+  int64  storage_usage_bytes    = 8;        // 현재 사용량
+}
+
+
+
+
+ 
+
+message C_CreateGroup { string group_name = 1; }
+message S_CreateGroup { bool success = 1; GroupInfo group = 2; }
+
+message C_GroupList {}
+message S_GroupList { repeated GroupInfo groups = 1; }
+
+message C_GroupInfo { string group_id = 1; }
+message S_GroupInfo { GroupInfo group = 1; GroupRole my_role = 2; }
+
+
+message C_InviteFriend { string group_id = 1; repeated string friend_user_ids = 2; }
+message S_InviteFriend { bool success = 1; }
+
+
+message C_JoinGroup { string group_code = 1; }
+message S_JoinGroup { bool success = 1; GroupInfo group = 2; }
+
+
+
+message C_GroupMemberList { string group_id = 1; }
+message S_GroupMemberList { string group_id = 1; repeated GroupMemberInfo members = 2; }
+
+
+message C_LeaveGroup { string group_id = 1; }
+message S_LeaveGroup { bool success = 1; }
+
+
+
+message C_EditGroup {
+    string group_id = 1;
+    string new_name = 2;
+    string new_description = 3;
+    string new_image_url = 4;
+}
+
+message S_EditGroup { bool success = 1; GroupInfo group = 2; }
+
+
+
+
+
+
+
+
+
+
+
+/*-------------
+    SYSTEM
+---------------*/
 
 
 // 에러 코드 enum (클라이언트-서버 공통)
@@ -356,213 +504,3 @@ message S_Error {
 
 message C_Heartbeat {}
 message S_Heartbeat {}
-
-
-
-
-
-
-/*-----------------------------
-            Friends 
------------------------------*/
-
-message FriendInfo {
-    string user_id = 1;
-    string name = 2;
-    string status_message = 3;
-    string profile_image_url = 4;
-    int64  last_seen = 5;
-    string status = 6;  // "online", "offline", "accepted"
-}
-
-message FriendRequest {
-  string user_id = 1;
-  string name = 2;
-  string status_message = 3;
-  string profile_image_url = 4;
-  int64 requested_at = 5;
-  bool  is_received = 6; // true: 받은거, false: 보낸거
-}
-
-
-
-message C_SearchUser {
-  string user_id = 1;           // 검색할 대상 ID
-}
-
-message S_SearchUser {
-  bool success = 1;
-  FriendInfo user_info = 2;     // 찾은 유저 정보
-  bool is_friend = 3;           // 이미 친구인지
-  bool has_sent_request = 4;    // 이미 요청을 보냈는지
-}
-
-// --- 친구 관리 액션 (요청, 수락, 거절, 삭제) ---
-message C_FriendAction {
-  enum ActionType {
-    SEND_REQUEST = 0;
-    CANCEL_REQUEST = 1;
-    ACCEPT_REQUEST = 2;
-    REJECT_REQUEST = 3;
-    DELETE_FRIEND = 4;
-  }
-  ActionType action = 1;
-  string target_user_id = 2;
-}
-
-message S_FriendAction {
-  bool success = 1;
-  string message = 2;
-  FriendInfo updated_friend = 3; // 수락 시, 새 친구 정보(목록 갱신용)
-}
-
-
-
-message C_FetchFriendData {
-  // 빈 메시지 (토큰으로 식별)
-}
-
-message S_FetchFriendData {
-  repeated FriendInfo friends = 1;              // 이미 친구인 목록
-  repeated FriendRequest received_requests = 2; // 내가 받은 요청
-  repeated FriendRequest sent_requests = 3;     // 내가 보낸 요청
-}
-
-// --- 실시간 푸시 알림 ---
-message S_FriendPush {
-  enum PushType {
-    NEW_REQUEST = 0;      // 누가 나한테 요청 보냄
-    REQUEST_ACCEPTED = 1; // 상대가 내 요청 수락함
-    FRIEND_DELETED = 2;   // 친구 삭제됨
-  }
-  PushType type = 1;
-  FriendInfo user_info = 2; // 대상 유저 정보
-}
-
-
-
-/*-----------------------------
-            Groups 
------------------------------*/
-
-enum GroupRole {
-  MEMBER = 0;       // 일반 멤버
-  ADMIN = 1;        // 관리자 (가입 승인, 멤버 강퇴 가능)
-  OWNER = 2;        // 방장 (그룹 삭제, 스토리지 결제 권한)
-}
-
-
-message GroupInfo {
-  string group_id = 1;
-  string group_name = 2;
-  string group_code = 3;       // 초대 코드
-  string description = 4;      // 그룹 설명 (공지사항 등)
-  string group_image_url = 5;  // 그룹 대표 이미지
-  
-  // 멤버 관련
-  int32 member_count = 6;
-  
-  // 공유 스토리지 정보
-  int64 storage_capacity_bytes = 7; // 총 용량 (예: 10GB = 10737418240)
-  int64 storage_usage_bytes = 8;    // 현재 사용량
-}
-
-
-message GroupMemberInfo {
-  string user_id = 1;
-  string name = 2;
-  string profile_image_url = 3;
-  string status_message = 4;
-  GroupRole role = 5;          // 이 멤버의 역할
-  int64 joined_at = 6;         // 가입일
-  int64 last_active_at = 7;    // 마지막 활동 시간 (접속일)
-}
-
-
-
- 
-
-message C_CreateGroup {
-    string group_name   = 1;  // 그룹 이름
-}
-
-message S_CreateGroup {
-    bool success        = 1;
-    string message      = 2;
-    GroupInfo group = 3;
-}
-
-
-message C_GroupList {
-}
-
-message S_GroupList {
-    repeated GroupInfo groups = 1;
-}
-
-message C_GroupInfo {
-  string group_id = 1;
-}
-
-message S_GroupInfo {
-  GroupInfo group = 1;
-  GroupRole my_role = 2;       // 이 그룹에서 나의 역할
-}
-
-
-message C_InviteFriend {
-  string group_id = 1;
-  repeated string friend_user_ids = 2; // 여러 명 동시 초대 가능하게
-}
-
-message S_InviteFriend {
-  bool success = 1;
-  string message = 2;
-}
-
-
-message C_JoinGroup {
-  string group_code = 1; 
-}
-
-message S_JoinGroup {
-  bool success = 1;
-  string message = 2;
-  GroupInfo group = 3; // 성공 시, 바로 방 정보를 줘서 채팅방으로 이동시킴
-}
-
-
-
-message C_GroupMemberList {
-  string group_id = 1;
-}
-
-message S_GroupMemberList {
-  string group_id = 1;
-  repeated GroupMemberInfo members = 2;
-}
-
-
-
-message C_LeaveGroup {
-  string group_id = 1;
-}
-
-message S_LeaveGroup {
-  bool success = 1;
-  string message = 2;
-}
-
-
-
-message C_EditGroup {
-  string group_id = 1;
-  string new_name = 2;
-  string new_image_url = 3;
-}
-
-message S_EditGroup {
-  bool success = 1;
-  string message = 2;
-  GroupInfo group = 3;
-}

@@ -20,7 +20,7 @@
 // ===== 전역 변수/상수 선언 =====
 const int32 GProtoVersion = 1;
 
-const int64 TIMEOUT_MS = 15 * 1000;
+const int64 TIMEOUT_MS = 120 * 1000;
 
 UserManager* GUserManager = nullptr;
 ChatService* GChatService = nullptr;
