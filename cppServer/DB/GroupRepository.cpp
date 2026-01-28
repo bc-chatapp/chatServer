@@ -69,7 +69,7 @@ bool GroupRepository::CreateGroup(const string& groupName, const string& creator
         session.startTransaction();
 
         auto groups = db.GetSchema().getTable("groups");
-        groups.insert("group_id", "group_name", "group_code", "creator_id", "description", "group_image_url", "storage_limit", "storage_usage", "member_count")
+        groups.insert("group_id", "group_name", "group_code", "creator_id", "description", "group_image_url", "storage_capacity_bytes", "storage_usage_bytes", "member_count")
             .values(groupId, groupName, groupCode, creatorId, "", "", defaultLimit, 0, 0)
             .execute();
 
@@ -267,10 +267,12 @@ bool GroupRepository::GetGroupInfoById(const string& groupId, cGroupInfo& OUT in
 
         auto rows = groups.select("group_id", "group_name", "group_code", "creator_id",
             "description", "group_image_url",
-            "storage_usage", "storage_limit", "member_count", "created_at")
+            "storage_usage_bytes", "storage_capacity_bytes", "member_count", "created_at")
             .where("group_id = :id")
             .bind("id", groupId)
             .execute();
+
+
 
         if (rows.count() == 0) return false;
 

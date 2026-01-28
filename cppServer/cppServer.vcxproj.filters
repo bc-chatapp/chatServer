@@ -16,6 +16,9 @@
     <Filter Include="Cloud">
       <UniqueIdentifier>{179f29ac-7bb2-4991-9a80-e063512bc984}</UniqueIdentifier>
     </Filter>
+    <Filter Include="bcrypt">
+      <UniqueIdentifier>{3bdfbccb-fa8c-4732-b530-4fb7a89b4dd9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -81,6 +84,12 @@
     <ClCompile Include="Service\GroupService.cpp">
       <Filter>Service</Filter>
     </ClCompile>
+    <ClCompile Include="..\Libraries\Include\bcrypt\src\bcrypt_lib.cpp">
+      <Filter>bcrypt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\Include\bcrypt\src\blowfish.cpp">
+      <Filter>bcrypt</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -145,6 +154,9 @@
     </ClInclude>
     <ClInclude Include="Service\GroupService.h">
       <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\Include\bcrypt\bcrypt_lib.h">
+      <Filter>bcrypt</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

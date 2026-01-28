@@ -196,6 +196,18 @@ copy /Y "$(SolutionDir)Libraries\mysql-connector-c++-9.5.0\lib64\libcrypto-3-x64
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Libraries\Include\bcrypt\src\bcrypt_lib.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\Include\bcrypt\src\blowfish.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Service\AuthService.cpp" />
     <ClCompile Include="Service\ChatService.cpp" />
     <ClCompile Include="Cloud\CloudStorageGCS.cpp" />
@@ -229,6 +241,7 @@ copy /Y "$(SolutionDir)Libraries\mysql-connector-c++-9.5.0\lib64\libcrypto-3-x64
     <ClCompile Include="Service\VerificationManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Libraries\Include\bcrypt\bcrypt_lib.h" />
     <ClInclude Include="Service\AuthService.h" />
     <ClInclude Include="Service\ChatService.h" />
     <ClInclude Include="Cloud\CloudStorage.h" />

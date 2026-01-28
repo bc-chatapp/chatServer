@@ -11,7 +11,8 @@
 #include "TokenManager.h"
 #include <sstream>
 #include <iomanip>
-#include <functional>  // hash 사용
+#include "bcrypt/bcrypt_lib.h"
+
 
 using namespace Protocol;
 
@@ -93,8 +94,7 @@ bool AuthService::SignUp(sessionPtr& session, uint64 reqId, const string& userId
         return false;
     }
     
-    string passwordHash = HashPassword(password);
-    
+    string passwordHash = BcryptPassword(password);
     bool success = UserRepository::CreateUser(userId, passwordHash, name, email);
     
     Protocol::S_SignUp pkt_s_signup;
@@ -125,18 +125,7 @@ bool AuthService::SignUp(sessionPtr& session, uint64 reqId, const string& userId
 
 
 
-// ============================================
-// 비밀번호 해싱 (간단한 해시, 추후 bcrypt로 개선 가능)
-// ============================================
-string AuthService::HashPassword(const string& password) {
-    // 간단한 해싱 (추후 bcrypt나 SHA256으로 개선 필요)
-    hash<string> hasher;
-    size_t hashValue = hasher(password);
-    
-    stringstream ss;
-    ss << hex << hashValue;
-    return ss.str();
-}
+
 
 
 
@@ -163,11 +152,11 @@ bool AuthService::Login(sessionPtr& session, uint64 reqId, const string& userId,
         return false;
     }
     
-    string passwordHash = HashPassword(password);
-    if (userInfo.passwordHash != passwordHash) {
+    if (!bcrypt::validatePassword(password, userInfo.passwordHash)) {
         HandleErr(session, reqId, ERR_INVALID_PASSWORD);
         return false;
     }
+
     
     string authToken = GenerateAuthToken(userId);
     
@@ -265,9 +254,27 @@ bool AuthService::LoginByToken(sessionPtr& session, uint64 reqId, const string& 
     return true;
 }
 
+
+
+
+
+
+
+
+string AuthService::BcryptPassword(const string& password)
+{
+    return bcrypt::generateHash(password);
+}
+
+
+
+
+
+
 // ============================================
 // Auth Token 생성
 // ============================================
+
 
 string AuthService::GenerateAuthToken(const string& userId) {
     // JWT 기반 토큰 생성 (userId, name 포함)

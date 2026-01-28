@@ -30,7 +30,7 @@ private:
 	UserManager& _userManager;
 	
 	// 비밀번호 해싱 (간단한 해시, 추후 bcrypt로 개선 가능)
-	static string HashPassword(const string& password);
+	static string BcryptPassword(const string& password);
 	
 	// Auth Token 생성 (JWT)
 	static string GenerateAuthToken(const string& userId);
