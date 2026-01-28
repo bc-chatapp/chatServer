@@ -11,7 +11,9 @@
 #include "TokenManager.h"
 #include <sstream>
 #include <iomanip>
+
 #include "bcrypt/bcrypt_lib.h"
+#include "curl/curl.h"
 
 
 using namespace Protocol;
@@ -94,16 +96,24 @@ bool AuthService::SignUp(sessionPtr& session, uint64 reqId, const string& userId
         return false;
     }
     
+
+
     string passwordHash = BcryptPassword(password);
     bool success = UserRepository::CreateUser(userId, passwordHash, name, email);
     
+
     Protocol::S_SignUp pkt_s_signup;
     if (success) {
         pkt_s_signup.set_success(true);
-        pkt_s_signup.set_message("Sign up successful");
+        pkt_s_signup.set_message("Registration successful. Please check your email for verification.");
         pkt_s_signup.set_user_id(userId);
         
         cout << "[AuthService] 회원가입 성공: userId=" << userId << endl;
+
+        std::thread([userId, email]() {
+            AuthService::TriggerEmailVerification(userId, email);
+            }).detach();
+
     } else {
         pkt_s_signup.set_success(false);
         pkt_s_signup.set_message("Failed to create user");
@@ -115,15 +125,10 @@ bool AuthService::SignUp(sessionPtr& session, uint64 reqId, const string& userId
     env.set_version(GProtoVersion);
     env.set_request_id(reqId);
     env.mutable_s_signup()->CopyFrom(pkt_s_signup);
-
-
-    //GVerificationManager->();
     
     PacketDispatcher::SendEnvelope(session, env);
     return success;
 }
-
-
 
 
 
@@ -157,9 +162,16 @@ bool AuthService::Login(sessionPtr& session, uint64 reqId, const string& userId,
         return false;
     }
 
+
+    // 이메일 인증 확인
+    /*if (!userInfo.isEmailVerified) {
+        HandleErr(session, reqId, ERR_EMAIL_NOT_VERIFIED, "Please verify your email before logging in.");
+        return false;
+    }*/
+
+
     
     string authToken = GenerateAuthToken(userId);
-    
     UserRepository::UpdateAuthToken(userId, authToken);
     UserRepository::UpdateLastSeen(userId);
     
@@ -194,6 +206,46 @@ bool AuthService::Login(sessionPtr& session, uint64 reqId, const string& userId,
     cout << "[AuthService] 로그인 성공: userId=" << userId << endl;
     return true;
 }
+
+
+
+
+
+
+
+
+bool AuthService::TriggerEmailVerification(const string& userId, const string& email)
+{
+    CURL* curl = curl_easy_init();
+    if (!curl) return false;
+
+    string url = "http://localhost:8080/api/internal/v1/auth/send-verification";
+    string jsonPayload = "{\"userId\":\"" + userId + "\", \"email\":\"" + email + "\"}";
+
+    struct curl_slist* headers = nullptr;
+    headers = curl_slist_append(headers, "Content-Type: application/json");
+
+    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, jsonPayload.c_str());
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 5L);
+
+    CURLcode res = curl_easy_perform(curl);
+    long http_code = 0;
+    curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
+
+    curl_slist_free_all(headers);
+    curl_easy_cleanup(curl);
+
+    if (res == CURLE_OK && http_code == 200) {
+        cout << "[AuthService] Java 서버 이메일 발송 요청 성공: " << email << endl;
+        return true;
+    }
+
+    cerr << "[AuthService] Java 서버 요청 실패! CURL: " << res << ", HTTP: " << http_code << endl;
+    return false;
+}
+
 
 
 

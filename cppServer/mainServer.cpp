@@ -9,6 +9,12 @@
 #include "Service/UserManager.h"
 #include "DB/DBManager.h"
 
+#include <curl/curl.h> // 전역 초기화용
+
+
+
+bool GKeepRunning = true;
+
 
 int main()
 {
@@ -17,23 +23,20 @@ int main()
 	cout << "[Server] MySQL 연결 시도 중... (localhost:33060)" << endl;
 	if (!DBManager::GetInstance().Initialize("localhost", 33060, "chat_server", "hoje1095", "chat_server"))
 	{
-		cout << "error" << endl;
-		cin.get();
+		cerr << "[Error] Database connection failed!" << endl;
 		return 1;
 	}
-	wcout << L"[Server] Database connected successfully" << endl;
+	cout << "[Server] Database connected successfully" << endl;
 
+	// libCurl
+	curl_global_init(CURL_GLOBAL_ALL);
 
 	WSADATA wsa;
-	if (::WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
-	{
-		wcout << L"[Error] WSAStartup 실패" << endl;
-		return 0;
-	}
+	if (::WSAStartup(MAKEWORD(2, 2), &wsa) != 0) return 0;
+
+
 
 	auto iocpCore = make_shared<IocpCore>();
-
-	// Service 생성 (ServerSession을 만들도록 팩토리 지정)
 	auto service = make_shared<Service>(
 		ServiceType::Server,
 		NetAddress(L"127.0.0.1", 3000), // 리스닝할 주소
@@ -41,54 +44,74 @@ int main()
 		[]() { return make_shared<ServerSession>(); }
 	);
 
+
 	// 리스닝 시작
 	if (service->Start() == false)
 	{
-		wcout << L"[Error] Service 시작 실패" << endl;
+		cerr << "[Error] Service 시작 실패" << endl;
 		return 0;
 	}
-	wcout << L"[Server] Listening on 127.0.0.1:3000..." << endl;
+	cout << "[Server] Listening on 127.0.0.1:3000..." << endl;
+
 
 	// 워커 스레드 생성 (CPU 코어 수만큼)
+	vector<thread> workerThreads;
 	const int32 threadCount = thread::hardware_concurrency();
-	vector<thread> threads;
 
 	for (int32 i = 0; i < threadCount; ++i)
 	{
-		threads.emplace_back([iocpCore]()
+		workerThreads.emplace_back([iocpCore]() {
+			while (GKeepRunning)
 			{
-				while (true)
-				{
-					iocpCore->Dispatch();
-				}
+				iocpCore->Dispatch();
+			}
 			});
 	}
 
-	// 
-	thread heartbeat([&]()
+	// 하트비트 스레드 (세션 관리)
+	thread heartbeatThread([&]() {
+		while (GKeepRunning)
 		{
-			while (true)
-			{
-				this_thread::sleep_for(chrono::seconds(10));
-				if (GUserManager)
-				{
-					// 타임아웃된 세션 강제 종료
-					GUserManager->CheckDeadSessions();
-				}
-			}
+			this_thread::sleep_for(chrono::seconds(10));
+			if (GUserManager) 
+				GUserManager->CheckDeadSessions();
+		}
 		});
 
-	// 메인 스레드 대기
-	for (thread& t : threads)
+
+
+	while (true)
 	{
-		t.join();
+		string command;
+		getline(cin, command);
+
+		if (command == "exit")
+		{
+			GKeepRunning = false;
+
+			iocpCore->PostQuitStatus(threadCount);
+			break;
+		}
+		else if (command == "status")
+		{
+			// TODO
+
+		}
 	}
 
-	if (heartbeat.joinable())
+
+
+	for (thread& t : workerThreads)
 	{
-		heartbeat.join();
+		if (t.joinable()) t.join();
 	}
 
+	if (heartbeatThread.joinable()) heartbeatThread.join();
+
+	curl_global_cleanup(); // libcurl 정리
 	::WSACleanup();
+
+	cout << "[Server] Successfully shut down." << endl;
 	return 0;
+
 }

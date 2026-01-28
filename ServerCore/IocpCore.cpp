@@ -51,3 +51,15 @@ bool IocpCore::Dispatch(DWORD ms)
 	return true;
 }
 
+
+
+
+void IocpCore::PostQuitStatus(int32 threadCount)
+{
+	for (int32 i = 0; i < threadCount; ++i)
+	{
+		// lpOverlapped를 nullptr로 보내서 Dispatch가 false를 반환하게 만듭니다.
+		::PostQueuedCompletionStatus(_iocpHandle, 0, 0, nullptr);
+	}
+}
+

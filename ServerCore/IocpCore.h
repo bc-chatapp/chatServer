@@ -22,6 +22,9 @@ public:
 	bool Dispatch(DWORD ms = INFINITE);
 
 
+
+	void PostQuitStatus(int32 threadCount);
+
 private:
 	HANDLE _iocpHandle;
 
