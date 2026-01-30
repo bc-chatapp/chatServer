@@ -208,6 +208,8 @@ copy /Y "$(SolutionDir)Libraries\mysql-connector-c++-9.5.0\lib64\libcrypto-3-x64
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Cloud\FcmClient.cpp" />
+    <ClCompile Include="DB\FcmTokenRepository.cpp" />
     <ClCompile Include="Service\AuthService.cpp" />
     <ClCompile Include="Service\ChatService.cpp" />
     <ClCompile Include="Cloud\CloudStorageGCS.cpp" />
@@ -222,6 +224,7 @@ copy /Y "$(SolutionDir)Libraries\mysql-connector-c++-9.5.0\lib64\libcrypto-3-x64
     <ClCompile Include="mainServer.cpp" />
     <ClCompile Include="DB\UserRepository.cpp" />
     <ClCompile Include="Service\GroupService.cpp" />
+    <ClCompile Include="Service\NotificationService.cpp" />
     <ClCompile Include="Service\TokenManager.cpp" />
     <ClCompile Include="Service\UserManager.cpp" />
     <ClCompile Include="PacketDispatcher.cpp" />
@@ -242,6 +245,8 @@ copy /Y "$(SolutionDir)Libraries\mysql-connector-c++-9.5.0\lib64\libcrypto-3-x64
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Libraries\Include\bcrypt\bcrypt_lib.h" />
+    <ClInclude Include="Cloud\FcmClient.h" />
+    <ClInclude Include="DB\FcmTokenRepository.h" />
     <ClInclude Include="Service\AuthService.h" />
     <ClInclude Include="Service\ChatService.h" />
     <ClInclude Include="Cloud\CloudStorage.h" />
@@ -255,6 +260,7 @@ copy /Y "$(SolutionDir)Libraries\mysql-connector-c++-9.5.0\lib64\libcrypto-3-x64
     <ClInclude Include="Service\FriendService.h" />
     <ClInclude Include="DB\MessageRepository.h" />
     <ClInclude Include="Service\GroupService.h" />
+    <ClInclude Include="Service\NotificationService.h" />
     <ClInclude Include="Service\TokenManager.h" />
     <ClInclude Include="Service\UserManager.h" />
     <ClInclude Include="DB\UserRepository.h" />

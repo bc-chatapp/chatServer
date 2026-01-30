@@ -90,6 +90,15 @@
     <ClCompile Include="..\Libraries\Include\bcrypt\src\blowfish.cpp">
       <Filter>bcrypt</Filter>
     </ClCompile>
+    <ClCompile Include="Service\NotificationService.cpp">
+      <Filter>Service</Filter>
+    </ClCompile>
+    <ClCompile Include="DB\FcmTokenRepository.cpp">
+      <Filter>DB</Filter>
+    </ClCompile>
+    <ClCompile Include="Cloud\FcmClient.cpp">
+      <Filter>Cloud</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -157,6 +166,15 @@
     </ClInclude>
     <ClInclude Include="..\Libraries\Include\bcrypt\bcrypt_lib.h">
       <Filter>bcrypt</Filter>
+    </ClInclude>
+    <ClInclude Include="Service\NotificationService.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="DB\FcmTokenRepository.h">
+      <Filter>DB</Filter>
+    </ClInclude>
+    <ClInclude Include="Cloud\FcmClient.h">
+      <Filter>Cloud</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

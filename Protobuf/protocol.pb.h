@@ -47,7 +47,7 @@ struct TableStruct_protocol_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[63]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[65]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -115,6 +115,9 @@ extern C_LeaveGroupDefaultTypeInternal _C_LeaveGroup_default_instance_;
 class C_Login;
 struct C_LoginDefaultTypeInternal;
 extern C_LoginDefaultTypeInternal _C_Login_default_instance_;
+class C_RegisterFcmToken;
+struct C_RegisterFcmTokenDefaultTypeInternal;
+extern C_RegisterFcmTokenDefaultTypeInternal _C_RegisterFcmToken_default_instance_;
 class C_ReqHistory;
 struct C_ReqHistoryDefaultTypeInternal;
 extern C_ReqHistoryDefaultTypeInternal _C_ReqHistory_default_instance_;
@@ -217,6 +220,9 @@ extern S_MessageBatchDefaultTypeInternal _S_MessageBatch_default_instance_;
 class S_MessageBatch_ConversationBatch;
 struct S_MessageBatch_ConversationBatchDefaultTypeInternal;
 extern S_MessageBatch_ConversationBatchDefaultTypeInternal _S_MessageBatch_ConversationBatch_default_instance_;
+class S_RegisterFcmToken;
+struct S_RegisterFcmTokenDefaultTypeInternal;
+extern S_RegisterFcmTokenDefaultTypeInternal _S_RegisterFcmToken_default_instance_;
 class S_ReqHistory;
 struct S_ReqHistoryDefaultTypeInternal;
 extern S_ReqHistoryDefaultTypeInternal _S_ReqHistory_default_instance_;
@@ -266,6 +272,7 @@ template<> ::Protocol::C_InviteFriend* Arena::CreateMaybeMessage<::Protocol::C_I
 template<> ::Protocol::C_JoinGroup* Arena::CreateMaybeMessage<::Protocol::C_JoinGroup>(Arena*);
 template<> ::Protocol::C_LeaveGroup* Arena::CreateMaybeMessage<::Protocol::C_LeaveGroup>(Arena*);
 template<> ::Protocol::C_Login* Arena::CreateMaybeMessage<::Protocol::C_Login>(Arena*);
+template<> ::Protocol::C_RegisterFcmToken* Arena::CreateMaybeMessage<::Protocol::C_RegisterFcmToken>(Arena*);
 template<> ::Protocol::C_ReqHistory* Arena::CreateMaybeMessage<::Protocol::C_ReqHistory>(Arena*);
 template<> ::Protocol::C_RequestEmailVerify* Arena::CreateMaybeMessage<::Protocol::C_RequestEmailVerify>(Arena*);
 template<> ::Protocol::C_SearchUser* Arena::CreateMaybeMessage<::Protocol::C_SearchUser>(Arena*);
@@ -300,6 +307,7 @@ template<> ::Protocol::S_LeaveGroup* Arena::CreateMaybeMessage<::Protocol::S_Lea
 template<> ::Protocol::S_Login* Arena::CreateMaybeMessage<::Protocol::S_Login>(Arena*);
 template<> ::Protocol::S_MessageBatch* Arena::CreateMaybeMessage<::Protocol::S_MessageBatch>(Arena*);
 template<> ::Protocol::S_MessageBatch_ConversationBatch* Arena::CreateMaybeMessage<::Protocol::S_MessageBatch_ConversationBatch>(Arena*);
+template<> ::Protocol::S_RegisterFcmToken* Arena::CreateMaybeMessage<::Protocol::S_RegisterFcmToken>(Arena*);
 template<> ::Protocol::S_ReqHistory* Arena::CreateMaybeMessage<::Protocol::S_ReqHistory>(Arena*);
 template<> ::Protocol::S_RequestEmailVerify* Arena::CreateMaybeMessage<::Protocol::S_RequestEmailVerify>(Arena*);
 template<> ::Protocol::S_SearchUser* Arena::CreateMaybeMessage<::Protocol::S_SearchUser>(Arena*);
@@ -533,6 +541,8 @@ class Envelope final :
     kSFetchMyInfo = 31,
     kCEditMyInfo = 32,
     kSEditMyInfo = 33,
+    kCRegisterFcmToken = 34,
+    kSRegisterFcmToken = 35,
     kCChat = 40,
     kSChat = 41,
     kCAck = 42,
@@ -659,6 +669,8 @@ class Envelope final :
     kSFetchMyInfoFieldNumber = 31,
     kCEditMyInfoFieldNumber = 32,
     kSEditMyInfoFieldNumber = 33,
+    kCRegisterFcmTokenFieldNumber = 34,
+    kSRegisterFcmTokenFieldNumber = 35,
     kCChatFieldNumber = 40,
     kSChatFieldNumber = 41,
     kCAckFieldNumber = 42,
@@ -1014,6 +1026,42 @@ class Envelope final :
   void unsafe_arena_set_allocated_s_edit_my_info(
       ::Protocol::S_EditMyInfo* s_edit_my_info);
   ::Protocol::S_EditMyInfo* unsafe_arena_release_s_edit_my_info();
+
+  // .Protocol.C_RegisterFcmToken c_register_fcm_token = 34;
+  bool has_c_register_fcm_token() const;
+  private:
+  bool _internal_has_c_register_fcm_token() const;
+  public:
+  void clear_c_register_fcm_token();
+  const ::Protocol::C_RegisterFcmToken& c_register_fcm_token() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::Protocol::C_RegisterFcmToken* release_c_register_fcm_token();
+  ::Protocol::C_RegisterFcmToken* mutable_c_register_fcm_token();
+  void set_allocated_c_register_fcm_token(::Protocol::C_RegisterFcmToken* c_register_fcm_token);
+  private:
+  const ::Protocol::C_RegisterFcmToken& _internal_c_register_fcm_token() const;
+  ::Protocol::C_RegisterFcmToken* _internal_mutable_c_register_fcm_token();
+  public:
+  void unsafe_arena_set_allocated_c_register_fcm_token(
+      ::Protocol::C_RegisterFcmToken* c_register_fcm_token);
+  ::Protocol::C_RegisterFcmToken* unsafe_arena_release_c_register_fcm_token();
+
+  // .Protocol.S_RegisterFcmToken s_register_fcm_token = 35;
+  bool has_s_register_fcm_token() const;
+  private:
+  bool _internal_has_s_register_fcm_token() const;
+  public:
+  void clear_s_register_fcm_token();
+  const ::Protocol::S_RegisterFcmToken& s_register_fcm_token() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::Protocol::S_RegisterFcmToken* release_s_register_fcm_token();
+  ::Protocol::S_RegisterFcmToken* mutable_s_register_fcm_token();
+  void set_allocated_s_register_fcm_token(::Protocol::S_RegisterFcmToken* s_register_fcm_token);
+  private:
+  const ::Protocol::S_RegisterFcmToken& _internal_s_register_fcm_token() const;
+  ::Protocol::S_RegisterFcmToken* _internal_mutable_s_register_fcm_token();
+  public:
+  void unsafe_arena_set_allocated_s_register_fcm_token(
+      ::Protocol::S_RegisterFcmToken* s_register_fcm_token);
+  ::Protocol::S_RegisterFcmToken* unsafe_arena_release_s_register_fcm_token();
 
   // .Protocol.C_Chat c_chat = 40;
   bool has_c_chat() const;
@@ -1666,6 +1714,8 @@ class Envelope final :
   void set_has_s_fetch_my_info();
   void set_has_c_edit_my_info();
   void set_has_s_edit_my_info();
+  void set_has_c_register_fcm_token();
+  void set_has_s_register_fcm_token();
   void set_has_c_chat();
   void set_has_s_chat();
   void set_has_c_ack();
@@ -1730,6 +1780,8 @@ class Envelope final :
     ::Protocol::S_FetchMyInfo* s_fetch_my_info_;
     ::Protocol::C_EditMyInfo* c_edit_my_info_;
     ::Protocol::S_EditMyInfo* s_edit_my_info_;
+    ::Protocol::C_RegisterFcmToken* c_register_fcm_token_;
+    ::Protocol::S_RegisterFcmToken* s_register_fcm_token_;
     ::Protocol::C_Chat* c_chat_;
     ::Protocol::S_Chat* s_chat_;
     ::Protocol::C_Ack* c_ack_;
@@ -4473,6 +4525,323 @@ class S_EditMyInfo final :
 };
 // -------------------------------------------------------------------
 
+class C_RegisterFcmToken final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.C_RegisterFcmToken) */ {
+ public:
+  inline C_RegisterFcmToken() : C_RegisterFcmToken(nullptr) {}
+  ~C_RegisterFcmToken() override;
+  explicit constexpr C_RegisterFcmToken(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  C_RegisterFcmToken(const C_RegisterFcmToken& from);
+  C_RegisterFcmToken(C_RegisterFcmToken&& from) noexcept
+    : C_RegisterFcmToken() {
+    *this = ::std::move(from);
+  }
+
+  inline C_RegisterFcmToken& operator=(const C_RegisterFcmToken& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline C_RegisterFcmToken& operator=(C_RegisterFcmToken&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const C_RegisterFcmToken& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const C_RegisterFcmToken* internal_default_instance() {
+    return reinterpret_cast<const C_RegisterFcmToken*>(
+               &_C_RegisterFcmToken_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    18;
+
+  friend void swap(C_RegisterFcmToken& a, C_RegisterFcmToken& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(C_RegisterFcmToken* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(C_RegisterFcmToken* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline C_RegisterFcmToken* New() const final {
+    return new C_RegisterFcmToken();
+  }
+
+  C_RegisterFcmToken* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<C_RegisterFcmToken>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const C_RegisterFcmToken& from);
+  void MergeFrom(const C_RegisterFcmToken& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(C_RegisterFcmToken* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.C_RegisterFcmToken";
+  }
+  protected:
+  explicit C_RegisterFcmToken(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kFcmTokenFieldNumber = 1,
+    kPlatformFieldNumber = 2,
+    kDeviceIdFieldNumber = 3,
+  };
+  // string fcm_token = 1;
+  void clear_fcm_token();
+  const std::string& fcm_token() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_fcm_token(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_fcm_token();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_fcm_token();
+  void set_allocated_fcm_token(std::string* fcm_token);
+  private:
+  const std::string& _internal_fcm_token() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_fcm_token(const std::string& value);
+  std::string* _internal_mutable_fcm_token();
+  public:
+
+  // string platform = 2;
+  void clear_platform();
+  const std::string& platform() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_platform(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_platform();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_platform();
+  void set_allocated_platform(std::string* platform);
+  private:
+  const std::string& _internal_platform() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_platform(const std::string& value);
+  std::string* _internal_mutable_platform();
+  public:
+
+  // string device_id = 3;
+  void clear_device_id();
+  const std::string& device_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_device_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_device_id();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_device_id();
+  void set_allocated_device_id(std::string* device_id);
+  private:
+  const std::string& _internal_device_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_device_id(const std::string& value);
+  std::string* _internal_mutable_device_id();
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.C_RegisterFcmToken)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr fcm_token_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr platform_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr device_id_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class S_RegisterFcmToken final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S_RegisterFcmToken) */ {
+ public:
+  inline S_RegisterFcmToken() : S_RegisterFcmToken(nullptr) {}
+  ~S_RegisterFcmToken() override;
+  explicit constexpr S_RegisterFcmToken(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  S_RegisterFcmToken(const S_RegisterFcmToken& from);
+  S_RegisterFcmToken(S_RegisterFcmToken&& from) noexcept
+    : S_RegisterFcmToken() {
+    *this = ::std::move(from);
+  }
+
+  inline S_RegisterFcmToken& operator=(const S_RegisterFcmToken& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline S_RegisterFcmToken& operator=(S_RegisterFcmToken&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const S_RegisterFcmToken& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const S_RegisterFcmToken* internal_default_instance() {
+    return reinterpret_cast<const S_RegisterFcmToken*>(
+               &_S_RegisterFcmToken_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    19;
+
+  friend void swap(S_RegisterFcmToken& a, S_RegisterFcmToken& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(S_RegisterFcmToken* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(S_RegisterFcmToken* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline S_RegisterFcmToken* New() const final {
+    return new S_RegisterFcmToken();
+  }
+
+  S_RegisterFcmToken* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<S_RegisterFcmToken>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const S_RegisterFcmToken& from);
+  void MergeFrom(const S_RegisterFcmToken& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(S_RegisterFcmToken* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.S_RegisterFcmToken";
+  }
+  protected:
+  explicit S_RegisterFcmToken(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kMessageFieldNumber = 2,
+    kSuccessFieldNumber = 1,
+  };
+  // string message = 2;
+  void clear_message();
+  const std::string& message() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_message(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_message();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_message();
+  void set_allocated_message(std::string* message);
+  private:
+  const std::string& _internal_message() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_message(const std::string& value);
+  std::string* _internal_mutable_message();
+  public:
+
+  // bool success = 1;
+  void clear_success();
+  bool success() const;
+  void set_success(bool value);
+  private:
+  bool _internal_success() const;
+  void _internal_set_success(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.S_RegisterFcmToken)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
+  bool success_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
 class Text final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.Text) */ {
  public:
@@ -4517,7 +4886,7 @@ class Text final :
                &_Text_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    18;
+    20;
 
   friend void swap(Text& a, Text& b) {
     a.Swap(&b);
@@ -4654,7 +5023,7 @@ class Image final :
                &_Image_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    19;
+    21;
 
   friend void swap(Image& a, Image& b) {
     a.Swap(&b);
@@ -4818,7 +5187,7 @@ class Video final :
                &_Video_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    20;
+    22;
 
   friend void swap(Video& a, Video& b) {
     a.Swap(&b);
@@ -4993,7 +5362,7 @@ class File final :
                &_File_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    21;
+    23;
 
   friend void swap(File& a, File& b) {
     a.Swap(&b);
@@ -5173,7 +5542,7 @@ class SystemMsg final :
                &_SystemMsg_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    22;
+    24;
 
   friend void swap(SystemMsg& a, SystemMsg& b) {
     a.Swap(&b);
@@ -5346,7 +5715,7 @@ class ChatPayload final :
                &_ChatPayload_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    23;
+    25;
 
   friend void swap(ChatPayload& a, ChatPayload& b) {
     a.Swap(&b);
@@ -5583,7 +5952,7 @@ class C_Chat final :
                &_C_Chat_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    24;
+    26;
 
   friend void swap(C_Chat& a, C_Chat& b) {
     a.Swap(&b);
@@ -5773,7 +6142,7 @@ class S_Chat final :
                &_S_Chat_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    25;
+    27;
 
   friend void swap(S_Chat& a, S_Chat& b) {
     a.Swap(&b);
@@ -6006,7 +6375,7 @@ class C_ReqHistory final :
                &_C_ReqHistory_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    26;
+    28;
 
   friend void swap(C_ReqHistory& a, C_ReqHistory& b) {
     a.Swap(&b);
@@ -6165,7 +6534,7 @@ class S_ReqHistory final :
                &_S_ReqHistory_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    27;
+    29;
 
   friend void swap(S_ReqHistory& a, S_ReqHistory& b) {
     a.Swap(&b);
@@ -6333,7 +6702,7 @@ class C_UploadFile final :
                &_C_UploadFile_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    28;
+    30;
 
   friend void swap(C_UploadFile& a, C_UploadFile& b) {
     a.Swap(&b);
@@ -6569,7 +6938,7 @@ class S_UploadFile final :
                &_S_UploadFile_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    29;
+    31;
 
   friend void swap(S_UploadFile& a, S_UploadFile& b) {
     a.Swap(&b);
@@ -6824,7 +7193,7 @@ class C_Ack final :
                &_C_Ack_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    30;
+    32;
 
   friend void swap(C_Ack& a, C_Ack& b) {
     a.Swap(&b);
@@ -6972,7 +7341,7 @@ class C_FetchOffline final :
                &_C_FetchOffline_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    31;
+    33;
 
   friend void swap(C_FetchOffline& a, C_FetchOffline& b) {
     a.Swap(&b);
@@ -7104,7 +7473,7 @@ class S_MessageBatch_ConversationBatch final :
                &_S_MessageBatch_ConversationBatch_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    32;
+    34;
 
   friend void swap(S_MessageBatch_ConversationBatch& a, S_MessageBatch_ConversationBatch& b) {
     a.Swap(&b);
@@ -7272,7 +7641,7 @@ class S_MessageBatch final :
                &_S_MessageBatch_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    33;
+    35;
 
   friend void swap(S_MessageBatch& a, S_MessageBatch& b) {
     a.Swap(&b);
@@ -7415,7 +7784,7 @@ class FriendRequest final :
                &_FriendRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    34;
+    36;
 
   friend void swap(FriendRequest& a, FriendRequest& b) {
     a.Swap(&b);
@@ -7578,7 +7947,7 @@ class C_SearchUser final :
                &_C_SearchUser_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    35;
+    37;
 
   friend void swap(C_SearchUser& a, C_SearchUser& b) {
     a.Swap(&b);
@@ -7715,7 +8084,7 @@ class S_SearchUser final :
                &_S_SearchUser_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    36;
+    38;
 
   friend void swap(S_SearchUser& a, S_SearchUser& b) {
     a.Swap(&b);
@@ -7889,7 +8258,7 @@ class C_FriendAction final :
                &_C_FriendAction_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    37;
+    39;
 
   friend void swap(C_FriendAction& a, C_FriendAction& b) {
     a.Swap(&b);
@@ -8073,7 +8442,7 @@ class S_FriendAction final :
                &_S_FriendAction_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    38;
+    40;
 
   friend void swap(S_FriendAction& a, S_FriendAction& b) {
     a.Swap(&b);
@@ -8241,7 +8610,7 @@ class C_FetchFriendData final :
                &_C_FetchFriendData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    39;
+    41;
 
   friend void swap(C_FetchFriendData& a, C_FetchFriendData& b) {
     a.Swap(&b);
@@ -8360,7 +8729,7 @@ class S_FetchFriendData final :
                &_S_FetchFriendData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    40;
+    42;
 
   friend void swap(S_FetchFriendData& a, S_FetchFriendData& b) {
     a.Swap(&b);
@@ -8541,7 +8910,7 @@ class S_FriendPush final :
                &_S_FriendPush_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    41;
+    43;
 
   friend void swap(S_FriendPush& a, S_FriendPush& b) {
     a.Swap(&b);
@@ -8725,7 +9094,7 @@ class GroupMemberInfo final :
                &_GroupMemberInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    42;
+    44;
 
   friend void swap(GroupMemberInfo& a, GroupMemberInfo& b) {
     a.Swap(&b);
@@ -8888,7 +9257,7 @@ class GroupInfo final :
                &_GroupInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    43;
+    45;
 
   friend void swap(GroupInfo& a, GroupInfo& b) {
     a.Swap(&b);
@@ -9122,7 +9491,7 @@ class C_CreateGroup final :
                &_C_CreateGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    44;
+    46;
 
   friend void swap(C_CreateGroup& a, C_CreateGroup& b) {
     a.Swap(&b);
@@ -9259,7 +9628,7 @@ class S_CreateGroup final :
                &_S_CreateGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    45;
+    47;
 
   friend void swap(S_CreateGroup& a, S_CreateGroup& b) {
     a.Swap(&b);
@@ -9411,7 +9780,7 @@ class C_GroupList final :
                &_C_GroupList_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    46;
+    48;
 
   friend void swap(C_GroupList& a, C_GroupList& b) {
     a.Swap(&b);
@@ -9530,7 +9899,7 @@ class S_GroupList final :
                &_S_GroupList_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    47;
+    49;
 
   friend void swap(S_GroupList& a, S_GroupList& b) {
     a.Swap(&b);
@@ -9671,7 +10040,7 @@ class C_GroupInfo final :
                &_C_GroupInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    48;
+    50;
 
   friend void swap(C_GroupInfo& a, C_GroupInfo& b) {
     a.Swap(&b);
@@ -9808,7 +10177,7 @@ class S_GroupInfo final :
                &_S_GroupInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    49;
+    51;
 
   friend void swap(S_GroupInfo& a, S_GroupInfo& b) {
     a.Swap(&b);
@@ -9960,7 +10329,7 @@ class C_InviteFriend final :
                &_C_InviteFriend_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    50;
+    52;
 
   friend void swap(C_InviteFriend& a, C_InviteFriend& b) {
     a.Swap(&b);
@@ -10123,7 +10492,7 @@ class S_InviteFriend final :
                &_S_InviteFriend_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    51;
+    53;
 
   friend void swap(S_InviteFriend& a, S_InviteFriend& b) {
     a.Swap(&b);
@@ -10255,7 +10624,7 @@ class C_JoinGroup final :
                &_C_JoinGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    52;
+    54;
 
   friend void swap(C_JoinGroup& a, C_JoinGroup& b) {
     a.Swap(&b);
@@ -10392,7 +10761,7 @@ class S_JoinGroup final :
                &_S_JoinGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    53;
+    55;
 
   friend void swap(S_JoinGroup& a, S_JoinGroup& b) {
     a.Swap(&b);
@@ -10544,7 +10913,7 @@ class C_GroupMemberList final :
                &_C_GroupMemberList_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    54;
+    56;
 
   friend void swap(C_GroupMemberList& a, C_GroupMemberList& b) {
     a.Swap(&b);
@@ -10681,7 +11050,7 @@ class S_GroupMemberList final :
                &_S_GroupMemberList_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    55;
+    57;
 
   friend void swap(S_GroupMemberList& a, S_GroupMemberList& b) {
     a.Swap(&b);
@@ -10838,7 +11207,7 @@ class C_LeaveGroup final :
                &_C_LeaveGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    56;
+    58;
 
   friend void swap(C_LeaveGroup& a, C_LeaveGroup& b) {
     a.Swap(&b);
@@ -10975,7 +11344,7 @@ class S_LeaveGroup final :
                &_S_LeaveGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    57;
+    59;
 
   friend void swap(S_LeaveGroup& a, S_LeaveGroup& b) {
     a.Swap(&b);
@@ -11107,7 +11476,7 @@ class C_EditGroup final :
                &_C_EditGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    58;
+    60;
 
   friend void swap(C_EditGroup& a, C_EditGroup& b) {
     a.Swap(&b);
@@ -11292,7 +11661,7 @@ class S_EditGroup final :
                &_S_EditGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    59;
+    61;
 
   friend void swap(S_EditGroup& a, S_EditGroup& b) {
     a.Swap(&b);
@@ -11444,7 +11813,7 @@ class S_Error final :
                &_S_Error_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    60;
+    62;
 
   friend void swap(S_Error& a, S_Error& b) {
     a.Swap(&b);
@@ -11603,7 +11972,7 @@ class C_Heartbeat final :
                &_C_Heartbeat_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    61;
+    63;
 
   friend void swap(C_Heartbeat& a, C_Heartbeat& b) {
     a.Swap(&b);
@@ -11722,7 +12091,7 @@ class S_Heartbeat final :
                &_S_Heartbeat_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    62;
+    64;
 
   friend void swap(S_Heartbeat& a, S_Heartbeat& b) {
     a.Swap(&b);
@@ -13057,6 +13426,152 @@ inline ::Protocol::S_EditMyInfo* Envelope::_internal_mutable_s_edit_my_info() {
 inline ::Protocol::S_EditMyInfo* Envelope::mutable_s_edit_my_info() {
   // @@protoc_insertion_point(field_mutable:Protocol.Envelope.s_edit_my_info)
   return _internal_mutable_s_edit_my_info();
+}
+
+// .Protocol.C_RegisterFcmToken c_register_fcm_token = 34;
+inline bool Envelope::_internal_has_c_register_fcm_token() const {
+  return body_case() == kCRegisterFcmToken;
+}
+inline bool Envelope::has_c_register_fcm_token() const {
+  return _internal_has_c_register_fcm_token();
+}
+inline void Envelope::set_has_c_register_fcm_token() {
+  _oneof_case_[0] = kCRegisterFcmToken;
+}
+inline void Envelope::clear_c_register_fcm_token() {
+  if (_internal_has_c_register_fcm_token()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete body_.c_register_fcm_token_;
+    }
+    clear_has_body();
+  }
+}
+inline ::Protocol::C_RegisterFcmToken* Envelope::release_c_register_fcm_token() {
+  // @@protoc_insertion_point(field_release:Protocol.Envelope.c_register_fcm_token)
+  if (_internal_has_c_register_fcm_token()) {
+    clear_has_body();
+      ::Protocol::C_RegisterFcmToken* temp = body_.c_register_fcm_token_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    body_.c_register_fcm_token_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::Protocol::C_RegisterFcmToken& Envelope::_internal_c_register_fcm_token() const {
+  return _internal_has_c_register_fcm_token()
+      ? *body_.c_register_fcm_token_
+      : reinterpret_cast< ::Protocol::C_RegisterFcmToken&>(::Protocol::_C_RegisterFcmToken_default_instance_);
+}
+inline const ::Protocol::C_RegisterFcmToken& Envelope::c_register_fcm_token() const {
+  // @@protoc_insertion_point(field_get:Protocol.Envelope.c_register_fcm_token)
+  return _internal_c_register_fcm_token();
+}
+inline ::Protocol::C_RegisterFcmToken* Envelope::unsafe_arena_release_c_register_fcm_token() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:Protocol.Envelope.c_register_fcm_token)
+  if (_internal_has_c_register_fcm_token()) {
+    clear_has_body();
+    ::Protocol::C_RegisterFcmToken* temp = body_.c_register_fcm_token_;
+    body_.c_register_fcm_token_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Envelope::unsafe_arena_set_allocated_c_register_fcm_token(::Protocol::C_RegisterFcmToken* c_register_fcm_token) {
+  clear_body();
+  if (c_register_fcm_token) {
+    set_has_c_register_fcm_token();
+    body_.c_register_fcm_token_ = c_register_fcm_token;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.Envelope.c_register_fcm_token)
+}
+inline ::Protocol::C_RegisterFcmToken* Envelope::_internal_mutable_c_register_fcm_token() {
+  if (!_internal_has_c_register_fcm_token()) {
+    clear_body();
+    set_has_c_register_fcm_token();
+    body_.c_register_fcm_token_ = CreateMaybeMessage< ::Protocol::C_RegisterFcmToken >(GetArenaForAllocation());
+  }
+  return body_.c_register_fcm_token_;
+}
+inline ::Protocol::C_RegisterFcmToken* Envelope::mutable_c_register_fcm_token() {
+  // @@protoc_insertion_point(field_mutable:Protocol.Envelope.c_register_fcm_token)
+  return _internal_mutable_c_register_fcm_token();
+}
+
+// .Protocol.S_RegisterFcmToken s_register_fcm_token = 35;
+inline bool Envelope::_internal_has_s_register_fcm_token() const {
+  return body_case() == kSRegisterFcmToken;
+}
+inline bool Envelope::has_s_register_fcm_token() const {
+  return _internal_has_s_register_fcm_token();
+}
+inline void Envelope::set_has_s_register_fcm_token() {
+  _oneof_case_[0] = kSRegisterFcmToken;
+}
+inline void Envelope::clear_s_register_fcm_token() {
+  if (_internal_has_s_register_fcm_token()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete body_.s_register_fcm_token_;
+    }
+    clear_has_body();
+  }
+}
+inline ::Protocol::S_RegisterFcmToken* Envelope::release_s_register_fcm_token() {
+  // @@protoc_insertion_point(field_release:Protocol.Envelope.s_register_fcm_token)
+  if (_internal_has_s_register_fcm_token()) {
+    clear_has_body();
+      ::Protocol::S_RegisterFcmToken* temp = body_.s_register_fcm_token_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    body_.s_register_fcm_token_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::Protocol::S_RegisterFcmToken& Envelope::_internal_s_register_fcm_token() const {
+  return _internal_has_s_register_fcm_token()
+      ? *body_.s_register_fcm_token_
+      : reinterpret_cast< ::Protocol::S_RegisterFcmToken&>(::Protocol::_S_RegisterFcmToken_default_instance_);
+}
+inline const ::Protocol::S_RegisterFcmToken& Envelope::s_register_fcm_token() const {
+  // @@protoc_insertion_point(field_get:Protocol.Envelope.s_register_fcm_token)
+  return _internal_s_register_fcm_token();
+}
+inline ::Protocol::S_RegisterFcmToken* Envelope::unsafe_arena_release_s_register_fcm_token() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:Protocol.Envelope.s_register_fcm_token)
+  if (_internal_has_s_register_fcm_token()) {
+    clear_has_body();
+    ::Protocol::S_RegisterFcmToken* temp = body_.s_register_fcm_token_;
+    body_.s_register_fcm_token_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Envelope::unsafe_arena_set_allocated_s_register_fcm_token(::Protocol::S_RegisterFcmToken* s_register_fcm_token) {
+  clear_body();
+  if (s_register_fcm_token) {
+    set_has_s_register_fcm_token();
+    body_.s_register_fcm_token_ = s_register_fcm_token;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.Envelope.s_register_fcm_token)
+}
+inline ::Protocol::S_RegisterFcmToken* Envelope::_internal_mutable_s_register_fcm_token() {
+  if (!_internal_has_s_register_fcm_token()) {
+    clear_body();
+    set_has_s_register_fcm_token();
+    body_.s_register_fcm_token_ = CreateMaybeMessage< ::Protocol::S_RegisterFcmToken >(GetArenaForAllocation());
+  }
+  return body_.s_register_fcm_token_;
+}
+inline ::Protocol::S_RegisterFcmToken* Envelope::mutable_s_register_fcm_token() {
+  // @@protoc_insertion_point(field_mutable:Protocol.Envelope.s_register_fcm_token)
+  return _internal_mutable_s_register_fcm_token();
 }
 
 // .Protocol.C_Chat c_chat = 40;
@@ -17463,6 +17978,214 @@ inline void S_EditMyInfo::set_allocated_updated_info(::Protocol::UserInfo* updat
   }
   updated_info_ = updated_info;
   // @@protoc_insertion_point(field_set_allocated:Protocol.S_EditMyInfo.updated_info)
+}
+
+// -------------------------------------------------------------------
+
+// C_RegisterFcmToken
+
+// string fcm_token = 1;
+inline void C_RegisterFcmToken::clear_fcm_token() {
+  fcm_token_.ClearToEmpty();
+}
+inline const std::string& C_RegisterFcmToken::fcm_token() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_RegisterFcmToken.fcm_token)
+  return _internal_fcm_token();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void C_RegisterFcmToken::set_fcm_token(ArgT0&& arg0, ArgT... args) {
+ 
+ fcm_token_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.C_RegisterFcmToken.fcm_token)
+}
+inline std::string* C_RegisterFcmToken::mutable_fcm_token() {
+  // @@protoc_insertion_point(field_mutable:Protocol.C_RegisterFcmToken.fcm_token)
+  return _internal_mutable_fcm_token();
+}
+inline const std::string& C_RegisterFcmToken::_internal_fcm_token() const {
+  return fcm_token_.Get();
+}
+inline void C_RegisterFcmToken::_internal_set_fcm_token(const std::string& value) {
+  
+  fcm_token_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* C_RegisterFcmToken::_internal_mutable_fcm_token() {
+  
+  return fcm_token_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* C_RegisterFcmToken::release_fcm_token() {
+  // @@protoc_insertion_point(field_release:Protocol.C_RegisterFcmToken.fcm_token)
+  return fcm_token_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void C_RegisterFcmToken::set_allocated_fcm_token(std::string* fcm_token) {
+  if (fcm_token != nullptr) {
+    
+  } else {
+    
+  }
+  fcm_token_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), fcm_token,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C_RegisterFcmToken.fcm_token)
+}
+
+// string platform = 2;
+inline void C_RegisterFcmToken::clear_platform() {
+  platform_.ClearToEmpty();
+}
+inline const std::string& C_RegisterFcmToken::platform() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_RegisterFcmToken.platform)
+  return _internal_platform();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void C_RegisterFcmToken::set_platform(ArgT0&& arg0, ArgT... args) {
+ 
+ platform_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.C_RegisterFcmToken.platform)
+}
+inline std::string* C_RegisterFcmToken::mutable_platform() {
+  // @@protoc_insertion_point(field_mutable:Protocol.C_RegisterFcmToken.platform)
+  return _internal_mutable_platform();
+}
+inline const std::string& C_RegisterFcmToken::_internal_platform() const {
+  return platform_.Get();
+}
+inline void C_RegisterFcmToken::_internal_set_platform(const std::string& value) {
+  
+  platform_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* C_RegisterFcmToken::_internal_mutable_platform() {
+  
+  return platform_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* C_RegisterFcmToken::release_platform() {
+  // @@protoc_insertion_point(field_release:Protocol.C_RegisterFcmToken.platform)
+  return platform_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void C_RegisterFcmToken::set_allocated_platform(std::string* platform) {
+  if (platform != nullptr) {
+    
+  } else {
+    
+  }
+  platform_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), platform,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C_RegisterFcmToken.platform)
+}
+
+// string device_id = 3;
+inline void C_RegisterFcmToken::clear_device_id() {
+  device_id_.ClearToEmpty();
+}
+inline const std::string& C_RegisterFcmToken::device_id() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_RegisterFcmToken.device_id)
+  return _internal_device_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void C_RegisterFcmToken::set_device_id(ArgT0&& arg0, ArgT... args) {
+ 
+ device_id_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.C_RegisterFcmToken.device_id)
+}
+inline std::string* C_RegisterFcmToken::mutable_device_id() {
+  // @@protoc_insertion_point(field_mutable:Protocol.C_RegisterFcmToken.device_id)
+  return _internal_mutable_device_id();
+}
+inline const std::string& C_RegisterFcmToken::_internal_device_id() const {
+  return device_id_.Get();
+}
+inline void C_RegisterFcmToken::_internal_set_device_id(const std::string& value) {
+  
+  device_id_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* C_RegisterFcmToken::_internal_mutable_device_id() {
+  
+  return device_id_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* C_RegisterFcmToken::release_device_id() {
+  // @@protoc_insertion_point(field_release:Protocol.C_RegisterFcmToken.device_id)
+  return device_id_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void C_RegisterFcmToken::set_allocated_device_id(std::string* device_id) {
+  if (device_id != nullptr) {
+    
+  } else {
+    
+  }
+  device_id_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), device_id,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C_RegisterFcmToken.device_id)
+}
+
+// -------------------------------------------------------------------
+
+// S_RegisterFcmToken
+
+// bool success = 1;
+inline void S_RegisterFcmToken::clear_success() {
+  success_ = false;
+}
+inline bool S_RegisterFcmToken::_internal_success() const {
+  return success_;
+}
+inline bool S_RegisterFcmToken::success() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_RegisterFcmToken.success)
+  return _internal_success();
+}
+inline void S_RegisterFcmToken::_internal_set_success(bool value) {
+  
+  success_ = value;
+}
+inline void S_RegisterFcmToken::set_success(bool value) {
+  _internal_set_success(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_RegisterFcmToken.success)
+}
+
+// string message = 2;
+inline void S_RegisterFcmToken::clear_message() {
+  message_.ClearToEmpty();
+}
+inline const std::string& S_RegisterFcmToken::message() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_RegisterFcmToken.message)
+  return _internal_message();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void S_RegisterFcmToken::set_message(ArgT0&& arg0, ArgT... args) {
+ 
+ message_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.S_RegisterFcmToken.message)
+}
+inline std::string* S_RegisterFcmToken::mutable_message() {
+  // @@protoc_insertion_point(field_mutable:Protocol.S_RegisterFcmToken.message)
+  return _internal_mutable_message();
+}
+inline const std::string& S_RegisterFcmToken::_internal_message() const {
+  return message_.Get();
+}
+inline void S_RegisterFcmToken::_internal_set_message(const std::string& value) {
+  
+  message_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* S_RegisterFcmToken::_internal_mutable_message() {
+  
+  return message_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* S_RegisterFcmToken::release_message() {
+  // @@protoc_insertion_point(field_release:Protocol.S_RegisterFcmToken.message)
+  return message_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void S_RegisterFcmToken::set_allocated_message(std::string* message) {
+  if (message != nullptr) {
+    
+  } else {
+    
+  }
+  message_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), message,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.S_RegisterFcmToken.message)
 }
 
 // -------------------------------------------------------------------
@@ -22361,6 +23084,10 @@ inline void S_Error::set_allocated_message(std::string* message) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

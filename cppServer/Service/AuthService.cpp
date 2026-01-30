@@ -309,6 +309,41 @@ bool AuthService::LoginByToken(sessionPtr& session, uint64 reqId, const string& 
 
 
 
+bool AuthService::HandleEditMyInfo(sessionPtr& session, uint64 reqId, const Protocol::C_EditMyInfo& pkt)
+{
+    auto serverSession = static_pointer_cast<ServerSession>(session);
+    string userId = serverSession->GetUserId();
+
+
+    bool success = UserRepository::UpdateMyInfo(userId, pkt);
+
+
+
+    cUserInfo userInfo;
+    UserRepository::GetUser(userId, userInfo);
+
+    Protocol::S_EditMyInfo resPkt;
+    resPkt.set_success(success);
+    resPkt.set_message(success ? "정보가 수정되었습니다." : "수정 중 오류가 발생했습니다.");
+
+    UserRepository::ConvertToProto(userInfo, resPkt.mutable_updated_info());
+
+
+
+    Protocol::Envelope env;
+    env.set_request_id(reqId);
+    env.mutable_s_edit_my_info()->CopyFrom(resPkt);
+
+    PacketDispatcher::SendEnvelope(session, env);
+    return success;
+}
+
+
+
+
+
+
+
 
 
 

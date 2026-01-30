@@ -16,7 +16,6 @@ public:
 	bool CheckIdAvailable(sessionPtr& session, uint64 reqId, const string& userId);
 	bool CheckEmailAvailable(sessionPtr& session, uint64 reqId, const string& email);
 	
-
 	// 회원가입
 	bool SignUp(sessionPtr& session, uint64 reqId, const string& userId,
 	            const string& password, const string& name,
@@ -25,9 +24,12 @@ public:
 	// 로그인 (비밀번호 확인 포함)
 	bool Login(sessionPtr& session, uint64 reqId, const string& userId, const string& password);
 	
-	
 	static bool TriggerEmailVerification(const string& userId, const string& email);
 	bool LoginByToken(sessionPtr& session, uint64 reqId, const string& token, const string& userId);
+
+
+	bool HandleEditMyInfo(sessionPtr& session, uint64 reqId, const Protocol::C_EditMyInfo& pkt);
+
 
 private:
 	UserManager& _userManager;

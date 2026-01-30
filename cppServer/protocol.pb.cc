@@ -262,6 +262,33 @@ struct S_EditMyInfoDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT S_EditMyInfoDefaultTypeInternal _S_EditMyInfo_default_instance_;
+constexpr C_RegisterFcmToken::C_RegisterFcmToken(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : fcm_token_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , platform_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , device_id_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
+struct C_RegisterFcmTokenDefaultTypeInternal {
+  constexpr C_RegisterFcmTokenDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~C_RegisterFcmTokenDefaultTypeInternal() {}
+  union {
+    C_RegisterFcmToken _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT C_RegisterFcmTokenDefaultTypeInternal _C_RegisterFcmToken_default_instance_;
+constexpr S_RegisterFcmToken::S_RegisterFcmToken(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : message_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , success_(false){}
+struct S_RegisterFcmTokenDefaultTypeInternal {
+  constexpr S_RegisterFcmTokenDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~S_RegisterFcmTokenDefaultTypeInternal() {}
+  union {
+    S_RegisterFcmToken _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT S_RegisterFcmTokenDefaultTypeInternal _S_RegisterFcmToken_default_instance_;
 constexpr Text::Text(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : message_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
@@ -877,7 +904,7 @@ struct S_HeartbeatDefaultTypeInternal {
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT S_HeartbeatDefaultTypeInternal _S_Heartbeat_default_instance_;
 }  // namespace Protocol
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_protocol_2eproto[63];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_protocol_2eproto[65];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_protocol_2eproto[5];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_protocol_2eproto = nullptr;
 
@@ -890,6 +917,8 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_protocol_2eproto::offsets[] PR
   PROTOBUF_FIELD_OFFSET(::Protocol::Envelope, version_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Envelope, request_id_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Envelope, auth_token_),
+  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
+  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
   ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
   ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
   ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
@@ -1070,6 +1099,21 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_protocol_2eproto::offsets[] PR
   PROTOBUF_FIELD_OFFSET(::Protocol::S_EditMyInfo, success_),
   PROTOBUF_FIELD_OFFSET(::Protocol::S_EditMyInfo, message_),
   PROTOBUF_FIELD_OFFSET(::Protocol::S_EditMyInfo, updated_info_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_RegisterFcmToken, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_RegisterFcmToken, fcm_token_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_RegisterFcmToken, platform_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_RegisterFcmToken, device_id_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_RegisterFcmToken, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_RegisterFcmToken, success_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_RegisterFcmToken, message_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::Text, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -1416,68 +1460,70 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_protocol_2eproto::offsets[] PR
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::Protocol::Envelope)},
-  { 60, -1, sizeof(::Protocol::UserInfo)},
-  { 77, -1, sizeof(::Protocol::C_CheckId)},
-  { 83, -1, sizeof(::Protocol::S_CheckId)},
-  { 89, -1, sizeof(::Protocol::C_CheckEmail)},
-  { 95, -1, sizeof(::Protocol::S_CheckEmail)},
-  { 101, -1, sizeof(::Protocol::C_RequestEmailVerify)},
-  { 107, -1, sizeof(::Protocol::S_RequestEmailVerify)},
-  { 114, -1, sizeof(::Protocol::C_ConfirmEmailVerify)},
-  { 121, -1, sizeof(::Protocol::S_ConfirmEmailVerify)},
-  { 127, -1, sizeof(::Protocol::C_SignUp)},
-  { 136, -1, sizeof(::Protocol::S_SignUp)},
-  { 144, -1, sizeof(::Protocol::C_Login)},
-  { 151, -1, sizeof(::Protocol::S_Login)},
-  { 159, -1, sizeof(::Protocol::C_FetchMyInfo)},
-  { 164, -1, sizeof(::Protocol::S_FetchMyInfo)},
-  { 170, -1, sizeof(::Protocol::C_EditMyInfo)},
-  { 180, -1, sizeof(::Protocol::S_EditMyInfo)},
-  { 188, -1, sizeof(::Protocol::Text)},
-  { 194, -1, sizeof(::Protocol::Image)},
-  { 202, -1, sizeof(::Protocol::Video)},
-  { 211, -1, sizeof(::Protocol::File)},
-  { 220, -1, sizeof(::Protocol::SystemMsg)},
-  { 228, -1, sizeof(::Protocol::ChatPayload)},
-  { 239, -1, sizeof(::Protocol::C_Chat)},
-  { 249, -1, sizeof(::Protocol::S_Chat)},
-  { 262, -1, sizeof(::Protocol::C_ReqHistory)},
-  { 270, -1, sizeof(::Protocol::S_ReqHistory)},
-  { 278, -1, sizeof(::Protocol::C_UploadFile)},
-  { 289, -1, sizeof(::Protocol::S_UploadFile)},
-  { 303, -1, sizeof(::Protocol::C_Ack)},
-  { 310, -1, sizeof(::Protocol::C_FetchOffline)},
-  { 316, -1, sizeof(::Protocol::S_MessageBatch_ConversationBatch)},
-  { 324, -1, sizeof(::Protocol::S_MessageBatch)},
-  { 330, -1, sizeof(::Protocol::FriendRequest)},
-  { 338, -1, sizeof(::Protocol::C_SearchUser)},
-  { 344, -1, sizeof(::Protocol::S_SearchUser)},
-  { 353, -1, sizeof(::Protocol::C_FriendAction)},
-  { 360, -1, sizeof(::Protocol::S_FriendAction)},
-  { 368, -1, sizeof(::Protocol::C_FetchFriendData)},
-  { 373, -1, sizeof(::Protocol::S_FetchFriendData)},
-  { 381, -1, sizeof(::Protocol::S_FriendPush)},
-  { 388, -1, sizeof(::Protocol::GroupMemberInfo)},
-  { 396, -1, sizeof(::Protocol::GroupInfo)},
-  { 409, -1, sizeof(::Protocol::C_CreateGroup)},
-  { 415, -1, sizeof(::Protocol::S_CreateGroup)},
-  { 422, -1, sizeof(::Protocol::C_GroupList)},
-  { 427, -1, sizeof(::Protocol::S_GroupList)},
-  { 433, -1, sizeof(::Protocol::C_GroupInfo)},
-  { 439, -1, sizeof(::Protocol::S_GroupInfo)},
-  { 446, -1, sizeof(::Protocol::C_InviteFriend)},
-  { 453, -1, sizeof(::Protocol::S_InviteFriend)},
-  { 459, -1, sizeof(::Protocol::C_JoinGroup)},
-  { 465, -1, sizeof(::Protocol::S_JoinGroup)},
-  { 472, -1, sizeof(::Protocol::C_GroupMemberList)},
-  { 478, -1, sizeof(::Protocol::S_GroupMemberList)},
-  { 485, -1, sizeof(::Protocol::C_LeaveGroup)},
-  { 491, -1, sizeof(::Protocol::S_LeaveGroup)},
-  { 497, -1, sizeof(::Protocol::C_EditGroup)},
-  { 506, -1, sizeof(::Protocol::S_EditGroup)},
-  { 513, -1, sizeof(::Protocol::S_Error)},
-  { 521, -1, sizeof(::Protocol::C_Heartbeat)},
-  { 526, -1, sizeof(::Protocol::S_Heartbeat)},
+  { 62, -1, sizeof(::Protocol::UserInfo)},
+  { 79, -1, sizeof(::Protocol::C_CheckId)},
+  { 85, -1, sizeof(::Protocol::S_CheckId)},
+  { 91, -1, sizeof(::Protocol::C_CheckEmail)},
+  { 97, -1, sizeof(::Protocol::S_CheckEmail)},
+  { 103, -1, sizeof(::Protocol::C_RequestEmailVerify)},
+  { 109, -1, sizeof(::Protocol::S_RequestEmailVerify)},
+  { 116, -1, sizeof(::Protocol::C_ConfirmEmailVerify)},
+  { 123, -1, sizeof(::Protocol::S_ConfirmEmailVerify)},
+  { 129, -1, sizeof(::Protocol::C_SignUp)},
+  { 138, -1, sizeof(::Protocol::S_SignUp)},
+  { 146, -1, sizeof(::Protocol::C_Login)},
+  { 153, -1, sizeof(::Protocol::S_Login)},
+  { 161, -1, sizeof(::Protocol::C_FetchMyInfo)},
+  { 166, -1, sizeof(::Protocol::S_FetchMyInfo)},
+  { 172, -1, sizeof(::Protocol::C_EditMyInfo)},
+  { 182, -1, sizeof(::Protocol::S_EditMyInfo)},
+  { 190, -1, sizeof(::Protocol::C_RegisterFcmToken)},
+  { 198, -1, sizeof(::Protocol::S_RegisterFcmToken)},
+  { 205, -1, sizeof(::Protocol::Text)},
+  { 211, -1, sizeof(::Protocol::Image)},
+  { 219, -1, sizeof(::Protocol::Video)},
+  { 228, -1, sizeof(::Protocol::File)},
+  { 237, -1, sizeof(::Protocol::SystemMsg)},
+  { 245, -1, sizeof(::Protocol::ChatPayload)},
+  { 256, -1, sizeof(::Protocol::C_Chat)},
+  { 266, -1, sizeof(::Protocol::S_Chat)},
+  { 279, -1, sizeof(::Protocol::C_ReqHistory)},
+  { 287, -1, sizeof(::Protocol::S_ReqHistory)},
+  { 295, -1, sizeof(::Protocol::C_UploadFile)},
+  { 306, -1, sizeof(::Protocol::S_UploadFile)},
+  { 320, -1, sizeof(::Protocol::C_Ack)},
+  { 327, -1, sizeof(::Protocol::C_FetchOffline)},
+  { 333, -1, sizeof(::Protocol::S_MessageBatch_ConversationBatch)},
+  { 341, -1, sizeof(::Protocol::S_MessageBatch)},
+  { 347, -1, sizeof(::Protocol::FriendRequest)},
+  { 355, -1, sizeof(::Protocol::C_SearchUser)},
+  { 361, -1, sizeof(::Protocol::S_SearchUser)},
+  { 370, -1, sizeof(::Protocol::C_FriendAction)},
+  { 377, -1, sizeof(::Protocol::S_FriendAction)},
+  { 385, -1, sizeof(::Protocol::C_FetchFriendData)},
+  { 390, -1, sizeof(::Protocol::S_FetchFriendData)},
+  { 398, -1, sizeof(::Protocol::S_FriendPush)},
+  { 405, -1, sizeof(::Protocol::GroupMemberInfo)},
+  { 413, -1, sizeof(::Protocol::GroupInfo)},
+  { 426, -1, sizeof(::Protocol::C_CreateGroup)},
+  { 432, -1, sizeof(::Protocol::S_CreateGroup)},
+  { 439, -1, sizeof(::Protocol::C_GroupList)},
+  { 444, -1, sizeof(::Protocol::S_GroupList)},
+  { 450, -1, sizeof(::Protocol::C_GroupInfo)},
+  { 456, -1, sizeof(::Protocol::S_GroupInfo)},
+  { 463, -1, sizeof(::Protocol::C_InviteFriend)},
+  { 470, -1, sizeof(::Protocol::S_InviteFriend)},
+  { 476, -1, sizeof(::Protocol::C_JoinGroup)},
+  { 482, -1, sizeof(::Protocol::S_JoinGroup)},
+  { 489, -1, sizeof(::Protocol::C_GroupMemberList)},
+  { 495, -1, sizeof(::Protocol::S_GroupMemberList)},
+  { 502, -1, sizeof(::Protocol::C_LeaveGroup)},
+  { 508, -1, sizeof(::Protocol::S_LeaveGroup)},
+  { 514, -1, sizeof(::Protocol::C_EditGroup)},
+  { 523, -1, sizeof(::Protocol::S_EditGroup)},
+  { 530, -1, sizeof(::Protocol::S_Error)},
+  { 538, -1, sizeof(::Protocol::C_Heartbeat)},
+  { 543, -1, sizeof(::Protocol::S_Heartbeat)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -1499,6 +1545,8 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S_FetchMyInfo_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_C_EditMyInfo_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S_EditMyInfo_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_C_RegisterFcmToken_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S_RegisterFcmToken_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_Text_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_Image_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_Video_default_instance_),
@@ -1547,7 +1595,7 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 };
 
 const char descriptor_table_protodef_protocol_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\016protocol.proto\022\010Protocol\"\234\024\n\010Envelope\022"
+  "\n\016protocol.proto\022\010Protocol\"\230\025\n\010Envelope\022"
   "\017\n\007version\030\001 \001(\r\022\022\n\nrequest_id\030\002 \001(\004\022\022\n\n"
   "auth_token\030\003 \001(\t\022)\n\nc_check_id\030\n \001(\0132\023.P"
   "rotocol.C_CheckIdH\000\022)\n\ns_check_id\030\013 \001(\0132"
@@ -1569,203 +1617,210 @@ const char descriptor_table_protodef_protocol_2eproto[] PROTOBUF_SECTION_VARIABL
   "nfo\030\037 \001(\0132\027.Protocol.S_FetchMyInfoH\000\0220\n\016"
   "c_edit_my_info\030  \001(\0132\026.Protocol.C_EditMy"
   "InfoH\000\0220\n\016s_edit_my_info\030! \001(\0132\026.Protoco"
-  "l.S_EditMyInfoH\000\022\"\n\006c_chat\030( \001(\0132\020.Proto"
-  "col.C_ChatH\000\022\"\n\006s_chat\030) \001(\0132\020.Protocol."
-  "S_ChatH\000\022 \n\005c_ack\030* \001(\0132\017.Protocol.C_Ack"
-  "H\000\022/\n\rc_req_history\030+ \001(\0132\026.Protocol.C_R"
-  "eqHistoryH\000\022/\n\rs_req_history\030, \001(\0132\026.Pro"
-  "tocol.S_ReqHistoryH\000\0223\n\017c_fetch_offline\030"
-  "- \001(\0132\030.Protocol.C_FetchOfflineH\000\0223\n\017s_m"
-  "essage_batch\030. \001(\0132\030.Protocol.S_MessageB"
-  "atchH\000\022/\n\rc_upload_file\030/ \001(\0132\026.Protocol"
-  ".C_UploadFileH\000\022/\n\rs_upload_file\0300 \001(\0132\026"
-  ".Protocol.S_UploadFileH\000\022/\n\rc_search_use"
-  "r\030< \001(\0132\026.Protocol.C_SearchUserH\000\022/\n\rs_s"
-  "earch_user\030= \001(\0132\026.Protocol.S_SearchUser"
-  "H\000\0223\n\017c_friend_action\030> \001(\0132\030.Protocol.C"
-  "_FriendActionH\000\0223\n\017s_friend_action\030\? \001(\013"
-  "2\030.Protocol.S_FriendActionH\000\022:\n\023c_fetch_"
-  "friend_data\030@ \001(\0132\033.Protocol.C_FetchFrie"
-  "ndDataH\000\022:\n\023s_fetch_friend_data\030A \001(\0132\033."
-  "Protocol.S_FetchFriendDataH\000\022/\n\rs_friend"
-  "_push\030B \001(\0132\026.Protocol.S_FriendPushH\000\0221\n"
-  "\016c_create_group\030P \001(\0132\027.Protocol.C_Creat"
-  "eGroupH\000\0221\n\016s_create_group\030Q \001(\0132\027.Proto"
-  "col.S_CreateGroupH\000\022-\n\014c_group_list\030R \001("
-  "\0132\025.Protocol.C_GroupListH\000\022-\n\014s_group_li"
-  "st\030S \001(\0132\025.Protocol.S_GroupListH\000\022-\n\014c_j"
-  "oin_group\030T \001(\0132\025.Protocol.C_JoinGroupH\000"
-  "\022-\n\014s_join_group\030U \001(\0132\025.Protocol.S_Join"
-  "GroupH\000\0223\n\017c_invite_friend\030V \001(\0132\030.Proto"
-  "col.C_InviteFriendH\000\0223\n\017s_invite_friend\030"
-  "W \001(\0132\030.Protocol.S_InviteFriendH\000\022/\n\rc_l"
-  "eave_group\030X \001(\0132\026.Protocol.C_LeaveGroup"
-  "H\000\022/\n\rs_leave_group\030Y \001(\0132\026.Protocol.S_L"
-  "eaveGroupH\000\022:\n\023c_group_member_list\030Z \001(\013"
-  "2\033.Protocol.C_GroupMemberListH\000\022:\n\023s_gro"
-  "up_member_list\030[ \001(\0132\033.Protocol.S_GroupM"
-  "emberListH\000\022-\n\014c_group_info\030\\ \001(\0132\025.Prot"
-  "ocol.C_GroupInfoH\000\022-\n\014s_group_info\030] \001(\013"
-  "2\025.Protocol.S_GroupInfoH\000\022-\n\014c_edit_grou"
-  "p\030^ \001(\0132\025.Protocol.C_EditGroupH\000\022-\n\014s_ed"
-  "it_group\030_ \001(\0132\025.Protocol.S_EditGroupH\000\022"
-  "$\n\007s_error\030d \001(\0132\021.Protocol.S_ErrorH\000\022,\n"
-  "\013c_heartbeat\030e \001(\0132\025.Protocol.C_Heartbea"
-  "tH\000\022,\n\013s_heartbeat\030f \001(\0132\025.Protocol.S_He"
-  "artbeatH\000B\006\n\004body\"\213\002\n\010UserInfo\022\017\n\007user_i"
-  "d\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\026\n\016status_message\030"
-  "\003 \001(\t\022\031\n\021profile_image_url\030\004 \001(\t\022\034\n\024back"
-  "ground_image_url\030\005 \001(\t\022\r\n\005email\030\006 \001(\t\022\r\n"
-  "\005phone\030\007 \001(\t\022\021\n\tsub_grade\030\010 \001(\003\022\036\n\026stora"
-  "ge_capacity_bytes\030\t \001(\003\022\033\n\023storage_usage"
-  "_bytes\030\n \001(\003\022\021\n\tlast_seen\030\013 \001(\003\022\016\n\006statu"
-  "s\030\014 \001(\t\"\034\n\tC_CheckId\022\017\n\007user_id\030\001 \001(\t\"!\n"
-  "\tS_CheckId\022\024\n\014is_available\030\001 \001(\010\"\035\n\014C_Ch"
-  "eckEmail\022\r\n\005email\030\001 \001(\t\"$\n\014S_CheckEmail\022"
-  "\024\n\014is_available\030\001 \001(\010\"%\n\024C_RequestEmailV"
-  "erify\022\r\n\005email\030\001 \001(\t\"8\n\024S_RequestEmailVe"
-  "rify\022\017\n\007success\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\"3"
-  "\n\024C_ConfirmEmailVerify\022\r\n\005email\030\001 \001(\t\022\014\n"
-  "\004code\030\002 \001(\t\"\'\n\024S_ConfirmEmailVerify\022\017\n\007s"
-  "uccess\030\001 \001(\010\"J\n\010C_SignUp\022\017\n\007user_id\030\001 \001("
-  "\t\022\020\n\010password\030\002 \001(\t\022\014\n\004name\030\003 \001(\t\022\r\n\005ema"
-  "il\030\004 \001(\t\"=\n\010S_SignUp\022\017\n\007success\030\001 \001(\010\022\017\n"
-  "\007message\030\002 \001(\t\022\017\n\007user_id\030\003 \001(\t\",\n\007C_Log"
-  "in\022\017\n\007user_id\030\001 \001(\t\022\020\n\010password\030\002 \001(\t\"S\n"
-  "\007S_Login\022\017\n\007success\030\001 \001(\010\022\022\n\nauth_token\030"
-  "\002 \001(\t\022#\n\007my_info\030\003 \001(\0132\022.Protocol.UserIn"
-  "fo\"\017\n\rC_FetchMyInfo\"4\n\rS_FetchMyInfo\022#\n\007"
-  "my_info\030\001 \001(\0132\022.Protocol.UserInfo\"|\n\014C_E"
-  "ditMyInfo\022\014\n\004name\030\001 \001(\t\022\026\n\016status_messag"
-  "e\030\002 \001(\t\022\031\n\021profile_image_url\030\003 \001(\t\022\034\n\024ba"
-  "ckground_image_url\030\004 \001(\t\022\r\n\005phone\030\005 \001(\t\""
-  "Z\n\014S_EditMyInfo\022\017\n\007success\030\001 \001(\010\022\017\n\007mess"
-  "age\030\002 \001(\t\022(\n\014updated_info\030\003 \001(\0132\022.Protoc"
-  "ol.UserInfo\"\027\n\004Text\022\017\n\007message\030\001 \001(\t\"5\n\005"
-  "Image\022\013\n\003url\030\001 \001(\t\022\021\n\tthumbnail\030\002 \001(\t\022\014\n"
-  "\004size\030\003 \001(\003\"K\n\005Video\022\013\n\003url\030\001 \001(\t\022\021\n\tthu"
-  "mbnail\030\002 \001(\t\022\024\n\014duration_sec\030\003 \001(\003\022\014\n\004si"
-  "ze\030\004 \001(\003\"F\n\004File\022\013\n\003url\030\001 \001(\t\022\020\n\010filenam"
-  "e\030\002 \001(\t\022\014\n\004size\030\003 \001(\003\022\021\n\tmime_type\030\004 \001(\t"
-  "\"C\n\tSystemMsg\022\017\n\007message\030\001 \001(\t\022\014\n\004type\030\002"
-  " \001(\003\022\027\n\017invite_group_id\030\003 \001(\t\"\300\001\n\013ChatPa"
-  "yload\022\036\n\004text\030\001 \001(\0132\016.Protocol.TextH\000\022 \n"
-  "\005image\030\002 \001(\0132\017.Protocol.ImageH\000\022 \n\005video"
-  "\030\003 \001(\0132\017.Protocol.VideoH\000\022\036\n\004file\030\004 \001(\0132"
-  "\016.Protocol.FileH\000\022%\n\006system\030\005 \001(\0132\023.Prot"
-  "ocol.SystemMsgH\000B\006\n\004data\"\201\001\n\006C_Chat\022\017\n\007c"
-  "onv_id\030\001 \001(\t\022\025\n\rclient_msg_id\030\002 \001(\003\022&\n\007p"
-  "ayload\030\003 \001(\0132\025.Protocol.ChatPayload\022\021\n\tt"
-  "s_client\030\004 \001(\003\022\024\n\014reply_to_seq\030\005 \001(\003\"\272\001\n"
-  "\006S_Chat\022\017\n\007conv_id\030\001 \001(\t\022\025\n\rclient_msg_i"
-  "d\030\002 \001(\003\022\017\n\007msg_seq\030\003 \001(\003\022\021\n\tsender_id\030\004 "
-  "\001(\t\022\023\n\013sender_name\030\005 \001(\t\022&\n\007payload\030\006 \001("
-  "\0132\025.Protocol.ChatPayload\022\021\n\tts_server\030\007 "
-  "\001(\003\022\024\n\014reply_to_seq\030\010 \001(\003\"D\n\014C_ReqHistor"
-  "y\022\017\n\007conv_id\030\001 \001(\t\022\024\n\014last_msg_seq\030\002 \001(\003"
-  "\022\r\n\005limit\030\003 \001(\003\"S\n\014S_ReqHistory\022\017\n\007conv_"
-  "id\030\001 \001(\t\022\"\n\010messages\030\002 \003(\0132\020.Protocol.S_"
-  "Chat\022\016\n\006is_end\030\003 \001(\010\"\365\001\n\014C_UploadFile\022\020\n"
-  "\010filename\030\001 \001(\t\022\014\n\004size\030\002 \001(\003\022\021\n\tmime_ty"
-  "pe\030\003 \001(\t\022\020\n\010is_image\030\004 \001(\010\0226\n\013upload_typ"
-  "e\030\005 \001(\0162!.Protocol.C_UploadFile.UploadTy"
-  "pe\022\021\n\ttarget_id\030\006 \001(\t\"U\n\nUploadType\022\017\n\013D"
-  "IRECT_CHAT\020\000\022\016\n\nGROUP_CHAT\020\001\022\017\n\013PROFILE_"
-  "IMG\020\002\022\025\n\021GROUP_PROFILE_IMG\020\003\"\276\001\n\014S_Uploa"
-  "dFile\022\017\n\007success\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\022"
-  "\017\n\007file_id\030\003 \001(\t\022\022\n\nupload_url\030\004 \001(\t\022\024\n\014"
-  "download_url\030\005 \001(\t\022\030\n\020thumb_upload_url\030\006"
-  " \001(\t\022\025\n\rthumbnail_url\030\007 \001(\t\022\022\n\nexpires_a"
-  "t\030\010 \001(\003\022\014\n\004path\030\t \001(\t\")\n\005C_Ack\022\017\n\007conv_i"
-  "d\030\001 \001(\t\022\017\n\007msg_seq\030\002 \001(\003\"\"\n\016C_FetchOffli"
-  "ne\022\020\n\010since_ts\030\001 \001(\003\"\255\001\n\016S_MessageBatch\022"
-  ";\n\007batches\030\001 \003(\0132*.Protocol.S_MessageBat"
-  "ch.ConversationBatch\032^\n\021ConversationBatc"
-  "h\022\017\n\007conv_id\030\001 \001(\t\022\"\n\010messages\030\002 \003(\0132\020.P"
-  "rotocol.S_Chat\022\024\n\014unread_count\030\003 \001(\003\"a\n\r"
-  "FriendRequest\022%\n\trequester\030\001 \001(\0132\022.Proto"
-  "col.UserInfo\022\024\n\014requested_at\030\002 \001(\003\022\023\n\013is"
-  "_received\030\003 \001(\010\"\037\n\014C_SearchUser\022\017\n\007user_"
-  "id\030\001 \001(\t\"s\n\014S_SearchUser\022\017\n\007success\030\001 \001("
-  "\010\022%\n\tuser_info\030\002 \001(\0132\022.Protocol.UserInfo"
-  "\022\021\n\tis_friend\030\003 \001(\010\022\030\n\020has_sent_request\030"
-  "\004 \001(\010\"\314\001\n\016C_FriendAction\0223\n\006action\030\001 \001(\016"
-  "2#.Protocol.C_FriendAction.ActionType\022\026\n"
-  "\016target_user_id\030\002 \001(\t\"m\n\nActionType\022\020\n\014S"
-  "END_REQUEST\020\000\022\022\n\016CANCEL_REQUEST\020\001\022\022\n\016ACC"
-  "EPT_REQUEST\020\002\022\022\n\016REJECT_REQUEST\020\003\022\021\n\rDEL"
-  "ETE_FRIEND\020\004\"^\n\016S_FriendAction\022\017\n\007succes"
-  "s\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\022*\n\016updated_frie"
-  "nd\030\003 \001(\0132\022.Protocol.UserInfo\"\023\n\021C_FetchF"
-  "riendData\"\234\001\n\021S_FetchFriendData\022#\n\007frien"
-  "ds\030\001 \003(\0132\022.Protocol.UserInfo\0222\n\021received"
-  "_requests\030\002 \003(\0132\027.Protocol.FriendRequest"
-  "\022.\n\rsent_requests\030\003 \003(\0132\027.Protocol.Frien"
-  "dRequest\"\234\001\n\014S_FriendPush\022-\n\004type\030\001 \001(\0162"
-  "\037.Protocol.S_FriendPush.PushType\022%\n\tuser"
-  "_info\030\002 \001(\0132\022.Protocol.UserInfo\"6\n\010PushT"
-  "ype\022\017\n\013NEW_REQUEST\020\000\022\014\n\010ACCEPTED\020\001\022\013\n\007DE"
-  "LETED\020\002\"n\n\017GroupMemberInfo\022%\n\tuser_info\030"
-  "\001 \001(\0132\022.Protocol.UserInfo\022!\n\004role\030\002 \001(\0162"
-  "\023.Protocol.GroupRole\022\021\n\tjoined_at\030\003 \001(\003\""
-  "\306\001\n\tGroupInfo\022\020\n\010group_id\030\001 \001(\t\022\022\n\ngroup"
-  "_name\030\002 \001(\t\022\022\n\ngroup_code\030\003 \001(\t\022\023\n\013descr"
-  "iption\030\004 \001(\t\022\027\n\017group_image_url\030\005 \001(\t\022\024\n"
-  "\014member_count\030\006 \001(\005\022\036\n\026storage_capacity_"
-  "bytes\030\007 \001(\003\022\033\n\023storage_usage_bytes\030\010 \001(\003"
-  "\"#\n\rC_CreateGroup\022\022\n\ngroup_name\030\001 \001(\t\"D\n"
-  "\rS_CreateGroup\022\017\n\007success\030\001 \001(\010\022\"\n\005group"
-  "\030\002 \001(\0132\023.Protocol.GroupInfo\"\r\n\013C_GroupLi"
-  "st\"2\n\013S_GroupList\022#\n\006groups\030\001 \003(\0132\023.Prot"
-  "ocol.GroupInfo\"\037\n\013C_GroupInfo\022\020\n\010group_i"
-  "d\030\001 \001(\t\"W\n\013S_GroupInfo\022\"\n\005group\030\001 \001(\0132\023."
-  "Protocol.GroupInfo\022$\n\007my_role\030\002 \001(\0162\023.Pr"
-  "otocol.GroupRole\";\n\016C_InviteFriend\022\020\n\010gr"
-  "oup_id\030\001 \001(\t\022\027\n\017friend_user_ids\030\002 \003(\t\"!\n"
-  "\016S_InviteFriend\022\017\n\007success\030\001 \001(\010\"!\n\013C_Jo"
-  "inGroup\022\022\n\ngroup_code\030\001 \001(\t\"B\n\013S_JoinGro"
-  "up\022\017\n\007success\030\001 \001(\010\022\"\n\005group\030\002 \001(\0132\023.Pro"
-  "tocol.GroupInfo\"%\n\021C_GroupMemberList\022\020\n\010"
-  "group_id\030\001 \001(\t\"Q\n\021S_GroupMemberList\022\020\n\010g"
-  "roup_id\030\001 \001(\t\022*\n\007members\030\002 \003(\0132\031.Protoco"
-  "l.GroupMemberInfo\" \n\014C_LeaveGroup\022\020\n\010gro"
-  "up_id\030\001 \001(\t\"\037\n\014S_LeaveGroup\022\017\n\007success\030\001"
-  " \001(\010\"a\n\013C_EditGroup\022\020\n\010group_id\030\001 \001(\t\022\020\n"
-  "\010new_name\030\002 \001(\t\022\027\n\017new_description\030\003 \001(\t"
-  "\022\025\n\rnew_image_url\030\004 \001(\t\"B\n\013S_EditGroup\022\017"
-  "\n\007success\030\001 \001(\010\022\"\n\005group\030\002 \001(\0132\023.Protoco"
-  "l.GroupInfo\"Q\n\007S_Error\022\'\n\nerror_code\030\001 \001"
-  "(\0162\023.Protocol.ErrorCode\022\014\n\004code\030\002 \001(\r\022\017\n"
-  "\007message\030\003 \001(\t\"\r\n\013C_Heartbeat\"\r\n\013S_Heart"
-  "beat*-\n\tGroupRole\022\n\n\006MEMBER\020\000\022\t\n\005ADMIN\020\001"
-  "\022\t\n\005OWNER\020\002*\373\006\n\tErrorCode\022\017\n\013ERR_SUCCESS"
-  "\020\000\022\017\n\013ERR_UNKNOWN\020\001\022\027\n\023ERR_SERVER_INTERN"
-  "AL\020\002\022\026\n\022ERR_INVALID_PACKET\020\003\022\030\n\024ERR_VERS"
-  "ION_MISMATCH\020\004\022\024\n\020ERR_UNAUTHORIZED\020\005\022\025\n\021"
-  "ERR_INVALID_TOKEN\020\006\022\025\n\021ERR_USER_ID_EMPTY"
-  "\020d\022\030\n\024ERR_USER_ID_REQUIRED\020e\022\031\n\025ERR_PASS"
-  "WORD_REQUIRED\020f\022\025\n\021ERR_NAME_REQUIRED\020g\022\026"
-  "\n\022ERR_EMAIL_REQUIRED\020h\022\026\n\022ERR_USER_NOT_F"
-  "OUND\020i\022\030\n\024ERR_INVALID_PASSWORD\020j\022\033\n\027ERR_"
-  "USER_ALREADY_EXISTS\020k\022\034\n\030ERR_EMAIL_ALREA"
-  "DY_EXISTS\020l\022\026\n\021ERR_PAYLOAD_EMPTY\020\310\001\022\030\n\023E"
-  "RR_INVALID_CONV_ID\020\311\001\022\034\n\027ERR_INVALID_REC"
-  "EIVER_ID\020\312\001\022\024\n\017ERR_INVALID_ACK\020\313\001\022\037\n\032ERR"
-  "_INVALID_FRIEND_USER_ID\020\254\002\022\030\n\023ERR_CANNOT"
-  "_ADD_SELF\020\255\002\022\025\n\020ERR_NOT_A_FRIEND\020\256\002\022!\n\034E"
-  "RR_FRIEND_REQUEST_NOT_FOUND\020\257\002\022%\n ERR_FI"
-  "LE_SERVICE_NOT_INITIALIZED\020\220\003\022&\n!ERR_CLO"
-  "UD_STORAGE_NOT_INITIALIZED\020\221\003\022\032\n\025ERR_FIL"
-  "ENAME_REQUIRED\020\222\003\022\032\n\025ERR_INVALID_FILE_SI"
-  "ZE\020\223\003\022\033\n\026ERR_MIME_TYPE_REQUIRED\020\224\003\022\037\n\032ER"
-  "R_FAILED_TO_GENERATE_URL\020\225\003\022\031\n\024ERR_INVAL"
-  "ID_FILE_URL\020\226\003\022\031\n\024ERR_INVALID_ARGUMENT\020\227"
-  "\003\022\026\n\021ERR_NO_PERMISSION\020\364\003b\006proto3"
+  "l.S_EditMyInfoH\000\022<\n\024c_register_fcm_token"
+  "\030\" \001(\0132\034.Protocol.C_RegisterFcmTokenH\000\022<"
+  "\n\024s_register_fcm_token\030# \001(\0132\034.Protocol."
+  "S_RegisterFcmTokenH\000\022\"\n\006c_chat\030( \001(\0132\020.P"
+  "rotocol.C_ChatH\000\022\"\n\006s_chat\030) \001(\0132\020.Proto"
+  "col.S_ChatH\000\022 \n\005c_ack\030* \001(\0132\017.Protocol.C"
+  "_AckH\000\022/\n\rc_req_history\030+ \001(\0132\026.Protocol"
+  ".C_ReqHistoryH\000\022/\n\rs_req_history\030, \001(\0132\026"
+  ".Protocol.S_ReqHistoryH\000\0223\n\017c_fetch_offl"
+  "ine\030- \001(\0132\030.Protocol.C_FetchOfflineH\000\0223\n"
+  "\017s_message_batch\030. \001(\0132\030.Protocol.S_Mess"
+  "ageBatchH\000\022/\n\rc_upload_file\030/ \001(\0132\026.Prot"
+  "ocol.C_UploadFileH\000\022/\n\rs_upload_file\0300 \001"
+  "(\0132\026.Protocol.S_UploadFileH\000\022/\n\rc_search"
+  "_user\030< \001(\0132\026.Protocol.C_SearchUserH\000\022/\n"
+  "\rs_search_user\030= \001(\0132\026.Protocol.S_Search"
+  "UserH\000\0223\n\017c_friend_action\030> \001(\0132\030.Protoc"
+  "ol.C_FriendActionH\000\0223\n\017s_friend_action\030\?"
+  " \001(\0132\030.Protocol.S_FriendActionH\000\022:\n\023c_fe"
+  "tch_friend_data\030@ \001(\0132\033.Protocol.C_Fetch"
+  "FriendDataH\000\022:\n\023s_fetch_friend_data\030A \001("
+  "\0132\033.Protocol.S_FetchFriendDataH\000\022/\n\rs_fr"
+  "iend_push\030B \001(\0132\026.Protocol.S_FriendPushH"
+  "\000\0221\n\016c_create_group\030P \001(\0132\027.Protocol.C_C"
+  "reateGroupH\000\0221\n\016s_create_group\030Q \001(\0132\027.P"
+  "rotocol.S_CreateGroupH\000\022-\n\014c_group_list\030"
+  "R \001(\0132\025.Protocol.C_GroupListH\000\022-\n\014s_grou"
+  "p_list\030S \001(\0132\025.Protocol.S_GroupListH\000\022-\n"
+  "\014c_join_group\030T \001(\0132\025.Protocol.C_JoinGro"
+  "upH\000\022-\n\014s_join_group\030U \001(\0132\025.Protocol.S_"
+  "JoinGroupH\000\0223\n\017c_invite_friend\030V \001(\0132\030.P"
+  "rotocol.C_InviteFriendH\000\0223\n\017s_invite_fri"
+  "end\030W \001(\0132\030.Protocol.S_InviteFriendH\000\022/\n"
+  "\rc_leave_group\030X \001(\0132\026.Protocol.C_LeaveG"
+  "roupH\000\022/\n\rs_leave_group\030Y \001(\0132\026.Protocol"
+  ".S_LeaveGroupH\000\022:\n\023c_group_member_list\030Z"
+  " \001(\0132\033.Protocol.C_GroupMemberListH\000\022:\n\023s"
+  "_group_member_list\030[ \001(\0132\033.Protocol.S_Gr"
+  "oupMemberListH\000\022-\n\014c_group_info\030\\ \001(\0132\025."
+  "Protocol.C_GroupInfoH\000\022-\n\014s_group_info\030]"
+  " \001(\0132\025.Protocol.S_GroupInfoH\000\022-\n\014c_edit_"
+  "group\030^ \001(\0132\025.Protocol.C_EditGroupH\000\022-\n\014"
+  "s_edit_group\030_ \001(\0132\025.Protocol.S_EditGrou"
+  "pH\000\022$\n\007s_error\030d \001(\0132\021.Protocol.S_ErrorH"
+  "\000\022,\n\013c_heartbeat\030e \001(\0132\025.Protocol.C_Hear"
+  "tbeatH\000\022,\n\013s_heartbeat\030f \001(\0132\025.Protocol."
+  "S_HeartbeatH\000B\006\n\004body\"\213\002\n\010UserInfo\022\017\n\007us"
+  "er_id\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\026\n\016status_mess"
+  "age\030\003 \001(\t\022\031\n\021profile_image_url\030\004 \001(\t\022\034\n\024"
+  "background_image_url\030\005 \001(\t\022\r\n\005email\030\006 \001("
+  "\t\022\r\n\005phone\030\007 \001(\t\022\021\n\tsub_grade\030\010 \001(\003\022\036\n\026s"
+  "torage_capacity_bytes\030\t \001(\003\022\033\n\023storage_u"
+  "sage_bytes\030\n \001(\003\022\021\n\tlast_seen\030\013 \001(\003\022\016\n\006s"
+  "tatus\030\014 \001(\t\"\034\n\tC_CheckId\022\017\n\007user_id\030\001 \001("
+  "\t\"!\n\tS_CheckId\022\024\n\014is_available\030\001 \001(\010\"\035\n\014"
+  "C_CheckEmail\022\r\n\005email\030\001 \001(\t\"$\n\014S_CheckEm"
+  "ail\022\024\n\014is_available\030\001 \001(\010\"%\n\024C_RequestEm"
+  "ailVerify\022\r\n\005email\030\001 \001(\t\"8\n\024S_RequestEma"
+  "ilVerify\022\017\n\007success\030\001 \001(\010\022\017\n\007message\030\002 \001"
+  "(\t\"3\n\024C_ConfirmEmailVerify\022\r\n\005email\030\001 \001("
+  "\t\022\014\n\004code\030\002 \001(\t\"\'\n\024S_ConfirmEmailVerify\022"
+  "\017\n\007success\030\001 \001(\010\"J\n\010C_SignUp\022\017\n\007user_id\030"
+  "\001 \001(\t\022\020\n\010password\030\002 \001(\t\022\014\n\004name\030\003 \001(\t\022\r\n"
+  "\005email\030\004 \001(\t\"=\n\010S_SignUp\022\017\n\007success\030\001 \001("
+  "\010\022\017\n\007message\030\002 \001(\t\022\017\n\007user_id\030\003 \001(\t\",\n\007C"
+  "_Login\022\017\n\007user_id\030\001 \001(\t\022\020\n\010password\030\002 \001("
+  "\t\"S\n\007S_Login\022\017\n\007success\030\001 \001(\010\022\022\n\nauth_to"
+  "ken\030\002 \001(\t\022#\n\007my_info\030\003 \001(\0132\022.Protocol.Us"
+  "erInfo\"\017\n\rC_FetchMyInfo\"4\n\rS_FetchMyInfo"
+  "\022#\n\007my_info\030\001 \001(\0132\022.Protocol.UserInfo\"|\n"
+  "\014C_EditMyInfo\022\014\n\004name\030\001 \001(\t\022\026\n\016status_me"
+  "ssage\030\002 \001(\t\022\031\n\021profile_image_url\030\003 \001(\t\022\034"
+  "\n\024background_image_url\030\004 \001(\t\022\r\n\005phone\030\005 "
+  "\001(\t\"Z\n\014S_EditMyInfo\022\017\n\007success\030\001 \001(\010\022\017\n\007"
+  "message\030\002 \001(\t\022(\n\014updated_info\030\003 \001(\0132\022.Pr"
+  "otocol.UserInfo\"L\n\022C_RegisterFcmToken\022\021\n"
+  "\tfcm_token\030\001 \001(\t\022\020\n\010platform\030\002 \001(\t\022\021\n\tde"
+  "vice_id\030\003 \001(\t\"6\n\022S_RegisterFcmToken\022\017\n\007s"
+  "uccess\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\"\027\n\004Text\022\017\n"
+  "\007message\030\001 \001(\t\"5\n\005Image\022\013\n\003url\030\001 \001(\t\022\021\n\t"
+  "thumbnail\030\002 \001(\t\022\014\n\004size\030\003 \001(\003\"K\n\005Video\022\013"
+  "\n\003url\030\001 \001(\t\022\021\n\tthumbnail\030\002 \001(\t\022\024\n\014durati"
+  "on_sec\030\003 \001(\003\022\014\n\004size\030\004 \001(\003\"F\n\004File\022\013\n\003ur"
+  "l\030\001 \001(\t\022\020\n\010filename\030\002 \001(\t\022\014\n\004size\030\003 \001(\003\022"
+  "\021\n\tmime_type\030\004 \001(\t\"C\n\tSystemMsg\022\017\n\007messa"
+  "ge\030\001 \001(\t\022\014\n\004type\030\002 \001(\003\022\027\n\017invite_group_i"
+  "d\030\003 \001(\t\"\300\001\n\013ChatPayload\022\036\n\004text\030\001 \001(\0132\016."
+  "Protocol.TextH\000\022 \n\005image\030\002 \001(\0132\017.Protoco"
+  "l.ImageH\000\022 \n\005video\030\003 \001(\0132\017.Protocol.Vide"
+  "oH\000\022\036\n\004file\030\004 \001(\0132\016.Protocol.FileH\000\022%\n\006s"
+  "ystem\030\005 \001(\0132\023.Protocol.SystemMsgH\000B\006\n\004da"
+  "ta\"\201\001\n\006C_Chat\022\017\n\007conv_id\030\001 \001(\t\022\025\n\rclient"
+  "_msg_id\030\002 \001(\003\022&\n\007payload\030\003 \001(\0132\025.Protoco"
+  "l.ChatPayload\022\021\n\tts_client\030\004 \001(\003\022\024\n\014repl"
+  "y_to_seq\030\005 \001(\003\"\272\001\n\006S_Chat\022\017\n\007conv_id\030\001 \001"
+  "(\t\022\025\n\rclient_msg_id\030\002 \001(\003\022\017\n\007msg_seq\030\003 \001"
+  "(\003\022\021\n\tsender_id\030\004 \001(\t\022\023\n\013sender_name\030\005 \001"
+  "(\t\022&\n\007payload\030\006 \001(\0132\025.Protocol.ChatPaylo"
+  "ad\022\021\n\tts_server\030\007 \001(\003\022\024\n\014reply_to_seq\030\010 "
+  "\001(\003\"D\n\014C_ReqHistory\022\017\n\007conv_id\030\001 \001(\t\022\024\n\014"
+  "last_msg_seq\030\002 \001(\003\022\r\n\005limit\030\003 \001(\003\"S\n\014S_R"
+  "eqHistory\022\017\n\007conv_id\030\001 \001(\t\022\"\n\010messages\030\002"
+  " \003(\0132\020.Protocol.S_Chat\022\016\n\006is_end\030\003 \001(\010\"\365"
+  "\001\n\014C_UploadFile\022\020\n\010filename\030\001 \001(\t\022\014\n\004siz"
+  "e\030\002 \001(\003\022\021\n\tmime_type\030\003 \001(\t\022\020\n\010is_image\030\004"
+  " \001(\010\0226\n\013upload_type\030\005 \001(\0162!.Protocol.C_U"
+  "ploadFile.UploadType\022\021\n\ttarget_id\030\006 \001(\t\""
+  "U\n\nUploadType\022\017\n\013DIRECT_CHAT\020\000\022\016\n\nGROUP_"
+  "CHAT\020\001\022\017\n\013PROFILE_IMG\020\002\022\025\n\021GROUP_PROFILE"
+  "_IMG\020\003\"\276\001\n\014S_UploadFile\022\017\n\007success\030\001 \001(\010"
+  "\022\017\n\007message\030\002 \001(\t\022\017\n\007file_id\030\003 \001(\t\022\022\n\nup"
+  "load_url\030\004 \001(\t\022\024\n\014download_url\030\005 \001(\t\022\030\n\020"
+  "thumb_upload_url\030\006 \001(\t\022\025\n\rthumbnail_url\030"
+  "\007 \001(\t\022\022\n\nexpires_at\030\010 \001(\003\022\014\n\004path\030\t \001(\t\""
+  ")\n\005C_Ack\022\017\n\007conv_id\030\001 \001(\t\022\017\n\007msg_seq\030\002 \001"
+  "(\003\"\"\n\016C_FetchOffline\022\020\n\010since_ts\030\001 \001(\003\"\255"
+  "\001\n\016S_MessageBatch\022;\n\007batches\030\001 \003(\0132*.Pro"
+  "tocol.S_MessageBatch.ConversationBatch\032^"
+  "\n\021ConversationBatch\022\017\n\007conv_id\030\001 \001(\t\022\"\n\010"
+  "messages\030\002 \003(\0132\020.Protocol.S_Chat\022\024\n\014unre"
+  "ad_count\030\003 \001(\003\"a\n\rFriendRequest\022%\n\treque"
+  "ster\030\001 \001(\0132\022.Protocol.UserInfo\022\024\n\014reques"
+  "ted_at\030\002 \001(\003\022\023\n\013is_received\030\003 \001(\010\"\037\n\014C_S"
+  "earchUser\022\017\n\007user_id\030\001 \001(\t\"s\n\014S_SearchUs"
+  "er\022\017\n\007success\030\001 \001(\010\022%\n\tuser_info\030\002 \001(\0132\022"
+  ".Protocol.UserInfo\022\021\n\tis_friend\030\003 \001(\010\022\030\n"
+  "\020has_sent_request\030\004 \001(\010\"\314\001\n\016C_FriendActi"
+  "on\0223\n\006action\030\001 \001(\0162#.Protocol.C_FriendAc"
+  "tion.ActionType\022\026\n\016target_user_id\030\002 \001(\t\""
+  "m\n\nActionType\022\020\n\014SEND_REQUEST\020\000\022\022\n\016CANCE"
+  "L_REQUEST\020\001\022\022\n\016ACCEPT_REQUEST\020\002\022\022\n\016REJEC"
+  "T_REQUEST\020\003\022\021\n\rDELETE_FRIEND\020\004\"^\n\016S_Frie"
+  "ndAction\022\017\n\007success\030\001 \001(\010\022\017\n\007message\030\002 \001"
+  "(\t\022*\n\016updated_friend\030\003 \001(\0132\022.Protocol.Us"
+  "erInfo\"\023\n\021C_FetchFriendData\"\234\001\n\021S_FetchF"
+  "riendData\022#\n\007friends\030\001 \003(\0132\022.Protocol.Us"
+  "erInfo\0222\n\021received_requests\030\002 \003(\0132\027.Prot"
+  "ocol.FriendRequest\022.\n\rsent_requests\030\003 \003("
+  "\0132\027.Protocol.FriendRequest\"\234\001\n\014S_FriendP"
+  "ush\022-\n\004type\030\001 \001(\0162\037.Protocol.S_FriendPus"
+  "h.PushType\022%\n\tuser_info\030\002 \001(\0132\022.Protocol"
+  ".UserInfo\"6\n\010PushType\022\017\n\013NEW_REQUEST\020\000\022\014"
+  "\n\010ACCEPTED\020\001\022\013\n\007DELETED\020\002\"n\n\017GroupMember"
+  "Info\022%\n\tuser_info\030\001 \001(\0132\022.Protocol.UserI"
+  "nfo\022!\n\004role\030\002 \001(\0162\023.Protocol.GroupRole\022\021"
+  "\n\tjoined_at\030\003 \001(\003\"\306\001\n\tGroupInfo\022\020\n\010group"
+  "_id\030\001 \001(\t\022\022\n\ngroup_name\030\002 \001(\t\022\022\n\ngroup_c"
+  "ode\030\003 \001(\t\022\023\n\013description\030\004 \001(\t\022\027\n\017group_"
+  "image_url\030\005 \001(\t\022\024\n\014member_count\030\006 \001(\005\022\036\n"
+  "\026storage_capacity_bytes\030\007 \001(\003\022\033\n\023storage"
+  "_usage_bytes\030\010 \001(\003\"#\n\rC_CreateGroup\022\022\n\ng"
+  "roup_name\030\001 \001(\t\"D\n\rS_CreateGroup\022\017\n\007succ"
+  "ess\030\001 \001(\010\022\"\n\005group\030\002 \001(\0132\023.Protocol.Grou"
+  "pInfo\"\r\n\013C_GroupList\"2\n\013S_GroupList\022#\n\006g"
+  "roups\030\001 \003(\0132\023.Protocol.GroupInfo\"\037\n\013C_Gr"
+  "oupInfo\022\020\n\010group_id\030\001 \001(\t\"W\n\013S_GroupInfo"
+  "\022\"\n\005group\030\001 \001(\0132\023.Protocol.GroupInfo\022$\n\007"
+  "my_role\030\002 \001(\0162\023.Protocol.GroupRole\";\n\016C_"
+  "InviteFriend\022\020\n\010group_id\030\001 \001(\t\022\027\n\017friend"
+  "_user_ids\030\002 \003(\t\"!\n\016S_InviteFriend\022\017\n\007suc"
+  "cess\030\001 \001(\010\"!\n\013C_JoinGroup\022\022\n\ngroup_code\030"
+  "\001 \001(\t\"B\n\013S_JoinGroup\022\017\n\007success\030\001 \001(\010\022\"\n"
+  "\005group\030\002 \001(\0132\023.Protocol.GroupInfo\"%\n\021C_G"
+  "roupMemberList\022\020\n\010group_id\030\001 \001(\t\"Q\n\021S_Gr"
+  "oupMemberList\022\020\n\010group_id\030\001 \001(\t\022*\n\007membe"
+  "rs\030\002 \003(\0132\031.Protocol.GroupMemberInfo\" \n\014C"
+  "_LeaveGroup\022\020\n\010group_id\030\001 \001(\t\"\037\n\014S_Leave"
+  "Group\022\017\n\007success\030\001 \001(\010\"a\n\013C_EditGroup\022\020\n"
+  "\010group_id\030\001 \001(\t\022\020\n\010new_name\030\002 \001(\t\022\027\n\017new"
+  "_description\030\003 \001(\t\022\025\n\rnew_image_url\030\004 \001("
+  "\t\"B\n\013S_EditGroup\022\017\n\007success\030\001 \001(\010\022\"\n\005gro"
+  "up\030\002 \001(\0132\023.Protocol.GroupInfo\"Q\n\007S_Error"
+  "\022\'\n\nerror_code\030\001 \001(\0162\023.Protocol.ErrorCod"
+  "e\022\014\n\004code\030\002 \001(\r\022\017\n\007message\030\003 \001(\t\"\r\n\013C_He"
+  "artbeat\"\r\n\013S_Heartbeat*-\n\tGroupRole\022\n\n\006M"
+  "EMBER\020\000\022\t\n\005ADMIN\020\001\022\t\n\005OWNER\020\002*\373\006\n\tErrorC"
+  "ode\022\017\n\013ERR_SUCCESS\020\000\022\017\n\013ERR_UNKNOWN\020\001\022\027\n"
+  "\023ERR_SERVER_INTERNAL\020\002\022\026\n\022ERR_INVALID_PA"
+  "CKET\020\003\022\030\n\024ERR_VERSION_MISMATCH\020\004\022\024\n\020ERR_"
+  "UNAUTHORIZED\020\005\022\025\n\021ERR_INVALID_TOKEN\020\006\022\025\n"
+  "\021ERR_USER_ID_EMPTY\020d\022\030\n\024ERR_USER_ID_REQU"
+  "IRED\020e\022\031\n\025ERR_PASSWORD_REQUIRED\020f\022\025\n\021ERR"
+  "_NAME_REQUIRED\020g\022\026\n\022ERR_EMAIL_REQUIRED\020h"
+  "\022\026\n\022ERR_USER_NOT_FOUND\020i\022\030\n\024ERR_INVALID_"
+  "PASSWORD\020j\022\033\n\027ERR_USER_ALREADY_EXISTS\020k\022"
+  "\034\n\030ERR_EMAIL_ALREADY_EXISTS\020l\022\026\n\021ERR_PAY"
+  "LOAD_EMPTY\020\310\001\022\030\n\023ERR_INVALID_CONV_ID\020\311\001\022"
+  "\034\n\027ERR_INVALID_RECEIVER_ID\020\312\001\022\024\n\017ERR_INV"
+  "ALID_ACK\020\313\001\022\037\n\032ERR_INVALID_FRIEND_USER_I"
+  "D\020\254\002\022\030\n\023ERR_CANNOT_ADD_SELF\020\255\002\022\025\n\020ERR_NO"
+  "T_A_FRIEND\020\256\002\022!\n\034ERR_FRIEND_REQUEST_NOT_"
+  "FOUND\020\257\002\022%\n ERR_FILE_SERVICE_NOT_INITIAL"
+  "IZED\020\220\003\022&\n!ERR_CLOUD_STORAGE_NOT_INITIAL"
+  "IZED\020\221\003\022\032\n\025ERR_FILENAME_REQUIRED\020\222\003\022\032\n\025E"
+  "RR_INVALID_FILE_SIZE\020\223\003\022\033\n\026ERR_MIME_TYPE"
+  "_REQUIRED\020\224\003\022\037\n\032ERR_FAILED_TO_GENERATE_U"
+  "RL\020\225\003\022\031\n\024ERR_INVALID_FILE_URL\020\226\003\022\031\n\024ERR_"
+  "INVALID_ARGUMENT\020\227\003\022\026\n\021ERR_NO_PERMISSION"
+  "\020\364\003b\006proto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_protocol_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_protocol_2eproto = {
-  false, false, 8553, descriptor_table_protodef_protocol_2eproto, "protocol.proto", 
-  &descriptor_table_protocol_2eproto_once, nullptr, 0, 63,
+  false, false, 8811, descriptor_table_protodef_protocol_2eproto, "protocol.proto", 
+  &descriptor_table_protocol_2eproto_once, nullptr, 0, 65,
   schemas, file_default_instances, TableStruct_protocol_2eproto::offsets,
   file_level_metadata_protocol_2eproto, file_level_enum_descriptors_protocol_2eproto, file_level_service_descriptors_protocol_2eproto,
 };
@@ -1932,6 +1987,8 @@ class Envelope::_Internal {
   static const ::Protocol::S_FetchMyInfo& s_fetch_my_info(const Envelope* msg);
   static const ::Protocol::C_EditMyInfo& c_edit_my_info(const Envelope* msg);
   static const ::Protocol::S_EditMyInfo& s_edit_my_info(const Envelope* msg);
+  static const ::Protocol::C_RegisterFcmToken& c_register_fcm_token(const Envelope* msg);
+  static const ::Protocol::S_RegisterFcmToken& s_register_fcm_token(const Envelope* msg);
   static const ::Protocol::C_Chat& c_chat(const Envelope* msg);
   static const ::Protocol::S_Chat& s_chat(const Envelope* msg);
   static const ::Protocol::C_Ack& c_ack(const Envelope* msg);
@@ -2032,6 +2089,14 @@ Envelope::_Internal::c_edit_my_info(const Envelope* msg) {
 const ::Protocol::S_EditMyInfo&
 Envelope::_Internal::s_edit_my_info(const Envelope* msg) {
   return *msg->body_.s_edit_my_info_;
+}
+const ::Protocol::C_RegisterFcmToken&
+Envelope::_Internal::c_register_fcm_token(const Envelope* msg) {
+  return *msg->body_.c_register_fcm_token_;
+}
+const ::Protocol::S_RegisterFcmToken&
+Envelope::_Internal::s_register_fcm_token(const Envelope* msg) {
+  return *msg->body_.s_register_fcm_token_;
 }
 const ::Protocol::C_Chat&
 Envelope::_Internal::c_chat(const Envelope* msg) {
@@ -2412,6 +2477,36 @@ void Envelope::set_allocated_s_edit_my_info(::Protocol::S_EditMyInfo* s_edit_my_
     body_.s_edit_my_info_ = s_edit_my_info;
   }
   // @@protoc_insertion_point(field_set_allocated:Protocol.Envelope.s_edit_my_info)
+}
+void Envelope::set_allocated_c_register_fcm_token(::Protocol::C_RegisterFcmToken* c_register_fcm_token) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_body();
+  if (c_register_fcm_token) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::Protocol::C_RegisterFcmToken>::GetOwningArena(c_register_fcm_token);
+    if (message_arena != submessage_arena) {
+      c_register_fcm_token = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, c_register_fcm_token, submessage_arena);
+    }
+    set_has_c_register_fcm_token();
+    body_.c_register_fcm_token_ = c_register_fcm_token;
+  }
+  // @@protoc_insertion_point(field_set_allocated:Protocol.Envelope.c_register_fcm_token)
+}
+void Envelope::set_allocated_s_register_fcm_token(::Protocol::S_RegisterFcmToken* s_register_fcm_token) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_body();
+  if (s_register_fcm_token) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::Protocol::S_RegisterFcmToken>::GetOwningArena(s_register_fcm_token);
+    if (message_arena != submessage_arena) {
+      s_register_fcm_token = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, s_register_fcm_token, submessage_arena);
+    }
+    set_has_s_register_fcm_token();
+    body_.s_register_fcm_token_ = s_register_fcm_token;
+  }
+  // @@protoc_insertion_point(field_set_allocated:Protocol.Envelope.s_register_fcm_token)
 }
 void Envelope::set_allocated_c_chat(::Protocol::C_Chat* c_chat) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
@@ -3021,6 +3116,14 @@ Envelope::Envelope(const Envelope& from)
       _internal_mutable_s_edit_my_info()->::Protocol::S_EditMyInfo::MergeFrom(from._internal_s_edit_my_info());
       break;
     }
+    case kCRegisterFcmToken: {
+      _internal_mutable_c_register_fcm_token()->::Protocol::C_RegisterFcmToken::MergeFrom(from._internal_c_register_fcm_token());
+      break;
+    }
+    case kSRegisterFcmToken: {
+      _internal_mutable_s_register_fcm_token()->::Protocol::S_RegisterFcmToken::MergeFrom(from._internal_s_register_fcm_token());
+      break;
+    }
     case kCChat: {
       _internal_mutable_c_chat()->::Protocol::C_Chat::MergeFrom(from._internal_c_chat());
       break;
@@ -3297,6 +3400,18 @@ void Envelope::clear_body() {
     case kSEditMyInfo: {
       if (GetArenaForAllocation() == nullptr) {
         delete body_.s_edit_my_info_;
+      }
+      break;
+    }
+    case kCRegisterFcmToken: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete body_.c_register_fcm_token_;
+      }
+      break;
+    }
+    case kSRegisterFcmToken: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete body_.s_register_fcm_token_;
       }
       break;
     }
@@ -3670,6 +3785,20 @@ const char* Envelope::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
       case 33:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
           ptr = ctx->ParseMessage(_internal_mutable_s_edit_my_info(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .Protocol.C_RegisterFcmToken c_register_fcm_token = 34;
+      case 34:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+          ptr = ctx->ParseMessage(_internal_mutable_c_register_fcm_token(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .Protocol.S_RegisterFcmToken s_register_fcm_token = 35;
+      case 35:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+          ptr = ctx->ParseMessage(_internal_mutable_s_register_fcm_token(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -4095,6 +4224,22 @@ failure:
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
         33, _Internal::s_edit_my_info(this), target, stream);
+  }
+
+  // .Protocol.C_RegisterFcmToken c_register_fcm_token = 34;
+  if (_internal_has_c_register_fcm_token()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        34, _Internal::c_register_fcm_token(this), target, stream);
+  }
+
+  // .Protocol.S_RegisterFcmToken s_register_fcm_token = 35;
+  if (_internal_has_s_register_fcm_token()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        35, _Internal::s_register_fcm_token(this), target, stream);
   }
 
   // .Protocol.C_Chat c_chat = 40;
@@ -4527,6 +4672,20 @@ size_t Envelope::ByteSizeLong() const {
           *body_.s_edit_my_info_);
       break;
     }
+    // .Protocol.C_RegisterFcmToken c_register_fcm_token = 34;
+    case kCRegisterFcmToken: {
+      total_size += 2 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *body_.c_register_fcm_token_);
+      break;
+    }
+    // .Protocol.S_RegisterFcmToken s_register_fcm_token = 35;
+    case kSRegisterFcmToken: {
+      total_size += 2 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *body_.s_register_fcm_token_);
+      break;
+    }
     // .Protocol.C_Chat c_chat = 40;
     case kCChat: {
       total_size += 2 +
@@ -4879,6 +5038,14 @@ void Envelope::MergeFrom(const Envelope& from) {
     }
     case kSEditMyInfo: {
       _internal_mutable_s_edit_my_info()->::Protocol::S_EditMyInfo::MergeFrom(from._internal_s_edit_my_info());
+      break;
+    }
+    case kCRegisterFcmToken: {
+      _internal_mutable_c_register_fcm_token()->::Protocol::C_RegisterFcmToken::MergeFrom(from._internal_c_register_fcm_token());
+      break;
+    }
+    case kSRegisterFcmToken: {
+      _internal_mutable_s_register_fcm_token()->::Protocol::S_RegisterFcmToken::MergeFrom(from._internal_s_register_fcm_token());
       break;
     }
     case kCChat: {
@@ -9476,6 +9643,525 @@ void S_EditMyInfo::InternalSwap(S_EditMyInfo* other) {
 
 // ===================================================================
 
+class C_RegisterFcmToken::_Internal {
+ public:
+};
+
+C_RegisterFcmToken::C_RegisterFcmToken(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+  SharedCtor();
+  RegisterArenaDtor(arena);
+  // @@protoc_insertion_point(arena_constructor:Protocol.C_RegisterFcmToken)
+}
+C_RegisterFcmToken::C_RegisterFcmToken(const C_RegisterFcmToken& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  fcm_token_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_fcm_token().empty()) {
+    fcm_token_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_fcm_token(), 
+      GetArenaForAllocation());
+  }
+  platform_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_platform().empty()) {
+    platform_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_platform(), 
+      GetArenaForAllocation());
+  }
+  device_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_device_id().empty()) {
+    device_id_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_device_id(), 
+      GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:Protocol.C_RegisterFcmToken)
+}
+
+void C_RegisterFcmToken::SharedCtor() {
+fcm_token_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+platform_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+device_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+C_RegisterFcmToken::~C_RegisterFcmToken() {
+  // @@protoc_insertion_point(destructor:Protocol.C_RegisterFcmToken)
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+void C_RegisterFcmToken::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  fcm_token_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  platform_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  device_id_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void C_RegisterFcmToken::ArenaDtor(void* object) {
+  C_RegisterFcmToken* _this = reinterpret_cast< C_RegisterFcmToken* >(object);
+  (void)_this;
+}
+void C_RegisterFcmToken::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void C_RegisterFcmToken::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void C_RegisterFcmToken::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.C_RegisterFcmToken)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  fcm_token_.ClearToEmpty();
+  platform_.ClearToEmpty();
+  device_id_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* C_RegisterFcmToken::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string fcm_token = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          auto str = _internal_mutable_fcm_token();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.C_RegisterFcmToken.fcm_token"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string platform = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+          auto str = _internal_mutable_platform();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.C_RegisterFcmToken.platform"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string device_id = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+          auto str = _internal_mutable_device_id();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.C_RegisterFcmToken.device_id"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* C_RegisterFcmToken::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.C_RegisterFcmToken)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string fcm_token = 1;
+  if (!this->fcm_token().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_fcm_token().data(), static_cast<int>(this->_internal_fcm_token().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.C_RegisterFcmToken.fcm_token");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_fcm_token(), target);
+  }
+
+  // string platform = 2;
+  if (!this->platform().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_platform().data(), static_cast<int>(this->_internal_platform().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.C_RegisterFcmToken.platform");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_platform(), target);
+  }
+
+  // string device_id = 3;
+  if (!this->device_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_device_id().data(), static_cast<int>(this->_internal_device_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.C_RegisterFcmToken.device_id");
+    target = stream->WriteStringMaybeAliased(
+        3, this->_internal_device_id(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.C_RegisterFcmToken)
+  return target;
+}
+
+size_t C_RegisterFcmToken::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.C_RegisterFcmToken)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string fcm_token = 1;
+  if (!this->fcm_token().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_fcm_token());
+  }
+
+  // string platform = 2;
+  if (!this->platform().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_platform());
+  }
+
+  // string device_id = 3;
+  if (!this->device_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_device_id());
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void C_RegisterFcmToken::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:Protocol.C_RegisterFcmToken)
+  GOOGLE_DCHECK_NE(&from, this);
+  const C_RegisterFcmToken* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<C_RegisterFcmToken>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:Protocol.C_RegisterFcmToken)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:Protocol.C_RegisterFcmToken)
+    MergeFrom(*source);
+  }
+}
+
+void C_RegisterFcmToken::MergeFrom(const C_RegisterFcmToken& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:Protocol.C_RegisterFcmToken)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from.fcm_token().empty()) {
+    _internal_set_fcm_token(from._internal_fcm_token());
+  }
+  if (!from.platform().empty()) {
+    _internal_set_platform(from._internal_platform());
+  }
+  if (!from.device_id().empty()) {
+    _internal_set_device_id(from._internal_device_id());
+  }
+}
+
+void C_RegisterFcmToken::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:Protocol.C_RegisterFcmToken)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void C_RegisterFcmToken::CopyFrom(const C_RegisterFcmToken& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.C_RegisterFcmToken)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool C_RegisterFcmToken::IsInitialized() const {
+  return true;
+}
+
+void C_RegisterFcmToken::InternalSwap(C_RegisterFcmToken* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &fcm_token_, GetArenaForAllocation(),
+      &other->fcm_token_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &platform_, GetArenaForAllocation(),
+      &other->platform_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &device_id_, GetArenaForAllocation(),
+      &other->device_id_, other->GetArenaForAllocation()
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata C_RegisterFcmToken::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
+      file_level_metadata_protocol_2eproto[18]);
+}
+
+// ===================================================================
+
+class S_RegisterFcmToken::_Internal {
+ public:
+};
+
+S_RegisterFcmToken::S_RegisterFcmToken(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+  SharedCtor();
+  RegisterArenaDtor(arena);
+  // @@protoc_insertion_point(arena_constructor:Protocol.S_RegisterFcmToken)
+}
+S_RegisterFcmToken::S_RegisterFcmToken(const S_RegisterFcmToken& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  message_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_message().empty()) {
+    message_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_message(), 
+      GetArenaForAllocation());
+  }
+  success_ = from.success_;
+  // @@protoc_insertion_point(copy_constructor:Protocol.S_RegisterFcmToken)
+}
+
+void S_RegisterFcmToken::SharedCtor() {
+message_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+success_ = false;
+}
+
+S_RegisterFcmToken::~S_RegisterFcmToken() {
+  // @@protoc_insertion_point(destructor:Protocol.S_RegisterFcmToken)
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+void S_RegisterFcmToken::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  message_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void S_RegisterFcmToken::ArenaDtor(void* object) {
+  S_RegisterFcmToken* _this = reinterpret_cast< S_RegisterFcmToken* >(object);
+  (void)_this;
+}
+void S_RegisterFcmToken::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void S_RegisterFcmToken::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void S_RegisterFcmToken::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.S_RegisterFcmToken)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  message_.ClearToEmpty();
+  success_ = false;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* S_RegisterFcmToken::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // bool success = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
+          success_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string message = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+          auto str = _internal_mutable_message();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.S_RegisterFcmToken.message"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* S_RegisterFcmToken::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.S_RegisterFcmToken)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // bool success = 1;
+  if (this->success() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(1, this->_internal_success(), target);
+  }
+
+  // string message = 2;
+  if (!this->message().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_message().data(), static_cast<int>(this->_internal_message().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.S_RegisterFcmToken.message");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_message(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.S_RegisterFcmToken)
+  return target;
+}
+
+size_t S_RegisterFcmToken::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.S_RegisterFcmToken)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string message = 2;
+  if (!this->message().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_message());
+  }
+
+  // bool success = 1;
+  if (this->success() != 0) {
+    total_size += 1 + 1;
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void S_RegisterFcmToken::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:Protocol.S_RegisterFcmToken)
+  GOOGLE_DCHECK_NE(&from, this);
+  const S_RegisterFcmToken* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<S_RegisterFcmToken>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:Protocol.S_RegisterFcmToken)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:Protocol.S_RegisterFcmToken)
+    MergeFrom(*source);
+  }
+}
+
+void S_RegisterFcmToken::MergeFrom(const S_RegisterFcmToken& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:Protocol.S_RegisterFcmToken)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from.message().empty()) {
+    _internal_set_message(from._internal_message());
+  }
+  if (from.success() != 0) {
+    _internal_set_success(from._internal_success());
+  }
+}
+
+void S_RegisterFcmToken::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:Protocol.S_RegisterFcmToken)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void S_RegisterFcmToken::CopyFrom(const S_RegisterFcmToken& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.S_RegisterFcmToken)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool S_RegisterFcmToken::IsInitialized() const {
+  return true;
+}
+
+void S_RegisterFcmToken::InternalSwap(S_RegisterFcmToken* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &message_, GetArenaForAllocation(),
+      &other->message_, other->GetArenaForAllocation()
+  );
+  swap(success_, other->success_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata S_RegisterFcmToken::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
+      file_level_metadata_protocol_2eproto[19]);
+}
+
+// ===================================================================
+
 class Text::_Internal {
  public:
 };
@@ -9676,7 +10362,7 @@ void Text::InternalSwap(Text* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata Text::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[18]);
+      file_level_metadata_protocol_2eproto[20]);
 }
 
 // ===================================================================
@@ -9950,7 +10636,7 @@ void Image::InternalSwap(Image* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata Image::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[19]);
+      file_level_metadata_protocol_2eproto[21]);
 }
 
 // ===================================================================
@@ -10259,7 +10945,7 @@ void Video::InternalSwap(Video* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata Video::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[20]);
+      file_level_metadata_protocol_2eproto[22]);
 }
 
 // ===================================================================
@@ -10575,7 +11261,7 @@ void File::InternalSwap(File* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata File::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[21]);
+      file_level_metadata_protocol_2eproto[23]);
 }
 
 // ===================================================================
@@ -10849,7 +11535,7 @@ void SystemMsg::InternalSwap(SystemMsg* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SystemMsg::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[22]);
+      file_level_metadata_protocol_2eproto[24]);
 }
 
 // ===================================================================
@@ -11326,7 +12012,7 @@ void ChatPayload::InternalSwap(ChatPayload* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata ChatPayload::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[23]);
+      file_level_metadata_protocol_2eproto[25]);
 }
 
 // ===================================================================
@@ -11656,7 +12342,7 @@ void C_Chat::InternalSwap(C_Chat* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_Chat::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[24]);
+      file_level_metadata_protocol_2eproto[26]);
 }
 
 // ===================================================================
@@ -12093,7 +12779,7 @@ void S_Chat::InternalSwap(S_Chat* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_Chat::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[25]);
+      file_level_metadata_protocol_2eproto[27]);
 }
 
 // ===================================================================
@@ -12360,7 +13046,7 @@ void C_ReqHistory::InternalSwap(C_ReqHistory* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_ReqHistory::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[26]);
+      file_level_metadata_protocol_2eproto[28]);
 }
 
 // ===================================================================
@@ -12622,7 +13308,7 @@ void S_ReqHistory::InternalSwap(S_ReqHistory* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_ReqHistory::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[27]);
+      file_level_metadata_protocol_2eproto[29]);
 }
 
 // ===================================================================
@@ -12995,7 +13681,7 @@ void C_UploadFile::InternalSwap(C_UploadFile* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_UploadFile::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[28]);
+      file_level_metadata_protocol_2eproto[30]);
 }
 
 // ===================================================================
@@ -13512,7 +14198,7 @@ void S_UploadFile::InternalSwap(S_UploadFile* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_UploadFile::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[29]);
+      file_level_metadata_protocol_2eproto[31]);
 }
 
 // ===================================================================
@@ -13744,7 +14430,7 @@ void C_Ack::InternalSwap(C_Ack* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_Ack::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[30]);
+      file_level_metadata_protocol_2eproto[32]);
 }
 
 // ===================================================================
@@ -13934,7 +14620,7 @@ void C_FetchOffline::InternalSwap(C_FetchOffline* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_FetchOffline::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[31]);
+      file_level_metadata_protocol_2eproto[33]);
 }
 
 // ===================================================================
@@ -14198,7 +14884,7 @@ void S_MessageBatch_ConversationBatch::InternalSwap(S_MessageBatch_ConversationB
 ::PROTOBUF_NAMESPACE_ID::Metadata S_MessageBatch_ConversationBatch::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[32]);
+      file_level_metadata_protocol_2eproto[34]);
 }
 
 // ===================================================================
@@ -14393,7 +15079,7 @@ void S_MessageBatch::InternalSwap(S_MessageBatch* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_MessageBatch::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[33]);
+      file_level_metadata_protocol_2eproto[35]);
 }
 
 // ===================================================================
@@ -14656,7 +15342,7 @@ void FriendRequest::InternalSwap(FriendRequest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata FriendRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[34]);
+      file_level_metadata_protocol_2eproto[36]);
 }
 
 // ===================================================================
@@ -14861,7 +15547,7 @@ void C_SearchUser::InternalSwap(C_SearchUser* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_SearchUser::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[35]);
+      file_level_metadata_protocol_2eproto[37]);
 }
 
 // ===================================================================
@@ -15143,7 +15829,7 @@ void S_SearchUser::InternalSwap(S_SearchUser* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_SearchUser::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[36]);
+      file_level_metadata_protocol_2eproto[38]);
 }
 
 // ===================================================================
@@ -15376,7 +16062,7 @@ void C_FriendAction::InternalSwap(C_FriendAction* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_FriendAction::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[37]);
+      file_level_metadata_protocol_2eproto[39]);
 }
 
 // ===================================================================
@@ -15654,7 +16340,7 @@ void S_FriendAction::InternalSwap(S_FriendAction* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_FriendAction::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[38]);
+      file_level_metadata_protocol_2eproto[40]);
 }
 
 // ===================================================================
@@ -15812,7 +16498,7 @@ void C_FetchFriendData::InternalSwap(C_FetchFriendData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_FetchFriendData::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[39]);
+      file_level_metadata_protocol_2eproto[41]);
 }
 
 // ===================================================================
@@ -16071,7 +16757,7 @@ void S_FetchFriendData::InternalSwap(S_FetchFriendData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_FetchFriendData::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[40]);
+      file_level_metadata_protocol_2eproto[42]);
 }
 
 // ===================================================================
@@ -16310,7 +16996,7 @@ void S_FriendPush::InternalSwap(S_FriendPush* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_FriendPush::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[41]);
+      file_level_metadata_protocol_2eproto[43]);
 }
 
 // ===================================================================
@@ -16576,7 +17262,7 @@ void GroupMemberInfo::InternalSwap(GroupMemberInfo* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata GroupMemberInfo::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[42]);
+      file_level_metadata_protocol_2eproto[44]);
 }
 
 // ===================================================================
@@ -17034,7 +17720,7 @@ void GroupInfo::InternalSwap(GroupInfo* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata GroupInfo::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[43]);
+      file_level_metadata_protocol_2eproto[45]);
 }
 
 // ===================================================================
@@ -17239,7 +17925,7 @@ void C_CreateGroup::InternalSwap(C_CreateGroup* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_CreateGroup::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[44]);
+      file_level_metadata_protocol_2eproto[46]);
 }
 
 // ===================================================================
@@ -17475,7 +18161,7 @@ void S_CreateGroup::InternalSwap(S_CreateGroup* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_CreateGroup::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[45]);
+      file_level_metadata_protocol_2eproto[47]);
 }
 
 // ===================================================================
@@ -17633,7 +18319,7 @@ void C_GroupList::InternalSwap(C_GroupList* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_GroupList::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[46]);
+      file_level_metadata_protocol_2eproto[48]);
 }
 
 // ===================================================================
@@ -17828,7 +18514,7 @@ void S_GroupList::InternalSwap(S_GroupList* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_GroupList::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[47]);
+      file_level_metadata_protocol_2eproto[49]);
 }
 
 // ===================================================================
@@ -18033,7 +18719,7 @@ void C_GroupInfo::InternalSwap(C_GroupInfo* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_GroupInfo::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[48]);
+      file_level_metadata_protocol_2eproto[50]);
 }
 
 // ===================================================================
@@ -18272,7 +18958,7 @@ void S_GroupInfo::InternalSwap(S_GroupInfo* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_GroupInfo::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[49]);
+      file_level_metadata_protocol_2eproto[51]);
 }
 
 // ===================================================================
@@ -18514,7 +19200,7 @@ void C_InviteFriend::InternalSwap(C_InviteFriend* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_InviteFriend::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[50]);
+      file_level_metadata_protocol_2eproto[52]);
 }
 
 // ===================================================================
@@ -18702,7 +19388,7 @@ void S_InviteFriend::InternalSwap(S_InviteFriend* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_InviteFriend::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[51]);
+      file_level_metadata_protocol_2eproto[53]);
 }
 
 // ===================================================================
@@ -18907,7 +19593,7 @@ void C_JoinGroup::InternalSwap(C_JoinGroup* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_JoinGroup::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[52]);
+      file_level_metadata_protocol_2eproto[54]);
 }
 
 // ===================================================================
@@ -19143,7 +19829,7 @@ void S_JoinGroup::InternalSwap(S_JoinGroup* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_JoinGroup::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[53]);
+      file_level_metadata_protocol_2eproto[55]);
 }
 
 // ===================================================================
@@ -19348,7 +20034,7 @@ void C_GroupMemberList::InternalSwap(C_GroupMemberList* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_GroupMemberList::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[54]);
+      file_level_metadata_protocol_2eproto[56]);
 }
 
 // ===================================================================
@@ -19585,7 +20271,7 @@ void S_GroupMemberList::InternalSwap(S_GroupMemberList* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_GroupMemberList::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[55]);
+      file_level_metadata_protocol_2eproto[57]);
 }
 
 // ===================================================================
@@ -19790,7 +20476,7 @@ void C_LeaveGroup::InternalSwap(C_LeaveGroup* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_LeaveGroup::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[56]);
+      file_level_metadata_protocol_2eproto[58]);
 }
 
 // ===================================================================
@@ -19978,7 +20664,7 @@ void S_LeaveGroup::InternalSwap(S_LeaveGroup* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_LeaveGroup::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[57]);
+      file_level_metadata_protocol_2eproto[59]);
 }
 
 // ===================================================================
@@ -20309,7 +20995,7 @@ void C_EditGroup::InternalSwap(C_EditGroup* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_EditGroup::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[58]);
+      file_level_metadata_protocol_2eproto[60]);
 }
 
 // ===================================================================
@@ -20545,7 +21231,7 @@ void S_EditGroup::InternalSwap(S_EditGroup* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_EditGroup::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[59]);
+      file_level_metadata_protocol_2eproto[61]);
 }
 
 // ===================================================================
@@ -20813,7 +21499,7 @@ void S_Error::InternalSwap(S_Error* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_Error::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[60]);
+      file_level_metadata_protocol_2eproto[62]);
 }
 
 // ===================================================================
@@ -20971,7 +21657,7 @@ void C_Heartbeat::InternalSwap(C_Heartbeat* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_Heartbeat::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[61]);
+      file_level_metadata_protocol_2eproto[63]);
 }
 
 // ===================================================================
@@ -21129,7 +21815,7 @@ void S_Heartbeat::InternalSwap(S_Heartbeat* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_Heartbeat::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[62]);
+      file_level_metadata_protocol_2eproto[64]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -21188,6 +21874,12 @@ template<> PROTOBUF_NOINLINE ::Protocol::C_EditMyInfo* Arena::CreateMaybeMessage
 }
 template<> PROTOBUF_NOINLINE ::Protocol::S_EditMyInfo* Arena::CreateMaybeMessage< ::Protocol::S_EditMyInfo >(Arena* arena) {
   return Arena::CreateMessageInternal< ::Protocol::S_EditMyInfo >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::C_RegisterFcmToken* Arena::CreateMaybeMessage< ::Protocol::C_RegisterFcmToken >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::C_RegisterFcmToken >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::S_RegisterFcmToken* Arena::CreateMaybeMessage< ::Protocol::S_RegisterFcmToken >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::S_RegisterFcmToken >(arena);
 }
 template<> PROTOBUF_NOINLINE ::Protocol::Text* Arena::CreateMaybeMessage< ::Protocol::Text >(Arena* arena) {
   return Arena::CreateMessageInternal< ::Protocol::Text >(arena);

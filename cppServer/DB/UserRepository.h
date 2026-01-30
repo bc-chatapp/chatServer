@@ -22,6 +22,9 @@ struct cUserInfo {
     int64 lastSeen;
 };
 
+
+
+
 class UserRepository {
 public:
 
@@ -39,6 +42,8 @@ public:
 
     static bool GetUserNameWithId(const string& userId, string& OUT userName);
     static bool UpdateAuthToken(const string& userId, const string& authToken);
+    static bool UpdateMyInfo(const string& userId, const Protocol::C_EditMyInfo& pkt);
+
     static bool UpdateLastSeen(const string& userId);
     static bool GetUserIdByToken(const string& authToken, string& userId);
 

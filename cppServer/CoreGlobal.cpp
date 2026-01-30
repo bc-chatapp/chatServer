@@ -10,7 +10,9 @@
 
 #include "Service/AuthService.h"
 #include "Service/FileService.h"
+#include "Service/NotificationService.h"
 #include "Cloud/CloudStorageGCS.h"
+#include "Cloud/FcmClient.h"
 
 #include <chrono>
 #include <fstream>
@@ -30,6 +32,7 @@ VerificationManager* GVerificationManager = nullptr;
 
 AuthService* GAuthService = nullptr;
 FileService* GFileService = nullptr;
+NotificationService* GNotificationService = nullptr;
 
 CoreGlobal GCoreGlobal;
 
@@ -54,24 +57,24 @@ static bool LoadGCPConfig(string& projectId, string& bucketName, string& credent
             cerr << "[CoreGlobal] Failed to open: " << adminFile << endl;
             return false;
         }
-        
+
         if (!getline(file, projectId) || !getline(file, bucketName)) {
             cerr << "[CoreGlobal] file is lacking" << endl;
             return false;
         }
         file.close();
-        
+
         // 공백 제거
         projectId.erase(0, projectId.find_first_not_of(" \t\r\n"));
         projectId.erase(projectId.find_last_not_of(" \t\r\n") + 1);
         bucketName.erase(0, bucketName.find_first_not_of(" \t\r\n"));
         bucketName.erase(bucketName.find_last_not_of(" \t\r\n") + 1);
-        
+
         if (projectId.empty() || bucketName.empty()) {
             cerr << "[CoreGlobal] Project ID or bucket name is empty" << endl;
             return false;
         }
-        
+
         // config 폴더에서 .json 파일 찾기
         ::filesystem::path keyFile = configDir / "gcp_key.json";
 
@@ -82,12 +85,12 @@ static bool LoadGCPConfig(string& projectId, string& bucketName, string& credent
 
         credentialsPath = keyFile.string();
 
-        
+
         cout << "[CoreGlobal] GCP Config loaded:" << endl;
         cout << "  - Project ID: " << projectId << endl;
         cout << "  - Bucket:     " << bucketName << endl;
         cout << "  - Key File:   " << credentialsPath << endl;
-        
+
         return true;
     }
     catch (const exception& e) {
@@ -95,6 +98,7 @@ static bool LoadGCPConfig(string& projectId, string& bucketName, string& credent
         return false;
     }
 }
+
 
 
 
@@ -108,7 +112,8 @@ CoreGlobal::CoreGlobal()
 
 
     _authService = make_unique<AuthService>(*_userManager);
-    
+    _notificationService = make_unique<NotificationService>(*_userManager);
+
     // CloudStorage 초기화 (파일에서 설정 읽기)
     string projectId, bucketName, credentialsPath;
     if (!LoadGCPConfig(projectId, bucketName, credentialsPath)) {
@@ -118,12 +123,19 @@ CoreGlobal::CoreGlobal()
     }
     else {
         _cloudStorage = make_unique<CloudStorageGCS>(projectId, bucketName, credentialsPath);
-        
+
         if (!_cloudStorage->Initialize()) {
             cerr << "[CoreGlobal] CloudStorage Initialize Failed" << endl;
         }
-        
+
         _fileService = make_unique<FileService>(_cloudStorage.get());
+
+        // FCM Client 초기화 (같은 credentials 사용)
+        _fcmClient = make_unique<FcmClient>(projectId, credentialsPath);
+        if (!_fcmClient->Initialize()) {
+            cerr << "[CoreGlobal] FcmClient Initialize Failed" << endl;
+            _fcmClient = nullptr;
+        }
     }
 
     GUserManager = _userManager.get();
@@ -132,13 +144,16 @@ CoreGlobal::CoreGlobal()
     GGroupService = _groupService.get();
     GVerificationManager = _verificationManager.get();
 
-
     GAuthService = _authService.get();
     GFileService = _fileService.get();
+    GNotificationService = _notificationService.get();
+    GFcmClient = _fcmClient.get();
 }
 
 CoreGlobal::~CoreGlobal()
 {
+    GFcmClient = nullptr;
+    GNotificationService = nullptr;
     GFileService = nullptr;
     GAuthService = nullptr;
 
@@ -148,6 +163,8 @@ CoreGlobal::~CoreGlobal()
     GChatService = nullptr;
     GUserManager = nullptr;
 
+    _fcmClient.reset();
+    _notificationService.reset();
     _fileService.reset();
     _cloudStorage.reset();
     _authService.reset();
@@ -162,6 +179,8 @@ CoreGlobal::~CoreGlobal()
 
 void CoreGlobal::Reset()
 {
+    _fcmClient.reset();
+    _notificationService.reset();
     _fileService.reset();
     _cloudStorage.reset();
     _authService.reset();
@@ -172,6 +191,8 @@ void CoreGlobal::Reset()
     _chatService.reset();
     _userManager.reset();
 
+    GFcmClient = nullptr;
+    GNotificationService = nullptr;
     GFileService = nullptr;
     GAuthService = nullptr;
     GFriendService = nullptr;
@@ -188,7 +209,8 @@ void CoreGlobal::Reset()
     _verificationManager = make_unique<VerificationManager>(*_userManager);
 
     _authService = make_unique<AuthService>(*_userManager);
-    
+    _notificationService = make_unique<NotificationService>(*_userManager);
+
     // CloudStorage 초기화 (파일에서 설정 읽기)
     string projectId, bucketName, credentialsPath;
     if (!LoadGCPConfig(projectId, bucketName, credentialsPath)) {
@@ -198,12 +220,19 @@ void CoreGlobal::Reset()
     }
     else {
         _cloudStorage = make_unique<CloudStorageGCS>(projectId, bucketName, credentialsPath);
-        
+
         if (!_cloudStorage->Initialize()) {
             cerr << "[CoreGlobal] CloudStorage Initialize Failed" << endl;
         }
-       
+
         _fileService = make_unique<FileService>(_cloudStorage.get());
+
+        // FCM Client 초기화 (같은 credentials 사용)
+        _fcmClient = make_unique<FcmClient>(projectId, credentialsPath);
+        if (!_fcmClient->Initialize()) {
+            cerr << "[CoreGlobal] FcmClient Initialize Failed" << endl;
+            _fcmClient = nullptr;
+        }
     }
 
     GUserManager = _userManager.get();
@@ -214,6 +243,8 @@ void CoreGlobal::Reset()
 
     GAuthService = _authService.get();
     GFileService = _fileService.get();
+    GNotificationService = _notificationService.get();
+    GFcmClient = _fcmClient.get();
 }
 
 

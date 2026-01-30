@@ -12,7 +12,6 @@ FLUSH PRIVILEGES;
    -- friends 테이블 확인
    SELECT * FROM friends;
    
-   
    SELECT * FROM conversations;
    SELECT * FROM conversation_participants;
    SELECT * FROM messages;

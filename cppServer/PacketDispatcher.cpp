@@ -8,12 +8,14 @@
 #include "Service/AuthService.h"
 #include "Service/FileService.h"
 #include "Service/GroupService.h"
+#include "Service/NotificationService.h"
 
 
 #include "DB/UserRepository.h"
 #include "DB/FriendRepository.h"
 #include "DB/MessageRepository.h"
 #include "DB/GroupRepository.h"
+#include "DB/FcmTokenRepository.h"
 
 
 using namespace Protocol;
@@ -91,6 +93,10 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 		break;
 	case Protocol::Envelope::kCEditMyInfo:
 		Dispatch_C_EditMyInfo(session, envelope.request_id(), envelope.c_edit_my_info());
+		break;
+
+	case Protocol::Envelope::kCRegisterFcmToken:
+		Dispatch_C_RegisterFcmToken(session, envelope.request_id(), envelope.c_register_fcm_token());
 		break;
 
 		/* 채팅 */
@@ -434,6 +440,8 @@ bool PacketDispatcher::Dispatch_C_FetchMyInfo(sessionPtr& session, uint64 reqId,
 }
 
 
+
+
 bool PacketDispatcher::Dispatch_C_EditMyInfo(sessionPtr& session, uint64 reqId, const Protocol::C_EditMyInfo& pkt)
 {
 	auto serverSession = static_pointer_cast<ServerSession>(session);
@@ -444,7 +452,7 @@ bool PacketDispatcher::Dispatch_C_EditMyInfo(sessionPtr& session, uint64 reqId, 
 	}
 
 	// pkt(C_EditMyInfo)에 담긴 이름, 상태메시지, 폰번호 등을 업데이트
-	//return GUserManager->EditMyInfo(session, reqId, userId, pkt);
+	return GAuthService->HandleEditMyInfo(session, reqId, pkt);
 }
 
 
@@ -695,5 +703,22 @@ bool PacketDispatcher::Dispatch_C_EditGroup(sessionPtr& session, uint64 reqId, c
 	}
 
 	return GGroupService->UpdateGroupInfo(session, reqId, const_cast<Protocol::C_EditGroup&>(pkt));
+}
+
+
+/*---------------------------------
+		FCM Token Handler
+-----------------------------------*/
+
+bool PacketDispatcher::Dispatch_C_RegisterFcmToken(sessionPtr& session, uint64 reqId, const Protocol::C_RegisterFcmToken& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED);
+		return false;
+	}
+
+	return GNotificationService->RegisterFcmToken(session, reqId, pkt);
 }
 

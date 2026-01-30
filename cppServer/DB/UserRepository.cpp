@@ -228,6 +228,63 @@ bool UserRepository::UpdateAuthToken(const string& userId, const string& authTok
 
 
 
+
+bool UserRepository::UpdateMyInfo(const string& userId, const Protocol::C_EditMyInfo& pkt)
+{
+    try {
+        auto& db = DBManager::GetInstance();
+        auto schema = db.GetSchema();
+        auto users = schema.getTable("users");
+
+        // 업데이트 쿼리 준비
+        auto query = users.update();
+
+        bool hasChanges = false;
+
+        // 2. set() 메서드들을 먼저 호출합니다. (순서 중요!)
+        if (!pkt.name().empty()) {
+            query.set("name", pkt.name());
+            hasChanges = true;
+        }
+        if (!pkt.status_message().empty()) {
+            query.set("status_message", pkt.status_message());
+            hasChanges = true;
+        }
+        if (!pkt.profile_image_url().empty()) {
+            query.set("profile_image_url", pkt.profile_image_url());
+            hasChanges = true;
+        }
+        if (!pkt.background_image_url().empty()) {
+            query.set("background_image_url", pkt.background_image_url());
+            hasChanges = true;
+        }
+        if (!pkt.phone().empty()) {
+            query.set("phone", pkt.phone());
+            hasChanges = true;
+        }
+
+        if (!hasChanges) return true;
+
+
+        query.where("user_id = :uid")
+            .bind("uid", userId)
+            .execute();
+
+
+        cout << "[UserRepository] 사용자 정보 업데이트 성공: " << userId << endl;
+        return true;
+
+    }
+    catch (const mysqlx::Error& err) {
+        cerr << "[UserRepository] 정보 업데이트 실패: " << err.what() << endl;
+        return false;
+    }
+}
+
+
+
+
+
 bool UserRepository::UpdateLastSeen(const string& userId) {
     try {
         auto& db = DBManager::GetInstance();

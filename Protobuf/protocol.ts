@@ -328,8 +328,10 @@ export interface Envelope {
   cFetchMyInfo?: CFetchMyInfo | undefined;
   sFetchMyInfo?: SFetchMyInfo | undefined;
   cEditMyInfo?: CEditMyInfo | undefined;
-  sEditMyInfo?:
-    | SEditMyInfo
+  sEditMyInfo?: SEditMyInfo | undefined;
+  cRegisterFcmToken?: CRegisterFcmToken | undefined;
+  sRegisterFcmToken?:
+    | SRegisterFcmToken
     | undefined;
   /** ─── CHAT / DATA / FILE (40 ~ 59) ─── */
   cChat?: CChat | undefined;
@@ -475,6 +477,20 @@ export interface SEditMyInfo {
   success: boolean;
   message: string;
   updatedInfo: UserInfo | undefined;
+}
+
+export interface CRegisterFcmToken {
+  /** FCM 디바이스 토큰 */
+  fcmToken: string;
+  /** "android" 또는 "ios" */
+  platform: string;
+  /** 디바이스 고유 ID (선택) */
+  deviceId: string;
+}
+
+export interface SRegisterFcmToken {
+  success: boolean;
+  message: string;
 }
 
 export interface Text {
@@ -927,6 +943,8 @@ function createBaseEnvelope(): Envelope {
     sFetchMyInfo: undefined,
     cEditMyInfo: undefined,
     sEditMyInfo: undefined,
+    cRegisterFcmToken: undefined,
+    sRegisterFcmToken: undefined,
     cChat: undefined,
     sChat: undefined,
     cAck: undefined,
@@ -1023,6 +1041,12 @@ export const Envelope = {
     }
     if (message.sEditMyInfo !== undefined) {
       SEditMyInfo.encode(message.sEditMyInfo, writer.uint32(266).fork()).ldelim();
+    }
+    if (message.cRegisterFcmToken !== undefined) {
+      CRegisterFcmToken.encode(message.cRegisterFcmToken, writer.uint32(274).fork()).ldelim();
+    }
+    if (message.sRegisterFcmToken !== undefined) {
+      SRegisterFcmToken.encode(message.sRegisterFcmToken, writer.uint32(282).fork()).ldelim();
     }
     if (message.cChat !== undefined) {
       CChat.encode(message.cChat, writer.uint32(322).fork()).ldelim();
@@ -1271,6 +1295,20 @@ export const Envelope = {
           }
 
           message.sEditMyInfo = SEditMyInfo.decode(reader, reader.uint32());
+          continue;
+        case 34:
+          if (tag !== 274) {
+            break;
+          }
+
+          message.cRegisterFcmToken = CRegisterFcmToken.decode(reader, reader.uint32());
+          continue;
+        case 35:
+          if (tag !== 282) {
+            break;
+          }
+
+          message.sRegisterFcmToken = SRegisterFcmToken.decode(reader, reader.uint32());
           continue;
         case 40:
           if (tag !== 322) {
@@ -1551,6 +1589,12 @@ export const Envelope = {
       sFetchMyInfo: isSet(object.sFetchMyInfo) ? SFetchMyInfo.fromJSON(object.sFetchMyInfo) : undefined,
       cEditMyInfo: isSet(object.cEditMyInfo) ? CEditMyInfo.fromJSON(object.cEditMyInfo) : undefined,
       sEditMyInfo: isSet(object.sEditMyInfo) ? SEditMyInfo.fromJSON(object.sEditMyInfo) : undefined,
+      cRegisterFcmToken: isSet(object.cRegisterFcmToken)
+        ? CRegisterFcmToken.fromJSON(object.cRegisterFcmToken)
+        : undefined,
+      sRegisterFcmToken: isSet(object.sRegisterFcmToken)
+        ? SRegisterFcmToken.fromJSON(object.sRegisterFcmToken)
+        : undefined,
       cChat: isSet(object.cChat) ? CChat.fromJSON(object.cChat) : undefined,
       sChat: isSet(object.sChat) ? SChat.fromJSON(object.sChat) : undefined,
       cAck: isSet(object.cAck) ? CAck.fromJSON(object.cAck) : undefined,
@@ -1647,6 +1691,12 @@ export const Envelope = {
     }
     if (message.sEditMyInfo !== undefined) {
       obj.sEditMyInfo = SEditMyInfo.toJSON(message.sEditMyInfo);
+    }
+    if (message.cRegisterFcmToken !== undefined) {
+      obj.cRegisterFcmToken = CRegisterFcmToken.toJSON(message.cRegisterFcmToken);
+    }
+    if (message.sRegisterFcmToken !== undefined) {
+      obj.sRegisterFcmToken = SRegisterFcmToken.toJSON(message.sRegisterFcmToken);
     }
     if (message.cChat !== undefined) {
       obj.cChat = CChat.toJSON(message.cChat);
@@ -1811,6 +1861,12 @@ export const Envelope = {
       : undefined;
     message.sEditMyInfo = (object.sEditMyInfo !== undefined && object.sEditMyInfo !== null)
       ? SEditMyInfo.fromPartial(object.sEditMyInfo)
+      : undefined;
+    message.cRegisterFcmToken = (object.cRegisterFcmToken !== undefined && object.cRegisterFcmToken !== null)
+      ? CRegisterFcmToken.fromPartial(object.cRegisterFcmToken)
+      : undefined;
+    message.sRegisterFcmToken = (object.sRegisterFcmToken !== undefined && object.sRegisterFcmToken !== null)
+      ? SRegisterFcmToken.fromPartial(object.sRegisterFcmToken)
       : undefined;
     message.cChat = (object.cChat !== undefined && object.cChat !== null) ? CChat.fromPartial(object.cChat) : undefined;
     message.sChat = (object.sChat !== undefined && object.sChat !== null) ? SChat.fromPartial(object.sChat) : undefined;
@@ -3308,6 +3364,169 @@ export const SEditMyInfo = {
     message.updatedInfo = (object.updatedInfo !== undefined && object.updatedInfo !== null)
       ? UserInfo.fromPartial(object.updatedInfo)
       : undefined;
+    return message;
+  },
+};
+
+function createBaseCRegisterFcmToken(): CRegisterFcmToken {
+  return { fcmToken: "", platform: "", deviceId: "" };
+}
+
+export const CRegisterFcmToken = {
+  encode(message: CRegisterFcmToken, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.fcmToken !== "") {
+      writer.uint32(10).string(message.fcmToken);
+    }
+    if (message.platform !== "") {
+      writer.uint32(18).string(message.platform);
+    }
+    if (message.deviceId !== "") {
+      writer.uint32(26).string(message.deviceId);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CRegisterFcmToken {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCRegisterFcmToken();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.fcmToken = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.platform = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.deviceId = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CRegisterFcmToken {
+    return {
+      fcmToken: isSet(object.fcmToken) ? globalThis.String(object.fcmToken) : "",
+      platform: isSet(object.platform) ? globalThis.String(object.platform) : "",
+      deviceId: isSet(object.deviceId) ? globalThis.String(object.deviceId) : "",
+    };
+  },
+
+  toJSON(message: CRegisterFcmToken): unknown {
+    const obj: any = {};
+    if (message.fcmToken !== "") {
+      obj.fcmToken = message.fcmToken;
+    }
+    if (message.platform !== "") {
+      obj.platform = message.platform;
+    }
+    if (message.deviceId !== "") {
+      obj.deviceId = message.deviceId;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CRegisterFcmToken>, I>>(base?: I): CRegisterFcmToken {
+    return CRegisterFcmToken.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CRegisterFcmToken>, I>>(object: I): CRegisterFcmToken {
+    const message = createBaseCRegisterFcmToken();
+    message.fcmToken = object.fcmToken ?? "";
+    message.platform = object.platform ?? "";
+    message.deviceId = object.deviceId ?? "";
+    return message;
+  },
+};
+
+function createBaseSRegisterFcmToken(): SRegisterFcmToken {
+  return { success: false, message: "" };
+}
+
+export const SRegisterFcmToken = {
+  encode(message: SRegisterFcmToken, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.success !== false) {
+      writer.uint32(8).bool(message.success);
+    }
+    if (message.message !== "") {
+      writer.uint32(18).string(message.message);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SRegisterFcmToken {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSRegisterFcmToken();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.success = reader.bool();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.message = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SRegisterFcmToken {
+    return {
+      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
+      message: isSet(object.message) ? globalThis.String(object.message) : "",
+    };
+  },
+
+  toJSON(message: SRegisterFcmToken): unknown {
+    const obj: any = {};
+    if (message.success !== false) {
+      obj.success = message.success;
+    }
+    if (message.message !== "") {
+      obj.message = message.message;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SRegisterFcmToken>, I>>(base?: I): SRegisterFcmToken {
+    return SRegisterFcmToken.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SRegisterFcmToken>, I>>(object: I): SRegisterFcmToken {
+    const message = createBaseSRegisterFcmToken();
+    message.success = object.success ?? false;
+    message.message = object.message ?? "";
     return message;
   },
 };

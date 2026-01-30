@@ -25,11 +25,17 @@ message Envelope {
       C_Login                 c_login                   = 20;
       S_Login                 s_login                   = 21;
 
+
+
       // ─── MY INFO / SETTINGS (30 ~ 39) ───
       C_FetchMyInfo           c_fetch_my_info           = 30;
       S_FetchMyInfo           s_fetch_my_info           = 31;
       C_EditMyInfo            c_edit_my_info            = 32;
       S_EditMyInfo            s_edit_my_info            = 33;
+      C_RegisterFcmToken      c_register_fcm_token      = 34;
+      S_RegisterFcmToken      s_register_fcm_token      = 35;
+
+
 
       // ─── CHAT / DATA / FILE (40 ~ 59) ───
       C_Chat                  c_chat                    = 40;
@@ -42,6 +48,7 @@ message Envelope {
       C_UploadFile            c_upload_file             = 47; 
       S_UploadFile            s_upload_file             = 48;
 
+
       // ─── FRIENDS (60 ~ 79) ───
       C_SearchUser            c_search_user             = 60;
       S_SearchUser            s_search_user             = 61;
@@ -50,6 +57,7 @@ message Envelope {
       C_FetchFriendData       c_fetch_friend_data       = 64;
       S_FetchFriendData       s_fetch_friend_data       = 65;
       S_FriendPush            s_friend_push             = 66;
+
 
       // ─── GROUPS (80 ~ 99) ───
       C_CreateGroup           c_create_group            = 80;
@@ -165,14 +173,27 @@ message C_EditMyInfo {
     string background_image_url = 4;
     string phone                = 5;
 }
-message S_EditMyInfo { 
-    bool success = 1; 
-    string message = 2; 
-    UserInfo updated_info = 3; 
+message S_EditMyInfo {
+    bool success = 1;
+    string message = 2;
+    UserInfo updated_info = 3;
 }
 
 
+/*-----------------------------
+      FCM 푸시 알림 토큰 등록
+-----------------------------*/
 
+message C_RegisterFcmToken {
+    string fcm_token = 1;       // FCM 디바이스 토큰
+    string platform = 2;        // "android" 또는 "ios"
+    string device_id = 3;       // 디바이스 고유 ID (선택)
+}
+
+message S_RegisterFcmToken {
+    bool success = 1;
+    string message = 2;
+}
 
 
 /*-------------

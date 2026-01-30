@@ -85,6 +85,9 @@ protected:
     static bool Dispatch_C_GroupInfo(sessionPtr& session, uint64 reqId, const Protocol::C_GroupInfo& pkt);
     static bool Dispatch_C_EditGroup(sessionPtr& session, uint64 reqId, const Protocol::C_EditGroup& pkt);
 
+    // FCM Token Handler
+    static bool Dispatch_C_RegisterFcmToken(sessionPtr& session, uint64 reqId, const Protocol::C_RegisterFcmToken& pkt);
+
 private:
 
     enum class ConvType { Error = 0, Direct = 1, Group = 2 };
