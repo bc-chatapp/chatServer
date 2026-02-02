@@ -16,6 +16,7 @@ FLUSH PRIVILEGES;
    SELECT * FROM conversation_participants;
    SELECT * FROM messages;
    SELECT * FROM read_status;
+   SELECT * FROM fcm_tokens;
    
 	SELECT * FROM `groups`;
 	SELECT * FROM `group_members`;

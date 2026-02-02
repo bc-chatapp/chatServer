@@ -330,8 +330,12 @@ export interface Envelope {
   cEditMyInfo?: CEditMyInfo | undefined;
   sEditMyInfo?: SEditMyInfo | undefined;
   cRegisterFcmToken?: CRegisterFcmToken | undefined;
-  sRegisterFcmToken?:
-    | SRegisterFcmToken
+  sRegisterFcmToken?: SRegisterFcmToken | undefined;
+  cChangeEmail?: CChangeEmail | undefined;
+  sChangeEmail?: SChangeEmail | undefined;
+  cChangePassword?: CChangePassword | undefined;
+  sChangePassword?:
+    | SChangePassword
     | undefined;
   /** ─── CHAT / DATA / FILE (40 ~ 59) ─── */
   cChat?: CChat | undefined;
@@ -371,8 +375,10 @@ export interface Envelope {
   cGroupInfo?: CGroupInfo | undefined;
   sGroupInfo?: SGroupInfo | undefined;
   cEditGroup?: CEditGroup | undefined;
-  sEditGroup?:
-    | SEditGroup
+  sEditGroup?: SEditGroup | undefined;
+  cWithdraw?: CWithdraw | undefined;
+  sWithdraw?:
+    | SWithdraw
     | undefined;
   /** ─── SYSTEM (100 ~ ) ─── */
   sError?: SError | undefined;
@@ -493,6 +499,30 @@ export interface SRegisterFcmToken {
   message: string;
 }
 
+/** 이메일 변경 (인증 완료 후 호출) */
+export interface CChangeEmail {
+  /** 인증 완료된 새 이메일 */
+  newEmail: string;
+}
+
+export interface SChangeEmail {
+  success: boolean;
+  message: string;
+  /** 변경된 사용자 정보 */
+  updatedInfo: UserInfo | undefined;
+}
+
+/** 비밀번호 변경 */
+export interface CChangePassword {
+  currentPassword: string;
+  newPassword: string;
+}
+
+export interface SChangePassword {
+  success: boolean;
+  message: string;
+}
+
 export interface Text {
   message: string;
 }
@@ -589,7 +619,10 @@ export enum CUploadFile_UploadType {
   GROUP_CHAT = 1,
   /** PROFILE_IMG - 프로필 이미지 */
   PROFILE_IMG = 2,
+  /** GROUP_PROFILE_IMG - 그룹 프로필 이미지 */
   GROUP_PROFILE_IMG = 3,
+  /** BACKGROUND_IMG - 배경 이미지 */
+  BACKGROUND_IMG = 4,
   UNRECOGNIZED = -1,
 }
 
@@ -607,6 +640,9 @@ export function cUploadFile_UploadTypeFromJSON(object: any): CUploadFile_UploadT
     case 3:
     case "GROUP_PROFILE_IMG":
       return CUploadFile_UploadType.GROUP_PROFILE_IMG;
+    case 4:
+    case "BACKGROUND_IMG":
+      return CUploadFile_UploadType.BACKGROUND_IMG;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -624,6 +660,8 @@ export function cUploadFile_UploadTypeToJSON(object: CUploadFile_UploadType): st
       return "PROFILE_IMG";
     case CUploadFile_UploadType.GROUP_PROFILE_IMG:
       return "GROUP_PROFILE_IMG";
+    case CUploadFile_UploadType.BACKGROUND_IMG:
+      return "BACKGROUND_IMG";
     case CUploadFile_UploadType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
@@ -907,6 +945,23 @@ export interface SEditGroup {
   group: GroupInfo | undefined;
 }
 
+/**
+ * -----------------------------
+ * 회원 탈퇴
+ * -----------------------------
+ */
+export interface CWithdraw {
+  /** 본인 확인용 */
+  password: string;
+  /** 탈퇴 사유 (선택) */
+  reason: string;
+}
+
+export interface SWithdraw {
+  success: boolean;
+  message: string;
+}
+
 export interface SError {
   /** 에러 코드 (enum) */
   errorCode: ErrorCode;
@@ -945,6 +1000,10 @@ function createBaseEnvelope(): Envelope {
     sEditMyInfo: undefined,
     cRegisterFcmToken: undefined,
     sRegisterFcmToken: undefined,
+    cChangeEmail: undefined,
+    sChangeEmail: undefined,
+    cChangePassword: undefined,
+    sChangePassword: undefined,
     cChat: undefined,
     sChat: undefined,
     cAck: undefined,
@@ -977,6 +1036,8 @@ function createBaseEnvelope(): Envelope {
     sGroupInfo: undefined,
     cEditGroup: undefined,
     sEditGroup: undefined,
+    cWithdraw: undefined,
+    sWithdraw: undefined,
     sError: undefined,
     cHeartbeat: undefined,
     sHeartbeat: undefined,
@@ -1047,6 +1108,18 @@ export const Envelope = {
     }
     if (message.sRegisterFcmToken !== undefined) {
       SRegisterFcmToken.encode(message.sRegisterFcmToken, writer.uint32(282).fork()).ldelim();
+    }
+    if (message.cChangeEmail !== undefined) {
+      CChangeEmail.encode(message.cChangeEmail, writer.uint32(290).fork()).ldelim();
+    }
+    if (message.sChangeEmail !== undefined) {
+      SChangeEmail.encode(message.sChangeEmail, writer.uint32(298).fork()).ldelim();
+    }
+    if (message.cChangePassword !== undefined) {
+      CChangePassword.encode(message.cChangePassword, writer.uint32(306).fork()).ldelim();
+    }
+    if (message.sChangePassword !== undefined) {
+      SChangePassword.encode(message.sChangePassword, writer.uint32(314).fork()).ldelim();
     }
     if (message.cChat !== undefined) {
       CChat.encode(message.cChat, writer.uint32(322).fork()).ldelim();
@@ -1143,6 +1216,12 @@ export const Envelope = {
     }
     if (message.sEditGroup !== undefined) {
       SEditGroup.encode(message.sEditGroup, writer.uint32(762).fork()).ldelim();
+    }
+    if (message.cWithdraw !== undefined) {
+      CWithdraw.encode(message.cWithdraw, writer.uint32(770).fork()).ldelim();
+    }
+    if (message.sWithdraw !== undefined) {
+      SWithdraw.encode(message.sWithdraw, writer.uint32(778).fork()).ldelim();
     }
     if (message.sError !== undefined) {
       SError.encode(message.sError, writer.uint32(802).fork()).ldelim();
@@ -1309,6 +1388,34 @@ export const Envelope = {
           }
 
           message.sRegisterFcmToken = SRegisterFcmToken.decode(reader, reader.uint32());
+          continue;
+        case 36:
+          if (tag !== 290) {
+            break;
+          }
+
+          message.cChangeEmail = CChangeEmail.decode(reader, reader.uint32());
+          continue;
+        case 37:
+          if (tag !== 298) {
+            break;
+          }
+
+          message.sChangeEmail = SChangeEmail.decode(reader, reader.uint32());
+          continue;
+        case 38:
+          if (tag !== 306) {
+            break;
+          }
+
+          message.cChangePassword = CChangePassword.decode(reader, reader.uint32());
+          continue;
+        case 39:
+          if (tag !== 314) {
+            break;
+          }
+
+          message.sChangePassword = SChangePassword.decode(reader, reader.uint32());
           continue;
         case 40:
           if (tag !== 322) {
@@ -1534,6 +1641,20 @@ export const Envelope = {
 
           message.sEditGroup = SEditGroup.decode(reader, reader.uint32());
           continue;
+        case 96:
+          if (tag !== 770) {
+            break;
+          }
+
+          message.cWithdraw = CWithdraw.decode(reader, reader.uint32());
+          continue;
+        case 97:
+          if (tag !== 778) {
+            break;
+          }
+
+          message.sWithdraw = SWithdraw.decode(reader, reader.uint32());
+          continue;
         case 100:
           if (tag !== 802) {
             break;
@@ -1595,6 +1716,10 @@ export const Envelope = {
       sRegisterFcmToken: isSet(object.sRegisterFcmToken)
         ? SRegisterFcmToken.fromJSON(object.sRegisterFcmToken)
         : undefined,
+      cChangeEmail: isSet(object.cChangeEmail) ? CChangeEmail.fromJSON(object.cChangeEmail) : undefined,
+      sChangeEmail: isSet(object.sChangeEmail) ? SChangeEmail.fromJSON(object.sChangeEmail) : undefined,
+      cChangePassword: isSet(object.cChangePassword) ? CChangePassword.fromJSON(object.cChangePassword) : undefined,
+      sChangePassword: isSet(object.sChangePassword) ? SChangePassword.fromJSON(object.sChangePassword) : undefined,
       cChat: isSet(object.cChat) ? CChat.fromJSON(object.cChat) : undefined,
       sChat: isSet(object.sChat) ? SChat.fromJSON(object.sChat) : undefined,
       cAck: isSet(object.cAck) ? CAck.fromJSON(object.cAck) : undefined,
@@ -1627,6 +1752,8 @@ export const Envelope = {
       sGroupInfo: isSet(object.sGroupInfo) ? SGroupInfo.fromJSON(object.sGroupInfo) : undefined,
       cEditGroup: isSet(object.cEditGroup) ? CEditGroup.fromJSON(object.cEditGroup) : undefined,
       sEditGroup: isSet(object.sEditGroup) ? SEditGroup.fromJSON(object.sEditGroup) : undefined,
+      cWithdraw: isSet(object.cWithdraw) ? CWithdraw.fromJSON(object.cWithdraw) : undefined,
+      sWithdraw: isSet(object.sWithdraw) ? SWithdraw.fromJSON(object.sWithdraw) : undefined,
       sError: isSet(object.sError) ? SError.fromJSON(object.sError) : undefined,
       cHeartbeat: isSet(object.cHeartbeat) ? CHeartbeat.fromJSON(object.cHeartbeat) : undefined,
       sHeartbeat: isSet(object.sHeartbeat) ? SHeartbeat.fromJSON(object.sHeartbeat) : undefined,
@@ -1697,6 +1824,18 @@ export const Envelope = {
     }
     if (message.sRegisterFcmToken !== undefined) {
       obj.sRegisterFcmToken = SRegisterFcmToken.toJSON(message.sRegisterFcmToken);
+    }
+    if (message.cChangeEmail !== undefined) {
+      obj.cChangeEmail = CChangeEmail.toJSON(message.cChangeEmail);
+    }
+    if (message.sChangeEmail !== undefined) {
+      obj.sChangeEmail = SChangeEmail.toJSON(message.sChangeEmail);
+    }
+    if (message.cChangePassword !== undefined) {
+      obj.cChangePassword = CChangePassword.toJSON(message.cChangePassword);
+    }
+    if (message.sChangePassword !== undefined) {
+      obj.sChangePassword = SChangePassword.toJSON(message.sChangePassword);
     }
     if (message.cChat !== undefined) {
       obj.cChat = CChat.toJSON(message.cChat);
@@ -1794,6 +1933,12 @@ export const Envelope = {
     if (message.sEditGroup !== undefined) {
       obj.sEditGroup = SEditGroup.toJSON(message.sEditGroup);
     }
+    if (message.cWithdraw !== undefined) {
+      obj.cWithdraw = CWithdraw.toJSON(message.cWithdraw);
+    }
+    if (message.sWithdraw !== undefined) {
+      obj.sWithdraw = SWithdraw.toJSON(message.sWithdraw);
+    }
     if (message.sError !== undefined) {
       obj.sError = SError.toJSON(message.sError);
     }
@@ -1867,6 +2012,18 @@ export const Envelope = {
       : undefined;
     message.sRegisterFcmToken = (object.sRegisterFcmToken !== undefined && object.sRegisterFcmToken !== null)
       ? SRegisterFcmToken.fromPartial(object.sRegisterFcmToken)
+      : undefined;
+    message.cChangeEmail = (object.cChangeEmail !== undefined && object.cChangeEmail !== null)
+      ? CChangeEmail.fromPartial(object.cChangeEmail)
+      : undefined;
+    message.sChangeEmail = (object.sChangeEmail !== undefined && object.sChangeEmail !== null)
+      ? SChangeEmail.fromPartial(object.sChangeEmail)
+      : undefined;
+    message.cChangePassword = (object.cChangePassword !== undefined && object.cChangePassword !== null)
+      ? CChangePassword.fromPartial(object.cChangePassword)
+      : undefined;
+    message.sChangePassword = (object.sChangePassword !== undefined && object.sChangePassword !== null)
+      ? SChangePassword.fromPartial(object.sChangePassword)
       : undefined;
     message.cChat = (object.cChat !== undefined && object.cChat !== null) ? CChat.fromPartial(object.cChat) : undefined;
     message.sChat = (object.sChat !== undefined && object.sChat !== null) ? SChat.fromPartial(object.sChat) : undefined;
@@ -1957,6 +2114,12 @@ export const Envelope = {
       : undefined;
     message.sEditGroup = (object.sEditGroup !== undefined && object.sEditGroup !== null)
       ? SEditGroup.fromPartial(object.sEditGroup)
+      : undefined;
+    message.cWithdraw = (object.cWithdraw !== undefined && object.cWithdraw !== null)
+      ? CWithdraw.fromPartial(object.cWithdraw)
+      : undefined;
+    message.sWithdraw = (object.sWithdraw !== undefined && object.sWithdraw !== null)
+      ? SWithdraw.fromPartial(object.sWithdraw)
       : undefined;
     message.sError = (object.sError !== undefined && object.sError !== null)
       ? SError.fromPartial(object.sError)
@@ -3525,6 +3688,302 @@ export const SRegisterFcmToken = {
   },
   fromPartial<I extends Exact<DeepPartial<SRegisterFcmToken>, I>>(object: I): SRegisterFcmToken {
     const message = createBaseSRegisterFcmToken();
+    message.success = object.success ?? false;
+    message.message = object.message ?? "";
+    return message;
+  },
+};
+
+function createBaseCChangeEmail(): CChangeEmail {
+  return { newEmail: "" };
+}
+
+export const CChangeEmail = {
+  encode(message: CChangeEmail, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.newEmail !== "") {
+      writer.uint32(10).string(message.newEmail);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CChangeEmail {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCChangeEmail();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.newEmail = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CChangeEmail {
+    return { newEmail: isSet(object.newEmail) ? globalThis.String(object.newEmail) : "" };
+  },
+
+  toJSON(message: CChangeEmail): unknown {
+    const obj: any = {};
+    if (message.newEmail !== "") {
+      obj.newEmail = message.newEmail;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CChangeEmail>, I>>(base?: I): CChangeEmail {
+    return CChangeEmail.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CChangeEmail>, I>>(object: I): CChangeEmail {
+    const message = createBaseCChangeEmail();
+    message.newEmail = object.newEmail ?? "";
+    return message;
+  },
+};
+
+function createBaseSChangeEmail(): SChangeEmail {
+  return { success: false, message: "", updatedInfo: undefined };
+}
+
+export const SChangeEmail = {
+  encode(message: SChangeEmail, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.success !== false) {
+      writer.uint32(8).bool(message.success);
+    }
+    if (message.message !== "") {
+      writer.uint32(18).string(message.message);
+    }
+    if (message.updatedInfo !== undefined) {
+      UserInfo.encode(message.updatedInfo, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SChangeEmail {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSChangeEmail();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.success = reader.bool();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.message = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.updatedInfo = UserInfo.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SChangeEmail {
+    return {
+      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
+      message: isSet(object.message) ? globalThis.String(object.message) : "",
+      updatedInfo: isSet(object.updatedInfo) ? UserInfo.fromJSON(object.updatedInfo) : undefined,
+    };
+  },
+
+  toJSON(message: SChangeEmail): unknown {
+    const obj: any = {};
+    if (message.success !== false) {
+      obj.success = message.success;
+    }
+    if (message.message !== "") {
+      obj.message = message.message;
+    }
+    if (message.updatedInfo !== undefined) {
+      obj.updatedInfo = UserInfo.toJSON(message.updatedInfo);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SChangeEmail>, I>>(base?: I): SChangeEmail {
+    return SChangeEmail.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SChangeEmail>, I>>(object: I): SChangeEmail {
+    const message = createBaseSChangeEmail();
+    message.success = object.success ?? false;
+    message.message = object.message ?? "";
+    message.updatedInfo = (object.updatedInfo !== undefined && object.updatedInfo !== null)
+      ? UserInfo.fromPartial(object.updatedInfo)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseCChangePassword(): CChangePassword {
+  return { currentPassword: "", newPassword: "" };
+}
+
+export const CChangePassword = {
+  encode(message: CChangePassword, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.currentPassword !== "") {
+      writer.uint32(10).string(message.currentPassword);
+    }
+    if (message.newPassword !== "") {
+      writer.uint32(18).string(message.newPassword);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CChangePassword {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCChangePassword();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.currentPassword = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.newPassword = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CChangePassword {
+    return {
+      currentPassword: isSet(object.currentPassword) ? globalThis.String(object.currentPassword) : "",
+      newPassword: isSet(object.newPassword) ? globalThis.String(object.newPassword) : "",
+    };
+  },
+
+  toJSON(message: CChangePassword): unknown {
+    const obj: any = {};
+    if (message.currentPassword !== "") {
+      obj.currentPassword = message.currentPassword;
+    }
+    if (message.newPassword !== "") {
+      obj.newPassword = message.newPassword;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CChangePassword>, I>>(base?: I): CChangePassword {
+    return CChangePassword.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CChangePassword>, I>>(object: I): CChangePassword {
+    const message = createBaseCChangePassword();
+    message.currentPassword = object.currentPassword ?? "";
+    message.newPassword = object.newPassword ?? "";
+    return message;
+  },
+};
+
+function createBaseSChangePassword(): SChangePassword {
+  return { success: false, message: "" };
+}
+
+export const SChangePassword = {
+  encode(message: SChangePassword, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.success !== false) {
+      writer.uint32(8).bool(message.success);
+    }
+    if (message.message !== "") {
+      writer.uint32(18).string(message.message);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SChangePassword {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSChangePassword();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.success = reader.bool();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.message = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SChangePassword {
+    return {
+      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
+      message: isSet(object.message) ? globalThis.String(object.message) : "",
+    };
+  },
+
+  toJSON(message: SChangePassword): unknown {
+    const obj: any = {};
+    if (message.success !== false) {
+      obj.success = message.success;
+    }
+    if (message.message !== "") {
+      obj.message = message.message;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SChangePassword>, I>>(base?: I): SChangePassword {
+    return SChangePassword.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SChangePassword>, I>>(object: I): SChangePassword {
+    const message = createBaseSChangePassword();
     message.success = object.success ?? false;
     message.message = object.message ?? "";
     return message;
@@ -7127,6 +7586,154 @@ export const SEditGroup = {
     message.group = (object.group !== undefined && object.group !== null)
       ? GroupInfo.fromPartial(object.group)
       : undefined;
+    return message;
+  },
+};
+
+function createBaseCWithdraw(): CWithdraw {
+  return { password: "", reason: "" };
+}
+
+export const CWithdraw = {
+  encode(message: CWithdraw, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.password !== "") {
+      writer.uint32(10).string(message.password);
+    }
+    if (message.reason !== "") {
+      writer.uint32(18).string(message.reason);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CWithdraw {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCWithdraw();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.password = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.reason = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CWithdraw {
+    return {
+      password: isSet(object.password) ? globalThis.String(object.password) : "",
+      reason: isSet(object.reason) ? globalThis.String(object.reason) : "",
+    };
+  },
+
+  toJSON(message: CWithdraw): unknown {
+    const obj: any = {};
+    if (message.password !== "") {
+      obj.password = message.password;
+    }
+    if (message.reason !== "") {
+      obj.reason = message.reason;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CWithdraw>, I>>(base?: I): CWithdraw {
+    return CWithdraw.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CWithdraw>, I>>(object: I): CWithdraw {
+    const message = createBaseCWithdraw();
+    message.password = object.password ?? "";
+    message.reason = object.reason ?? "";
+    return message;
+  },
+};
+
+function createBaseSWithdraw(): SWithdraw {
+  return { success: false, message: "" };
+}
+
+export const SWithdraw = {
+  encode(message: SWithdraw, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.success !== false) {
+      writer.uint32(8).bool(message.success);
+    }
+    if (message.message !== "") {
+      writer.uint32(18).string(message.message);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SWithdraw {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSWithdraw();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.success = reader.bool();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.message = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SWithdraw {
+    return {
+      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
+      message: isSet(object.message) ? globalThis.String(object.message) : "",
+    };
+  },
+
+  toJSON(message: SWithdraw): unknown {
+    const obj: any = {};
+    if (message.success !== false) {
+      obj.success = message.success;
+    }
+    if (message.message !== "") {
+      obj.message = message.message;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SWithdraw>, I>>(base?: I): SWithdraw {
+    return SWithdraw.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SWithdraw>, I>>(object: I): SWithdraw {
+    const message = createBaseSWithdraw();
+    message.success = object.success ?? false;
+    message.message = object.message ?? "";
     return message;
   },
 };

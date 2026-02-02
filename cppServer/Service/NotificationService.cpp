@@ -31,7 +31,8 @@ bool NotificationService::RegisterFcmToken(sessionPtr& session, uint64 reqId, co
     }
 
     cout << "[NotificationService] FCM 토큰 등록 요청: userId=" << userId
-         << ", platform=" << platform << endl;
+         << ", platform=" << platform
+         << ", token=" << fcmToken.substr(0, 30) << "..." << endl;
 
     // DB에 토큰 저장
     bool success = FcmTokenRepository::UpsertFcmToken(userId, fcmToken, platform, deviceId);

@@ -47,7 +47,9 @@ bool ChatService::SendDirect(sessionPtr& senderSession, uint64 reqId, const stri
         }
         else if (GFcmClient) {
             // 오프라인 - FCM 푸시 발송
+            cout << "[ChatService] SendDirect FCM: sender=" << senderId << ", receiver=" << receiverId << endl;
             auto tokens = FcmTokenRepository::GetUserTokens(receiverId);
+            cout << "[ChatService] Found " << tokens.size() << " FCM tokens for " << receiverId << endl;
             if (!tokens.empty()) {
                 string msgPreview = "[메시지]";
                 if (pkt_s_chat.has_payload() && pkt_s_chat.payload().has_text()) {
@@ -70,6 +72,8 @@ bool ChatService::SendDirect(sessionPtr& senderSession, uint64 reqId, const stri
                 };
 
                 for (const auto& tokenInfo : tokens) {
+                    cout << "[ChatService] Sending FCM to userId=" << tokenInfo.userId
+                         << ", token=" << tokenInfo.fcmToken.substr(0, 20) << "..." << endl;
                     GFcmClient->SendPush(tokenInfo.fcmToken, senderName, msgPreview, data);
                 }
             }

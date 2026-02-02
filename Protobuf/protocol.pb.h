@@ -47,7 +47,7 @@ struct TableStruct_protocol_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[65]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[71]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -58,6 +58,12 @@ namespace Protocol {
 class C_Ack;
 struct C_AckDefaultTypeInternal;
 extern C_AckDefaultTypeInternal _C_Ack_default_instance_;
+class C_ChangeEmail;
+struct C_ChangeEmailDefaultTypeInternal;
+extern C_ChangeEmailDefaultTypeInternal _C_ChangeEmail_default_instance_;
+class C_ChangePassword;
+struct C_ChangePasswordDefaultTypeInternal;
+extern C_ChangePasswordDefaultTypeInternal _C_ChangePassword_default_instance_;
 class C_Chat;
 struct C_ChatDefaultTypeInternal;
 extern C_ChatDefaultTypeInternal _C_Chat_default_instance_;
@@ -133,6 +139,9 @@ extern C_SignUpDefaultTypeInternal _C_SignUp_default_instance_;
 class C_UploadFile;
 struct C_UploadFileDefaultTypeInternal;
 extern C_UploadFileDefaultTypeInternal _C_UploadFile_default_instance_;
+class C_Withdraw;
+struct C_WithdrawDefaultTypeInternal;
+extern C_WithdrawDefaultTypeInternal _C_Withdraw_default_instance_;
 class ChatPayload;
 struct ChatPayloadDefaultTypeInternal;
 extern ChatPayloadDefaultTypeInternal _ChatPayload_default_instance_;
@@ -154,6 +163,12 @@ extern GroupMemberInfoDefaultTypeInternal _GroupMemberInfo_default_instance_;
 class Image;
 struct ImageDefaultTypeInternal;
 extern ImageDefaultTypeInternal _Image_default_instance_;
+class S_ChangeEmail;
+struct S_ChangeEmailDefaultTypeInternal;
+extern S_ChangeEmailDefaultTypeInternal _S_ChangeEmail_default_instance_;
+class S_ChangePassword;
+struct S_ChangePasswordDefaultTypeInternal;
+extern S_ChangePasswordDefaultTypeInternal _S_ChangePassword_default_instance_;
 class S_Chat;
 struct S_ChatDefaultTypeInternal;
 extern S_ChatDefaultTypeInternal _S_Chat_default_instance_;
@@ -238,6 +253,9 @@ extern S_SignUpDefaultTypeInternal _S_SignUp_default_instance_;
 class S_UploadFile;
 struct S_UploadFileDefaultTypeInternal;
 extern S_UploadFileDefaultTypeInternal _S_UploadFile_default_instance_;
+class S_Withdraw;
+struct S_WithdrawDefaultTypeInternal;
+extern S_WithdrawDefaultTypeInternal _S_Withdraw_default_instance_;
 class SystemMsg;
 struct SystemMsgDefaultTypeInternal;
 extern SystemMsgDefaultTypeInternal _SystemMsg_default_instance_;
@@ -253,6 +271,8 @@ extern VideoDefaultTypeInternal _Video_default_instance_;
 }  // namespace Protocol
 PROTOBUF_NAMESPACE_OPEN
 template<> ::Protocol::C_Ack* Arena::CreateMaybeMessage<::Protocol::C_Ack>(Arena*);
+template<> ::Protocol::C_ChangeEmail* Arena::CreateMaybeMessage<::Protocol::C_ChangeEmail>(Arena*);
+template<> ::Protocol::C_ChangePassword* Arena::CreateMaybeMessage<::Protocol::C_ChangePassword>(Arena*);
 template<> ::Protocol::C_Chat* Arena::CreateMaybeMessage<::Protocol::C_Chat>(Arena*);
 template<> ::Protocol::C_CheckEmail* Arena::CreateMaybeMessage<::Protocol::C_CheckEmail>(Arena*);
 template<> ::Protocol::C_CheckId* Arena::CreateMaybeMessage<::Protocol::C_CheckId>(Arena*);
@@ -278,6 +298,7 @@ template<> ::Protocol::C_RequestEmailVerify* Arena::CreateMaybeMessage<::Protoco
 template<> ::Protocol::C_SearchUser* Arena::CreateMaybeMessage<::Protocol::C_SearchUser>(Arena*);
 template<> ::Protocol::C_SignUp* Arena::CreateMaybeMessage<::Protocol::C_SignUp>(Arena*);
 template<> ::Protocol::C_UploadFile* Arena::CreateMaybeMessage<::Protocol::C_UploadFile>(Arena*);
+template<> ::Protocol::C_Withdraw* Arena::CreateMaybeMessage<::Protocol::C_Withdraw>(Arena*);
 template<> ::Protocol::ChatPayload* Arena::CreateMaybeMessage<::Protocol::ChatPayload>(Arena*);
 template<> ::Protocol::Envelope* Arena::CreateMaybeMessage<::Protocol::Envelope>(Arena*);
 template<> ::Protocol::File* Arena::CreateMaybeMessage<::Protocol::File>(Arena*);
@@ -285,6 +306,8 @@ template<> ::Protocol::FriendRequest* Arena::CreateMaybeMessage<::Protocol::Frie
 template<> ::Protocol::GroupInfo* Arena::CreateMaybeMessage<::Protocol::GroupInfo>(Arena*);
 template<> ::Protocol::GroupMemberInfo* Arena::CreateMaybeMessage<::Protocol::GroupMemberInfo>(Arena*);
 template<> ::Protocol::Image* Arena::CreateMaybeMessage<::Protocol::Image>(Arena*);
+template<> ::Protocol::S_ChangeEmail* Arena::CreateMaybeMessage<::Protocol::S_ChangeEmail>(Arena*);
+template<> ::Protocol::S_ChangePassword* Arena::CreateMaybeMessage<::Protocol::S_ChangePassword>(Arena*);
 template<> ::Protocol::S_Chat* Arena::CreateMaybeMessage<::Protocol::S_Chat>(Arena*);
 template<> ::Protocol::S_CheckEmail* Arena::CreateMaybeMessage<::Protocol::S_CheckEmail>(Arena*);
 template<> ::Protocol::S_CheckId* Arena::CreateMaybeMessage<::Protocol::S_CheckId>(Arena*);
@@ -313,6 +336,7 @@ template<> ::Protocol::S_RequestEmailVerify* Arena::CreateMaybeMessage<::Protoco
 template<> ::Protocol::S_SearchUser* Arena::CreateMaybeMessage<::Protocol::S_SearchUser>(Arena*);
 template<> ::Protocol::S_SignUp* Arena::CreateMaybeMessage<::Protocol::S_SignUp>(Arena*);
 template<> ::Protocol::S_UploadFile* Arena::CreateMaybeMessage<::Protocol::S_UploadFile>(Arena*);
+template<> ::Protocol::S_Withdraw* Arena::CreateMaybeMessage<::Protocol::S_Withdraw>(Arena*);
 template<> ::Protocol::SystemMsg* Arena::CreateMaybeMessage<::Protocol::SystemMsg>(Arena*);
 template<> ::Protocol::Text* Arena::CreateMaybeMessage<::Protocol::Text>(Arena*);
 template<> ::Protocol::UserInfo* Arena::CreateMaybeMessage<::Protocol::UserInfo>(Arena*);
@@ -325,12 +349,13 @@ enum C_UploadFile_UploadType : int {
   C_UploadFile_UploadType_GROUP_CHAT = 1,
   C_UploadFile_UploadType_PROFILE_IMG = 2,
   C_UploadFile_UploadType_GROUP_PROFILE_IMG = 3,
+  C_UploadFile_UploadType_BACKGROUND_IMG = 4,
   C_UploadFile_UploadType_C_UploadFile_UploadType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
   C_UploadFile_UploadType_C_UploadFile_UploadType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
 };
 bool C_UploadFile_UploadType_IsValid(int value);
 constexpr C_UploadFile_UploadType C_UploadFile_UploadType_UploadType_MIN = C_UploadFile_UploadType_DIRECT_CHAT;
-constexpr C_UploadFile_UploadType C_UploadFile_UploadType_UploadType_MAX = C_UploadFile_UploadType_GROUP_PROFILE_IMG;
+constexpr C_UploadFile_UploadType C_UploadFile_UploadType_UploadType_MAX = C_UploadFile_UploadType_BACKGROUND_IMG;
 constexpr int C_UploadFile_UploadType_UploadType_ARRAYSIZE = C_UploadFile_UploadType_UploadType_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* C_UploadFile_UploadType_descriptor();
@@ -543,6 +568,10 @@ class Envelope final :
     kSEditMyInfo = 33,
     kCRegisterFcmToken = 34,
     kSRegisterFcmToken = 35,
+    kCChangeEmail = 36,
+    kSChangeEmail = 37,
+    kCChangePassword = 38,
+    kSChangePassword = 39,
     kCChat = 40,
     kSChat = 41,
     kCAck = 42,
@@ -575,6 +604,8 @@ class Envelope final :
     kSGroupInfo = 93,
     kCEditGroup = 94,
     kSEditGroup = 95,
+    kCWithdraw = 96,
+    kSWithdraw = 97,
     kSError = 100,
     kCHeartbeat = 101,
     kSHeartbeat = 102,
@@ -671,6 +702,10 @@ class Envelope final :
     kSEditMyInfoFieldNumber = 33,
     kCRegisterFcmTokenFieldNumber = 34,
     kSRegisterFcmTokenFieldNumber = 35,
+    kCChangeEmailFieldNumber = 36,
+    kSChangeEmailFieldNumber = 37,
+    kCChangePasswordFieldNumber = 38,
+    kSChangePasswordFieldNumber = 39,
     kCChatFieldNumber = 40,
     kSChatFieldNumber = 41,
     kCAckFieldNumber = 42,
@@ -703,6 +738,8 @@ class Envelope final :
     kSGroupInfoFieldNumber = 93,
     kCEditGroupFieldNumber = 94,
     kSEditGroupFieldNumber = 95,
+    kCWithdrawFieldNumber = 96,
+    kSWithdrawFieldNumber = 97,
     kSErrorFieldNumber = 100,
     kCHeartbeatFieldNumber = 101,
     kSHeartbeatFieldNumber = 102,
@@ -1062,6 +1099,78 @@ class Envelope final :
   void unsafe_arena_set_allocated_s_register_fcm_token(
       ::Protocol::S_RegisterFcmToken* s_register_fcm_token);
   ::Protocol::S_RegisterFcmToken* unsafe_arena_release_s_register_fcm_token();
+
+  // .Protocol.C_ChangeEmail c_change_email = 36;
+  bool has_c_change_email() const;
+  private:
+  bool _internal_has_c_change_email() const;
+  public:
+  void clear_c_change_email();
+  const ::Protocol::C_ChangeEmail& c_change_email() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::Protocol::C_ChangeEmail* release_c_change_email();
+  ::Protocol::C_ChangeEmail* mutable_c_change_email();
+  void set_allocated_c_change_email(::Protocol::C_ChangeEmail* c_change_email);
+  private:
+  const ::Protocol::C_ChangeEmail& _internal_c_change_email() const;
+  ::Protocol::C_ChangeEmail* _internal_mutable_c_change_email();
+  public:
+  void unsafe_arena_set_allocated_c_change_email(
+      ::Protocol::C_ChangeEmail* c_change_email);
+  ::Protocol::C_ChangeEmail* unsafe_arena_release_c_change_email();
+
+  // .Protocol.S_ChangeEmail s_change_email = 37;
+  bool has_s_change_email() const;
+  private:
+  bool _internal_has_s_change_email() const;
+  public:
+  void clear_s_change_email();
+  const ::Protocol::S_ChangeEmail& s_change_email() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::Protocol::S_ChangeEmail* release_s_change_email();
+  ::Protocol::S_ChangeEmail* mutable_s_change_email();
+  void set_allocated_s_change_email(::Protocol::S_ChangeEmail* s_change_email);
+  private:
+  const ::Protocol::S_ChangeEmail& _internal_s_change_email() const;
+  ::Protocol::S_ChangeEmail* _internal_mutable_s_change_email();
+  public:
+  void unsafe_arena_set_allocated_s_change_email(
+      ::Protocol::S_ChangeEmail* s_change_email);
+  ::Protocol::S_ChangeEmail* unsafe_arena_release_s_change_email();
+
+  // .Protocol.C_ChangePassword c_change_password = 38;
+  bool has_c_change_password() const;
+  private:
+  bool _internal_has_c_change_password() const;
+  public:
+  void clear_c_change_password();
+  const ::Protocol::C_ChangePassword& c_change_password() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::Protocol::C_ChangePassword* release_c_change_password();
+  ::Protocol::C_ChangePassword* mutable_c_change_password();
+  void set_allocated_c_change_password(::Protocol::C_ChangePassword* c_change_password);
+  private:
+  const ::Protocol::C_ChangePassword& _internal_c_change_password() const;
+  ::Protocol::C_ChangePassword* _internal_mutable_c_change_password();
+  public:
+  void unsafe_arena_set_allocated_c_change_password(
+      ::Protocol::C_ChangePassword* c_change_password);
+  ::Protocol::C_ChangePassword* unsafe_arena_release_c_change_password();
+
+  // .Protocol.S_ChangePassword s_change_password = 39;
+  bool has_s_change_password() const;
+  private:
+  bool _internal_has_s_change_password() const;
+  public:
+  void clear_s_change_password();
+  const ::Protocol::S_ChangePassword& s_change_password() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::Protocol::S_ChangePassword* release_s_change_password();
+  ::Protocol::S_ChangePassword* mutable_s_change_password();
+  void set_allocated_s_change_password(::Protocol::S_ChangePassword* s_change_password);
+  private:
+  const ::Protocol::S_ChangePassword& _internal_s_change_password() const;
+  ::Protocol::S_ChangePassword* _internal_mutable_s_change_password();
+  public:
+  void unsafe_arena_set_allocated_s_change_password(
+      ::Protocol::S_ChangePassword* s_change_password);
+  ::Protocol::S_ChangePassword* unsafe_arena_release_s_change_password();
 
   // .Protocol.C_Chat c_chat = 40;
   bool has_c_chat() const;
@@ -1639,6 +1748,42 @@ class Envelope final :
       ::Protocol::S_EditGroup* s_edit_group);
   ::Protocol::S_EditGroup* unsafe_arena_release_s_edit_group();
 
+  // .Protocol.C_Withdraw c_withdraw = 96;
+  bool has_c_withdraw() const;
+  private:
+  bool _internal_has_c_withdraw() const;
+  public:
+  void clear_c_withdraw();
+  const ::Protocol::C_Withdraw& c_withdraw() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::Protocol::C_Withdraw* release_c_withdraw();
+  ::Protocol::C_Withdraw* mutable_c_withdraw();
+  void set_allocated_c_withdraw(::Protocol::C_Withdraw* c_withdraw);
+  private:
+  const ::Protocol::C_Withdraw& _internal_c_withdraw() const;
+  ::Protocol::C_Withdraw* _internal_mutable_c_withdraw();
+  public:
+  void unsafe_arena_set_allocated_c_withdraw(
+      ::Protocol::C_Withdraw* c_withdraw);
+  ::Protocol::C_Withdraw* unsafe_arena_release_c_withdraw();
+
+  // .Protocol.S_Withdraw s_withdraw = 97;
+  bool has_s_withdraw() const;
+  private:
+  bool _internal_has_s_withdraw() const;
+  public:
+  void clear_s_withdraw();
+  const ::Protocol::S_Withdraw& s_withdraw() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::Protocol::S_Withdraw* release_s_withdraw();
+  ::Protocol::S_Withdraw* mutable_s_withdraw();
+  void set_allocated_s_withdraw(::Protocol::S_Withdraw* s_withdraw);
+  private:
+  const ::Protocol::S_Withdraw& _internal_s_withdraw() const;
+  ::Protocol::S_Withdraw* _internal_mutable_s_withdraw();
+  public:
+  void unsafe_arena_set_allocated_s_withdraw(
+      ::Protocol::S_Withdraw* s_withdraw);
+  ::Protocol::S_Withdraw* unsafe_arena_release_s_withdraw();
+
   // .Protocol.S_Error s_error = 100;
   bool has_s_error() const;
   private:
@@ -1716,6 +1861,10 @@ class Envelope final :
   void set_has_s_edit_my_info();
   void set_has_c_register_fcm_token();
   void set_has_s_register_fcm_token();
+  void set_has_c_change_email();
+  void set_has_s_change_email();
+  void set_has_c_change_password();
+  void set_has_s_change_password();
   void set_has_c_chat();
   void set_has_s_chat();
   void set_has_c_ack();
@@ -1748,6 +1897,8 @@ class Envelope final :
   void set_has_s_group_info();
   void set_has_c_edit_group();
   void set_has_s_edit_group();
+  void set_has_c_withdraw();
+  void set_has_s_withdraw();
   void set_has_s_error();
   void set_has_c_heartbeat();
   void set_has_s_heartbeat();
@@ -1782,6 +1933,10 @@ class Envelope final :
     ::Protocol::S_EditMyInfo* s_edit_my_info_;
     ::Protocol::C_RegisterFcmToken* c_register_fcm_token_;
     ::Protocol::S_RegisterFcmToken* s_register_fcm_token_;
+    ::Protocol::C_ChangeEmail* c_change_email_;
+    ::Protocol::S_ChangeEmail* s_change_email_;
+    ::Protocol::C_ChangePassword* c_change_password_;
+    ::Protocol::S_ChangePassword* s_change_password_;
     ::Protocol::C_Chat* c_chat_;
     ::Protocol::S_Chat* s_chat_;
     ::Protocol::C_Ack* c_ack_;
@@ -1814,6 +1969,8 @@ class Envelope final :
     ::Protocol::S_GroupInfo* s_group_info_;
     ::Protocol::C_EditGroup* c_edit_group_;
     ::Protocol::S_EditGroup* s_edit_group_;
+    ::Protocol::C_Withdraw* c_withdraw_;
+    ::Protocol::S_Withdraw* s_withdraw_;
     ::Protocol::S_Error* s_error_;
     ::Protocol::C_Heartbeat* c_heartbeat_;
     ::Protocol::S_Heartbeat* s_heartbeat_;
@@ -4842,6 +4999,612 @@ class S_RegisterFcmToken final :
 };
 // -------------------------------------------------------------------
 
+class C_ChangeEmail final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.C_ChangeEmail) */ {
+ public:
+  inline C_ChangeEmail() : C_ChangeEmail(nullptr) {}
+  ~C_ChangeEmail() override;
+  explicit constexpr C_ChangeEmail(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  C_ChangeEmail(const C_ChangeEmail& from);
+  C_ChangeEmail(C_ChangeEmail&& from) noexcept
+    : C_ChangeEmail() {
+    *this = ::std::move(from);
+  }
+
+  inline C_ChangeEmail& operator=(const C_ChangeEmail& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline C_ChangeEmail& operator=(C_ChangeEmail&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const C_ChangeEmail& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const C_ChangeEmail* internal_default_instance() {
+    return reinterpret_cast<const C_ChangeEmail*>(
+               &_C_ChangeEmail_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    20;
+
+  friend void swap(C_ChangeEmail& a, C_ChangeEmail& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(C_ChangeEmail* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(C_ChangeEmail* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline C_ChangeEmail* New() const final {
+    return new C_ChangeEmail();
+  }
+
+  C_ChangeEmail* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<C_ChangeEmail>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const C_ChangeEmail& from);
+  void MergeFrom(const C_ChangeEmail& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(C_ChangeEmail* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.C_ChangeEmail";
+  }
+  protected:
+  explicit C_ChangeEmail(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kNewEmailFieldNumber = 1,
+  };
+  // string new_email = 1;
+  void clear_new_email();
+  const std::string& new_email() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_new_email(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_new_email();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_new_email();
+  void set_allocated_new_email(std::string* new_email);
+  private:
+  const std::string& _internal_new_email() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_new_email(const std::string& value);
+  std::string* _internal_mutable_new_email();
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.C_ChangeEmail)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr new_email_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class S_ChangeEmail final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S_ChangeEmail) */ {
+ public:
+  inline S_ChangeEmail() : S_ChangeEmail(nullptr) {}
+  ~S_ChangeEmail() override;
+  explicit constexpr S_ChangeEmail(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  S_ChangeEmail(const S_ChangeEmail& from);
+  S_ChangeEmail(S_ChangeEmail&& from) noexcept
+    : S_ChangeEmail() {
+    *this = ::std::move(from);
+  }
+
+  inline S_ChangeEmail& operator=(const S_ChangeEmail& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline S_ChangeEmail& operator=(S_ChangeEmail&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const S_ChangeEmail& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const S_ChangeEmail* internal_default_instance() {
+    return reinterpret_cast<const S_ChangeEmail*>(
+               &_S_ChangeEmail_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    21;
+
+  friend void swap(S_ChangeEmail& a, S_ChangeEmail& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(S_ChangeEmail* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(S_ChangeEmail* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline S_ChangeEmail* New() const final {
+    return new S_ChangeEmail();
+  }
+
+  S_ChangeEmail* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<S_ChangeEmail>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const S_ChangeEmail& from);
+  void MergeFrom(const S_ChangeEmail& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(S_ChangeEmail* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.S_ChangeEmail";
+  }
+  protected:
+  explicit S_ChangeEmail(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kMessageFieldNumber = 2,
+    kUpdatedInfoFieldNumber = 3,
+    kSuccessFieldNumber = 1,
+  };
+  // string message = 2;
+  void clear_message();
+  const std::string& message() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_message(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_message();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_message();
+  void set_allocated_message(std::string* message);
+  private:
+  const std::string& _internal_message() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_message(const std::string& value);
+  std::string* _internal_mutable_message();
+  public:
+
+  // .Protocol.UserInfo updated_info = 3;
+  bool has_updated_info() const;
+  private:
+  bool _internal_has_updated_info() const;
+  public:
+  void clear_updated_info();
+  const ::Protocol::UserInfo& updated_info() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::Protocol::UserInfo* release_updated_info();
+  ::Protocol::UserInfo* mutable_updated_info();
+  void set_allocated_updated_info(::Protocol::UserInfo* updated_info);
+  private:
+  const ::Protocol::UserInfo& _internal_updated_info() const;
+  ::Protocol::UserInfo* _internal_mutable_updated_info();
+  public:
+  void unsafe_arena_set_allocated_updated_info(
+      ::Protocol::UserInfo* updated_info);
+  ::Protocol::UserInfo* unsafe_arena_release_updated_info();
+
+  // bool success = 1;
+  void clear_success();
+  bool success() const;
+  void set_success(bool value);
+  private:
+  bool _internal_success() const;
+  void _internal_set_success(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.S_ChangeEmail)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
+  ::Protocol::UserInfo* updated_info_;
+  bool success_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class C_ChangePassword final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.C_ChangePassword) */ {
+ public:
+  inline C_ChangePassword() : C_ChangePassword(nullptr) {}
+  ~C_ChangePassword() override;
+  explicit constexpr C_ChangePassword(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  C_ChangePassword(const C_ChangePassword& from);
+  C_ChangePassword(C_ChangePassword&& from) noexcept
+    : C_ChangePassword() {
+    *this = ::std::move(from);
+  }
+
+  inline C_ChangePassword& operator=(const C_ChangePassword& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline C_ChangePassword& operator=(C_ChangePassword&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const C_ChangePassword& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const C_ChangePassword* internal_default_instance() {
+    return reinterpret_cast<const C_ChangePassword*>(
+               &_C_ChangePassword_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    22;
+
+  friend void swap(C_ChangePassword& a, C_ChangePassword& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(C_ChangePassword* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(C_ChangePassword* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline C_ChangePassword* New() const final {
+    return new C_ChangePassword();
+  }
+
+  C_ChangePassword* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<C_ChangePassword>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const C_ChangePassword& from);
+  void MergeFrom(const C_ChangePassword& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(C_ChangePassword* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.C_ChangePassword";
+  }
+  protected:
+  explicit C_ChangePassword(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kCurrentPasswordFieldNumber = 1,
+    kNewPasswordFieldNumber = 2,
+  };
+  // string current_password = 1;
+  void clear_current_password();
+  const std::string& current_password() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_current_password(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_current_password();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_current_password();
+  void set_allocated_current_password(std::string* current_password);
+  private:
+  const std::string& _internal_current_password() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_current_password(const std::string& value);
+  std::string* _internal_mutable_current_password();
+  public:
+
+  // string new_password = 2;
+  void clear_new_password();
+  const std::string& new_password() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_new_password(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_new_password();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_new_password();
+  void set_allocated_new_password(std::string* new_password);
+  private:
+  const std::string& _internal_new_password() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_new_password(const std::string& value);
+  std::string* _internal_mutable_new_password();
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.C_ChangePassword)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr current_password_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr new_password_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class S_ChangePassword final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S_ChangePassword) */ {
+ public:
+  inline S_ChangePassword() : S_ChangePassword(nullptr) {}
+  ~S_ChangePassword() override;
+  explicit constexpr S_ChangePassword(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  S_ChangePassword(const S_ChangePassword& from);
+  S_ChangePassword(S_ChangePassword&& from) noexcept
+    : S_ChangePassword() {
+    *this = ::std::move(from);
+  }
+
+  inline S_ChangePassword& operator=(const S_ChangePassword& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline S_ChangePassword& operator=(S_ChangePassword&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const S_ChangePassword& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const S_ChangePassword* internal_default_instance() {
+    return reinterpret_cast<const S_ChangePassword*>(
+               &_S_ChangePassword_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    23;
+
+  friend void swap(S_ChangePassword& a, S_ChangePassword& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(S_ChangePassword* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(S_ChangePassword* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline S_ChangePassword* New() const final {
+    return new S_ChangePassword();
+  }
+
+  S_ChangePassword* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<S_ChangePassword>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const S_ChangePassword& from);
+  void MergeFrom(const S_ChangePassword& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(S_ChangePassword* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.S_ChangePassword";
+  }
+  protected:
+  explicit S_ChangePassword(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kMessageFieldNumber = 2,
+    kSuccessFieldNumber = 1,
+  };
+  // string message = 2;
+  void clear_message();
+  const std::string& message() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_message(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_message();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_message();
+  void set_allocated_message(std::string* message);
+  private:
+  const std::string& _internal_message() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_message(const std::string& value);
+  std::string* _internal_mutable_message();
+  public:
+
+  // bool success = 1;
+  void clear_success();
+  bool success() const;
+  void set_success(bool value);
+  private:
+  bool _internal_success() const;
+  void _internal_set_success(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.S_ChangePassword)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
+  bool success_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
 class Text final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.Text) */ {
  public:
@@ -4886,7 +5649,7 @@ class Text final :
                &_Text_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    20;
+    24;
 
   friend void swap(Text& a, Text& b) {
     a.Swap(&b);
@@ -5023,7 +5786,7 @@ class Image final :
                &_Image_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    21;
+    25;
 
   friend void swap(Image& a, Image& b) {
     a.Swap(&b);
@@ -5187,7 +5950,7 @@ class Video final :
                &_Video_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    22;
+    26;
 
   friend void swap(Video& a, Video& b) {
     a.Swap(&b);
@@ -5362,7 +6125,7 @@ class File final :
                &_File_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    23;
+    27;
 
   friend void swap(File& a, File& b) {
     a.Swap(&b);
@@ -5542,7 +6305,7 @@ class SystemMsg final :
                &_SystemMsg_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    24;
+    28;
 
   friend void swap(SystemMsg& a, SystemMsg& b) {
     a.Swap(&b);
@@ -5715,7 +6478,7 @@ class ChatPayload final :
                &_ChatPayload_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    25;
+    29;
 
   friend void swap(ChatPayload& a, ChatPayload& b) {
     a.Swap(&b);
@@ -5952,7 +6715,7 @@ class C_Chat final :
                &_C_Chat_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    26;
+    30;
 
   friend void swap(C_Chat& a, C_Chat& b) {
     a.Swap(&b);
@@ -6142,7 +6905,7 @@ class S_Chat final :
                &_S_Chat_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    27;
+    31;
 
   friend void swap(S_Chat& a, S_Chat& b) {
     a.Swap(&b);
@@ -6375,7 +7138,7 @@ class C_ReqHistory final :
                &_C_ReqHistory_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    28;
+    32;
 
   friend void swap(C_ReqHistory& a, C_ReqHistory& b) {
     a.Swap(&b);
@@ -6534,7 +7297,7 @@ class S_ReqHistory final :
                &_S_ReqHistory_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    29;
+    33;
 
   friend void swap(S_ReqHistory& a, S_ReqHistory& b) {
     a.Swap(&b);
@@ -6702,7 +7465,7 @@ class C_UploadFile final :
                &_C_UploadFile_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    30;
+    34;
 
   friend void swap(C_UploadFile& a, C_UploadFile& b) {
     a.Swap(&b);
@@ -6772,6 +7535,8 @@ class C_UploadFile final :
     C_UploadFile_UploadType_PROFILE_IMG;
   static constexpr UploadType GROUP_PROFILE_IMG =
     C_UploadFile_UploadType_GROUP_PROFILE_IMG;
+  static constexpr UploadType BACKGROUND_IMG =
+    C_UploadFile_UploadType_BACKGROUND_IMG;
   static inline bool UploadType_IsValid(int value) {
     return C_UploadFile_UploadType_IsValid(value);
   }
@@ -6938,7 +7703,7 @@ class S_UploadFile final :
                &_S_UploadFile_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    31;
+    35;
 
   friend void swap(S_UploadFile& a, S_UploadFile& b) {
     a.Swap(&b);
@@ -7193,7 +7958,7 @@ class C_Ack final :
                &_C_Ack_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    32;
+    36;
 
   friend void swap(C_Ack& a, C_Ack& b) {
     a.Swap(&b);
@@ -7341,7 +8106,7 @@ class C_FetchOffline final :
                &_C_FetchOffline_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    33;
+    37;
 
   friend void swap(C_FetchOffline& a, C_FetchOffline& b) {
     a.Swap(&b);
@@ -7473,7 +8238,7 @@ class S_MessageBatch_ConversationBatch final :
                &_S_MessageBatch_ConversationBatch_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    34;
+    38;
 
   friend void swap(S_MessageBatch_ConversationBatch& a, S_MessageBatch_ConversationBatch& b) {
     a.Swap(&b);
@@ -7641,7 +8406,7 @@ class S_MessageBatch final :
                &_S_MessageBatch_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    35;
+    39;
 
   friend void swap(S_MessageBatch& a, S_MessageBatch& b) {
     a.Swap(&b);
@@ -7784,7 +8549,7 @@ class FriendRequest final :
                &_FriendRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    36;
+    40;
 
   friend void swap(FriendRequest& a, FriendRequest& b) {
     a.Swap(&b);
@@ -7947,7 +8712,7 @@ class C_SearchUser final :
                &_C_SearchUser_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    37;
+    41;
 
   friend void swap(C_SearchUser& a, C_SearchUser& b) {
     a.Swap(&b);
@@ -8084,7 +8849,7 @@ class S_SearchUser final :
                &_S_SearchUser_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    38;
+    42;
 
   friend void swap(S_SearchUser& a, S_SearchUser& b) {
     a.Swap(&b);
@@ -8258,7 +9023,7 @@ class C_FriendAction final :
                &_C_FriendAction_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    39;
+    43;
 
   friend void swap(C_FriendAction& a, C_FriendAction& b) {
     a.Swap(&b);
@@ -8442,7 +9207,7 @@ class S_FriendAction final :
                &_S_FriendAction_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    40;
+    44;
 
   friend void swap(S_FriendAction& a, S_FriendAction& b) {
     a.Swap(&b);
@@ -8610,7 +9375,7 @@ class C_FetchFriendData final :
                &_C_FetchFriendData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    41;
+    45;
 
   friend void swap(C_FetchFriendData& a, C_FetchFriendData& b) {
     a.Swap(&b);
@@ -8729,7 +9494,7 @@ class S_FetchFriendData final :
                &_S_FetchFriendData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    42;
+    46;
 
   friend void swap(S_FetchFriendData& a, S_FetchFriendData& b) {
     a.Swap(&b);
@@ -8910,7 +9675,7 @@ class S_FriendPush final :
                &_S_FriendPush_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    43;
+    47;
 
   friend void swap(S_FriendPush& a, S_FriendPush& b) {
     a.Swap(&b);
@@ -9094,7 +9859,7 @@ class GroupMemberInfo final :
                &_GroupMemberInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    44;
+    48;
 
   friend void swap(GroupMemberInfo& a, GroupMemberInfo& b) {
     a.Swap(&b);
@@ -9257,7 +10022,7 @@ class GroupInfo final :
                &_GroupInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    45;
+    49;
 
   friend void swap(GroupInfo& a, GroupInfo& b) {
     a.Swap(&b);
@@ -9491,7 +10256,7 @@ class C_CreateGroup final :
                &_C_CreateGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    46;
+    50;
 
   friend void swap(C_CreateGroup& a, C_CreateGroup& b) {
     a.Swap(&b);
@@ -9628,7 +10393,7 @@ class S_CreateGroup final :
                &_S_CreateGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    47;
+    51;
 
   friend void swap(S_CreateGroup& a, S_CreateGroup& b) {
     a.Swap(&b);
@@ -9780,7 +10545,7 @@ class C_GroupList final :
                &_C_GroupList_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    48;
+    52;
 
   friend void swap(C_GroupList& a, C_GroupList& b) {
     a.Swap(&b);
@@ -9899,7 +10664,7 @@ class S_GroupList final :
                &_S_GroupList_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    49;
+    53;
 
   friend void swap(S_GroupList& a, S_GroupList& b) {
     a.Swap(&b);
@@ -10040,7 +10805,7 @@ class C_GroupInfo final :
                &_C_GroupInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    50;
+    54;
 
   friend void swap(C_GroupInfo& a, C_GroupInfo& b) {
     a.Swap(&b);
@@ -10177,7 +10942,7 @@ class S_GroupInfo final :
                &_S_GroupInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    51;
+    55;
 
   friend void swap(S_GroupInfo& a, S_GroupInfo& b) {
     a.Swap(&b);
@@ -10329,7 +11094,7 @@ class C_InviteFriend final :
                &_C_InviteFriend_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    52;
+    56;
 
   friend void swap(C_InviteFriend& a, C_InviteFriend& b) {
     a.Swap(&b);
@@ -10492,7 +11257,7 @@ class S_InviteFriend final :
                &_S_InviteFriend_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    53;
+    57;
 
   friend void swap(S_InviteFriend& a, S_InviteFriend& b) {
     a.Swap(&b);
@@ -10624,7 +11389,7 @@ class C_JoinGroup final :
                &_C_JoinGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    54;
+    58;
 
   friend void swap(C_JoinGroup& a, C_JoinGroup& b) {
     a.Swap(&b);
@@ -10761,7 +11526,7 @@ class S_JoinGroup final :
                &_S_JoinGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    55;
+    59;
 
   friend void swap(S_JoinGroup& a, S_JoinGroup& b) {
     a.Swap(&b);
@@ -10913,7 +11678,7 @@ class C_GroupMemberList final :
                &_C_GroupMemberList_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    56;
+    60;
 
   friend void swap(C_GroupMemberList& a, C_GroupMemberList& b) {
     a.Swap(&b);
@@ -11050,7 +11815,7 @@ class S_GroupMemberList final :
                &_S_GroupMemberList_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    57;
+    61;
 
   friend void swap(S_GroupMemberList& a, S_GroupMemberList& b) {
     a.Swap(&b);
@@ -11207,7 +11972,7 @@ class C_LeaveGroup final :
                &_C_LeaveGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    58;
+    62;
 
   friend void swap(C_LeaveGroup& a, C_LeaveGroup& b) {
     a.Swap(&b);
@@ -11344,7 +12109,7 @@ class S_LeaveGroup final :
                &_S_LeaveGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    59;
+    63;
 
   friend void swap(S_LeaveGroup& a, S_LeaveGroup& b) {
     a.Swap(&b);
@@ -11476,7 +12241,7 @@ class C_EditGroup final :
                &_C_EditGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    60;
+    64;
 
   friend void swap(C_EditGroup& a, C_EditGroup& b) {
     a.Swap(&b);
@@ -11661,7 +12426,7 @@ class S_EditGroup final :
                &_S_EditGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    61;
+    65;
 
   friend void swap(S_EditGroup& a, S_EditGroup& b) {
     a.Swap(&b);
@@ -11769,6 +12534,307 @@ class S_EditGroup final :
 };
 // -------------------------------------------------------------------
 
+class C_Withdraw final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.C_Withdraw) */ {
+ public:
+  inline C_Withdraw() : C_Withdraw(nullptr) {}
+  ~C_Withdraw() override;
+  explicit constexpr C_Withdraw(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  C_Withdraw(const C_Withdraw& from);
+  C_Withdraw(C_Withdraw&& from) noexcept
+    : C_Withdraw() {
+    *this = ::std::move(from);
+  }
+
+  inline C_Withdraw& operator=(const C_Withdraw& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline C_Withdraw& operator=(C_Withdraw&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const C_Withdraw& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const C_Withdraw* internal_default_instance() {
+    return reinterpret_cast<const C_Withdraw*>(
+               &_C_Withdraw_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    66;
+
+  friend void swap(C_Withdraw& a, C_Withdraw& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(C_Withdraw* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(C_Withdraw* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline C_Withdraw* New() const final {
+    return new C_Withdraw();
+  }
+
+  C_Withdraw* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<C_Withdraw>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const C_Withdraw& from);
+  void MergeFrom(const C_Withdraw& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(C_Withdraw* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.C_Withdraw";
+  }
+  protected:
+  explicit C_Withdraw(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPasswordFieldNumber = 1,
+    kReasonFieldNumber = 2,
+  };
+  // string password = 1;
+  void clear_password();
+  const std::string& password() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_password(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_password();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_password();
+  void set_allocated_password(std::string* password);
+  private:
+  const std::string& _internal_password() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_password(const std::string& value);
+  std::string* _internal_mutable_password();
+  public:
+
+  // string reason = 2;
+  void clear_reason();
+  const std::string& reason() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_reason(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_reason();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_reason();
+  void set_allocated_reason(std::string* reason);
+  private:
+  const std::string& _internal_reason() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_reason(const std::string& value);
+  std::string* _internal_mutable_reason();
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.C_Withdraw)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr password_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr reason_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class S_Withdraw final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S_Withdraw) */ {
+ public:
+  inline S_Withdraw() : S_Withdraw(nullptr) {}
+  ~S_Withdraw() override;
+  explicit constexpr S_Withdraw(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  S_Withdraw(const S_Withdraw& from);
+  S_Withdraw(S_Withdraw&& from) noexcept
+    : S_Withdraw() {
+    *this = ::std::move(from);
+  }
+
+  inline S_Withdraw& operator=(const S_Withdraw& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline S_Withdraw& operator=(S_Withdraw&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const S_Withdraw& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const S_Withdraw* internal_default_instance() {
+    return reinterpret_cast<const S_Withdraw*>(
+               &_S_Withdraw_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    67;
+
+  friend void swap(S_Withdraw& a, S_Withdraw& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(S_Withdraw* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(S_Withdraw* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline S_Withdraw* New() const final {
+    return new S_Withdraw();
+  }
+
+  S_Withdraw* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<S_Withdraw>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const S_Withdraw& from);
+  void MergeFrom(const S_Withdraw& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(S_Withdraw* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.S_Withdraw";
+  }
+  protected:
+  explicit S_Withdraw(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kMessageFieldNumber = 2,
+    kSuccessFieldNumber = 1,
+  };
+  // string message = 2;
+  void clear_message();
+  const std::string& message() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_message(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_message();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_message();
+  void set_allocated_message(std::string* message);
+  private:
+  const std::string& _internal_message() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_message(const std::string& value);
+  std::string* _internal_mutable_message();
+  public:
+
+  // bool success = 1;
+  void clear_success();
+  bool success() const;
+  void set_success(bool value);
+  private:
+  bool _internal_success() const;
+  void _internal_set_success(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.S_Withdraw)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
+  bool success_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
 class S_Error final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S_Error) */ {
  public:
@@ -11813,7 +12879,7 @@ class S_Error final :
                &_S_Error_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    62;
+    68;
 
   friend void swap(S_Error& a, S_Error& b) {
     a.Swap(&b);
@@ -11972,7 +13038,7 @@ class C_Heartbeat final :
                &_C_Heartbeat_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    63;
+    69;
 
   friend void swap(C_Heartbeat& a, C_Heartbeat& b) {
     a.Swap(&b);
@@ -12091,7 +13157,7 @@ class S_Heartbeat final :
                &_S_Heartbeat_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    64;
+    70;
 
   friend void swap(S_Heartbeat& a, S_Heartbeat& b) {
     a.Swap(&b);
@@ -13572,6 +14638,298 @@ inline ::Protocol::S_RegisterFcmToken* Envelope::_internal_mutable_s_register_fc
 inline ::Protocol::S_RegisterFcmToken* Envelope::mutable_s_register_fcm_token() {
   // @@protoc_insertion_point(field_mutable:Protocol.Envelope.s_register_fcm_token)
   return _internal_mutable_s_register_fcm_token();
+}
+
+// .Protocol.C_ChangeEmail c_change_email = 36;
+inline bool Envelope::_internal_has_c_change_email() const {
+  return body_case() == kCChangeEmail;
+}
+inline bool Envelope::has_c_change_email() const {
+  return _internal_has_c_change_email();
+}
+inline void Envelope::set_has_c_change_email() {
+  _oneof_case_[0] = kCChangeEmail;
+}
+inline void Envelope::clear_c_change_email() {
+  if (_internal_has_c_change_email()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete body_.c_change_email_;
+    }
+    clear_has_body();
+  }
+}
+inline ::Protocol::C_ChangeEmail* Envelope::release_c_change_email() {
+  // @@protoc_insertion_point(field_release:Protocol.Envelope.c_change_email)
+  if (_internal_has_c_change_email()) {
+    clear_has_body();
+      ::Protocol::C_ChangeEmail* temp = body_.c_change_email_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    body_.c_change_email_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::Protocol::C_ChangeEmail& Envelope::_internal_c_change_email() const {
+  return _internal_has_c_change_email()
+      ? *body_.c_change_email_
+      : reinterpret_cast< ::Protocol::C_ChangeEmail&>(::Protocol::_C_ChangeEmail_default_instance_);
+}
+inline const ::Protocol::C_ChangeEmail& Envelope::c_change_email() const {
+  // @@protoc_insertion_point(field_get:Protocol.Envelope.c_change_email)
+  return _internal_c_change_email();
+}
+inline ::Protocol::C_ChangeEmail* Envelope::unsafe_arena_release_c_change_email() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:Protocol.Envelope.c_change_email)
+  if (_internal_has_c_change_email()) {
+    clear_has_body();
+    ::Protocol::C_ChangeEmail* temp = body_.c_change_email_;
+    body_.c_change_email_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Envelope::unsafe_arena_set_allocated_c_change_email(::Protocol::C_ChangeEmail* c_change_email) {
+  clear_body();
+  if (c_change_email) {
+    set_has_c_change_email();
+    body_.c_change_email_ = c_change_email;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.Envelope.c_change_email)
+}
+inline ::Protocol::C_ChangeEmail* Envelope::_internal_mutable_c_change_email() {
+  if (!_internal_has_c_change_email()) {
+    clear_body();
+    set_has_c_change_email();
+    body_.c_change_email_ = CreateMaybeMessage< ::Protocol::C_ChangeEmail >(GetArenaForAllocation());
+  }
+  return body_.c_change_email_;
+}
+inline ::Protocol::C_ChangeEmail* Envelope::mutable_c_change_email() {
+  // @@protoc_insertion_point(field_mutable:Protocol.Envelope.c_change_email)
+  return _internal_mutable_c_change_email();
+}
+
+// .Protocol.S_ChangeEmail s_change_email = 37;
+inline bool Envelope::_internal_has_s_change_email() const {
+  return body_case() == kSChangeEmail;
+}
+inline bool Envelope::has_s_change_email() const {
+  return _internal_has_s_change_email();
+}
+inline void Envelope::set_has_s_change_email() {
+  _oneof_case_[0] = kSChangeEmail;
+}
+inline void Envelope::clear_s_change_email() {
+  if (_internal_has_s_change_email()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete body_.s_change_email_;
+    }
+    clear_has_body();
+  }
+}
+inline ::Protocol::S_ChangeEmail* Envelope::release_s_change_email() {
+  // @@protoc_insertion_point(field_release:Protocol.Envelope.s_change_email)
+  if (_internal_has_s_change_email()) {
+    clear_has_body();
+      ::Protocol::S_ChangeEmail* temp = body_.s_change_email_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    body_.s_change_email_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::Protocol::S_ChangeEmail& Envelope::_internal_s_change_email() const {
+  return _internal_has_s_change_email()
+      ? *body_.s_change_email_
+      : reinterpret_cast< ::Protocol::S_ChangeEmail&>(::Protocol::_S_ChangeEmail_default_instance_);
+}
+inline const ::Protocol::S_ChangeEmail& Envelope::s_change_email() const {
+  // @@protoc_insertion_point(field_get:Protocol.Envelope.s_change_email)
+  return _internal_s_change_email();
+}
+inline ::Protocol::S_ChangeEmail* Envelope::unsafe_arena_release_s_change_email() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:Protocol.Envelope.s_change_email)
+  if (_internal_has_s_change_email()) {
+    clear_has_body();
+    ::Protocol::S_ChangeEmail* temp = body_.s_change_email_;
+    body_.s_change_email_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Envelope::unsafe_arena_set_allocated_s_change_email(::Protocol::S_ChangeEmail* s_change_email) {
+  clear_body();
+  if (s_change_email) {
+    set_has_s_change_email();
+    body_.s_change_email_ = s_change_email;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.Envelope.s_change_email)
+}
+inline ::Protocol::S_ChangeEmail* Envelope::_internal_mutable_s_change_email() {
+  if (!_internal_has_s_change_email()) {
+    clear_body();
+    set_has_s_change_email();
+    body_.s_change_email_ = CreateMaybeMessage< ::Protocol::S_ChangeEmail >(GetArenaForAllocation());
+  }
+  return body_.s_change_email_;
+}
+inline ::Protocol::S_ChangeEmail* Envelope::mutable_s_change_email() {
+  // @@protoc_insertion_point(field_mutable:Protocol.Envelope.s_change_email)
+  return _internal_mutable_s_change_email();
+}
+
+// .Protocol.C_ChangePassword c_change_password = 38;
+inline bool Envelope::_internal_has_c_change_password() const {
+  return body_case() == kCChangePassword;
+}
+inline bool Envelope::has_c_change_password() const {
+  return _internal_has_c_change_password();
+}
+inline void Envelope::set_has_c_change_password() {
+  _oneof_case_[0] = kCChangePassword;
+}
+inline void Envelope::clear_c_change_password() {
+  if (_internal_has_c_change_password()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete body_.c_change_password_;
+    }
+    clear_has_body();
+  }
+}
+inline ::Protocol::C_ChangePassword* Envelope::release_c_change_password() {
+  // @@protoc_insertion_point(field_release:Protocol.Envelope.c_change_password)
+  if (_internal_has_c_change_password()) {
+    clear_has_body();
+      ::Protocol::C_ChangePassword* temp = body_.c_change_password_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    body_.c_change_password_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::Protocol::C_ChangePassword& Envelope::_internal_c_change_password() const {
+  return _internal_has_c_change_password()
+      ? *body_.c_change_password_
+      : reinterpret_cast< ::Protocol::C_ChangePassword&>(::Protocol::_C_ChangePassword_default_instance_);
+}
+inline const ::Protocol::C_ChangePassword& Envelope::c_change_password() const {
+  // @@protoc_insertion_point(field_get:Protocol.Envelope.c_change_password)
+  return _internal_c_change_password();
+}
+inline ::Protocol::C_ChangePassword* Envelope::unsafe_arena_release_c_change_password() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:Protocol.Envelope.c_change_password)
+  if (_internal_has_c_change_password()) {
+    clear_has_body();
+    ::Protocol::C_ChangePassword* temp = body_.c_change_password_;
+    body_.c_change_password_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Envelope::unsafe_arena_set_allocated_c_change_password(::Protocol::C_ChangePassword* c_change_password) {
+  clear_body();
+  if (c_change_password) {
+    set_has_c_change_password();
+    body_.c_change_password_ = c_change_password;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.Envelope.c_change_password)
+}
+inline ::Protocol::C_ChangePassword* Envelope::_internal_mutable_c_change_password() {
+  if (!_internal_has_c_change_password()) {
+    clear_body();
+    set_has_c_change_password();
+    body_.c_change_password_ = CreateMaybeMessage< ::Protocol::C_ChangePassword >(GetArenaForAllocation());
+  }
+  return body_.c_change_password_;
+}
+inline ::Protocol::C_ChangePassword* Envelope::mutable_c_change_password() {
+  // @@protoc_insertion_point(field_mutable:Protocol.Envelope.c_change_password)
+  return _internal_mutable_c_change_password();
+}
+
+// .Protocol.S_ChangePassword s_change_password = 39;
+inline bool Envelope::_internal_has_s_change_password() const {
+  return body_case() == kSChangePassword;
+}
+inline bool Envelope::has_s_change_password() const {
+  return _internal_has_s_change_password();
+}
+inline void Envelope::set_has_s_change_password() {
+  _oneof_case_[0] = kSChangePassword;
+}
+inline void Envelope::clear_s_change_password() {
+  if (_internal_has_s_change_password()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete body_.s_change_password_;
+    }
+    clear_has_body();
+  }
+}
+inline ::Protocol::S_ChangePassword* Envelope::release_s_change_password() {
+  // @@protoc_insertion_point(field_release:Protocol.Envelope.s_change_password)
+  if (_internal_has_s_change_password()) {
+    clear_has_body();
+      ::Protocol::S_ChangePassword* temp = body_.s_change_password_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    body_.s_change_password_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::Protocol::S_ChangePassword& Envelope::_internal_s_change_password() const {
+  return _internal_has_s_change_password()
+      ? *body_.s_change_password_
+      : reinterpret_cast< ::Protocol::S_ChangePassword&>(::Protocol::_S_ChangePassword_default_instance_);
+}
+inline const ::Protocol::S_ChangePassword& Envelope::s_change_password() const {
+  // @@protoc_insertion_point(field_get:Protocol.Envelope.s_change_password)
+  return _internal_s_change_password();
+}
+inline ::Protocol::S_ChangePassword* Envelope::unsafe_arena_release_s_change_password() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:Protocol.Envelope.s_change_password)
+  if (_internal_has_s_change_password()) {
+    clear_has_body();
+    ::Protocol::S_ChangePassword* temp = body_.s_change_password_;
+    body_.s_change_password_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Envelope::unsafe_arena_set_allocated_s_change_password(::Protocol::S_ChangePassword* s_change_password) {
+  clear_body();
+  if (s_change_password) {
+    set_has_s_change_password();
+    body_.s_change_password_ = s_change_password;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.Envelope.s_change_password)
+}
+inline ::Protocol::S_ChangePassword* Envelope::_internal_mutable_s_change_password() {
+  if (!_internal_has_s_change_password()) {
+    clear_body();
+    set_has_s_change_password();
+    body_.s_change_password_ = CreateMaybeMessage< ::Protocol::S_ChangePassword >(GetArenaForAllocation());
+  }
+  return body_.s_change_password_;
+}
+inline ::Protocol::S_ChangePassword* Envelope::mutable_s_change_password() {
+  // @@protoc_insertion_point(field_mutable:Protocol.Envelope.s_change_password)
+  return _internal_mutable_s_change_password();
 }
 
 // .Protocol.C_Chat c_chat = 40;
@@ -15910,6 +17268,152 @@ inline ::Protocol::S_EditGroup* Envelope::mutable_s_edit_group() {
   return _internal_mutable_s_edit_group();
 }
 
+// .Protocol.C_Withdraw c_withdraw = 96;
+inline bool Envelope::_internal_has_c_withdraw() const {
+  return body_case() == kCWithdraw;
+}
+inline bool Envelope::has_c_withdraw() const {
+  return _internal_has_c_withdraw();
+}
+inline void Envelope::set_has_c_withdraw() {
+  _oneof_case_[0] = kCWithdraw;
+}
+inline void Envelope::clear_c_withdraw() {
+  if (_internal_has_c_withdraw()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete body_.c_withdraw_;
+    }
+    clear_has_body();
+  }
+}
+inline ::Protocol::C_Withdraw* Envelope::release_c_withdraw() {
+  // @@protoc_insertion_point(field_release:Protocol.Envelope.c_withdraw)
+  if (_internal_has_c_withdraw()) {
+    clear_has_body();
+      ::Protocol::C_Withdraw* temp = body_.c_withdraw_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    body_.c_withdraw_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::Protocol::C_Withdraw& Envelope::_internal_c_withdraw() const {
+  return _internal_has_c_withdraw()
+      ? *body_.c_withdraw_
+      : reinterpret_cast< ::Protocol::C_Withdraw&>(::Protocol::_C_Withdraw_default_instance_);
+}
+inline const ::Protocol::C_Withdraw& Envelope::c_withdraw() const {
+  // @@protoc_insertion_point(field_get:Protocol.Envelope.c_withdraw)
+  return _internal_c_withdraw();
+}
+inline ::Protocol::C_Withdraw* Envelope::unsafe_arena_release_c_withdraw() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:Protocol.Envelope.c_withdraw)
+  if (_internal_has_c_withdraw()) {
+    clear_has_body();
+    ::Protocol::C_Withdraw* temp = body_.c_withdraw_;
+    body_.c_withdraw_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Envelope::unsafe_arena_set_allocated_c_withdraw(::Protocol::C_Withdraw* c_withdraw) {
+  clear_body();
+  if (c_withdraw) {
+    set_has_c_withdraw();
+    body_.c_withdraw_ = c_withdraw;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.Envelope.c_withdraw)
+}
+inline ::Protocol::C_Withdraw* Envelope::_internal_mutable_c_withdraw() {
+  if (!_internal_has_c_withdraw()) {
+    clear_body();
+    set_has_c_withdraw();
+    body_.c_withdraw_ = CreateMaybeMessage< ::Protocol::C_Withdraw >(GetArenaForAllocation());
+  }
+  return body_.c_withdraw_;
+}
+inline ::Protocol::C_Withdraw* Envelope::mutable_c_withdraw() {
+  // @@protoc_insertion_point(field_mutable:Protocol.Envelope.c_withdraw)
+  return _internal_mutable_c_withdraw();
+}
+
+// .Protocol.S_Withdraw s_withdraw = 97;
+inline bool Envelope::_internal_has_s_withdraw() const {
+  return body_case() == kSWithdraw;
+}
+inline bool Envelope::has_s_withdraw() const {
+  return _internal_has_s_withdraw();
+}
+inline void Envelope::set_has_s_withdraw() {
+  _oneof_case_[0] = kSWithdraw;
+}
+inline void Envelope::clear_s_withdraw() {
+  if (_internal_has_s_withdraw()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete body_.s_withdraw_;
+    }
+    clear_has_body();
+  }
+}
+inline ::Protocol::S_Withdraw* Envelope::release_s_withdraw() {
+  // @@protoc_insertion_point(field_release:Protocol.Envelope.s_withdraw)
+  if (_internal_has_s_withdraw()) {
+    clear_has_body();
+      ::Protocol::S_Withdraw* temp = body_.s_withdraw_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    body_.s_withdraw_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::Protocol::S_Withdraw& Envelope::_internal_s_withdraw() const {
+  return _internal_has_s_withdraw()
+      ? *body_.s_withdraw_
+      : reinterpret_cast< ::Protocol::S_Withdraw&>(::Protocol::_S_Withdraw_default_instance_);
+}
+inline const ::Protocol::S_Withdraw& Envelope::s_withdraw() const {
+  // @@protoc_insertion_point(field_get:Protocol.Envelope.s_withdraw)
+  return _internal_s_withdraw();
+}
+inline ::Protocol::S_Withdraw* Envelope::unsafe_arena_release_s_withdraw() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:Protocol.Envelope.s_withdraw)
+  if (_internal_has_s_withdraw()) {
+    clear_has_body();
+    ::Protocol::S_Withdraw* temp = body_.s_withdraw_;
+    body_.s_withdraw_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Envelope::unsafe_arena_set_allocated_s_withdraw(::Protocol::S_Withdraw* s_withdraw) {
+  clear_body();
+  if (s_withdraw) {
+    set_has_s_withdraw();
+    body_.s_withdraw_ = s_withdraw;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.Envelope.s_withdraw)
+}
+inline ::Protocol::S_Withdraw* Envelope::_internal_mutable_s_withdraw() {
+  if (!_internal_has_s_withdraw()) {
+    clear_body();
+    set_has_s_withdraw();
+    body_.s_withdraw_ = CreateMaybeMessage< ::Protocol::S_Withdraw >(GetArenaForAllocation());
+  }
+  return body_.s_withdraw_;
+}
+inline ::Protocol::S_Withdraw* Envelope::mutable_s_withdraw() {
+  // @@protoc_insertion_point(field_mutable:Protocol.Envelope.s_withdraw)
+  return _internal_mutable_s_withdraw();
+}
+
 // .Protocol.S_Error s_error = 100;
 inline bool Envelope::_internal_has_s_error() const {
   return body_case() == kSError;
@@ -18186,6 +19690,370 @@ inline void S_RegisterFcmToken::set_allocated_message(std::string* message) {
   message_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), message,
       GetArenaForAllocation());
   // @@protoc_insertion_point(field_set_allocated:Protocol.S_RegisterFcmToken.message)
+}
+
+// -------------------------------------------------------------------
+
+// C_ChangeEmail
+
+// string new_email = 1;
+inline void C_ChangeEmail::clear_new_email() {
+  new_email_.ClearToEmpty();
+}
+inline const std::string& C_ChangeEmail::new_email() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_ChangeEmail.new_email)
+  return _internal_new_email();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void C_ChangeEmail::set_new_email(ArgT0&& arg0, ArgT... args) {
+ 
+ new_email_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.C_ChangeEmail.new_email)
+}
+inline std::string* C_ChangeEmail::mutable_new_email() {
+  // @@protoc_insertion_point(field_mutable:Protocol.C_ChangeEmail.new_email)
+  return _internal_mutable_new_email();
+}
+inline const std::string& C_ChangeEmail::_internal_new_email() const {
+  return new_email_.Get();
+}
+inline void C_ChangeEmail::_internal_set_new_email(const std::string& value) {
+  
+  new_email_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* C_ChangeEmail::_internal_mutable_new_email() {
+  
+  return new_email_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* C_ChangeEmail::release_new_email() {
+  // @@protoc_insertion_point(field_release:Protocol.C_ChangeEmail.new_email)
+  return new_email_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void C_ChangeEmail::set_allocated_new_email(std::string* new_email) {
+  if (new_email != nullptr) {
+    
+  } else {
+    
+  }
+  new_email_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), new_email,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C_ChangeEmail.new_email)
+}
+
+// -------------------------------------------------------------------
+
+// S_ChangeEmail
+
+// bool success = 1;
+inline void S_ChangeEmail::clear_success() {
+  success_ = false;
+}
+inline bool S_ChangeEmail::_internal_success() const {
+  return success_;
+}
+inline bool S_ChangeEmail::success() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_ChangeEmail.success)
+  return _internal_success();
+}
+inline void S_ChangeEmail::_internal_set_success(bool value) {
+  
+  success_ = value;
+}
+inline void S_ChangeEmail::set_success(bool value) {
+  _internal_set_success(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_ChangeEmail.success)
+}
+
+// string message = 2;
+inline void S_ChangeEmail::clear_message() {
+  message_.ClearToEmpty();
+}
+inline const std::string& S_ChangeEmail::message() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_ChangeEmail.message)
+  return _internal_message();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void S_ChangeEmail::set_message(ArgT0&& arg0, ArgT... args) {
+ 
+ message_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.S_ChangeEmail.message)
+}
+inline std::string* S_ChangeEmail::mutable_message() {
+  // @@protoc_insertion_point(field_mutable:Protocol.S_ChangeEmail.message)
+  return _internal_mutable_message();
+}
+inline const std::string& S_ChangeEmail::_internal_message() const {
+  return message_.Get();
+}
+inline void S_ChangeEmail::_internal_set_message(const std::string& value) {
+  
+  message_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* S_ChangeEmail::_internal_mutable_message() {
+  
+  return message_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* S_ChangeEmail::release_message() {
+  // @@protoc_insertion_point(field_release:Protocol.S_ChangeEmail.message)
+  return message_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void S_ChangeEmail::set_allocated_message(std::string* message) {
+  if (message != nullptr) {
+    
+  } else {
+    
+  }
+  message_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), message,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.S_ChangeEmail.message)
+}
+
+// .Protocol.UserInfo updated_info = 3;
+inline bool S_ChangeEmail::_internal_has_updated_info() const {
+  return this != internal_default_instance() && updated_info_ != nullptr;
+}
+inline bool S_ChangeEmail::has_updated_info() const {
+  return _internal_has_updated_info();
+}
+inline void S_ChangeEmail::clear_updated_info() {
+  if (GetArenaForAllocation() == nullptr && updated_info_ != nullptr) {
+    delete updated_info_;
+  }
+  updated_info_ = nullptr;
+}
+inline const ::Protocol::UserInfo& S_ChangeEmail::_internal_updated_info() const {
+  const ::Protocol::UserInfo* p = updated_info_;
+  return p != nullptr ? *p : reinterpret_cast<const ::Protocol::UserInfo&>(
+      ::Protocol::_UserInfo_default_instance_);
+}
+inline const ::Protocol::UserInfo& S_ChangeEmail::updated_info() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_ChangeEmail.updated_info)
+  return _internal_updated_info();
+}
+inline void S_ChangeEmail::unsafe_arena_set_allocated_updated_info(
+    ::Protocol::UserInfo* updated_info) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(updated_info_);
+  }
+  updated_info_ = updated_info;
+  if (updated_info) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.S_ChangeEmail.updated_info)
+}
+inline ::Protocol::UserInfo* S_ChangeEmail::release_updated_info() {
+  
+  ::Protocol::UserInfo* temp = updated_info_;
+  updated_info_ = nullptr;
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+  return temp;
+}
+inline ::Protocol::UserInfo* S_ChangeEmail::unsafe_arena_release_updated_info() {
+  // @@protoc_insertion_point(field_release:Protocol.S_ChangeEmail.updated_info)
+  
+  ::Protocol::UserInfo* temp = updated_info_;
+  updated_info_ = nullptr;
+  return temp;
+}
+inline ::Protocol::UserInfo* S_ChangeEmail::_internal_mutable_updated_info() {
+  
+  if (updated_info_ == nullptr) {
+    auto* p = CreateMaybeMessage<::Protocol::UserInfo>(GetArenaForAllocation());
+    updated_info_ = p;
+  }
+  return updated_info_;
+}
+inline ::Protocol::UserInfo* S_ChangeEmail::mutable_updated_info() {
+  // @@protoc_insertion_point(field_mutable:Protocol.S_ChangeEmail.updated_info)
+  return _internal_mutable_updated_info();
+}
+inline void S_ChangeEmail::set_allocated_updated_info(::Protocol::UserInfo* updated_info) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete updated_info_;
+  }
+  if (updated_info) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::Protocol::UserInfo>::GetOwningArena(updated_info);
+    if (message_arena != submessage_arena) {
+      updated_info = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, updated_info, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  updated_info_ = updated_info;
+  // @@protoc_insertion_point(field_set_allocated:Protocol.S_ChangeEmail.updated_info)
+}
+
+// -------------------------------------------------------------------
+
+// C_ChangePassword
+
+// string current_password = 1;
+inline void C_ChangePassword::clear_current_password() {
+  current_password_.ClearToEmpty();
+}
+inline const std::string& C_ChangePassword::current_password() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_ChangePassword.current_password)
+  return _internal_current_password();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void C_ChangePassword::set_current_password(ArgT0&& arg0, ArgT... args) {
+ 
+ current_password_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.C_ChangePassword.current_password)
+}
+inline std::string* C_ChangePassword::mutable_current_password() {
+  // @@protoc_insertion_point(field_mutable:Protocol.C_ChangePassword.current_password)
+  return _internal_mutable_current_password();
+}
+inline const std::string& C_ChangePassword::_internal_current_password() const {
+  return current_password_.Get();
+}
+inline void C_ChangePassword::_internal_set_current_password(const std::string& value) {
+  
+  current_password_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* C_ChangePassword::_internal_mutable_current_password() {
+  
+  return current_password_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* C_ChangePassword::release_current_password() {
+  // @@protoc_insertion_point(field_release:Protocol.C_ChangePassword.current_password)
+  return current_password_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void C_ChangePassword::set_allocated_current_password(std::string* current_password) {
+  if (current_password != nullptr) {
+    
+  } else {
+    
+  }
+  current_password_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), current_password,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C_ChangePassword.current_password)
+}
+
+// string new_password = 2;
+inline void C_ChangePassword::clear_new_password() {
+  new_password_.ClearToEmpty();
+}
+inline const std::string& C_ChangePassword::new_password() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_ChangePassword.new_password)
+  return _internal_new_password();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void C_ChangePassword::set_new_password(ArgT0&& arg0, ArgT... args) {
+ 
+ new_password_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.C_ChangePassword.new_password)
+}
+inline std::string* C_ChangePassword::mutable_new_password() {
+  // @@protoc_insertion_point(field_mutable:Protocol.C_ChangePassword.new_password)
+  return _internal_mutable_new_password();
+}
+inline const std::string& C_ChangePassword::_internal_new_password() const {
+  return new_password_.Get();
+}
+inline void C_ChangePassword::_internal_set_new_password(const std::string& value) {
+  
+  new_password_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* C_ChangePassword::_internal_mutable_new_password() {
+  
+  return new_password_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* C_ChangePassword::release_new_password() {
+  // @@protoc_insertion_point(field_release:Protocol.C_ChangePassword.new_password)
+  return new_password_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void C_ChangePassword::set_allocated_new_password(std::string* new_password) {
+  if (new_password != nullptr) {
+    
+  } else {
+    
+  }
+  new_password_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), new_password,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C_ChangePassword.new_password)
+}
+
+// -------------------------------------------------------------------
+
+// S_ChangePassword
+
+// bool success = 1;
+inline void S_ChangePassword::clear_success() {
+  success_ = false;
+}
+inline bool S_ChangePassword::_internal_success() const {
+  return success_;
+}
+inline bool S_ChangePassword::success() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_ChangePassword.success)
+  return _internal_success();
+}
+inline void S_ChangePassword::_internal_set_success(bool value) {
+  
+  success_ = value;
+}
+inline void S_ChangePassword::set_success(bool value) {
+  _internal_set_success(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_ChangePassword.success)
+}
+
+// string message = 2;
+inline void S_ChangePassword::clear_message() {
+  message_.ClearToEmpty();
+}
+inline const std::string& S_ChangePassword::message() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_ChangePassword.message)
+  return _internal_message();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void S_ChangePassword::set_message(ArgT0&& arg0, ArgT... args) {
+ 
+ message_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.S_ChangePassword.message)
+}
+inline std::string* S_ChangePassword::mutable_message() {
+  // @@protoc_insertion_point(field_mutable:Protocol.S_ChangePassword.message)
+  return _internal_mutable_message();
+}
+inline const std::string& S_ChangePassword::_internal_message() const {
+  return message_.Get();
+}
+inline void S_ChangePassword::_internal_set_message(const std::string& value) {
+  
+  message_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* S_ChangePassword::_internal_mutable_message() {
+  
+  return message_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* S_ChangePassword::release_message() {
+  // @@protoc_insertion_point(field_release:Protocol.S_ChangePassword.message)
+  return message_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void S_ChangePassword::set_allocated_message(std::string* message) {
+  if (message != nullptr) {
+    
+  } else {
+    
+  }
+  message_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), message,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.S_ChangePassword.message)
 }
 
 // -------------------------------------------------------------------
@@ -22986,6 +24854,169 @@ inline void S_EditGroup::set_allocated_group(::Protocol::GroupInfo* group) {
 
 // -------------------------------------------------------------------
 
+// C_Withdraw
+
+// string password = 1;
+inline void C_Withdraw::clear_password() {
+  password_.ClearToEmpty();
+}
+inline const std::string& C_Withdraw::password() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_Withdraw.password)
+  return _internal_password();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void C_Withdraw::set_password(ArgT0&& arg0, ArgT... args) {
+ 
+ password_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.C_Withdraw.password)
+}
+inline std::string* C_Withdraw::mutable_password() {
+  // @@protoc_insertion_point(field_mutable:Protocol.C_Withdraw.password)
+  return _internal_mutable_password();
+}
+inline const std::string& C_Withdraw::_internal_password() const {
+  return password_.Get();
+}
+inline void C_Withdraw::_internal_set_password(const std::string& value) {
+  
+  password_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* C_Withdraw::_internal_mutable_password() {
+  
+  return password_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* C_Withdraw::release_password() {
+  // @@protoc_insertion_point(field_release:Protocol.C_Withdraw.password)
+  return password_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void C_Withdraw::set_allocated_password(std::string* password) {
+  if (password != nullptr) {
+    
+  } else {
+    
+  }
+  password_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), password,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C_Withdraw.password)
+}
+
+// string reason = 2;
+inline void C_Withdraw::clear_reason() {
+  reason_.ClearToEmpty();
+}
+inline const std::string& C_Withdraw::reason() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_Withdraw.reason)
+  return _internal_reason();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void C_Withdraw::set_reason(ArgT0&& arg0, ArgT... args) {
+ 
+ reason_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.C_Withdraw.reason)
+}
+inline std::string* C_Withdraw::mutable_reason() {
+  // @@protoc_insertion_point(field_mutable:Protocol.C_Withdraw.reason)
+  return _internal_mutable_reason();
+}
+inline const std::string& C_Withdraw::_internal_reason() const {
+  return reason_.Get();
+}
+inline void C_Withdraw::_internal_set_reason(const std::string& value) {
+  
+  reason_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* C_Withdraw::_internal_mutable_reason() {
+  
+  return reason_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* C_Withdraw::release_reason() {
+  // @@protoc_insertion_point(field_release:Protocol.C_Withdraw.reason)
+  return reason_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void C_Withdraw::set_allocated_reason(std::string* reason) {
+  if (reason != nullptr) {
+    
+  } else {
+    
+  }
+  reason_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), reason,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C_Withdraw.reason)
+}
+
+// -------------------------------------------------------------------
+
+// S_Withdraw
+
+// bool success = 1;
+inline void S_Withdraw::clear_success() {
+  success_ = false;
+}
+inline bool S_Withdraw::_internal_success() const {
+  return success_;
+}
+inline bool S_Withdraw::success() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_Withdraw.success)
+  return _internal_success();
+}
+inline void S_Withdraw::_internal_set_success(bool value) {
+  
+  success_ = value;
+}
+inline void S_Withdraw::set_success(bool value) {
+  _internal_set_success(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_Withdraw.success)
+}
+
+// string message = 2;
+inline void S_Withdraw::clear_message() {
+  message_.ClearToEmpty();
+}
+inline const std::string& S_Withdraw::message() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_Withdraw.message)
+  return _internal_message();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void S_Withdraw::set_message(ArgT0&& arg0, ArgT... args) {
+ 
+ message_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.S_Withdraw.message)
+}
+inline std::string* S_Withdraw::mutable_message() {
+  // @@protoc_insertion_point(field_mutable:Protocol.S_Withdraw.message)
+  return _internal_mutable_message();
+}
+inline const std::string& S_Withdraw::_internal_message() const {
+  return message_.Get();
+}
+inline void S_Withdraw::_internal_set_message(const std::string& value) {
+  
+  message_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* S_Withdraw::_internal_mutable_message() {
+  
+  return message_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* S_Withdraw::release_message() {
+  // @@protoc_insertion_point(field_release:Protocol.S_Withdraw.message)
+  return message_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void S_Withdraw::set_allocated_message(std::string* message) {
+  if (message != nullptr) {
+    
+  } else {
+    
+  }
+  message_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), message,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.S_Withdraw.message)
+}
+
+// -------------------------------------------------------------------
+
 // S_Error
 
 // .Protocol.ErrorCode error_code = 1;
@@ -23084,6 +25115,18 @@ inline void S_Error::set_allocated_message(std::string* message) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

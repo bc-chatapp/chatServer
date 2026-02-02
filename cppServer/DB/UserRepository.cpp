@@ -84,10 +84,10 @@ bool UserRepository::GetUser(const string& userId, cUserInfo& OUT userInfo) {
         auto& db = DBManager::GetInstance();
         auto schema = db.GetSchema();
         auto users = schema.getTable("users");
-        
+
         auto result = users.select("user_id", "auth_token", "name", "email", "phone",
             "status_message", "profile_image_url", "background_image_url",
-            "sub_grade", "storage_capacity_bytes", "storage_usage_bytes", "last_seen")
+            "sub_grade", "storage_capacity_bytes", "storage_usage_bytes", "last_seen", "is_deleted")
             .where("user_id = :uid")
             .bind("uid", userId)
             .execute();
@@ -95,7 +95,6 @@ bool UserRepository::GetUser(const string& userId, cUserInfo& OUT userInfo) {
         auto row = result.fetchOne();
         if (!row) return false;
 
-        
         userInfo.userId = row[0].get<string>();
         if (!row[1].isNull()) userInfo.authToken = row[1].get<string>();
         if (!row[2].isNull()) userInfo.name = row[2].get<string>();
@@ -104,13 +103,13 @@ bool UserRepository::GetUser(const string& userId, cUserInfo& OUT userInfo) {
         if (!row[5].isNull()) userInfo.status_message = row[5].get<string>();
         if (!row[6].isNull()) userInfo.profileImageUrl = row[6].get<string>();
         if (!row[7].isNull()) userInfo.backgroundImageUrl = row[7].get<string>();
-        
+
         userInfo.subGrade = row[8].get<int64>();
         userInfo.storageCapacity = row[9].get<int64>();
         userInfo.storageUsage = row[10].get<int64>();
         userInfo.lastSeen = row[11].isNull() ? 0 : FriendRepository::ParseTimestamp(row[11]);
-        
-        
+        userInfo.isDeleted = row[12].isNull() ? false : (row[12].get<int>() == 1);
+
         return true;
     } catch (const mysqlx::Error& err) {
         cerr << "[UserRepository] 사용자 정보 조회 실패: " << err.what() << endl;
@@ -127,19 +126,19 @@ bool UserRepository::GetUserWithPassword(const string& userId, cUserInfo& OUT us
         auto& db = DBManager::GetInstance();
         auto schema = db.GetSchema();
         auto users = schema.getTable("users");
-        
+
         auto result = users.select("user_id", "password_hash", "auth_token", "name", "email", "phone",
             "status_message", "profile_image_url", "background_image_url",
-            "sub_grade", "storage_capacity_bytes", "storage_usage_bytes", "last_seen")
+            "sub_grade", "storage_capacity_bytes", "storage_usage_bytes", "last_seen", "is_deleted")
             .where("user_id = :uid")
             .bind("uid", userId)
             .execute();
-        
+
         auto row = result.fetchOne();
         if (!row) {
             return false;
         }
-        
+
         userInfo.userId = row[0].get<string>();
         userInfo.passwordHash = row[1].get<string>();
         if (!row[2].isNull()) userInfo.authToken = row[2].get<string>();
@@ -154,7 +153,8 @@ bool UserRepository::GetUserWithPassword(const string& userId, cUserInfo& OUT us
         userInfo.storageCapacity = row[10].get<int64>();
         userInfo.storageUsage = row[11].get<int64>();
         userInfo.lastSeen = row[12].isNull() ? 0 : FriendRepository::ParseTimestamp(row[12]);
-        
+        userInfo.isDeleted = row[13].isNull() ? false : (row[13].get<int>() == 1);
+
         return true;
     } catch (const mysqlx::Error& err) {
         cerr << "[UserRepository] 사용자 정보 조회 실패: " << err.what() << endl;
@@ -312,21 +312,115 @@ bool UserRepository::GetUserIdByToken(const string& authToken, string& userId) {
         auto& db = DBManager::GetInstance();
         auto schema = db.GetSchema();
         auto users = schema.getTable("users");
-        
+
         auto result = users.select("user_id")
                      .where("auth_token = :token")
                      .bind("token", authToken)
                      .execute();
-        
+
         auto row = result.fetchOne();
         if (!row) {
             return false;
         }
-        
+
         userId = row[0].get<string>();
         return true;
     } catch (const mysqlx::Error& err) {
         cerr << "[UserRepository] 토큰으로 사용자 ID 조회 실패: " << err.what() << endl;
+        return false;
+    }
+}
+
+
+bool UserRepository::UpdateEmail(const string& userId, const string& newEmail) {
+    try {
+        auto& db = DBManager::GetInstance();
+        auto schema = db.GetSchema();
+        auto users = schema.getTable("users");
+
+        users.update()
+             .set("email", newEmail)
+             .where("user_id = :uid")
+             .bind("uid", userId)
+             .execute();
+
+        cout << "[UserRepository] 이메일 업데이트 성공: " << userId << " -> " << newEmail << endl;
+        return true;
+    } catch (const mysqlx::Error& err) {
+        cerr << "[UserRepository] 이메일 업데이트 실패: " << err.what() << endl;
+        return false;
+    }
+}
+
+
+bool UserRepository::UpdatePassword(const string& userId, const string& newPasswordHash) {
+    try {
+        auto& db = DBManager::GetInstance();
+        auto schema = db.GetSchema();
+        auto users = schema.getTable("users");
+
+        users.update()
+             .set("password_hash", newPasswordHash)
+             .where("user_id = :uid")
+             .bind("uid", userId)
+             .execute();
+
+        cout << "[UserRepository] 비밀번호 업데이트 성공: " << userId << endl;
+        return true;
+    } catch (const mysqlx::Error& err) {
+        cerr << "[UserRepository] 비밀번호 업데이트 실패: " << err.what() << endl;
+        return false;
+    }
+}
+
+
+bool UserRepository::SoftDeleteUser(const string& userId) {
+    try {
+        auto& db = DBManager::GetInstance();
+        auto schema = db.GetSchema();
+        auto users = schema.getTable("users");
+
+        // Soft Delete: is_deleted=1, deleted_at 설정, auth_token 무효화, 개인정보 익명화
+        users.update()
+             .set("is_deleted", 1)
+             .set("deleted_at", mysqlx::expr("NOW()"))
+             .set("auth_token", "")
+             .set("name", "탈퇴한 사용자")
+             .set("email", "")
+             .set("phone", "")
+             .set("status_message", "")
+             .set("profile_image_url", "")
+             .set("background_image_url", "")
+             .where("user_id = :uid")
+             .bind("uid", userId)
+             .execute();
+
+        cout << "[UserRepository] 회원 탈퇴 처리 완료 (Soft Delete): " << userId << endl;
+        return true;
+    } catch (const mysqlx::Error& err) {
+        cerr << "[UserRepository] 회원 탈퇴 처리 실패: " << err.what() << endl;
+        return false;
+    }
+}
+
+
+bool UserRepository::HardDeleteUser(const string& userId) {
+    try {
+        auto& db = DBManager::GetInstance();
+        auto schema = db.GetSchema();
+        auto users = schema.getTable("users");
+
+        // Hard Delete: DB에서 완전히 삭제
+        // 주의: 외래키로 연결된 데이터(messages, friends 등)도 함께 처리 필요
+        users.remove()
+             .where("user_id = :uid")
+             .bind("uid", userId)
+             .execute();
+
+        cout << "[UserRepository] 회원 완전 삭제 완료 (Hard Delete): " << userId << endl;
+        return true;
+    } catch (const mysqlx::Error& err) {
+        cerr << "[UserRepository] 회원 완전 삭제 실패: " << err.what() << endl;
         return false;
     }
 }

@@ -99,6 +99,27 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 		Dispatch_C_RegisterFcmToken(session, envelope.request_id(), envelope.c_register_fcm_token());
 		break;
 
+		/* 이메일 인증 */
+	case Protocol::Envelope::kCReqEmailVerify:
+		Dispatch_C_ReqEmailVerify(session, envelope.request_id(), envelope.c_req_email_verify());
+		break;
+	case Protocol::Envelope::kCConfirmEmailVerify:
+		Dispatch_C_ConfirmEmailVerify(session, envelope.request_id(), envelope.c_confirm_email_verify());
+		break;
+
+		/* 계정 관리 (이메일/비밀번호 변경) */
+	case Protocol::Envelope::kCChangeEmail:
+		Dispatch_C_ChangeEmail(session, envelope.request_id(), envelope.c_change_email());
+		break;
+	case Protocol::Envelope::kCChangePassword:
+		Dispatch_C_ChangePassword(session, envelope.request_id(), envelope.c_change_password());
+		break;
+
+		/* 회원 탈퇴 */
+	case Protocol::Envelope::kCWithdraw:
+		Dispatch_C_Withdraw(session, envelope.request_id(), envelope.c_withdraw());
+		break;
+
 		/* 채팅 */
 	case Protocol::Envelope::kCChat:
 		Dispatch_C_Chat(session, envelope.request_id(), envelope.c_chat());
@@ -720,5 +741,80 @@ bool PacketDispatcher::Dispatch_C_RegisterFcmToken(sessionPtr& session, uint64 r
 	}
 
 	return GNotificationService->RegisterFcmToken(session, reqId, pkt);
+}
+
+
+/*---------------------------------
+	Email Verification Handler
+-----------------------------------*/
+
+bool PacketDispatcher::Dispatch_C_ReqEmailVerify(sessionPtr& session, uint64 reqId, const Protocol::C_RequestEmailVerify& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED);
+		return false;
+	}
+
+	return GAuthService->HandleReqEmailVerify(session, reqId, pkt.email());
+}
+
+bool PacketDispatcher::Dispatch_C_ConfirmEmailVerify(sessionPtr& session, uint64 reqId, const Protocol::C_ConfirmEmailVerify& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED);
+		return false;
+	}
+
+	return GAuthService->HandleConfirmEmailVerify(session, reqId, pkt.email(), pkt.code());
+}
+
+
+/*---------------------------------
+	Account Management Handler
+-----------------------------------*/
+
+bool PacketDispatcher::Dispatch_C_ChangeEmail(sessionPtr& session, uint64 reqId, const Protocol::C_ChangeEmail& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED);
+		return false;
+	}
+
+	return GAuthService->HandleChangeEmail(session, reqId, pkt.new_email());
+}
+
+bool PacketDispatcher::Dispatch_C_ChangePassword(sessionPtr& session, uint64 reqId, const Protocol::C_ChangePassword& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED);
+		return false;
+	}
+
+	return GAuthService->HandleChangePassword(session, reqId, pkt.current_password(), pkt.new_password());
+}
+
+
+/*---------------------------------
+	Withdraw Handler (회원 탈퇴)
+-----------------------------------*/
+
+bool PacketDispatcher::Dispatch_C_Withdraw(sessionPtr& session, uint64 reqId, const Protocol::C_Withdraw& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED);
+		return false;
+	}
+
+	return GAuthService->HandleWithdraw(session, reqId, pkt.password(), pkt.reason());
 }
 

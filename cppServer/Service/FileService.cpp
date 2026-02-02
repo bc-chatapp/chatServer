@@ -98,6 +98,14 @@ bool FileService::HandleUploadFileRequest(sessionPtr& session, uint64 reqId, con
             }
             break;
 
+        case Protocol::C_UploadFile_UploadType_BACKGROUND_IMG:
+            // 유저 배경 이미지: backgrounds/user/{userId}_{timestamp}.ext
+            path = "backgrounds/user/" + userId + "_" + ts + extension;
+            if (pkt.is_image()) {
+                thumbPath = "backgrounds/user/" + userId + "_" + ts + "_thumb.jpg";
+            }
+            break;
+
         default:
             HandleErr(session, reqId, ERR_INVALID_ARGUMENT, "Invalid UploadType");
             return false;

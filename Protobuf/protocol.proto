@@ -34,6 +34,10 @@ message Envelope {
       S_EditMyInfo            s_edit_my_info            = 33;
       C_RegisterFcmToken      c_register_fcm_token      = 34;
       S_RegisterFcmToken      s_register_fcm_token      = 35;
+      C_ChangeEmail           c_change_email            = 36;
+      S_ChangeEmail           s_change_email            = 37;
+      C_ChangePassword        c_change_password         = 38;
+      S_ChangePassword        s_change_password         = 39;
 
 
 
@@ -76,6 +80,8 @@ message Envelope {
       S_GroupInfo             s_group_info              = 93;
       C_EditGroup             c_edit_group              = 94;
       S_EditGroup             s_edit_group              = 95;
+      C_Withdraw              c_withdraw                = 96;
+      S_Withdraw              s_withdraw                = 97;
 
       // ─── SYSTEM (100 ~ ) ───
       S_Error                 s_error                   = 100;
@@ -196,6 +202,31 @@ message S_RegisterFcmToken {
 }
 
 
+/*-----------------------------
+      이메일 / 비밀번호 변경
+-----------------------------*/
+
+// 이메일 변경 (인증 완료 후 호출)
+message C_ChangeEmail {
+    string new_email = 1;       // 인증 완료된 새 이메일
+}
+message S_ChangeEmail {
+    bool success = 1;
+    string message = 2;
+    UserInfo updated_info = 3;  // 변경된 사용자 정보
+}
+
+// 비밀번호 변경
+message C_ChangePassword {
+    string current_password = 1;
+    string new_password = 2;
+}
+message S_ChangePassword {
+    bool success = 1;
+    string message = 2;
+}
+
+
 /*-------------
       채팅
 ---------------*/
@@ -271,7 +302,8 @@ message C_UploadFile {
         DIRECT_CHAT = 0;       // 개인 채팅
         GROUP_CHAT = 1;        // 그룹 채팅
         PROFILE_IMG = 2;       // 프로필 이미지
-        GROUP_PROFILE_IMG = 3;
+        GROUP_PROFILE_IMG = 3; // 그룹 프로필 이미지
+        BACKGROUND_IMG = 4;    // 배경 이미지
     }
     UploadType upload_type = 5; 
 
@@ -452,6 +484,18 @@ message C_EditGroup {
 message S_EditGroup { bool success = 1; GroupInfo group = 2; }
 
 
+/*-----------------------------
+      회원 탈퇴
+-----------------------------*/
+message C_Withdraw {
+    string password = 1;    // 본인 확인용
+    string reason = 2;      // 탈퇴 사유 (선택)
+}
+
+message S_Withdraw {
+    bool success = 1;
+    string message = 2;
+}
 
 
 

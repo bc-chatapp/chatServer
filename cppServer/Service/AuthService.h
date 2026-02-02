@@ -30,6 +30,16 @@ public:
 
 	bool HandleEditMyInfo(sessionPtr& session, uint64 reqId, const Protocol::C_EditMyInfo& pkt);
 
+	// 이메일 인증 요청/확인
+	bool HandleReqEmailVerify(sessionPtr& session, uint64 reqId, const string& email);
+	bool HandleConfirmEmailVerify(sessionPtr& session, uint64 reqId, const string& email, const string& code);
+
+	// 계정 관리 (이메일/비밀번호 변경)
+	bool HandleChangeEmail(sessionPtr& session, uint64 reqId, const string& newEmail);
+	bool HandleChangePassword(sessionPtr& session, uint64 reqId, const string& currentPassword, const string& newPassword);
+
+	// 회원 탈퇴
+	bool HandleWithdraw(sessionPtr& session, uint64 reqId, const string& password, const string& reason);
 
 private:
 	UserManager& _userManager;

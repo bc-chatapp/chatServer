@@ -88,6 +88,17 @@ protected:
     // FCM Token Handler
     static bool Dispatch_C_RegisterFcmToken(sessionPtr& session, uint64 reqId, const Protocol::C_RegisterFcmToken& pkt);
 
+    // Email Verification Handlers
+    static bool Dispatch_C_ReqEmailVerify(sessionPtr& session, uint64 reqId, const Protocol::C_RequestEmailVerify& pkt);
+    static bool Dispatch_C_ConfirmEmailVerify(sessionPtr& session, uint64 reqId, const Protocol::C_ConfirmEmailVerify& pkt);
+
+    // Account Management Handlers
+    static bool Dispatch_C_ChangeEmail(sessionPtr& session, uint64 reqId, const Protocol::C_ChangeEmail& pkt);
+    static bool Dispatch_C_ChangePassword(sessionPtr& session, uint64 reqId, const Protocol::C_ChangePassword& pkt);
+
+    // Withdraw Handler (회원 탈퇴)
+    static bool Dispatch_C_Withdraw(sessionPtr& session, uint64 reqId, const Protocol::C_Withdraw& pkt);
+
 private:
 
     enum class ConvType { Error = 0, Direct = 1, Group = 2 };

@@ -6,20 +6,22 @@
 struct cUserInfo {
     string userId;
     string passwordHash;
-    string authToken;    
+    string authToken;
 
     string name;
     string email;
-    string phone;        
+    string phone;
     string status_message;
     string profileImageUrl;
-    string backgroundImageUrl; 
+    string backgroundImageUrl;
 
     int64 subGrade = 0;        // 추가됨 (0: 일반, 1: 프로...)
-    int64 storageCapacity = 0; 
-    int64 storageUsage = 0;    
+    int64 storageCapacity = 0;
+    int64 storageUsage = 0;
 
     int64 lastSeen;
+
+    bool isDeleted = false;    // 탈퇴 여부
 };
 
 
@@ -46,6 +48,14 @@ public:
 
     static bool UpdateLastSeen(const string& userId);
     static bool GetUserIdByToken(const string& authToken, string& userId);
+
+    // 이메일/비밀번호 변경
+    static bool UpdateEmail(const string& userId, const string& newEmail);
+    static bool UpdatePassword(const string& userId, const string& newPasswordHash);
+
+    // 회원 탈퇴
+    static bool SoftDeleteUser(const string& userId);  // 논리적 삭제 (is_deleted=1, 개인정보 익명화)
+    static bool HardDeleteUser(const string& userId);  // 물리적 삭제 (DB에서 완전 삭제)
 
     // cUserInfo -> Protocol::UserInfo 변환 헬퍼
     static void ConvertToProto(const cUserInfo& dbUser, Protocol::UserInfo* outProto);
