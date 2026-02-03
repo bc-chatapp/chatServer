@@ -11,6 +11,8 @@ class VerificationManager;
 class AuthService;
 class FileService;
 class CloudStorage;
+class NotificationService;
+class FcmClient;
 
 
 extern const int32 GProtoVersion;
@@ -26,6 +28,7 @@ extern VerificationManager* GVerificationManager;
 
 extern AuthService* GAuthService;
 extern FileService* GFileService;
+extern NotificationService* GNotificationService;
 
 
 class CoreGlobal
@@ -46,6 +49,8 @@ private:
     unique_ptr<AuthService> _authService;
     unique_ptr<CloudStorage> _cloudStorage;
     unique_ptr<FileService> _fileService;
+    unique_ptr<NotificationService> _notificationService;
+    unique_ptr<FcmClient> _fcmClient;
 };
 
 

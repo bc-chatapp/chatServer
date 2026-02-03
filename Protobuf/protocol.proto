@@ -24,12 +24,26 @@ message Envelope {
       S_SignUp                s_signup                  = 19;
       C_Login                 c_login                   = 20;
       S_Login                 s_login                   = 21;
+      C_Logout                c_logout                  = 22;
+      S_Logout                s_logout                  = 23;
+      C_GetMyDevices          c_get_my_devices          = 24;
+      S_GetMyDevices          s_get_my_devices          = 25;
+      C_RemoveDevice          c_remove_device           = 26;
+      S_RemoveDevice          s_remove_device           = 27;
 
       // ─── MY INFO / SETTINGS (30 ~ 39) ───
       C_FetchMyInfo           c_fetch_my_info           = 30;
       S_FetchMyInfo           s_fetch_my_info           = 31;
       C_EditMyInfo            c_edit_my_info            = 32;
       S_EditMyInfo            s_edit_my_info            = 33;
+      C_RegisterFcmToken      c_register_fcm_token      = 34;
+      S_RegisterFcmToken      s_register_fcm_token      = 35;
+      C_ChangeEmail           c_change_email            = 36;
+      S_ChangeEmail           s_change_email            = 37;
+      C_ChangePassword        c_change_password         = 38;
+      S_ChangePassword        s_change_password         = 39;
+
+
 
       // ─── CHAT / DATA / FILE (40 ~ 59) ───
       C_Chat                  c_chat                    = 40;
@@ -42,6 +56,7 @@ message Envelope {
       C_UploadFile            c_upload_file             = 47; 
       S_UploadFile            s_upload_file             = 48;
 
+
       // ─── FRIENDS (60 ~ 79) ───
       C_SearchUser            c_search_user             = 60;
       S_SearchUser            s_search_user             = 61;
@@ -50,6 +65,7 @@ message Envelope {
       C_FetchFriendData       c_fetch_friend_data       = 64;
       S_FetchFriendData       s_fetch_friend_data       = 65;
       S_FriendPush            s_friend_push             = 66;
+
 
       // ─── GROUPS (80 ~ 99) ───
       C_CreateGroup           c_create_group            = 80;
@@ -68,6 +84,8 @@ message Envelope {
       S_GroupInfo             s_group_info              = 93;
       C_EditGroup             c_edit_group              = 94;
       S_EditGroup             s_edit_group              = 95;
+      C_Withdraw              c_withdraw                = 96;
+      S_Withdraw              s_withdraw                = 97;
 
       // ─── SYSTEM (100 ~ ) ───
       S_Error                 s_error                   = 100;
@@ -146,6 +164,13 @@ message S_Login {
     UserInfo my_info    = 3; // 로그인 시 내 정보를 한꺼번에 동기화
 }
 
+message C_Logout {
+    string fcm_token = 1;   // 삭제할 FCM 토큰 (현재 기기)
+    string device_id = 2;   // 디바이스 ID (선택)
+}
+message S_Logout {
+    bool success = 1;
+}
 
 
 
@@ -165,14 +190,82 @@ message C_EditMyInfo {
     string background_image_url = 4;
     string phone                = 5;
 }
-message S_EditMyInfo { 
-    bool success = 1; 
-    string message = 2; 
-    UserInfo updated_info = 3; 
+message S_EditMyInfo {
+    bool success = 1;
+    string message = 2;
+    UserInfo updated_info = 3;
 }
 
 
+/*-----------------------------
+      FCM 푸시 알림 토큰 등록
+-----------------------------*/
 
+message C_RegisterFcmToken {
+    string fcm_token = 1;       // FCM 디바이스 토큰
+    string platform = 2;        // "android" 또는 "ios"
+    string device_id = 3;       // 디바이스 고유 ID (선택)
+    string device_name = 4;     // 기기 이름 (예: "Galaxy S24", "iPad Pro")
+    string app_version = 5;     // 앱 버전
+}
+
+message S_RegisterFcmToken {
+    bool success = 1;
+    string message = 2;
+}
+
+
+/*-----------------------------
+      기기 관리 (Device Management)
+-----------------------------*/
+
+message DeviceInfo {
+    string device_id = 1;       // 기기 고유 ID
+    string device_name = 2;     // 기기 이름
+    string platform = 3;        // android/ios
+    int64 last_active = 4;      // 마지막 활동 시간 (Unix timestamp ms)
+    int64 registered_at = 5;    // 등록 시간
+    string app_version = 6;     // 앱 버전
+    bool is_current = 7;        // 현재 요청한 기기인지
+}
+
+message C_GetMyDevices { }
+message S_GetMyDevices {
+    repeated DeviceInfo devices = 1;
+}
+
+message C_RemoveDevice {
+    string device_id = 1;       // 삭제할 기기의 device_id
+}
+message S_RemoveDevice {
+    bool success = 1;
+    string message = 2;
+}
+
+
+/*-----------------------------
+      이메일 / 비밀번호 변경
+-----------------------------*/
+
+// 이메일 변경 (인증 완료 후 호출)
+message C_ChangeEmail {
+    string new_email = 1;       // 인증 완료된 새 이메일
+}
+message S_ChangeEmail {
+    bool success = 1;
+    string message = 2;
+    UserInfo updated_info = 3;  // 변경된 사용자 정보
+}
+
+// 비밀번호 변경
+message C_ChangePassword {
+    string current_password = 1;
+    string new_password = 2;
+}
+message S_ChangePassword {
+    bool success = 1;
+    string message = 2;
+}
 
 
 /*-------------
@@ -250,7 +343,8 @@ message C_UploadFile {
         DIRECT_CHAT = 0;       // 개인 채팅
         GROUP_CHAT = 1;        // 그룹 채팅
         PROFILE_IMG = 2;       // 프로필 이미지
-        GROUP_PROFILE_IMG = 3;
+        GROUP_PROFILE_IMG = 3; // 그룹 프로필 이미지
+        BACKGROUND_IMG = 4;    // 배경 이미지
     }
     UploadType upload_type = 5; 
 
@@ -431,6 +525,18 @@ message C_EditGroup {
 message S_EditGroup { bool success = 1; GroupInfo group = 2; }
 
 
+/*-----------------------------
+      회원 탈퇴
+-----------------------------*/
+message C_Withdraw {
+    string password = 1;    // 본인 확인용
+    string reason = 2;      // 탈퇴 사유 (선택)
+}
+
+message S_Withdraw {
+    bool success = 1;
+    string message = 2;
+}
 
 
 

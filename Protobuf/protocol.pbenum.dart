@@ -167,6 +167,8 @@ class C_UploadFile_UploadType extends $pb.ProtobufEnum {
       C_UploadFile_UploadType._(2, _omitEnumNames ? '' : 'PROFILE_IMG');
   static const C_UploadFile_UploadType GROUP_PROFILE_IMG =
       C_UploadFile_UploadType._(3, _omitEnumNames ? '' : 'GROUP_PROFILE_IMG');
+  static const C_UploadFile_UploadType BACKGROUND_IMG =
+      C_UploadFile_UploadType._(4, _omitEnumNames ? '' : 'BACKGROUND_IMG');
 
   static const $core.List<C_UploadFile_UploadType> values =
       <C_UploadFile_UploadType>[
@@ -174,10 +176,11 @@ class C_UploadFile_UploadType extends $pb.ProtobufEnum {
     GROUP_CHAT,
     PROFILE_IMG,
     GROUP_PROFILE_IMG,
+    BACKGROUND_IMG,
   ];
 
   static final $core.List<C_UploadFile_UploadType?> _byValue =
-      $pb.ProtobufEnum.$_initByValueList(values, 3);
+      $pb.ProtobufEnum.$_initByValueList(values, 4);
   static C_UploadFile_UploadType? valueOf($core.int value) =>
       value < 0 || value >= _byValue.length ? null : _byValue[value];
 

@@ -16,7 +16,6 @@ public:
 	bool CheckIdAvailable(sessionPtr& session, uint64 reqId, const string& userId);
 	bool CheckEmailAvailable(sessionPtr& session, uint64 reqId, const string& email);
 	
-
 	// 회원가입
 	bool SignUp(sessionPtr& session, uint64 reqId, const string& userId,
 	            const string& password, const string& name,
@@ -25,9 +24,25 @@ public:
 	// 로그인 (비밀번호 확인 포함)
 	bool Login(sessionPtr& session, uint64 reqId, const string& userId, const string& password);
 	
-	
 	static bool TriggerEmailVerification(const string& userId, const string& email);
 	bool LoginByToken(sessionPtr& session, uint64 reqId, const string& token, const string& userId);
+
+
+	bool HandleEditMyInfo(sessionPtr& session, uint64 reqId, const Protocol::C_EditMyInfo& pkt);
+
+	// 이메일 인증 요청/확인
+	bool HandleReqEmailVerify(sessionPtr& session, uint64 reqId, const string& email);
+	bool HandleConfirmEmailVerify(sessionPtr& session, uint64 reqId, const string& email, const string& code);
+
+	// 계정 관리 (이메일/비밀번호 변경)
+	bool HandleChangeEmail(sessionPtr& session, uint64 reqId, const string& newEmail);
+	bool HandleChangePassword(sessionPtr& session, uint64 reqId, const string& currentPassword, const string& newPassword);
+
+	// 회원 탈퇴
+	bool HandleWithdraw(sessionPtr& session, uint64 reqId, const string& password, const string& reason);
+
+	// 로그아웃
+	bool HandleLogout(sessionPtr& session, uint64 reqId, const string& fcmToken, const string& deviceId);
 
 private:
 	UserManager& _userManager;

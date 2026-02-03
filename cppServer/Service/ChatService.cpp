@@ -6,6 +6,8 @@
 #include "../DB/MessageRepository.h"
 #include "../DB/UserRepository.h"
 #include "../DB/GroupRepository.h"
+#include "../DB/FcmTokenRepository.h"
+#include "../Cloud/FcmClient.h"
 
 #include "../CoreGlobal.h"
 
@@ -38,9 +40,43 @@ bool ChatService::SendDirect(sessionPtr& senderSession, uint64 reqId, const stri
     PushEnvelope(senderSession, reqId, pkt_s_chat); /* Ack to self */
 
     /* To receiver */
-    if (msgSeq >= 0) {  // 온라인인 경우만, 
+    if (msgSeq >= 0) {
         if (auto target = _userManager.FindSession(receiverId)) {
+            // 온라인 - 소켓으로 전송
             PushEnvelope(target, 0, pkt_s_chat);
+        }
+        else if (GFcmClient) {
+            // 오프라인 - FCM 푸시 발송
+            cout << "[ChatService] SendDirect FCM: sender=" << senderId << ", receiver=" << receiverId << endl;
+            auto tokens = FcmTokenRepository::GetUserTokens(receiverId);
+            cout << "[ChatService] Found " << tokens.size() << " FCM tokens for " << receiverId << endl;
+            if (!tokens.empty()) {
+                string msgPreview = "[메시지]";
+                if (pkt_s_chat.has_payload() && pkt_s_chat.payload().has_text()) {
+                    msgPreview = pkt_s_chat.payload().text().message();
+                    if (msgPreview.length() > 50) {
+                        msgPreview = msgPreview.substr(0, 50) + "...";
+                    }
+                }
+                else if (pkt_s_chat.has_payload() && pkt_s_chat.payload().has_image()) {
+                    msgPreview = "[사진]";
+                }
+                else if (pkt_s_chat.has_payload() && pkt_s_chat.payload().has_file()) {
+                    msgPreview = "[파일]";
+                }
+
+                map<string, string> data = {
+                    {"type", "chat"},
+                    {"conv_id", convId},
+                    {"sender_id", senderId}
+                };
+
+                for (const auto& tokenInfo : tokens) {
+                    cout << "[ChatService] Sending FCM to userId=" << tokenInfo.userId
+                         << ", token=" << tokenInfo.fcmToken.substr(0, 20) << "..." << endl;
+                    GFcmClient->SendPush(tokenInfo.fcmToken, senderName, msgPreview, data);
+                }
+            }
         }
     }
     return true;
@@ -80,12 +116,50 @@ bool ChatService::SendGroup(sessionPtr& senderSession, uint64 reqId, const strin
     /* To Group */
     auto members = GroupRepository::GetGroupMembers(groupId);
 
+    // 그룹 이름 가져오기
+    cGroupInfo groupInfo;
+    GroupRepository::GetGroupInfoById(groupId, groupInfo);
+    string groupName = groupInfo.groupName.empty() ? "그룹" : groupInfo.groupName;
+
+    // 메시지 미리보기 준비
+    string msgPreview = "[메시지]";
+    if (pkt_s_chat.has_payload() && pkt_s_chat.payload().has_text()) {
+        msgPreview = pkt_s_chat.payload().text().message();
+        if (msgPreview.length() > 50) {
+            msgPreview = msgPreview.substr(0, 50) + "...";
+        }
+    }
+    else if (pkt_s_chat.has_payload() && pkt_s_chat.payload().has_image()) {
+        msgPreview = "[사진]";
+    }
+    else if (pkt_s_chat.has_payload() && pkt_s_chat.payload().has_file()) {
+        msgPreview = "[파일]";
+    }
+
     for (const auto& member : members) {
         if (member.userId == senderId) continue;
 
-        // 온라인인 멤버에게만 실시간 전송
         if (auto target = _userManager.FindSession(member.userId)) {
+            // 온라인 - 소켓으로 전송
             PushEnvelope(target, 0, pkt_s_chat);
+        }
+        else if (GFcmClient) {
+            // 오프라인 - FCM 푸시 발송
+            auto tokens = FcmTokenRepository::GetUserTokens(member.userId);
+            if (!tokens.empty()) {
+                string title = groupName + " - " + senderName;
+
+                map<string, string> data = {
+                    {"type", "chat"},
+                    {"conv_id", convId},
+                    {"sender_id", senderId},
+                    {"group_id", groupId}
+                };
+
+                for (const auto& tokenInfo : tokens) {
+                    GFcmClient->SendPush(tokenInfo.fcmToken, title, msgPreview, data);
+                }
+            }
         }
     }
 

@@ -8,12 +8,14 @@
 #include "Service/AuthService.h"
 #include "Service/FileService.h"
 #include "Service/GroupService.h"
+#include "Service/NotificationService.h"
 
 
 #include "DB/UserRepository.h"
 #include "DB/FriendRepository.h"
 #include "DB/MessageRepository.h"
 #include "DB/GroupRepository.h"
+#include "DB/FcmTokenRepository.h"
 
 
 using namespace Protocol;
@@ -81,6 +83,15 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 	case Protocol::Envelope::kCLogin:
 		Dispatch_C_Login(session, envelope.request_id(), envelope);
 		break;
+	case Protocol::Envelope::kCLogout:
+		Dispatch_C_Logout(session, envelope.request_id(), envelope.c_logout());
+		break;
+	case Protocol::Envelope::kCGetMyDevices:
+		Dispatch_C_GetMyDevices(session, envelope.request_id(), envelope.c_get_my_devices());
+		break;
+	case Protocol::Envelope::kCRemoveDevice:
+		Dispatch_C_RemoveDevice(session, envelope.request_id(), envelope.c_remove_device());
+		break;
 	case Protocol::Envelope::kCFetchOffline:
 		Dispatch_C_FetchOffline(session, envelope.request_id(), envelope.c_fetch_offline());
 		break;
@@ -91,6 +102,31 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 		break;
 	case Protocol::Envelope::kCEditMyInfo:
 		Dispatch_C_EditMyInfo(session, envelope.request_id(), envelope.c_edit_my_info());
+		break;
+
+	case Protocol::Envelope::kCRegisterFcmToken:
+		Dispatch_C_RegisterFcmToken(session, envelope.request_id(), envelope.c_register_fcm_token());
+		break;
+
+		/* 이메일 인증 */
+	case Protocol::Envelope::kCReqEmailVerify:
+		Dispatch_C_ReqEmailVerify(session, envelope.request_id(), envelope.c_req_email_verify());
+		break;
+	case Protocol::Envelope::kCConfirmEmailVerify:
+		Dispatch_C_ConfirmEmailVerify(session, envelope.request_id(), envelope.c_confirm_email_verify());
+		break;
+
+		/* 계정 관리 (이메일/비밀번호 변경) */
+	case Protocol::Envelope::kCChangeEmail:
+		Dispatch_C_ChangeEmail(session, envelope.request_id(), envelope.c_change_email());
+		break;
+	case Protocol::Envelope::kCChangePassword:
+		Dispatch_C_ChangePassword(session, envelope.request_id(), envelope.c_change_password());
+		break;
+
+		/* 회원 탈퇴 */
+	case Protocol::Envelope::kCWithdraw:
+		Dispatch_C_Withdraw(session, envelope.request_id(), envelope.c_withdraw());
 		break;
 
 		/* 채팅 */
@@ -434,6 +470,8 @@ bool PacketDispatcher::Dispatch_C_FetchMyInfo(sessionPtr& session, uint64 reqId,
 }
 
 
+
+
 bool PacketDispatcher::Dispatch_C_EditMyInfo(sessionPtr& session, uint64 reqId, const Protocol::C_EditMyInfo& pkt)
 {
 	auto serverSession = static_pointer_cast<ServerSession>(session);
@@ -444,7 +482,7 @@ bool PacketDispatcher::Dispatch_C_EditMyInfo(sessionPtr& session, uint64 reqId, 
 	}
 
 	// pkt(C_EditMyInfo)에 담긴 이름, 상태메시지, 폰번호 등을 업데이트
-	//return GUserManager->EditMyInfo(session, reqId, userId, pkt);
+	return GAuthService->HandleEditMyInfo(session, reqId, pkt);
 }
 
 
@@ -695,5 +733,146 @@ bool PacketDispatcher::Dispatch_C_EditGroup(sessionPtr& session, uint64 reqId, c
 	}
 
 	return GGroupService->UpdateGroupInfo(session, reqId, const_cast<Protocol::C_EditGroup&>(pkt));
+}
+
+
+/*---------------------------------
+		FCM Token Handler
+-----------------------------------*/
+
+bool PacketDispatcher::Dispatch_C_RegisterFcmToken(sessionPtr& session, uint64 reqId, const Protocol::C_RegisterFcmToken& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED);
+		return false;
+	}
+
+	return GNotificationService->RegisterFcmToken(session, reqId, pkt);
+}
+
+
+/*---------------------------------
+	Email Verification Handler
+-----------------------------------*/
+
+bool PacketDispatcher::Dispatch_C_ReqEmailVerify(sessionPtr& session, uint64 reqId, const Protocol::C_RequestEmailVerify& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED);
+		return false;
+	}
+
+	return GAuthService->HandleReqEmailVerify(session, reqId, pkt.email());
+}
+
+bool PacketDispatcher::Dispatch_C_ConfirmEmailVerify(sessionPtr& session, uint64 reqId, const Protocol::C_ConfirmEmailVerify& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED);
+		return false;
+	}
+
+	return GAuthService->HandleConfirmEmailVerify(session, reqId, pkt.email(), pkt.code());
+}
+
+
+/*---------------------------------
+	Account Management Handler
+-----------------------------------*/
+
+bool PacketDispatcher::Dispatch_C_ChangeEmail(sessionPtr& session, uint64 reqId, const Protocol::C_ChangeEmail& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED);
+		return false;
+	}
+
+	return GAuthService->HandleChangeEmail(session, reqId, pkt.new_email());
+}
+
+bool PacketDispatcher::Dispatch_C_ChangePassword(sessionPtr& session, uint64 reqId, const Protocol::C_ChangePassword& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED);
+		return false;
+	}
+
+	return GAuthService->HandleChangePassword(session, reqId, pkt.current_password(), pkt.new_password());
+}
+
+
+/*---------------------------------
+	Withdraw Handler (회원 탈퇴)
+-----------------------------------*/
+
+bool PacketDispatcher::Dispatch_C_Withdraw(sessionPtr& session, uint64 reqId, const Protocol::C_Withdraw& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED);
+		return false;
+	}
+
+	return GAuthService->HandleWithdraw(session, reqId, pkt.password(), pkt.reason());
+}
+
+
+/*---------------------------------
+	Logout Handler (로그아웃)
+-----------------------------------*/
+
+bool PacketDispatcher::Dispatch_C_Logout(sessionPtr& session, uint64 reqId, const Protocol::C_Logout& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED);
+		return false;
+	}
+
+	return GAuthService->HandleLogout(session, reqId, pkt.fcm_token(), pkt.device_id());
+}
+
+
+/*---------------------------------
+	Device Management Handler
+-----------------------------------*/
+
+bool PacketDispatcher::Dispatch_C_GetMyDevices(sessionPtr& session, uint64 reqId, const Protocol::C_GetMyDevices& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED);
+		return false;
+	}
+
+	// 현재 세션의 deviceId 가져오기 (TODO: 세션에 deviceId 저장 필요)
+	string currentDeviceId = ""; // serverSession->GetDeviceId();
+
+	return GNotificationService->GetMyDevices(session, reqId, currentDeviceId);
+}
+
+bool PacketDispatcher::Dispatch_C_RemoveDevice(sessionPtr& session, uint64 reqId, const Protocol::C_RemoveDevice& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED);
+		return false;
+	}
+
+	return GNotificationService->RemoveDevice(session, reqId, pkt.device_id());
 }
 
