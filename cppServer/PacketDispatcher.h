@@ -99,6 +99,13 @@ protected:
     // Withdraw Handler (회원 탈퇴)
     static bool Dispatch_C_Withdraw(sessionPtr& session, uint64 reqId, const Protocol::C_Withdraw& pkt);
 
+    // Logout Handler (로그아웃)
+    static bool Dispatch_C_Logout(sessionPtr& session, uint64 reqId, const Protocol::C_Logout& pkt);
+
+    // Device Management Handlers (기기 관리)
+    static bool Dispatch_C_GetMyDevices(sessionPtr& session, uint64 reqId, const Protocol::C_GetMyDevices& pkt);
+    static bool Dispatch_C_RemoveDevice(sessionPtr& session, uint64 reqId, const Protocol::C_RemoveDevice& pkt);
+
 private:
 
     enum class ConvType { Error = 0, Direct = 1, Group = 2 };

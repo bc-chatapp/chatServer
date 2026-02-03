@@ -47,7 +47,7 @@ struct TableStruct_protocol_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[71]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[78]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -97,6 +97,9 @@ extern C_FetchOfflineDefaultTypeInternal _C_FetchOffline_default_instance_;
 class C_FriendAction;
 struct C_FriendActionDefaultTypeInternal;
 extern C_FriendActionDefaultTypeInternal _C_FriendAction_default_instance_;
+class C_GetMyDevices;
+struct C_GetMyDevicesDefaultTypeInternal;
+extern C_GetMyDevicesDefaultTypeInternal _C_GetMyDevices_default_instance_;
 class C_GroupInfo;
 struct C_GroupInfoDefaultTypeInternal;
 extern C_GroupInfoDefaultTypeInternal _C_GroupInfo_default_instance_;
@@ -121,9 +124,15 @@ extern C_LeaveGroupDefaultTypeInternal _C_LeaveGroup_default_instance_;
 class C_Login;
 struct C_LoginDefaultTypeInternal;
 extern C_LoginDefaultTypeInternal _C_Login_default_instance_;
+class C_Logout;
+struct C_LogoutDefaultTypeInternal;
+extern C_LogoutDefaultTypeInternal _C_Logout_default_instance_;
 class C_RegisterFcmToken;
 struct C_RegisterFcmTokenDefaultTypeInternal;
 extern C_RegisterFcmTokenDefaultTypeInternal _C_RegisterFcmToken_default_instance_;
+class C_RemoveDevice;
+struct C_RemoveDeviceDefaultTypeInternal;
+extern C_RemoveDeviceDefaultTypeInternal _C_RemoveDevice_default_instance_;
 class C_ReqHistory;
 struct C_ReqHistoryDefaultTypeInternal;
 extern C_ReqHistoryDefaultTypeInternal _C_ReqHistory_default_instance_;
@@ -145,6 +154,9 @@ extern C_WithdrawDefaultTypeInternal _C_Withdraw_default_instance_;
 class ChatPayload;
 struct ChatPayloadDefaultTypeInternal;
 extern ChatPayloadDefaultTypeInternal _ChatPayload_default_instance_;
+class DeviceInfo;
+struct DeviceInfoDefaultTypeInternal;
+extern DeviceInfoDefaultTypeInternal _DeviceInfo_default_instance_;
 class Envelope;
 struct EnvelopeDefaultTypeInternal;
 extern EnvelopeDefaultTypeInternal _Envelope_default_instance_;
@@ -205,6 +217,9 @@ extern S_FriendActionDefaultTypeInternal _S_FriendAction_default_instance_;
 class S_FriendPush;
 struct S_FriendPushDefaultTypeInternal;
 extern S_FriendPushDefaultTypeInternal _S_FriendPush_default_instance_;
+class S_GetMyDevices;
+struct S_GetMyDevicesDefaultTypeInternal;
+extern S_GetMyDevicesDefaultTypeInternal _S_GetMyDevices_default_instance_;
 class S_GroupInfo;
 struct S_GroupInfoDefaultTypeInternal;
 extern S_GroupInfoDefaultTypeInternal _S_GroupInfo_default_instance_;
@@ -229,6 +244,9 @@ extern S_LeaveGroupDefaultTypeInternal _S_LeaveGroup_default_instance_;
 class S_Login;
 struct S_LoginDefaultTypeInternal;
 extern S_LoginDefaultTypeInternal _S_Login_default_instance_;
+class S_Logout;
+struct S_LogoutDefaultTypeInternal;
+extern S_LogoutDefaultTypeInternal _S_Logout_default_instance_;
 class S_MessageBatch;
 struct S_MessageBatchDefaultTypeInternal;
 extern S_MessageBatchDefaultTypeInternal _S_MessageBatch_default_instance_;
@@ -238,6 +256,9 @@ extern S_MessageBatch_ConversationBatchDefaultTypeInternal _S_MessageBatch_Conve
 class S_RegisterFcmToken;
 struct S_RegisterFcmTokenDefaultTypeInternal;
 extern S_RegisterFcmTokenDefaultTypeInternal _S_RegisterFcmToken_default_instance_;
+class S_RemoveDevice;
+struct S_RemoveDeviceDefaultTypeInternal;
+extern S_RemoveDeviceDefaultTypeInternal _S_RemoveDevice_default_instance_;
 class S_ReqHistory;
 struct S_ReqHistoryDefaultTypeInternal;
 extern S_ReqHistoryDefaultTypeInternal _S_ReqHistory_default_instance_;
@@ -284,6 +305,7 @@ template<> ::Protocol::C_FetchFriendData* Arena::CreateMaybeMessage<::Protocol::
 template<> ::Protocol::C_FetchMyInfo* Arena::CreateMaybeMessage<::Protocol::C_FetchMyInfo>(Arena*);
 template<> ::Protocol::C_FetchOffline* Arena::CreateMaybeMessage<::Protocol::C_FetchOffline>(Arena*);
 template<> ::Protocol::C_FriendAction* Arena::CreateMaybeMessage<::Protocol::C_FriendAction>(Arena*);
+template<> ::Protocol::C_GetMyDevices* Arena::CreateMaybeMessage<::Protocol::C_GetMyDevices>(Arena*);
 template<> ::Protocol::C_GroupInfo* Arena::CreateMaybeMessage<::Protocol::C_GroupInfo>(Arena*);
 template<> ::Protocol::C_GroupList* Arena::CreateMaybeMessage<::Protocol::C_GroupList>(Arena*);
 template<> ::Protocol::C_GroupMemberList* Arena::CreateMaybeMessage<::Protocol::C_GroupMemberList>(Arena*);
@@ -292,7 +314,9 @@ template<> ::Protocol::C_InviteFriend* Arena::CreateMaybeMessage<::Protocol::C_I
 template<> ::Protocol::C_JoinGroup* Arena::CreateMaybeMessage<::Protocol::C_JoinGroup>(Arena*);
 template<> ::Protocol::C_LeaveGroup* Arena::CreateMaybeMessage<::Protocol::C_LeaveGroup>(Arena*);
 template<> ::Protocol::C_Login* Arena::CreateMaybeMessage<::Protocol::C_Login>(Arena*);
+template<> ::Protocol::C_Logout* Arena::CreateMaybeMessage<::Protocol::C_Logout>(Arena*);
 template<> ::Protocol::C_RegisterFcmToken* Arena::CreateMaybeMessage<::Protocol::C_RegisterFcmToken>(Arena*);
+template<> ::Protocol::C_RemoveDevice* Arena::CreateMaybeMessage<::Protocol::C_RemoveDevice>(Arena*);
 template<> ::Protocol::C_ReqHistory* Arena::CreateMaybeMessage<::Protocol::C_ReqHistory>(Arena*);
 template<> ::Protocol::C_RequestEmailVerify* Arena::CreateMaybeMessage<::Protocol::C_RequestEmailVerify>(Arena*);
 template<> ::Protocol::C_SearchUser* Arena::CreateMaybeMessage<::Protocol::C_SearchUser>(Arena*);
@@ -300,6 +324,7 @@ template<> ::Protocol::C_SignUp* Arena::CreateMaybeMessage<::Protocol::C_SignUp>
 template<> ::Protocol::C_UploadFile* Arena::CreateMaybeMessage<::Protocol::C_UploadFile>(Arena*);
 template<> ::Protocol::C_Withdraw* Arena::CreateMaybeMessage<::Protocol::C_Withdraw>(Arena*);
 template<> ::Protocol::ChatPayload* Arena::CreateMaybeMessage<::Protocol::ChatPayload>(Arena*);
+template<> ::Protocol::DeviceInfo* Arena::CreateMaybeMessage<::Protocol::DeviceInfo>(Arena*);
 template<> ::Protocol::Envelope* Arena::CreateMaybeMessage<::Protocol::Envelope>(Arena*);
 template<> ::Protocol::File* Arena::CreateMaybeMessage<::Protocol::File>(Arena*);
 template<> ::Protocol::FriendRequest* Arena::CreateMaybeMessage<::Protocol::FriendRequest>(Arena*);
@@ -320,6 +345,7 @@ template<> ::Protocol::S_FetchFriendData* Arena::CreateMaybeMessage<::Protocol::
 template<> ::Protocol::S_FetchMyInfo* Arena::CreateMaybeMessage<::Protocol::S_FetchMyInfo>(Arena*);
 template<> ::Protocol::S_FriendAction* Arena::CreateMaybeMessage<::Protocol::S_FriendAction>(Arena*);
 template<> ::Protocol::S_FriendPush* Arena::CreateMaybeMessage<::Protocol::S_FriendPush>(Arena*);
+template<> ::Protocol::S_GetMyDevices* Arena::CreateMaybeMessage<::Protocol::S_GetMyDevices>(Arena*);
 template<> ::Protocol::S_GroupInfo* Arena::CreateMaybeMessage<::Protocol::S_GroupInfo>(Arena*);
 template<> ::Protocol::S_GroupList* Arena::CreateMaybeMessage<::Protocol::S_GroupList>(Arena*);
 template<> ::Protocol::S_GroupMemberList* Arena::CreateMaybeMessage<::Protocol::S_GroupMemberList>(Arena*);
@@ -328,9 +354,11 @@ template<> ::Protocol::S_InviteFriend* Arena::CreateMaybeMessage<::Protocol::S_I
 template<> ::Protocol::S_JoinGroup* Arena::CreateMaybeMessage<::Protocol::S_JoinGroup>(Arena*);
 template<> ::Protocol::S_LeaveGroup* Arena::CreateMaybeMessage<::Protocol::S_LeaveGroup>(Arena*);
 template<> ::Protocol::S_Login* Arena::CreateMaybeMessage<::Protocol::S_Login>(Arena*);
+template<> ::Protocol::S_Logout* Arena::CreateMaybeMessage<::Protocol::S_Logout>(Arena*);
 template<> ::Protocol::S_MessageBatch* Arena::CreateMaybeMessage<::Protocol::S_MessageBatch>(Arena*);
 template<> ::Protocol::S_MessageBatch_ConversationBatch* Arena::CreateMaybeMessage<::Protocol::S_MessageBatch_ConversationBatch>(Arena*);
 template<> ::Protocol::S_RegisterFcmToken* Arena::CreateMaybeMessage<::Protocol::S_RegisterFcmToken>(Arena*);
+template<> ::Protocol::S_RemoveDevice* Arena::CreateMaybeMessage<::Protocol::S_RemoveDevice>(Arena*);
 template<> ::Protocol::S_ReqHistory* Arena::CreateMaybeMessage<::Protocol::S_ReqHistory>(Arena*);
 template<> ::Protocol::S_RequestEmailVerify* Arena::CreateMaybeMessage<::Protocol::S_RequestEmailVerify>(Arena*);
 template<> ::Protocol::S_SearchUser* Arena::CreateMaybeMessage<::Protocol::S_SearchUser>(Arena*);
@@ -562,6 +590,12 @@ class Envelope final :
     kSSignup = 19,
     kCLogin = 20,
     kSLogin = 21,
+    kCLogout = 22,
+    kSLogout = 23,
+    kCGetMyDevices = 24,
+    kSGetMyDevices = 25,
+    kCRemoveDevice = 26,
+    kSRemoveDevice = 27,
     kCFetchMyInfo = 30,
     kSFetchMyInfo = 31,
     kCEditMyInfo = 32,
@@ -696,6 +730,12 @@ class Envelope final :
     kSSignupFieldNumber = 19,
     kCLoginFieldNumber = 20,
     kSLoginFieldNumber = 21,
+    kCLogoutFieldNumber = 22,
+    kSLogoutFieldNumber = 23,
+    kCGetMyDevicesFieldNumber = 24,
+    kSGetMyDevicesFieldNumber = 25,
+    kCRemoveDeviceFieldNumber = 26,
+    kSRemoveDeviceFieldNumber = 27,
     kCFetchMyInfoFieldNumber = 30,
     kSFetchMyInfoFieldNumber = 31,
     kCEditMyInfoFieldNumber = 32,
@@ -991,6 +1031,114 @@ class Envelope final :
   void unsafe_arena_set_allocated_s_login(
       ::Protocol::S_Login* s_login);
   ::Protocol::S_Login* unsafe_arena_release_s_login();
+
+  // .Protocol.C_Logout c_logout = 22;
+  bool has_c_logout() const;
+  private:
+  bool _internal_has_c_logout() const;
+  public:
+  void clear_c_logout();
+  const ::Protocol::C_Logout& c_logout() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::Protocol::C_Logout* release_c_logout();
+  ::Protocol::C_Logout* mutable_c_logout();
+  void set_allocated_c_logout(::Protocol::C_Logout* c_logout);
+  private:
+  const ::Protocol::C_Logout& _internal_c_logout() const;
+  ::Protocol::C_Logout* _internal_mutable_c_logout();
+  public:
+  void unsafe_arena_set_allocated_c_logout(
+      ::Protocol::C_Logout* c_logout);
+  ::Protocol::C_Logout* unsafe_arena_release_c_logout();
+
+  // .Protocol.S_Logout s_logout = 23;
+  bool has_s_logout() const;
+  private:
+  bool _internal_has_s_logout() const;
+  public:
+  void clear_s_logout();
+  const ::Protocol::S_Logout& s_logout() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::Protocol::S_Logout* release_s_logout();
+  ::Protocol::S_Logout* mutable_s_logout();
+  void set_allocated_s_logout(::Protocol::S_Logout* s_logout);
+  private:
+  const ::Protocol::S_Logout& _internal_s_logout() const;
+  ::Protocol::S_Logout* _internal_mutable_s_logout();
+  public:
+  void unsafe_arena_set_allocated_s_logout(
+      ::Protocol::S_Logout* s_logout);
+  ::Protocol::S_Logout* unsafe_arena_release_s_logout();
+
+  // .Protocol.C_GetMyDevices c_get_my_devices = 24;
+  bool has_c_get_my_devices() const;
+  private:
+  bool _internal_has_c_get_my_devices() const;
+  public:
+  void clear_c_get_my_devices();
+  const ::Protocol::C_GetMyDevices& c_get_my_devices() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::Protocol::C_GetMyDevices* release_c_get_my_devices();
+  ::Protocol::C_GetMyDevices* mutable_c_get_my_devices();
+  void set_allocated_c_get_my_devices(::Protocol::C_GetMyDevices* c_get_my_devices);
+  private:
+  const ::Protocol::C_GetMyDevices& _internal_c_get_my_devices() const;
+  ::Protocol::C_GetMyDevices* _internal_mutable_c_get_my_devices();
+  public:
+  void unsafe_arena_set_allocated_c_get_my_devices(
+      ::Protocol::C_GetMyDevices* c_get_my_devices);
+  ::Protocol::C_GetMyDevices* unsafe_arena_release_c_get_my_devices();
+
+  // .Protocol.S_GetMyDevices s_get_my_devices = 25;
+  bool has_s_get_my_devices() const;
+  private:
+  bool _internal_has_s_get_my_devices() const;
+  public:
+  void clear_s_get_my_devices();
+  const ::Protocol::S_GetMyDevices& s_get_my_devices() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::Protocol::S_GetMyDevices* release_s_get_my_devices();
+  ::Protocol::S_GetMyDevices* mutable_s_get_my_devices();
+  void set_allocated_s_get_my_devices(::Protocol::S_GetMyDevices* s_get_my_devices);
+  private:
+  const ::Protocol::S_GetMyDevices& _internal_s_get_my_devices() const;
+  ::Protocol::S_GetMyDevices* _internal_mutable_s_get_my_devices();
+  public:
+  void unsafe_arena_set_allocated_s_get_my_devices(
+      ::Protocol::S_GetMyDevices* s_get_my_devices);
+  ::Protocol::S_GetMyDevices* unsafe_arena_release_s_get_my_devices();
+
+  // .Protocol.C_RemoveDevice c_remove_device = 26;
+  bool has_c_remove_device() const;
+  private:
+  bool _internal_has_c_remove_device() const;
+  public:
+  void clear_c_remove_device();
+  const ::Protocol::C_RemoveDevice& c_remove_device() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::Protocol::C_RemoveDevice* release_c_remove_device();
+  ::Protocol::C_RemoveDevice* mutable_c_remove_device();
+  void set_allocated_c_remove_device(::Protocol::C_RemoveDevice* c_remove_device);
+  private:
+  const ::Protocol::C_RemoveDevice& _internal_c_remove_device() const;
+  ::Protocol::C_RemoveDevice* _internal_mutable_c_remove_device();
+  public:
+  void unsafe_arena_set_allocated_c_remove_device(
+      ::Protocol::C_RemoveDevice* c_remove_device);
+  ::Protocol::C_RemoveDevice* unsafe_arena_release_c_remove_device();
+
+  // .Protocol.S_RemoveDevice s_remove_device = 27;
+  bool has_s_remove_device() const;
+  private:
+  bool _internal_has_s_remove_device() const;
+  public:
+  void clear_s_remove_device();
+  const ::Protocol::S_RemoveDevice& s_remove_device() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::Protocol::S_RemoveDevice* release_s_remove_device();
+  ::Protocol::S_RemoveDevice* mutable_s_remove_device();
+  void set_allocated_s_remove_device(::Protocol::S_RemoveDevice* s_remove_device);
+  private:
+  const ::Protocol::S_RemoveDevice& _internal_s_remove_device() const;
+  ::Protocol::S_RemoveDevice* _internal_mutable_s_remove_device();
+  public:
+  void unsafe_arena_set_allocated_s_remove_device(
+      ::Protocol::S_RemoveDevice* s_remove_device);
+  ::Protocol::S_RemoveDevice* unsafe_arena_release_s_remove_device();
 
   // .Protocol.C_FetchMyInfo c_fetch_my_info = 30;
   bool has_c_fetch_my_info() const;
@@ -1855,6 +2003,12 @@ class Envelope final :
   void set_has_s_signup();
   void set_has_c_login();
   void set_has_s_login();
+  void set_has_c_logout();
+  void set_has_s_logout();
+  void set_has_c_get_my_devices();
+  void set_has_s_get_my_devices();
+  void set_has_c_remove_device();
+  void set_has_s_remove_device();
   void set_has_c_fetch_my_info();
   void set_has_s_fetch_my_info();
   void set_has_c_edit_my_info();
@@ -1927,6 +2081,12 @@ class Envelope final :
     ::Protocol::S_SignUp* s_signup_;
     ::Protocol::C_Login* c_login_;
     ::Protocol::S_Login* s_login_;
+    ::Protocol::C_Logout* c_logout_;
+    ::Protocol::S_Logout* s_logout_;
+    ::Protocol::C_GetMyDevices* c_get_my_devices_;
+    ::Protocol::S_GetMyDevices* s_get_my_devices_;
+    ::Protocol::C_RemoveDevice* c_remove_device_;
+    ::Protocol::S_RemoveDevice* s_remove_device_;
     ::Protocol::C_FetchMyInfo* c_fetch_my_info_;
     ::Protocol::S_FetchMyInfo* s_fetch_my_info_;
     ::Protocol::C_EditMyInfo* c_edit_my_info_;
@@ -4053,6 +4213,291 @@ class S_Login final :
 };
 // -------------------------------------------------------------------
 
+class C_Logout final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.C_Logout) */ {
+ public:
+  inline C_Logout() : C_Logout(nullptr) {}
+  ~C_Logout() override;
+  explicit constexpr C_Logout(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  C_Logout(const C_Logout& from);
+  C_Logout(C_Logout&& from) noexcept
+    : C_Logout() {
+    *this = ::std::move(from);
+  }
+
+  inline C_Logout& operator=(const C_Logout& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline C_Logout& operator=(C_Logout&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const C_Logout& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const C_Logout* internal_default_instance() {
+    return reinterpret_cast<const C_Logout*>(
+               &_C_Logout_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    14;
+
+  friend void swap(C_Logout& a, C_Logout& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(C_Logout* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(C_Logout* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline C_Logout* New() const final {
+    return new C_Logout();
+  }
+
+  C_Logout* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<C_Logout>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const C_Logout& from);
+  void MergeFrom(const C_Logout& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(C_Logout* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.C_Logout";
+  }
+  protected:
+  explicit C_Logout(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kFcmTokenFieldNumber = 1,
+    kDeviceIdFieldNumber = 2,
+  };
+  // string fcm_token = 1;
+  void clear_fcm_token();
+  const std::string& fcm_token() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_fcm_token(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_fcm_token();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_fcm_token();
+  void set_allocated_fcm_token(std::string* fcm_token);
+  private:
+  const std::string& _internal_fcm_token() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_fcm_token(const std::string& value);
+  std::string* _internal_mutable_fcm_token();
+  public:
+
+  // string device_id = 2;
+  void clear_device_id();
+  const std::string& device_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_device_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_device_id();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_device_id();
+  void set_allocated_device_id(std::string* device_id);
+  private:
+  const std::string& _internal_device_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_device_id(const std::string& value);
+  std::string* _internal_mutable_device_id();
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.C_Logout)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr fcm_token_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr device_id_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class S_Logout final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S_Logout) */ {
+ public:
+  inline S_Logout() : S_Logout(nullptr) {}
+  ~S_Logout() override;
+  explicit constexpr S_Logout(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  S_Logout(const S_Logout& from);
+  S_Logout(S_Logout&& from) noexcept
+    : S_Logout() {
+    *this = ::std::move(from);
+  }
+
+  inline S_Logout& operator=(const S_Logout& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline S_Logout& operator=(S_Logout&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const S_Logout& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const S_Logout* internal_default_instance() {
+    return reinterpret_cast<const S_Logout*>(
+               &_S_Logout_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    15;
+
+  friend void swap(S_Logout& a, S_Logout& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(S_Logout* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(S_Logout* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline S_Logout* New() const final {
+    return new S_Logout();
+  }
+
+  S_Logout* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<S_Logout>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const S_Logout& from);
+  void MergeFrom(const S_Logout& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(S_Logout* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.S_Logout";
+  }
+  protected:
+  explicit S_Logout(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kSuccessFieldNumber = 1,
+  };
+  // bool success = 1;
+  void clear_success();
+  bool success() const;
+  void set_success(bool value);
+  private:
+  bool _internal_success() const;
+  void _internal_set_success(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.S_Logout)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  bool success_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
 class C_FetchMyInfo final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.C_FetchMyInfo) */ {
  public:
@@ -4097,7 +4542,7 @@ class C_FetchMyInfo final :
                &_C_FetchMyInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    14;
+    16;
 
   friend void swap(C_FetchMyInfo& a, C_FetchMyInfo& b) {
     a.Swap(&b);
@@ -4216,7 +4661,7 @@ class S_FetchMyInfo final :
                &_S_FetchMyInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    15;
+    17;
 
   friend void swap(S_FetchMyInfo& a, S_FetchMyInfo& b) {
     a.Swap(&b);
@@ -4357,7 +4802,7 @@ class C_EditMyInfo final :
                &_C_EditMyInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    16;
+    18;
 
   friend void swap(C_EditMyInfo& a, C_EditMyInfo& b) {
     a.Swap(&b);
@@ -4558,7 +5003,7 @@ class S_EditMyInfo final :
                &_S_EditMyInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    17;
+    19;
 
   friend void swap(S_EditMyInfo& a, S_EditMyInfo& b) {
     a.Swap(&b);
@@ -4726,7 +5171,7 @@ class C_RegisterFcmToken final :
                &_C_RegisterFcmToken_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    18;
+    20;
 
   friend void swap(C_RegisterFcmToken& a, C_RegisterFcmToken& b) {
     a.Swap(&b);
@@ -4793,6 +5238,8 @@ class C_RegisterFcmToken final :
     kFcmTokenFieldNumber = 1,
     kPlatformFieldNumber = 2,
     kDeviceIdFieldNumber = 3,
+    kDeviceNameFieldNumber = 4,
+    kAppVersionFieldNumber = 5,
   };
   // string fcm_token = 1;
   void clear_fcm_token();
@@ -4836,6 +5283,34 @@ class C_RegisterFcmToken final :
   std::string* _internal_mutable_device_id();
   public:
 
+  // string device_name = 4;
+  void clear_device_name();
+  const std::string& device_name() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_device_name(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_device_name();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_device_name();
+  void set_allocated_device_name(std::string* device_name);
+  private:
+  const std::string& _internal_device_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_device_name(const std::string& value);
+  std::string* _internal_mutable_device_name();
+  public:
+
+  // string app_version = 5;
+  void clear_app_version();
+  const std::string& app_version() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_app_version(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_app_version();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_app_version();
+  void set_allocated_app_version(std::string* app_version);
+  private:
+  const std::string& _internal_app_version() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_app_version(const std::string& value);
+  std::string* _internal_mutable_app_version();
+  public:
+
   // @@protoc_insertion_point(class_scope:Protocol.C_RegisterFcmToken)
  private:
   class _Internal;
@@ -4846,6 +5321,8 @@ class C_RegisterFcmToken final :
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr fcm_token_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr platform_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr device_id_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr device_name_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr app_version_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_protocol_2eproto;
 };
@@ -4895,7 +5372,7 @@ class S_RegisterFcmToken final :
                &_S_RegisterFcmToken_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    19;
+    21;
 
   friend void swap(S_RegisterFcmToken& a, S_RegisterFcmToken& b) {
     a.Swap(&b);
@@ -4999,6 +5476,769 @@ class S_RegisterFcmToken final :
 };
 // -------------------------------------------------------------------
 
+class DeviceInfo final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.DeviceInfo) */ {
+ public:
+  inline DeviceInfo() : DeviceInfo(nullptr) {}
+  ~DeviceInfo() override;
+  explicit constexpr DeviceInfo(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  DeviceInfo(const DeviceInfo& from);
+  DeviceInfo(DeviceInfo&& from) noexcept
+    : DeviceInfo() {
+    *this = ::std::move(from);
+  }
+
+  inline DeviceInfo& operator=(const DeviceInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline DeviceInfo& operator=(DeviceInfo&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const DeviceInfo& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const DeviceInfo* internal_default_instance() {
+    return reinterpret_cast<const DeviceInfo*>(
+               &_DeviceInfo_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    22;
+
+  friend void swap(DeviceInfo& a, DeviceInfo& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(DeviceInfo* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(DeviceInfo* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline DeviceInfo* New() const final {
+    return new DeviceInfo();
+  }
+
+  DeviceInfo* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<DeviceInfo>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const DeviceInfo& from);
+  void MergeFrom(const DeviceInfo& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(DeviceInfo* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.DeviceInfo";
+  }
+  protected:
+  explicit DeviceInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kDeviceIdFieldNumber = 1,
+    kDeviceNameFieldNumber = 2,
+    kPlatformFieldNumber = 3,
+    kAppVersionFieldNumber = 6,
+    kLastActiveFieldNumber = 4,
+    kRegisteredAtFieldNumber = 5,
+    kIsCurrentFieldNumber = 7,
+  };
+  // string device_id = 1;
+  void clear_device_id();
+  const std::string& device_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_device_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_device_id();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_device_id();
+  void set_allocated_device_id(std::string* device_id);
+  private:
+  const std::string& _internal_device_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_device_id(const std::string& value);
+  std::string* _internal_mutable_device_id();
+  public:
+
+  // string device_name = 2;
+  void clear_device_name();
+  const std::string& device_name() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_device_name(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_device_name();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_device_name();
+  void set_allocated_device_name(std::string* device_name);
+  private:
+  const std::string& _internal_device_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_device_name(const std::string& value);
+  std::string* _internal_mutable_device_name();
+  public:
+
+  // string platform = 3;
+  void clear_platform();
+  const std::string& platform() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_platform(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_platform();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_platform();
+  void set_allocated_platform(std::string* platform);
+  private:
+  const std::string& _internal_platform() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_platform(const std::string& value);
+  std::string* _internal_mutable_platform();
+  public:
+
+  // string app_version = 6;
+  void clear_app_version();
+  const std::string& app_version() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_app_version(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_app_version();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_app_version();
+  void set_allocated_app_version(std::string* app_version);
+  private:
+  const std::string& _internal_app_version() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_app_version(const std::string& value);
+  std::string* _internal_mutable_app_version();
+  public:
+
+  // int64 last_active = 4;
+  void clear_last_active();
+  ::PROTOBUF_NAMESPACE_ID::int64 last_active() const;
+  void set_last_active(::PROTOBUF_NAMESPACE_ID::int64 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int64 _internal_last_active() const;
+  void _internal_set_last_active(::PROTOBUF_NAMESPACE_ID::int64 value);
+  public:
+
+  // int64 registered_at = 5;
+  void clear_registered_at();
+  ::PROTOBUF_NAMESPACE_ID::int64 registered_at() const;
+  void set_registered_at(::PROTOBUF_NAMESPACE_ID::int64 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int64 _internal_registered_at() const;
+  void _internal_set_registered_at(::PROTOBUF_NAMESPACE_ID::int64 value);
+  public:
+
+  // bool is_current = 7;
+  void clear_is_current();
+  bool is_current() const;
+  void set_is_current(bool value);
+  private:
+  bool _internal_is_current() const;
+  void _internal_set_is_current(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.DeviceInfo)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr device_id_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr device_name_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr platform_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr app_version_;
+  ::PROTOBUF_NAMESPACE_ID::int64 last_active_;
+  ::PROTOBUF_NAMESPACE_ID::int64 registered_at_;
+  bool is_current_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class C_GetMyDevices final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.C_GetMyDevices) */ {
+ public:
+  inline C_GetMyDevices() : C_GetMyDevices(nullptr) {}
+  ~C_GetMyDevices() override;
+  explicit constexpr C_GetMyDevices(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  C_GetMyDevices(const C_GetMyDevices& from);
+  C_GetMyDevices(C_GetMyDevices&& from) noexcept
+    : C_GetMyDevices() {
+    *this = ::std::move(from);
+  }
+
+  inline C_GetMyDevices& operator=(const C_GetMyDevices& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline C_GetMyDevices& operator=(C_GetMyDevices&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const C_GetMyDevices& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const C_GetMyDevices* internal_default_instance() {
+    return reinterpret_cast<const C_GetMyDevices*>(
+               &_C_GetMyDevices_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    23;
+
+  friend void swap(C_GetMyDevices& a, C_GetMyDevices& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(C_GetMyDevices* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(C_GetMyDevices* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline C_GetMyDevices* New() const final {
+    return new C_GetMyDevices();
+  }
+
+  C_GetMyDevices* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<C_GetMyDevices>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const C_GetMyDevices& from);
+  void MergeFrom(const C_GetMyDevices& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(C_GetMyDevices* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.C_GetMyDevices";
+  }
+  protected:
+  explicit C_GetMyDevices(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:Protocol.C_GetMyDevices)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class S_GetMyDevices final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S_GetMyDevices) */ {
+ public:
+  inline S_GetMyDevices() : S_GetMyDevices(nullptr) {}
+  ~S_GetMyDevices() override;
+  explicit constexpr S_GetMyDevices(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  S_GetMyDevices(const S_GetMyDevices& from);
+  S_GetMyDevices(S_GetMyDevices&& from) noexcept
+    : S_GetMyDevices() {
+    *this = ::std::move(from);
+  }
+
+  inline S_GetMyDevices& operator=(const S_GetMyDevices& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline S_GetMyDevices& operator=(S_GetMyDevices&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const S_GetMyDevices& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const S_GetMyDevices* internal_default_instance() {
+    return reinterpret_cast<const S_GetMyDevices*>(
+               &_S_GetMyDevices_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    24;
+
+  friend void swap(S_GetMyDevices& a, S_GetMyDevices& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(S_GetMyDevices* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(S_GetMyDevices* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline S_GetMyDevices* New() const final {
+    return new S_GetMyDevices();
+  }
+
+  S_GetMyDevices* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<S_GetMyDevices>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const S_GetMyDevices& from);
+  void MergeFrom(const S_GetMyDevices& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(S_GetMyDevices* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.S_GetMyDevices";
+  }
+  protected:
+  explicit S_GetMyDevices(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kDevicesFieldNumber = 1,
+  };
+  // repeated .Protocol.DeviceInfo devices = 1;
+  int devices_size() const;
+  private:
+  int _internal_devices_size() const;
+  public:
+  void clear_devices();
+  ::Protocol::DeviceInfo* mutable_devices(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::DeviceInfo >*
+      mutable_devices();
+  private:
+  const ::Protocol::DeviceInfo& _internal_devices(int index) const;
+  ::Protocol::DeviceInfo* _internal_add_devices();
+  public:
+  const ::Protocol::DeviceInfo& devices(int index) const;
+  ::Protocol::DeviceInfo* add_devices();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::DeviceInfo >&
+      devices() const;
+
+  // @@protoc_insertion_point(class_scope:Protocol.S_GetMyDevices)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::DeviceInfo > devices_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class C_RemoveDevice final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.C_RemoveDevice) */ {
+ public:
+  inline C_RemoveDevice() : C_RemoveDevice(nullptr) {}
+  ~C_RemoveDevice() override;
+  explicit constexpr C_RemoveDevice(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  C_RemoveDevice(const C_RemoveDevice& from);
+  C_RemoveDevice(C_RemoveDevice&& from) noexcept
+    : C_RemoveDevice() {
+    *this = ::std::move(from);
+  }
+
+  inline C_RemoveDevice& operator=(const C_RemoveDevice& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline C_RemoveDevice& operator=(C_RemoveDevice&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const C_RemoveDevice& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const C_RemoveDevice* internal_default_instance() {
+    return reinterpret_cast<const C_RemoveDevice*>(
+               &_C_RemoveDevice_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    25;
+
+  friend void swap(C_RemoveDevice& a, C_RemoveDevice& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(C_RemoveDevice* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(C_RemoveDevice* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline C_RemoveDevice* New() const final {
+    return new C_RemoveDevice();
+  }
+
+  C_RemoveDevice* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<C_RemoveDevice>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const C_RemoveDevice& from);
+  void MergeFrom(const C_RemoveDevice& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(C_RemoveDevice* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.C_RemoveDevice";
+  }
+  protected:
+  explicit C_RemoveDevice(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kDeviceIdFieldNumber = 1,
+  };
+  // string device_id = 1;
+  void clear_device_id();
+  const std::string& device_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_device_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_device_id();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_device_id();
+  void set_allocated_device_id(std::string* device_id);
+  private:
+  const std::string& _internal_device_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_device_id(const std::string& value);
+  std::string* _internal_mutable_device_id();
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.C_RemoveDevice)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr device_id_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class S_RemoveDevice final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S_RemoveDevice) */ {
+ public:
+  inline S_RemoveDevice() : S_RemoveDevice(nullptr) {}
+  ~S_RemoveDevice() override;
+  explicit constexpr S_RemoveDevice(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  S_RemoveDevice(const S_RemoveDevice& from);
+  S_RemoveDevice(S_RemoveDevice&& from) noexcept
+    : S_RemoveDevice() {
+    *this = ::std::move(from);
+  }
+
+  inline S_RemoveDevice& operator=(const S_RemoveDevice& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline S_RemoveDevice& operator=(S_RemoveDevice&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const S_RemoveDevice& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const S_RemoveDevice* internal_default_instance() {
+    return reinterpret_cast<const S_RemoveDevice*>(
+               &_S_RemoveDevice_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    26;
+
+  friend void swap(S_RemoveDevice& a, S_RemoveDevice& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(S_RemoveDevice* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(S_RemoveDevice* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline S_RemoveDevice* New() const final {
+    return new S_RemoveDevice();
+  }
+
+  S_RemoveDevice* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<S_RemoveDevice>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const S_RemoveDevice& from);
+  void MergeFrom(const S_RemoveDevice& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(S_RemoveDevice* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.S_RemoveDevice";
+  }
+  protected:
+  explicit S_RemoveDevice(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kMessageFieldNumber = 2,
+    kSuccessFieldNumber = 1,
+  };
+  // string message = 2;
+  void clear_message();
+  const std::string& message() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_message(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_message();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_message();
+  void set_allocated_message(std::string* message);
+  private:
+  const std::string& _internal_message() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_message(const std::string& value);
+  std::string* _internal_mutable_message();
+  public:
+
+  // bool success = 1;
+  void clear_success();
+  bool success() const;
+  void set_success(bool value);
+  private:
+  bool _internal_success() const;
+  void _internal_set_success(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.S_RemoveDevice)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
+  bool success_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
 class C_ChangeEmail final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.C_ChangeEmail) */ {
  public:
@@ -5043,7 +6283,7 @@ class C_ChangeEmail final :
                &_C_ChangeEmail_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    20;
+    27;
 
   friend void swap(C_ChangeEmail& a, C_ChangeEmail& b) {
     a.Swap(&b);
@@ -5180,7 +6420,7 @@ class S_ChangeEmail final :
                &_S_ChangeEmail_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    21;
+    28;
 
   friend void swap(S_ChangeEmail& a, S_ChangeEmail& b) {
     a.Swap(&b);
@@ -5348,7 +6588,7 @@ class C_ChangePassword final :
                &_C_ChangePassword_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    22;
+    29;
 
   friend void swap(C_ChangePassword& a, C_ChangePassword& b) {
     a.Swap(&b);
@@ -5501,7 +6741,7 @@ class S_ChangePassword final :
                &_S_ChangePassword_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    23;
+    30;
 
   friend void swap(S_ChangePassword& a, S_ChangePassword& b) {
     a.Swap(&b);
@@ -5649,7 +6889,7 @@ class Text final :
                &_Text_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    24;
+    31;
 
   friend void swap(Text& a, Text& b) {
     a.Swap(&b);
@@ -5786,7 +7026,7 @@ class Image final :
                &_Image_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    25;
+    32;
 
   friend void swap(Image& a, Image& b) {
     a.Swap(&b);
@@ -5950,7 +7190,7 @@ class Video final :
                &_Video_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    26;
+    33;
 
   friend void swap(Video& a, Video& b) {
     a.Swap(&b);
@@ -6125,7 +7365,7 @@ class File final :
                &_File_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    27;
+    34;
 
   friend void swap(File& a, File& b) {
     a.Swap(&b);
@@ -6305,7 +7545,7 @@ class SystemMsg final :
                &_SystemMsg_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    28;
+    35;
 
   friend void swap(SystemMsg& a, SystemMsg& b) {
     a.Swap(&b);
@@ -6478,7 +7718,7 @@ class ChatPayload final :
                &_ChatPayload_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    29;
+    36;
 
   friend void swap(ChatPayload& a, ChatPayload& b) {
     a.Swap(&b);
@@ -6715,7 +7955,7 @@ class C_Chat final :
                &_C_Chat_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    30;
+    37;
 
   friend void swap(C_Chat& a, C_Chat& b) {
     a.Swap(&b);
@@ -6905,7 +8145,7 @@ class S_Chat final :
                &_S_Chat_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    31;
+    38;
 
   friend void swap(S_Chat& a, S_Chat& b) {
     a.Swap(&b);
@@ -7138,7 +8378,7 @@ class C_ReqHistory final :
                &_C_ReqHistory_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    32;
+    39;
 
   friend void swap(C_ReqHistory& a, C_ReqHistory& b) {
     a.Swap(&b);
@@ -7297,7 +8537,7 @@ class S_ReqHistory final :
                &_S_ReqHistory_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    33;
+    40;
 
   friend void swap(S_ReqHistory& a, S_ReqHistory& b) {
     a.Swap(&b);
@@ -7465,7 +8705,7 @@ class C_UploadFile final :
                &_C_UploadFile_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    34;
+    41;
 
   friend void swap(C_UploadFile& a, C_UploadFile& b) {
     a.Swap(&b);
@@ -7703,7 +8943,7 @@ class S_UploadFile final :
                &_S_UploadFile_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    35;
+    42;
 
   friend void swap(S_UploadFile& a, S_UploadFile& b) {
     a.Swap(&b);
@@ -7958,7 +9198,7 @@ class C_Ack final :
                &_C_Ack_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    36;
+    43;
 
   friend void swap(C_Ack& a, C_Ack& b) {
     a.Swap(&b);
@@ -8106,7 +9346,7 @@ class C_FetchOffline final :
                &_C_FetchOffline_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    37;
+    44;
 
   friend void swap(C_FetchOffline& a, C_FetchOffline& b) {
     a.Swap(&b);
@@ -8238,7 +9478,7 @@ class S_MessageBatch_ConversationBatch final :
                &_S_MessageBatch_ConversationBatch_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    38;
+    45;
 
   friend void swap(S_MessageBatch_ConversationBatch& a, S_MessageBatch_ConversationBatch& b) {
     a.Swap(&b);
@@ -8406,7 +9646,7 @@ class S_MessageBatch final :
                &_S_MessageBatch_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    39;
+    46;
 
   friend void swap(S_MessageBatch& a, S_MessageBatch& b) {
     a.Swap(&b);
@@ -8549,7 +9789,7 @@ class FriendRequest final :
                &_FriendRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    40;
+    47;
 
   friend void swap(FriendRequest& a, FriendRequest& b) {
     a.Swap(&b);
@@ -8712,7 +9952,7 @@ class C_SearchUser final :
                &_C_SearchUser_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    41;
+    48;
 
   friend void swap(C_SearchUser& a, C_SearchUser& b) {
     a.Swap(&b);
@@ -8849,7 +10089,7 @@ class S_SearchUser final :
                &_S_SearchUser_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    42;
+    49;
 
   friend void swap(S_SearchUser& a, S_SearchUser& b) {
     a.Swap(&b);
@@ -9023,7 +10263,7 @@ class C_FriendAction final :
                &_C_FriendAction_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    43;
+    50;
 
   friend void swap(C_FriendAction& a, C_FriendAction& b) {
     a.Swap(&b);
@@ -9207,7 +10447,7 @@ class S_FriendAction final :
                &_S_FriendAction_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    44;
+    51;
 
   friend void swap(S_FriendAction& a, S_FriendAction& b) {
     a.Swap(&b);
@@ -9375,7 +10615,7 @@ class C_FetchFriendData final :
                &_C_FetchFriendData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    45;
+    52;
 
   friend void swap(C_FetchFriendData& a, C_FetchFriendData& b) {
     a.Swap(&b);
@@ -9494,7 +10734,7 @@ class S_FetchFriendData final :
                &_S_FetchFriendData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    46;
+    53;
 
   friend void swap(S_FetchFriendData& a, S_FetchFriendData& b) {
     a.Swap(&b);
@@ -9675,7 +10915,7 @@ class S_FriendPush final :
                &_S_FriendPush_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    47;
+    54;
 
   friend void swap(S_FriendPush& a, S_FriendPush& b) {
     a.Swap(&b);
@@ -9859,7 +11099,7 @@ class GroupMemberInfo final :
                &_GroupMemberInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    48;
+    55;
 
   friend void swap(GroupMemberInfo& a, GroupMemberInfo& b) {
     a.Swap(&b);
@@ -10022,7 +11262,7 @@ class GroupInfo final :
                &_GroupInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    49;
+    56;
 
   friend void swap(GroupInfo& a, GroupInfo& b) {
     a.Swap(&b);
@@ -10256,7 +11496,7 @@ class C_CreateGroup final :
                &_C_CreateGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    50;
+    57;
 
   friend void swap(C_CreateGroup& a, C_CreateGroup& b) {
     a.Swap(&b);
@@ -10393,7 +11633,7 @@ class S_CreateGroup final :
                &_S_CreateGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    51;
+    58;
 
   friend void swap(S_CreateGroup& a, S_CreateGroup& b) {
     a.Swap(&b);
@@ -10545,7 +11785,7 @@ class C_GroupList final :
                &_C_GroupList_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    52;
+    59;
 
   friend void swap(C_GroupList& a, C_GroupList& b) {
     a.Swap(&b);
@@ -10664,7 +11904,7 @@ class S_GroupList final :
                &_S_GroupList_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    53;
+    60;
 
   friend void swap(S_GroupList& a, S_GroupList& b) {
     a.Swap(&b);
@@ -10805,7 +12045,7 @@ class C_GroupInfo final :
                &_C_GroupInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    54;
+    61;
 
   friend void swap(C_GroupInfo& a, C_GroupInfo& b) {
     a.Swap(&b);
@@ -10942,7 +12182,7 @@ class S_GroupInfo final :
                &_S_GroupInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    55;
+    62;
 
   friend void swap(S_GroupInfo& a, S_GroupInfo& b) {
     a.Swap(&b);
@@ -11094,7 +12334,7 @@ class C_InviteFriend final :
                &_C_InviteFriend_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    56;
+    63;
 
   friend void swap(C_InviteFriend& a, C_InviteFriend& b) {
     a.Swap(&b);
@@ -11257,7 +12497,7 @@ class S_InviteFriend final :
                &_S_InviteFriend_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    57;
+    64;
 
   friend void swap(S_InviteFriend& a, S_InviteFriend& b) {
     a.Swap(&b);
@@ -11389,7 +12629,7 @@ class C_JoinGroup final :
                &_C_JoinGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    58;
+    65;
 
   friend void swap(C_JoinGroup& a, C_JoinGroup& b) {
     a.Swap(&b);
@@ -11526,7 +12766,7 @@ class S_JoinGroup final :
                &_S_JoinGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    59;
+    66;
 
   friend void swap(S_JoinGroup& a, S_JoinGroup& b) {
     a.Swap(&b);
@@ -11678,7 +12918,7 @@ class C_GroupMemberList final :
                &_C_GroupMemberList_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    60;
+    67;
 
   friend void swap(C_GroupMemberList& a, C_GroupMemberList& b) {
     a.Swap(&b);
@@ -11815,7 +13055,7 @@ class S_GroupMemberList final :
                &_S_GroupMemberList_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    61;
+    68;
 
   friend void swap(S_GroupMemberList& a, S_GroupMemberList& b) {
     a.Swap(&b);
@@ -11972,7 +13212,7 @@ class C_LeaveGroup final :
                &_C_LeaveGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    62;
+    69;
 
   friend void swap(C_LeaveGroup& a, C_LeaveGroup& b) {
     a.Swap(&b);
@@ -12109,7 +13349,7 @@ class S_LeaveGroup final :
                &_S_LeaveGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    63;
+    70;
 
   friend void swap(S_LeaveGroup& a, S_LeaveGroup& b) {
     a.Swap(&b);
@@ -12241,7 +13481,7 @@ class C_EditGroup final :
                &_C_EditGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    64;
+    71;
 
   friend void swap(C_EditGroup& a, C_EditGroup& b) {
     a.Swap(&b);
@@ -12426,7 +13666,7 @@ class S_EditGroup final :
                &_S_EditGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    65;
+    72;
 
   friend void swap(S_EditGroup& a, S_EditGroup& b) {
     a.Swap(&b);
@@ -12578,7 +13818,7 @@ class C_Withdraw final :
                &_C_Withdraw_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    66;
+    73;
 
   friend void swap(C_Withdraw& a, C_Withdraw& b) {
     a.Swap(&b);
@@ -12731,7 +13971,7 @@ class S_Withdraw final :
                &_S_Withdraw_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    67;
+    74;
 
   friend void swap(S_Withdraw& a, S_Withdraw& b) {
     a.Swap(&b);
@@ -12879,7 +14119,7 @@ class S_Error final :
                &_S_Error_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    68;
+    75;
 
   friend void swap(S_Error& a, S_Error& b) {
     a.Swap(&b);
@@ -13038,7 +14278,7 @@ class C_Heartbeat final :
                &_C_Heartbeat_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    69;
+    76;
 
   friend void swap(C_Heartbeat& a, C_Heartbeat& b) {
     a.Swap(&b);
@@ -13157,7 +14397,7 @@ class S_Heartbeat final :
                &_S_Heartbeat_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    70;
+    77;
 
   friend void swap(S_Heartbeat& a, S_Heartbeat& b) {
     a.Swap(&b);
@@ -14200,6 +15440,444 @@ inline ::Protocol::S_Login* Envelope::_internal_mutable_s_login() {
 inline ::Protocol::S_Login* Envelope::mutable_s_login() {
   // @@protoc_insertion_point(field_mutable:Protocol.Envelope.s_login)
   return _internal_mutable_s_login();
+}
+
+// .Protocol.C_Logout c_logout = 22;
+inline bool Envelope::_internal_has_c_logout() const {
+  return body_case() == kCLogout;
+}
+inline bool Envelope::has_c_logout() const {
+  return _internal_has_c_logout();
+}
+inline void Envelope::set_has_c_logout() {
+  _oneof_case_[0] = kCLogout;
+}
+inline void Envelope::clear_c_logout() {
+  if (_internal_has_c_logout()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete body_.c_logout_;
+    }
+    clear_has_body();
+  }
+}
+inline ::Protocol::C_Logout* Envelope::release_c_logout() {
+  // @@protoc_insertion_point(field_release:Protocol.Envelope.c_logout)
+  if (_internal_has_c_logout()) {
+    clear_has_body();
+      ::Protocol::C_Logout* temp = body_.c_logout_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    body_.c_logout_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::Protocol::C_Logout& Envelope::_internal_c_logout() const {
+  return _internal_has_c_logout()
+      ? *body_.c_logout_
+      : reinterpret_cast< ::Protocol::C_Logout&>(::Protocol::_C_Logout_default_instance_);
+}
+inline const ::Protocol::C_Logout& Envelope::c_logout() const {
+  // @@protoc_insertion_point(field_get:Protocol.Envelope.c_logout)
+  return _internal_c_logout();
+}
+inline ::Protocol::C_Logout* Envelope::unsafe_arena_release_c_logout() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:Protocol.Envelope.c_logout)
+  if (_internal_has_c_logout()) {
+    clear_has_body();
+    ::Protocol::C_Logout* temp = body_.c_logout_;
+    body_.c_logout_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Envelope::unsafe_arena_set_allocated_c_logout(::Protocol::C_Logout* c_logout) {
+  clear_body();
+  if (c_logout) {
+    set_has_c_logout();
+    body_.c_logout_ = c_logout;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.Envelope.c_logout)
+}
+inline ::Protocol::C_Logout* Envelope::_internal_mutable_c_logout() {
+  if (!_internal_has_c_logout()) {
+    clear_body();
+    set_has_c_logout();
+    body_.c_logout_ = CreateMaybeMessage< ::Protocol::C_Logout >(GetArenaForAllocation());
+  }
+  return body_.c_logout_;
+}
+inline ::Protocol::C_Logout* Envelope::mutable_c_logout() {
+  // @@protoc_insertion_point(field_mutable:Protocol.Envelope.c_logout)
+  return _internal_mutable_c_logout();
+}
+
+// .Protocol.S_Logout s_logout = 23;
+inline bool Envelope::_internal_has_s_logout() const {
+  return body_case() == kSLogout;
+}
+inline bool Envelope::has_s_logout() const {
+  return _internal_has_s_logout();
+}
+inline void Envelope::set_has_s_logout() {
+  _oneof_case_[0] = kSLogout;
+}
+inline void Envelope::clear_s_logout() {
+  if (_internal_has_s_logout()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete body_.s_logout_;
+    }
+    clear_has_body();
+  }
+}
+inline ::Protocol::S_Logout* Envelope::release_s_logout() {
+  // @@protoc_insertion_point(field_release:Protocol.Envelope.s_logout)
+  if (_internal_has_s_logout()) {
+    clear_has_body();
+      ::Protocol::S_Logout* temp = body_.s_logout_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    body_.s_logout_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::Protocol::S_Logout& Envelope::_internal_s_logout() const {
+  return _internal_has_s_logout()
+      ? *body_.s_logout_
+      : reinterpret_cast< ::Protocol::S_Logout&>(::Protocol::_S_Logout_default_instance_);
+}
+inline const ::Protocol::S_Logout& Envelope::s_logout() const {
+  // @@protoc_insertion_point(field_get:Protocol.Envelope.s_logout)
+  return _internal_s_logout();
+}
+inline ::Protocol::S_Logout* Envelope::unsafe_arena_release_s_logout() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:Protocol.Envelope.s_logout)
+  if (_internal_has_s_logout()) {
+    clear_has_body();
+    ::Protocol::S_Logout* temp = body_.s_logout_;
+    body_.s_logout_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Envelope::unsafe_arena_set_allocated_s_logout(::Protocol::S_Logout* s_logout) {
+  clear_body();
+  if (s_logout) {
+    set_has_s_logout();
+    body_.s_logout_ = s_logout;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.Envelope.s_logout)
+}
+inline ::Protocol::S_Logout* Envelope::_internal_mutable_s_logout() {
+  if (!_internal_has_s_logout()) {
+    clear_body();
+    set_has_s_logout();
+    body_.s_logout_ = CreateMaybeMessage< ::Protocol::S_Logout >(GetArenaForAllocation());
+  }
+  return body_.s_logout_;
+}
+inline ::Protocol::S_Logout* Envelope::mutable_s_logout() {
+  // @@protoc_insertion_point(field_mutable:Protocol.Envelope.s_logout)
+  return _internal_mutable_s_logout();
+}
+
+// .Protocol.C_GetMyDevices c_get_my_devices = 24;
+inline bool Envelope::_internal_has_c_get_my_devices() const {
+  return body_case() == kCGetMyDevices;
+}
+inline bool Envelope::has_c_get_my_devices() const {
+  return _internal_has_c_get_my_devices();
+}
+inline void Envelope::set_has_c_get_my_devices() {
+  _oneof_case_[0] = kCGetMyDevices;
+}
+inline void Envelope::clear_c_get_my_devices() {
+  if (_internal_has_c_get_my_devices()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete body_.c_get_my_devices_;
+    }
+    clear_has_body();
+  }
+}
+inline ::Protocol::C_GetMyDevices* Envelope::release_c_get_my_devices() {
+  // @@protoc_insertion_point(field_release:Protocol.Envelope.c_get_my_devices)
+  if (_internal_has_c_get_my_devices()) {
+    clear_has_body();
+      ::Protocol::C_GetMyDevices* temp = body_.c_get_my_devices_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    body_.c_get_my_devices_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::Protocol::C_GetMyDevices& Envelope::_internal_c_get_my_devices() const {
+  return _internal_has_c_get_my_devices()
+      ? *body_.c_get_my_devices_
+      : reinterpret_cast< ::Protocol::C_GetMyDevices&>(::Protocol::_C_GetMyDevices_default_instance_);
+}
+inline const ::Protocol::C_GetMyDevices& Envelope::c_get_my_devices() const {
+  // @@protoc_insertion_point(field_get:Protocol.Envelope.c_get_my_devices)
+  return _internal_c_get_my_devices();
+}
+inline ::Protocol::C_GetMyDevices* Envelope::unsafe_arena_release_c_get_my_devices() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:Protocol.Envelope.c_get_my_devices)
+  if (_internal_has_c_get_my_devices()) {
+    clear_has_body();
+    ::Protocol::C_GetMyDevices* temp = body_.c_get_my_devices_;
+    body_.c_get_my_devices_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Envelope::unsafe_arena_set_allocated_c_get_my_devices(::Protocol::C_GetMyDevices* c_get_my_devices) {
+  clear_body();
+  if (c_get_my_devices) {
+    set_has_c_get_my_devices();
+    body_.c_get_my_devices_ = c_get_my_devices;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.Envelope.c_get_my_devices)
+}
+inline ::Protocol::C_GetMyDevices* Envelope::_internal_mutable_c_get_my_devices() {
+  if (!_internal_has_c_get_my_devices()) {
+    clear_body();
+    set_has_c_get_my_devices();
+    body_.c_get_my_devices_ = CreateMaybeMessage< ::Protocol::C_GetMyDevices >(GetArenaForAllocation());
+  }
+  return body_.c_get_my_devices_;
+}
+inline ::Protocol::C_GetMyDevices* Envelope::mutable_c_get_my_devices() {
+  // @@protoc_insertion_point(field_mutable:Protocol.Envelope.c_get_my_devices)
+  return _internal_mutable_c_get_my_devices();
+}
+
+// .Protocol.S_GetMyDevices s_get_my_devices = 25;
+inline bool Envelope::_internal_has_s_get_my_devices() const {
+  return body_case() == kSGetMyDevices;
+}
+inline bool Envelope::has_s_get_my_devices() const {
+  return _internal_has_s_get_my_devices();
+}
+inline void Envelope::set_has_s_get_my_devices() {
+  _oneof_case_[0] = kSGetMyDevices;
+}
+inline void Envelope::clear_s_get_my_devices() {
+  if (_internal_has_s_get_my_devices()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete body_.s_get_my_devices_;
+    }
+    clear_has_body();
+  }
+}
+inline ::Protocol::S_GetMyDevices* Envelope::release_s_get_my_devices() {
+  // @@protoc_insertion_point(field_release:Protocol.Envelope.s_get_my_devices)
+  if (_internal_has_s_get_my_devices()) {
+    clear_has_body();
+      ::Protocol::S_GetMyDevices* temp = body_.s_get_my_devices_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    body_.s_get_my_devices_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::Protocol::S_GetMyDevices& Envelope::_internal_s_get_my_devices() const {
+  return _internal_has_s_get_my_devices()
+      ? *body_.s_get_my_devices_
+      : reinterpret_cast< ::Protocol::S_GetMyDevices&>(::Protocol::_S_GetMyDevices_default_instance_);
+}
+inline const ::Protocol::S_GetMyDevices& Envelope::s_get_my_devices() const {
+  // @@protoc_insertion_point(field_get:Protocol.Envelope.s_get_my_devices)
+  return _internal_s_get_my_devices();
+}
+inline ::Protocol::S_GetMyDevices* Envelope::unsafe_arena_release_s_get_my_devices() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:Protocol.Envelope.s_get_my_devices)
+  if (_internal_has_s_get_my_devices()) {
+    clear_has_body();
+    ::Protocol::S_GetMyDevices* temp = body_.s_get_my_devices_;
+    body_.s_get_my_devices_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Envelope::unsafe_arena_set_allocated_s_get_my_devices(::Protocol::S_GetMyDevices* s_get_my_devices) {
+  clear_body();
+  if (s_get_my_devices) {
+    set_has_s_get_my_devices();
+    body_.s_get_my_devices_ = s_get_my_devices;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.Envelope.s_get_my_devices)
+}
+inline ::Protocol::S_GetMyDevices* Envelope::_internal_mutable_s_get_my_devices() {
+  if (!_internal_has_s_get_my_devices()) {
+    clear_body();
+    set_has_s_get_my_devices();
+    body_.s_get_my_devices_ = CreateMaybeMessage< ::Protocol::S_GetMyDevices >(GetArenaForAllocation());
+  }
+  return body_.s_get_my_devices_;
+}
+inline ::Protocol::S_GetMyDevices* Envelope::mutable_s_get_my_devices() {
+  // @@protoc_insertion_point(field_mutable:Protocol.Envelope.s_get_my_devices)
+  return _internal_mutable_s_get_my_devices();
+}
+
+// .Protocol.C_RemoveDevice c_remove_device = 26;
+inline bool Envelope::_internal_has_c_remove_device() const {
+  return body_case() == kCRemoveDevice;
+}
+inline bool Envelope::has_c_remove_device() const {
+  return _internal_has_c_remove_device();
+}
+inline void Envelope::set_has_c_remove_device() {
+  _oneof_case_[0] = kCRemoveDevice;
+}
+inline void Envelope::clear_c_remove_device() {
+  if (_internal_has_c_remove_device()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete body_.c_remove_device_;
+    }
+    clear_has_body();
+  }
+}
+inline ::Protocol::C_RemoveDevice* Envelope::release_c_remove_device() {
+  // @@protoc_insertion_point(field_release:Protocol.Envelope.c_remove_device)
+  if (_internal_has_c_remove_device()) {
+    clear_has_body();
+      ::Protocol::C_RemoveDevice* temp = body_.c_remove_device_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    body_.c_remove_device_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::Protocol::C_RemoveDevice& Envelope::_internal_c_remove_device() const {
+  return _internal_has_c_remove_device()
+      ? *body_.c_remove_device_
+      : reinterpret_cast< ::Protocol::C_RemoveDevice&>(::Protocol::_C_RemoveDevice_default_instance_);
+}
+inline const ::Protocol::C_RemoveDevice& Envelope::c_remove_device() const {
+  // @@protoc_insertion_point(field_get:Protocol.Envelope.c_remove_device)
+  return _internal_c_remove_device();
+}
+inline ::Protocol::C_RemoveDevice* Envelope::unsafe_arena_release_c_remove_device() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:Protocol.Envelope.c_remove_device)
+  if (_internal_has_c_remove_device()) {
+    clear_has_body();
+    ::Protocol::C_RemoveDevice* temp = body_.c_remove_device_;
+    body_.c_remove_device_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Envelope::unsafe_arena_set_allocated_c_remove_device(::Protocol::C_RemoveDevice* c_remove_device) {
+  clear_body();
+  if (c_remove_device) {
+    set_has_c_remove_device();
+    body_.c_remove_device_ = c_remove_device;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.Envelope.c_remove_device)
+}
+inline ::Protocol::C_RemoveDevice* Envelope::_internal_mutable_c_remove_device() {
+  if (!_internal_has_c_remove_device()) {
+    clear_body();
+    set_has_c_remove_device();
+    body_.c_remove_device_ = CreateMaybeMessage< ::Protocol::C_RemoveDevice >(GetArenaForAllocation());
+  }
+  return body_.c_remove_device_;
+}
+inline ::Protocol::C_RemoveDevice* Envelope::mutable_c_remove_device() {
+  // @@protoc_insertion_point(field_mutable:Protocol.Envelope.c_remove_device)
+  return _internal_mutable_c_remove_device();
+}
+
+// .Protocol.S_RemoveDevice s_remove_device = 27;
+inline bool Envelope::_internal_has_s_remove_device() const {
+  return body_case() == kSRemoveDevice;
+}
+inline bool Envelope::has_s_remove_device() const {
+  return _internal_has_s_remove_device();
+}
+inline void Envelope::set_has_s_remove_device() {
+  _oneof_case_[0] = kSRemoveDevice;
+}
+inline void Envelope::clear_s_remove_device() {
+  if (_internal_has_s_remove_device()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete body_.s_remove_device_;
+    }
+    clear_has_body();
+  }
+}
+inline ::Protocol::S_RemoveDevice* Envelope::release_s_remove_device() {
+  // @@protoc_insertion_point(field_release:Protocol.Envelope.s_remove_device)
+  if (_internal_has_s_remove_device()) {
+    clear_has_body();
+      ::Protocol::S_RemoveDevice* temp = body_.s_remove_device_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    body_.s_remove_device_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::Protocol::S_RemoveDevice& Envelope::_internal_s_remove_device() const {
+  return _internal_has_s_remove_device()
+      ? *body_.s_remove_device_
+      : reinterpret_cast< ::Protocol::S_RemoveDevice&>(::Protocol::_S_RemoveDevice_default_instance_);
+}
+inline const ::Protocol::S_RemoveDevice& Envelope::s_remove_device() const {
+  // @@protoc_insertion_point(field_get:Protocol.Envelope.s_remove_device)
+  return _internal_s_remove_device();
+}
+inline ::Protocol::S_RemoveDevice* Envelope::unsafe_arena_release_s_remove_device() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:Protocol.Envelope.s_remove_device)
+  if (_internal_has_s_remove_device()) {
+    clear_has_body();
+    ::Protocol::S_RemoveDevice* temp = body_.s_remove_device_;
+    body_.s_remove_device_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void Envelope::unsafe_arena_set_allocated_s_remove_device(::Protocol::S_RemoveDevice* s_remove_device) {
+  clear_body();
+  if (s_remove_device) {
+    set_has_s_remove_device();
+    body_.s_remove_device_ = s_remove_device;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.Envelope.s_remove_device)
+}
+inline ::Protocol::S_RemoveDevice* Envelope::_internal_mutable_s_remove_device() {
+  if (!_internal_has_s_remove_device()) {
+    clear_body();
+    set_has_s_remove_device();
+    body_.s_remove_device_ = CreateMaybeMessage< ::Protocol::S_RemoveDevice >(GetArenaForAllocation());
+  }
+  return body_.s_remove_device_;
+}
+inline ::Protocol::S_RemoveDevice* Envelope::mutable_s_remove_device() {
+  // @@protoc_insertion_point(field_mutable:Protocol.Envelope.s_remove_device)
+  return _internal_mutable_s_remove_device();
 }
 
 // .Protocol.C_FetchMyInfo c_fetch_my_info = 30;
@@ -19014,6 +20692,124 @@ inline void S_Login::set_allocated_my_info(::Protocol::UserInfo* my_info) {
 
 // -------------------------------------------------------------------
 
+// C_Logout
+
+// string fcm_token = 1;
+inline void C_Logout::clear_fcm_token() {
+  fcm_token_.ClearToEmpty();
+}
+inline const std::string& C_Logout::fcm_token() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_Logout.fcm_token)
+  return _internal_fcm_token();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void C_Logout::set_fcm_token(ArgT0&& arg0, ArgT... args) {
+ 
+ fcm_token_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.C_Logout.fcm_token)
+}
+inline std::string* C_Logout::mutable_fcm_token() {
+  // @@protoc_insertion_point(field_mutable:Protocol.C_Logout.fcm_token)
+  return _internal_mutable_fcm_token();
+}
+inline const std::string& C_Logout::_internal_fcm_token() const {
+  return fcm_token_.Get();
+}
+inline void C_Logout::_internal_set_fcm_token(const std::string& value) {
+  
+  fcm_token_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* C_Logout::_internal_mutable_fcm_token() {
+  
+  return fcm_token_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* C_Logout::release_fcm_token() {
+  // @@protoc_insertion_point(field_release:Protocol.C_Logout.fcm_token)
+  return fcm_token_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void C_Logout::set_allocated_fcm_token(std::string* fcm_token) {
+  if (fcm_token != nullptr) {
+    
+  } else {
+    
+  }
+  fcm_token_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), fcm_token,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C_Logout.fcm_token)
+}
+
+// string device_id = 2;
+inline void C_Logout::clear_device_id() {
+  device_id_.ClearToEmpty();
+}
+inline const std::string& C_Logout::device_id() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_Logout.device_id)
+  return _internal_device_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void C_Logout::set_device_id(ArgT0&& arg0, ArgT... args) {
+ 
+ device_id_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.C_Logout.device_id)
+}
+inline std::string* C_Logout::mutable_device_id() {
+  // @@protoc_insertion_point(field_mutable:Protocol.C_Logout.device_id)
+  return _internal_mutable_device_id();
+}
+inline const std::string& C_Logout::_internal_device_id() const {
+  return device_id_.Get();
+}
+inline void C_Logout::_internal_set_device_id(const std::string& value) {
+  
+  device_id_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* C_Logout::_internal_mutable_device_id() {
+  
+  return device_id_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* C_Logout::release_device_id() {
+  // @@protoc_insertion_point(field_release:Protocol.C_Logout.device_id)
+  return device_id_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void C_Logout::set_allocated_device_id(std::string* device_id) {
+  if (device_id != nullptr) {
+    
+  } else {
+    
+  }
+  device_id_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), device_id,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C_Logout.device_id)
+}
+
+// -------------------------------------------------------------------
+
+// S_Logout
+
+// bool success = 1;
+inline void S_Logout::clear_success() {
+  success_ = false;
+}
+inline bool S_Logout::_internal_success() const {
+  return success_;
+}
+inline bool S_Logout::success() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_Logout.success)
+  return _internal_success();
+}
+inline void S_Logout::_internal_set_success(bool value) {
+  
+  success_ = value;
+}
+inline void S_Logout::set_success(bool value) {
+  _internal_set_success(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_Logout.success)
+}
+
+// -------------------------------------------------------------------
+
 // C_FetchMyInfo
 
 // -------------------------------------------------------------------
@@ -19623,6 +21419,96 @@ inline void C_RegisterFcmToken::set_allocated_device_id(std::string* device_id) 
   // @@protoc_insertion_point(field_set_allocated:Protocol.C_RegisterFcmToken.device_id)
 }
 
+// string device_name = 4;
+inline void C_RegisterFcmToken::clear_device_name() {
+  device_name_.ClearToEmpty();
+}
+inline const std::string& C_RegisterFcmToken::device_name() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_RegisterFcmToken.device_name)
+  return _internal_device_name();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void C_RegisterFcmToken::set_device_name(ArgT0&& arg0, ArgT... args) {
+ 
+ device_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.C_RegisterFcmToken.device_name)
+}
+inline std::string* C_RegisterFcmToken::mutable_device_name() {
+  // @@protoc_insertion_point(field_mutable:Protocol.C_RegisterFcmToken.device_name)
+  return _internal_mutable_device_name();
+}
+inline const std::string& C_RegisterFcmToken::_internal_device_name() const {
+  return device_name_.Get();
+}
+inline void C_RegisterFcmToken::_internal_set_device_name(const std::string& value) {
+  
+  device_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* C_RegisterFcmToken::_internal_mutable_device_name() {
+  
+  return device_name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* C_RegisterFcmToken::release_device_name() {
+  // @@protoc_insertion_point(field_release:Protocol.C_RegisterFcmToken.device_name)
+  return device_name_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void C_RegisterFcmToken::set_allocated_device_name(std::string* device_name) {
+  if (device_name != nullptr) {
+    
+  } else {
+    
+  }
+  device_name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), device_name,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C_RegisterFcmToken.device_name)
+}
+
+// string app_version = 5;
+inline void C_RegisterFcmToken::clear_app_version() {
+  app_version_.ClearToEmpty();
+}
+inline const std::string& C_RegisterFcmToken::app_version() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_RegisterFcmToken.app_version)
+  return _internal_app_version();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void C_RegisterFcmToken::set_app_version(ArgT0&& arg0, ArgT... args) {
+ 
+ app_version_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.C_RegisterFcmToken.app_version)
+}
+inline std::string* C_RegisterFcmToken::mutable_app_version() {
+  // @@protoc_insertion_point(field_mutable:Protocol.C_RegisterFcmToken.app_version)
+  return _internal_mutable_app_version();
+}
+inline const std::string& C_RegisterFcmToken::_internal_app_version() const {
+  return app_version_.Get();
+}
+inline void C_RegisterFcmToken::_internal_set_app_version(const std::string& value) {
+  
+  app_version_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* C_RegisterFcmToken::_internal_mutable_app_version() {
+  
+  return app_version_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* C_RegisterFcmToken::release_app_version() {
+  // @@protoc_insertion_point(field_release:Protocol.C_RegisterFcmToken.app_version)
+  return app_version_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void C_RegisterFcmToken::set_allocated_app_version(std::string* app_version) {
+  if (app_version != nullptr) {
+    
+  } else {
+    
+  }
+  app_version_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), app_version,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C_RegisterFcmToken.app_version)
+}
+
 // -------------------------------------------------------------------
 
 // S_RegisterFcmToken
@@ -19690,6 +21576,415 @@ inline void S_RegisterFcmToken::set_allocated_message(std::string* message) {
   message_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), message,
       GetArenaForAllocation());
   // @@protoc_insertion_point(field_set_allocated:Protocol.S_RegisterFcmToken.message)
+}
+
+// -------------------------------------------------------------------
+
+// DeviceInfo
+
+// string device_id = 1;
+inline void DeviceInfo::clear_device_id() {
+  device_id_.ClearToEmpty();
+}
+inline const std::string& DeviceInfo::device_id() const {
+  // @@protoc_insertion_point(field_get:Protocol.DeviceInfo.device_id)
+  return _internal_device_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void DeviceInfo::set_device_id(ArgT0&& arg0, ArgT... args) {
+ 
+ device_id_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.DeviceInfo.device_id)
+}
+inline std::string* DeviceInfo::mutable_device_id() {
+  // @@protoc_insertion_point(field_mutable:Protocol.DeviceInfo.device_id)
+  return _internal_mutable_device_id();
+}
+inline const std::string& DeviceInfo::_internal_device_id() const {
+  return device_id_.Get();
+}
+inline void DeviceInfo::_internal_set_device_id(const std::string& value) {
+  
+  device_id_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* DeviceInfo::_internal_mutable_device_id() {
+  
+  return device_id_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* DeviceInfo::release_device_id() {
+  // @@protoc_insertion_point(field_release:Protocol.DeviceInfo.device_id)
+  return device_id_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void DeviceInfo::set_allocated_device_id(std::string* device_id) {
+  if (device_id != nullptr) {
+    
+  } else {
+    
+  }
+  device_id_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), device_id,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.DeviceInfo.device_id)
+}
+
+// string device_name = 2;
+inline void DeviceInfo::clear_device_name() {
+  device_name_.ClearToEmpty();
+}
+inline const std::string& DeviceInfo::device_name() const {
+  // @@protoc_insertion_point(field_get:Protocol.DeviceInfo.device_name)
+  return _internal_device_name();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void DeviceInfo::set_device_name(ArgT0&& arg0, ArgT... args) {
+ 
+ device_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.DeviceInfo.device_name)
+}
+inline std::string* DeviceInfo::mutable_device_name() {
+  // @@protoc_insertion_point(field_mutable:Protocol.DeviceInfo.device_name)
+  return _internal_mutable_device_name();
+}
+inline const std::string& DeviceInfo::_internal_device_name() const {
+  return device_name_.Get();
+}
+inline void DeviceInfo::_internal_set_device_name(const std::string& value) {
+  
+  device_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* DeviceInfo::_internal_mutable_device_name() {
+  
+  return device_name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* DeviceInfo::release_device_name() {
+  // @@protoc_insertion_point(field_release:Protocol.DeviceInfo.device_name)
+  return device_name_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void DeviceInfo::set_allocated_device_name(std::string* device_name) {
+  if (device_name != nullptr) {
+    
+  } else {
+    
+  }
+  device_name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), device_name,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.DeviceInfo.device_name)
+}
+
+// string platform = 3;
+inline void DeviceInfo::clear_platform() {
+  platform_.ClearToEmpty();
+}
+inline const std::string& DeviceInfo::platform() const {
+  // @@protoc_insertion_point(field_get:Protocol.DeviceInfo.platform)
+  return _internal_platform();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void DeviceInfo::set_platform(ArgT0&& arg0, ArgT... args) {
+ 
+ platform_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.DeviceInfo.platform)
+}
+inline std::string* DeviceInfo::mutable_platform() {
+  // @@protoc_insertion_point(field_mutable:Protocol.DeviceInfo.platform)
+  return _internal_mutable_platform();
+}
+inline const std::string& DeviceInfo::_internal_platform() const {
+  return platform_.Get();
+}
+inline void DeviceInfo::_internal_set_platform(const std::string& value) {
+  
+  platform_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* DeviceInfo::_internal_mutable_platform() {
+  
+  return platform_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* DeviceInfo::release_platform() {
+  // @@protoc_insertion_point(field_release:Protocol.DeviceInfo.platform)
+  return platform_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void DeviceInfo::set_allocated_platform(std::string* platform) {
+  if (platform != nullptr) {
+    
+  } else {
+    
+  }
+  platform_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), platform,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.DeviceInfo.platform)
+}
+
+// int64 last_active = 4;
+inline void DeviceInfo::clear_last_active() {
+  last_active_ = int64_t{0};
+}
+inline ::PROTOBUF_NAMESPACE_ID::int64 DeviceInfo::_internal_last_active() const {
+  return last_active_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int64 DeviceInfo::last_active() const {
+  // @@protoc_insertion_point(field_get:Protocol.DeviceInfo.last_active)
+  return _internal_last_active();
+}
+inline void DeviceInfo::_internal_set_last_active(::PROTOBUF_NAMESPACE_ID::int64 value) {
+  
+  last_active_ = value;
+}
+inline void DeviceInfo::set_last_active(::PROTOBUF_NAMESPACE_ID::int64 value) {
+  _internal_set_last_active(value);
+  // @@protoc_insertion_point(field_set:Protocol.DeviceInfo.last_active)
+}
+
+// int64 registered_at = 5;
+inline void DeviceInfo::clear_registered_at() {
+  registered_at_ = int64_t{0};
+}
+inline ::PROTOBUF_NAMESPACE_ID::int64 DeviceInfo::_internal_registered_at() const {
+  return registered_at_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int64 DeviceInfo::registered_at() const {
+  // @@protoc_insertion_point(field_get:Protocol.DeviceInfo.registered_at)
+  return _internal_registered_at();
+}
+inline void DeviceInfo::_internal_set_registered_at(::PROTOBUF_NAMESPACE_ID::int64 value) {
+  
+  registered_at_ = value;
+}
+inline void DeviceInfo::set_registered_at(::PROTOBUF_NAMESPACE_ID::int64 value) {
+  _internal_set_registered_at(value);
+  // @@protoc_insertion_point(field_set:Protocol.DeviceInfo.registered_at)
+}
+
+// string app_version = 6;
+inline void DeviceInfo::clear_app_version() {
+  app_version_.ClearToEmpty();
+}
+inline const std::string& DeviceInfo::app_version() const {
+  // @@protoc_insertion_point(field_get:Protocol.DeviceInfo.app_version)
+  return _internal_app_version();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void DeviceInfo::set_app_version(ArgT0&& arg0, ArgT... args) {
+ 
+ app_version_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.DeviceInfo.app_version)
+}
+inline std::string* DeviceInfo::mutable_app_version() {
+  // @@protoc_insertion_point(field_mutable:Protocol.DeviceInfo.app_version)
+  return _internal_mutable_app_version();
+}
+inline const std::string& DeviceInfo::_internal_app_version() const {
+  return app_version_.Get();
+}
+inline void DeviceInfo::_internal_set_app_version(const std::string& value) {
+  
+  app_version_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* DeviceInfo::_internal_mutable_app_version() {
+  
+  return app_version_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* DeviceInfo::release_app_version() {
+  // @@protoc_insertion_point(field_release:Protocol.DeviceInfo.app_version)
+  return app_version_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void DeviceInfo::set_allocated_app_version(std::string* app_version) {
+  if (app_version != nullptr) {
+    
+  } else {
+    
+  }
+  app_version_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), app_version,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.DeviceInfo.app_version)
+}
+
+// bool is_current = 7;
+inline void DeviceInfo::clear_is_current() {
+  is_current_ = false;
+}
+inline bool DeviceInfo::_internal_is_current() const {
+  return is_current_;
+}
+inline bool DeviceInfo::is_current() const {
+  // @@protoc_insertion_point(field_get:Protocol.DeviceInfo.is_current)
+  return _internal_is_current();
+}
+inline void DeviceInfo::_internal_set_is_current(bool value) {
+  
+  is_current_ = value;
+}
+inline void DeviceInfo::set_is_current(bool value) {
+  _internal_set_is_current(value);
+  // @@protoc_insertion_point(field_set:Protocol.DeviceInfo.is_current)
+}
+
+// -------------------------------------------------------------------
+
+// C_GetMyDevices
+
+// -------------------------------------------------------------------
+
+// S_GetMyDevices
+
+// repeated .Protocol.DeviceInfo devices = 1;
+inline int S_GetMyDevices::_internal_devices_size() const {
+  return devices_.size();
+}
+inline int S_GetMyDevices::devices_size() const {
+  return _internal_devices_size();
+}
+inline void S_GetMyDevices::clear_devices() {
+  devices_.Clear();
+}
+inline ::Protocol::DeviceInfo* S_GetMyDevices::mutable_devices(int index) {
+  // @@protoc_insertion_point(field_mutable:Protocol.S_GetMyDevices.devices)
+  return devices_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::DeviceInfo >*
+S_GetMyDevices::mutable_devices() {
+  // @@protoc_insertion_point(field_mutable_list:Protocol.S_GetMyDevices.devices)
+  return &devices_;
+}
+inline const ::Protocol::DeviceInfo& S_GetMyDevices::_internal_devices(int index) const {
+  return devices_.Get(index);
+}
+inline const ::Protocol::DeviceInfo& S_GetMyDevices::devices(int index) const {
+  // @@protoc_insertion_point(field_get:Protocol.S_GetMyDevices.devices)
+  return _internal_devices(index);
+}
+inline ::Protocol::DeviceInfo* S_GetMyDevices::_internal_add_devices() {
+  return devices_.Add();
+}
+inline ::Protocol::DeviceInfo* S_GetMyDevices::add_devices() {
+  // @@protoc_insertion_point(field_add:Protocol.S_GetMyDevices.devices)
+  return _internal_add_devices();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Protocol::DeviceInfo >&
+S_GetMyDevices::devices() const {
+  // @@protoc_insertion_point(field_list:Protocol.S_GetMyDevices.devices)
+  return devices_;
+}
+
+// -------------------------------------------------------------------
+
+// C_RemoveDevice
+
+// string device_id = 1;
+inline void C_RemoveDevice::clear_device_id() {
+  device_id_.ClearToEmpty();
+}
+inline const std::string& C_RemoveDevice::device_id() const {
+  // @@protoc_insertion_point(field_get:Protocol.C_RemoveDevice.device_id)
+  return _internal_device_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void C_RemoveDevice::set_device_id(ArgT0&& arg0, ArgT... args) {
+ 
+ device_id_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.C_RemoveDevice.device_id)
+}
+inline std::string* C_RemoveDevice::mutable_device_id() {
+  // @@protoc_insertion_point(field_mutable:Protocol.C_RemoveDevice.device_id)
+  return _internal_mutable_device_id();
+}
+inline const std::string& C_RemoveDevice::_internal_device_id() const {
+  return device_id_.Get();
+}
+inline void C_RemoveDevice::_internal_set_device_id(const std::string& value) {
+  
+  device_id_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* C_RemoveDevice::_internal_mutable_device_id() {
+  
+  return device_id_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* C_RemoveDevice::release_device_id() {
+  // @@protoc_insertion_point(field_release:Protocol.C_RemoveDevice.device_id)
+  return device_id_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void C_RemoveDevice::set_allocated_device_id(std::string* device_id) {
+  if (device_id != nullptr) {
+    
+  } else {
+    
+  }
+  device_id_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), device_id,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C_RemoveDevice.device_id)
+}
+
+// -------------------------------------------------------------------
+
+// S_RemoveDevice
+
+// bool success = 1;
+inline void S_RemoveDevice::clear_success() {
+  success_ = false;
+}
+inline bool S_RemoveDevice::_internal_success() const {
+  return success_;
+}
+inline bool S_RemoveDevice::success() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_RemoveDevice.success)
+  return _internal_success();
+}
+inline void S_RemoveDevice::_internal_set_success(bool value) {
+  
+  success_ = value;
+}
+inline void S_RemoveDevice::set_success(bool value) {
+  _internal_set_success(value);
+  // @@protoc_insertion_point(field_set:Protocol.S_RemoveDevice.success)
+}
+
+// string message = 2;
+inline void S_RemoveDevice::clear_message() {
+  message_.ClearToEmpty();
+}
+inline const std::string& S_RemoveDevice::message() const {
+  // @@protoc_insertion_point(field_get:Protocol.S_RemoveDevice.message)
+  return _internal_message();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void S_RemoveDevice::set_message(ArgT0&& arg0, ArgT... args) {
+ 
+ message_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.S_RemoveDevice.message)
+}
+inline std::string* S_RemoveDevice::mutable_message() {
+  // @@protoc_insertion_point(field_mutable:Protocol.S_RemoveDevice.message)
+  return _internal_mutable_message();
+}
+inline const std::string& S_RemoveDevice::_internal_message() const {
+  return message_.Get();
+}
+inline void S_RemoveDevice::_internal_set_message(const std::string& value) {
+  
+  message_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* S_RemoveDevice::_internal_mutable_message() {
+  
+  return message_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* S_RemoveDevice::release_message() {
+  // @@protoc_insertion_point(field_release:Protocol.S_RemoveDevice.message)
+  return message_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void S_RemoveDevice::set_allocated_message(std::string* message) {
+  if (message != nullptr) {
+    
+  } else {
+    
+  }
+  message_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), message,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.S_RemoveDevice.message)
 }
 
 // -------------------------------------------------------------------
@@ -25115,6 +27410,20 @@ inline void S_Error::set_allocated_message(std::string* message) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

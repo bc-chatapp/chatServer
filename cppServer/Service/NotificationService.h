@@ -18,6 +18,12 @@ public:
     // FCM 토큰 삭제 (로그아웃 시 호출)
     bool UnregisterFcmToken(sessionPtr& session, uint64 reqId, const string& fcmToken);
 
+    // 내 기기 목록 조회
+    bool GetMyDevices(sessionPtr& session, uint64 reqId, const string& currentDeviceId);
+
+    // 특정 기기 삭제 (원격 로그아웃)
+    bool RemoveDevice(sessionPtr& session, uint64 reqId, const string& deviceId);
+
 private:
     UserManager& _userManager;
 

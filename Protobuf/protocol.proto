@@ -24,8 +24,12 @@ message Envelope {
       S_SignUp                s_signup                  = 19;
       C_Login                 c_login                   = 20;
       S_Login                 s_login                   = 21;
-
-
+      C_Logout                c_logout                  = 22;
+      S_Logout                s_logout                  = 23;
+      C_GetMyDevices          c_get_my_devices          = 24;
+      S_GetMyDevices          s_get_my_devices          = 25;
+      C_RemoveDevice          c_remove_device           = 26;
+      S_RemoveDevice          s_remove_device           = 27;
 
       // ─── MY INFO / SETTINGS (30 ~ 39) ───
       C_FetchMyInfo           c_fetch_my_info           = 30;
@@ -160,6 +164,13 @@ message S_Login {
     UserInfo my_info    = 3; // 로그인 시 내 정보를 한꺼번에 동기화
 }
 
+message C_Logout {
+    string fcm_token = 1;   // 삭제할 FCM 토큰 (현재 기기)
+    string device_id = 2;   // 디바이스 ID (선택)
+}
+message S_Logout {
+    bool success = 1;
+}
 
 
 
@@ -194,9 +205,39 @@ message C_RegisterFcmToken {
     string fcm_token = 1;       // FCM 디바이스 토큰
     string platform = 2;        // "android" 또는 "ios"
     string device_id = 3;       // 디바이스 고유 ID (선택)
+    string device_name = 4;     // 기기 이름 (예: "Galaxy S24", "iPad Pro")
+    string app_version = 5;     // 앱 버전
 }
 
 message S_RegisterFcmToken {
+    bool success = 1;
+    string message = 2;
+}
+
+
+/*-----------------------------
+      기기 관리 (Device Management)
+-----------------------------*/
+
+message DeviceInfo {
+    string device_id = 1;       // 기기 고유 ID
+    string device_name = 2;     // 기기 이름
+    string platform = 3;        // android/ios
+    int64 last_active = 4;      // 마지막 활동 시간 (Unix timestamp ms)
+    int64 registered_at = 5;    // 등록 시간
+    string app_version = 6;     // 앱 버전
+    bool is_current = 7;        // 현재 요청한 기기인지
+}
+
+message C_GetMyDevices { }
+message S_GetMyDevices {
+    repeated DeviceInfo devices = 1;
+}
+
+message C_RemoveDevice {
+    string device_id = 1;       // 삭제할 기기의 device_id
+}
+message S_RemoveDevice {
     bool success = 1;
     string message = 2;
 }

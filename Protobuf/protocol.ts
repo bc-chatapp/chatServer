@@ -321,8 +321,14 @@ export interface Envelope {
   cSignup?: CSignUp | undefined;
   sSignup?: SSignUp | undefined;
   cLogin?: CLogin | undefined;
-  sLogin?:
-    | SLogin
+  sLogin?: SLogin | undefined;
+  cLogout?: CLogout | undefined;
+  sLogout?: SLogout | undefined;
+  cGetMyDevices?: CGetMyDevices | undefined;
+  sGetMyDevices?: SGetMyDevices | undefined;
+  cRemoveDevice?: CRemoveDevice | undefined;
+  sRemoveDevice?:
+    | SRemoveDevice
     | undefined;
   /** ─── MY INFO / SETTINGS (30 ~ 39) ─── */
   cFetchMyInfo?: CFetchMyInfo | undefined;
@@ -463,6 +469,17 @@ export interface SLogin {
   myInfo: UserInfo | undefined;
 }
 
+export interface CLogout {
+  /** 삭제할 FCM 토큰 (현재 기기) */
+  fcmToken: string;
+  /** 디바이스 ID (선택) */
+  deviceId: string;
+}
+
+export interface SLogout {
+  success: boolean;
+}
+
 export interface CFetchMyInfo {
 }
 
@@ -492,9 +509,47 @@ export interface CRegisterFcmToken {
   platform: string;
   /** 디바이스 고유 ID (선택) */
   deviceId: string;
+  /** 기기 이름 (예: "Galaxy S24", "iPad Pro") */
+  deviceName: string;
+  /** 앱 버전 */
+  appVersion: string;
 }
 
 export interface SRegisterFcmToken {
+  success: boolean;
+  message: string;
+}
+
+export interface DeviceInfo {
+  /** 기기 고유 ID */
+  deviceId: string;
+  /** 기기 이름 */
+  deviceName: string;
+  /** android/ios */
+  platform: string;
+  /** 마지막 활동 시간 (Unix timestamp ms) */
+  lastActive: number;
+  /** 등록 시간 */
+  registeredAt: number;
+  /** 앱 버전 */
+  appVersion: string;
+  /** 현재 요청한 기기인지 */
+  isCurrent: boolean;
+}
+
+export interface CGetMyDevices {
+}
+
+export interface SGetMyDevices {
+  devices: DeviceInfo[];
+}
+
+export interface CRemoveDevice {
+  /** 삭제할 기기의 device_id */
+  deviceId: string;
+}
+
+export interface SRemoveDevice {
   success: boolean;
   message: string;
 }
@@ -994,6 +1049,12 @@ function createBaseEnvelope(): Envelope {
     sSignup: undefined,
     cLogin: undefined,
     sLogin: undefined,
+    cLogout: undefined,
+    sLogout: undefined,
+    cGetMyDevices: undefined,
+    sGetMyDevices: undefined,
+    cRemoveDevice: undefined,
+    sRemoveDevice: undefined,
     cFetchMyInfo: undefined,
     sFetchMyInfo: undefined,
     cEditMyInfo: undefined,
@@ -1090,6 +1151,24 @@ export const Envelope = {
     }
     if (message.sLogin !== undefined) {
       SLogin.encode(message.sLogin, writer.uint32(170).fork()).ldelim();
+    }
+    if (message.cLogout !== undefined) {
+      CLogout.encode(message.cLogout, writer.uint32(178).fork()).ldelim();
+    }
+    if (message.sLogout !== undefined) {
+      SLogout.encode(message.sLogout, writer.uint32(186).fork()).ldelim();
+    }
+    if (message.cGetMyDevices !== undefined) {
+      CGetMyDevices.encode(message.cGetMyDevices, writer.uint32(194).fork()).ldelim();
+    }
+    if (message.sGetMyDevices !== undefined) {
+      SGetMyDevices.encode(message.sGetMyDevices, writer.uint32(202).fork()).ldelim();
+    }
+    if (message.cRemoveDevice !== undefined) {
+      CRemoveDevice.encode(message.cRemoveDevice, writer.uint32(210).fork()).ldelim();
+    }
+    if (message.sRemoveDevice !== undefined) {
+      SRemoveDevice.encode(message.sRemoveDevice, writer.uint32(218).fork()).ldelim();
     }
     if (message.cFetchMyInfo !== undefined) {
       CFetchMyInfo.encode(message.cFetchMyInfo, writer.uint32(242).fork()).ldelim();
@@ -1346,6 +1425,48 @@ export const Envelope = {
           }
 
           message.sLogin = SLogin.decode(reader, reader.uint32());
+          continue;
+        case 22:
+          if (tag !== 178) {
+            break;
+          }
+
+          message.cLogout = CLogout.decode(reader, reader.uint32());
+          continue;
+        case 23:
+          if (tag !== 186) {
+            break;
+          }
+
+          message.sLogout = SLogout.decode(reader, reader.uint32());
+          continue;
+        case 24:
+          if (tag !== 194) {
+            break;
+          }
+
+          message.cGetMyDevices = CGetMyDevices.decode(reader, reader.uint32());
+          continue;
+        case 25:
+          if (tag !== 202) {
+            break;
+          }
+
+          message.sGetMyDevices = SGetMyDevices.decode(reader, reader.uint32());
+          continue;
+        case 26:
+          if (tag !== 210) {
+            break;
+          }
+
+          message.cRemoveDevice = CRemoveDevice.decode(reader, reader.uint32());
+          continue;
+        case 27:
+          if (tag !== 218) {
+            break;
+          }
+
+          message.sRemoveDevice = SRemoveDevice.decode(reader, reader.uint32());
           continue;
         case 30:
           if (tag !== 242) {
@@ -1706,6 +1827,12 @@ export const Envelope = {
       sSignup: isSet(object.sSignup) ? SSignUp.fromJSON(object.sSignup) : undefined,
       cLogin: isSet(object.cLogin) ? CLogin.fromJSON(object.cLogin) : undefined,
       sLogin: isSet(object.sLogin) ? SLogin.fromJSON(object.sLogin) : undefined,
+      cLogout: isSet(object.cLogout) ? CLogout.fromJSON(object.cLogout) : undefined,
+      sLogout: isSet(object.sLogout) ? SLogout.fromJSON(object.sLogout) : undefined,
+      cGetMyDevices: isSet(object.cGetMyDevices) ? CGetMyDevices.fromJSON(object.cGetMyDevices) : undefined,
+      sGetMyDevices: isSet(object.sGetMyDevices) ? SGetMyDevices.fromJSON(object.sGetMyDevices) : undefined,
+      cRemoveDevice: isSet(object.cRemoveDevice) ? CRemoveDevice.fromJSON(object.cRemoveDevice) : undefined,
+      sRemoveDevice: isSet(object.sRemoveDevice) ? SRemoveDevice.fromJSON(object.sRemoveDevice) : undefined,
       cFetchMyInfo: isSet(object.cFetchMyInfo) ? CFetchMyInfo.fromJSON(object.cFetchMyInfo) : undefined,
       sFetchMyInfo: isSet(object.sFetchMyInfo) ? SFetchMyInfo.fromJSON(object.sFetchMyInfo) : undefined,
       cEditMyInfo: isSet(object.cEditMyInfo) ? CEditMyInfo.fromJSON(object.cEditMyInfo) : undefined,
@@ -1806,6 +1933,24 @@ export const Envelope = {
     }
     if (message.sLogin !== undefined) {
       obj.sLogin = SLogin.toJSON(message.sLogin);
+    }
+    if (message.cLogout !== undefined) {
+      obj.cLogout = CLogout.toJSON(message.cLogout);
+    }
+    if (message.sLogout !== undefined) {
+      obj.sLogout = SLogout.toJSON(message.sLogout);
+    }
+    if (message.cGetMyDevices !== undefined) {
+      obj.cGetMyDevices = CGetMyDevices.toJSON(message.cGetMyDevices);
+    }
+    if (message.sGetMyDevices !== undefined) {
+      obj.sGetMyDevices = SGetMyDevices.toJSON(message.sGetMyDevices);
+    }
+    if (message.cRemoveDevice !== undefined) {
+      obj.cRemoveDevice = CRemoveDevice.toJSON(message.cRemoveDevice);
+    }
+    if (message.sRemoveDevice !== undefined) {
+      obj.sRemoveDevice = SRemoveDevice.toJSON(message.sRemoveDevice);
     }
     if (message.cFetchMyInfo !== undefined) {
       obj.cFetchMyInfo = CFetchMyInfo.toJSON(message.cFetchMyInfo);
@@ -1994,6 +2139,24 @@ export const Envelope = {
       : undefined;
     message.sLogin = (object.sLogin !== undefined && object.sLogin !== null)
       ? SLogin.fromPartial(object.sLogin)
+      : undefined;
+    message.cLogout = (object.cLogout !== undefined && object.cLogout !== null)
+      ? CLogout.fromPartial(object.cLogout)
+      : undefined;
+    message.sLogout = (object.sLogout !== undefined && object.sLogout !== null)
+      ? SLogout.fromPartial(object.sLogout)
+      : undefined;
+    message.cGetMyDevices = (object.cGetMyDevices !== undefined && object.cGetMyDevices !== null)
+      ? CGetMyDevices.fromPartial(object.cGetMyDevices)
+      : undefined;
+    message.sGetMyDevices = (object.sGetMyDevices !== undefined && object.sGetMyDevices !== null)
+      ? SGetMyDevices.fromPartial(object.sGetMyDevices)
+      : undefined;
+    message.cRemoveDevice = (object.cRemoveDevice !== undefined && object.cRemoveDevice !== null)
+      ? CRemoveDevice.fromPartial(object.cRemoveDevice)
+      : undefined;
+    message.sRemoveDevice = (object.sRemoveDevice !== undefined && object.sRemoveDevice !== null)
+      ? SRemoveDevice.fromPartial(object.sRemoveDevice)
       : undefined;
     message.cFetchMyInfo = (object.cFetchMyInfo !== undefined && object.cFetchMyInfo !== null)
       ? CFetchMyInfo.fromPartial(object.cFetchMyInfo)
@@ -3219,6 +3382,137 @@ export const SLogin = {
   },
 };
 
+function createBaseCLogout(): CLogout {
+  return { fcmToken: "", deviceId: "" };
+}
+
+export const CLogout = {
+  encode(message: CLogout, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.fcmToken !== "") {
+      writer.uint32(10).string(message.fcmToken);
+    }
+    if (message.deviceId !== "") {
+      writer.uint32(18).string(message.deviceId);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CLogout {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCLogout();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.fcmToken = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.deviceId = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CLogout {
+    return {
+      fcmToken: isSet(object.fcmToken) ? globalThis.String(object.fcmToken) : "",
+      deviceId: isSet(object.deviceId) ? globalThis.String(object.deviceId) : "",
+    };
+  },
+
+  toJSON(message: CLogout): unknown {
+    const obj: any = {};
+    if (message.fcmToken !== "") {
+      obj.fcmToken = message.fcmToken;
+    }
+    if (message.deviceId !== "") {
+      obj.deviceId = message.deviceId;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CLogout>, I>>(base?: I): CLogout {
+    return CLogout.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CLogout>, I>>(object: I): CLogout {
+    const message = createBaseCLogout();
+    message.fcmToken = object.fcmToken ?? "";
+    message.deviceId = object.deviceId ?? "";
+    return message;
+  },
+};
+
+function createBaseSLogout(): SLogout {
+  return { success: false };
+}
+
+export const SLogout = {
+  encode(message: SLogout, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.success !== false) {
+      writer.uint32(8).bool(message.success);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SLogout {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSLogout();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.success = reader.bool();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SLogout {
+    return { success: isSet(object.success) ? globalThis.Boolean(object.success) : false };
+  },
+
+  toJSON(message: SLogout): unknown {
+    const obj: any = {};
+    if (message.success !== false) {
+      obj.success = message.success;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SLogout>, I>>(base?: I): SLogout {
+    return SLogout.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SLogout>, I>>(object: I): SLogout {
+    const message = createBaseSLogout();
+    message.success = object.success ?? false;
+    return message;
+  },
+};
+
 function createBaseCFetchMyInfo(): CFetchMyInfo {
   return {};
 }
@@ -3532,7 +3826,7 @@ export const SEditMyInfo = {
 };
 
 function createBaseCRegisterFcmToken(): CRegisterFcmToken {
-  return { fcmToken: "", platform: "", deviceId: "" };
+  return { fcmToken: "", platform: "", deviceId: "", deviceName: "", appVersion: "" };
 }
 
 export const CRegisterFcmToken = {
@@ -3545,6 +3839,12 @@ export const CRegisterFcmToken = {
     }
     if (message.deviceId !== "") {
       writer.uint32(26).string(message.deviceId);
+    }
+    if (message.deviceName !== "") {
+      writer.uint32(34).string(message.deviceName);
+    }
+    if (message.appVersion !== "") {
+      writer.uint32(42).string(message.appVersion);
     }
     return writer;
   },
@@ -3577,6 +3877,20 @@ export const CRegisterFcmToken = {
 
           message.deviceId = reader.string();
           continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.deviceName = reader.string();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.appVersion = reader.string();
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -3591,6 +3905,8 @@ export const CRegisterFcmToken = {
       fcmToken: isSet(object.fcmToken) ? globalThis.String(object.fcmToken) : "",
       platform: isSet(object.platform) ? globalThis.String(object.platform) : "",
       deviceId: isSet(object.deviceId) ? globalThis.String(object.deviceId) : "",
+      deviceName: isSet(object.deviceName) ? globalThis.String(object.deviceName) : "",
+      appVersion: isSet(object.appVersion) ? globalThis.String(object.appVersion) : "",
     };
   },
 
@@ -3605,6 +3921,12 @@ export const CRegisterFcmToken = {
     if (message.deviceId !== "") {
       obj.deviceId = message.deviceId;
     }
+    if (message.deviceName !== "") {
+      obj.deviceName = message.deviceName;
+    }
+    if (message.appVersion !== "") {
+      obj.appVersion = message.appVersion;
+    }
     return obj;
   },
 
@@ -3616,6 +3938,8 @@ export const CRegisterFcmToken = {
     message.fcmToken = object.fcmToken ?? "";
     message.platform = object.platform ?? "";
     message.deviceId = object.deviceId ?? "";
+    message.deviceName = object.deviceName ?? "";
+    message.appVersion = object.appVersion ?? "";
     return message;
   },
 };
@@ -3688,6 +4012,396 @@ export const SRegisterFcmToken = {
   },
   fromPartial<I extends Exact<DeepPartial<SRegisterFcmToken>, I>>(object: I): SRegisterFcmToken {
     const message = createBaseSRegisterFcmToken();
+    message.success = object.success ?? false;
+    message.message = object.message ?? "";
+    return message;
+  },
+};
+
+function createBaseDeviceInfo(): DeviceInfo {
+  return {
+    deviceId: "",
+    deviceName: "",
+    platform: "",
+    lastActive: 0,
+    registeredAt: 0,
+    appVersion: "",
+    isCurrent: false,
+  };
+}
+
+export const DeviceInfo = {
+  encode(message: DeviceInfo, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.deviceId !== "") {
+      writer.uint32(10).string(message.deviceId);
+    }
+    if (message.deviceName !== "") {
+      writer.uint32(18).string(message.deviceName);
+    }
+    if (message.platform !== "") {
+      writer.uint32(26).string(message.platform);
+    }
+    if (message.lastActive !== 0) {
+      writer.uint32(32).int64(message.lastActive);
+    }
+    if (message.registeredAt !== 0) {
+      writer.uint32(40).int64(message.registeredAt);
+    }
+    if (message.appVersion !== "") {
+      writer.uint32(50).string(message.appVersion);
+    }
+    if (message.isCurrent !== false) {
+      writer.uint32(56).bool(message.isCurrent);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): DeviceInfo {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseDeviceInfo();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.deviceId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.deviceName = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.platform = reader.string();
+          continue;
+        case 4:
+          if (tag !== 32) {
+            break;
+          }
+
+          message.lastActive = longToNumber(reader.int64() as Long);
+          continue;
+        case 5:
+          if (tag !== 40) {
+            break;
+          }
+
+          message.registeredAt = longToNumber(reader.int64() as Long);
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.appVersion = reader.string();
+          continue;
+        case 7:
+          if (tag !== 56) {
+            break;
+          }
+
+          message.isCurrent = reader.bool();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): DeviceInfo {
+    return {
+      deviceId: isSet(object.deviceId) ? globalThis.String(object.deviceId) : "",
+      deviceName: isSet(object.deviceName) ? globalThis.String(object.deviceName) : "",
+      platform: isSet(object.platform) ? globalThis.String(object.platform) : "",
+      lastActive: isSet(object.lastActive) ? globalThis.Number(object.lastActive) : 0,
+      registeredAt: isSet(object.registeredAt) ? globalThis.Number(object.registeredAt) : 0,
+      appVersion: isSet(object.appVersion) ? globalThis.String(object.appVersion) : "",
+      isCurrent: isSet(object.isCurrent) ? globalThis.Boolean(object.isCurrent) : false,
+    };
+  },
+
+  toJSON(message: DeviceInfo): unknown {
+    const obj: any = {};
+    if (message.deviceId !== "") {
+      obj.deviceId = message.deviceId;
+    }
+    if (message.deviceName !== "") {
+      obj.deviceName = message.deviceName;
+    }
+    if (message.platform !== "") {
+      obj.platform = message.platform;
+    }
+    if (message.lastActive !== 0) {
+      obj.lastActive = Math.round(message.lastActive);
+    }
+    if (message.registeredAt !== 0) {
+      obj.registeredAt = Math.round(message.registeredAt);
+    }
+    if (message.appVersion !== "") {
+      obj.appVersion = message.appVersion;
+    }
+    if (message.isCurrent !== false) {
+      obj.isCurrent = message.isCurrent;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<DeviceInfo>, I>>(base?: I): DeviceInfo {
+    return DeviceInfo.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<DeviceInfo>, I>>(object: I): DeviceInfo {
+    const message = createBaseDeviceInfo();
+    message.deviceId = object.deviceId ?? "";
+    message.deviceName = object.deviceName ?? "";
+    message.platform = object.platform ?? "";
+    message.lastActive = object.lastActive ?? 0;
+    message.registeredAt = object.registeredAt ?? 0;
+    message.appVersion = object.appVersion ?? "";
+    message.isCurrent = object.isCurrent ?? false;
+    return message;
+  },
+};
+
+function createBaseCGetMyDevices(): CGetMyDevices {
+  return {};
+}
+
+export const CGetMyDevices = {
+  encode(_: CGetMyDevices, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CGetMyDevices {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCGetMyDevices();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(_: any): CGetMyDevices {
+    return {};
+  },
+
+  toJSON(_: CGetMyDevices): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CGetMyDevices>, I>>(base?: I): CGetMyDevices {
+    return CGetMyDevices.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CGetMyDevices>, I>>(_: I): CGetMyDevices {
+    const message = createBaseCGetMyDevices();
+    return message;
+  },
+};
+
+function createBaseSGetMyDevices(): SGetMyDevices {
+  return { devices: [] };
+}
+
+export const SGetMyDevices = {
+  encode(message: SGetMyDevices, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.devices) {
+      DeviceInfo.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SGetMyDevices {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSGetMyDevices();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.devices.push(DeviceInfo.decode(reader, reader.uint32()));
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SGetMyDevices {
+    return {
+      devices: globalThis.Array.isArray(object?.devices) ? object.devices.map((e: any) => DeviceInfo.fromJSON(e)) : [],
+    };
+  },
+
+  toJSON(message: SGetMyDevices): unknown {
+    const obj: any = {};
+    if (message.devices?.length) {
+      obj.devices = message.devices.map((e) => DeviceInfo.toJSON(e));
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SGetMyDevices>, I>>(base?: I): SGetMyDevices {
+    return SGetMyDevices.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SGetMyDevices>, I>>(object: I): SGetMyDevices {
+    const message = createBaseSGetMyDevices();
+    message.devices = object.devices?.map((e) => DeviceInfo.fromPartial(e)) || [];
+    return message;
+  },
+};
+
+function createBaseCRemoveDevice(): CRemoveDevice {
+  return { deviceId: "" };
+}
+
+export const CRemoveDevice = {
+  encode(message: CRemoveDevice, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.deviceId !== "") {
+      writer.uint32(10).string(message.deviceId);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CRemoveDevice {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCRemoveDevice();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.deviceId = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CRemoveDevice {
+    return { deviceId: isSet(object.deviceId) ? globalThis.String(object.deviceId) : "" };
+  },
+
+  toJSON(message: CRemoveDevice): unknown {
+    const obj: any = {};
+    if (message.deviceId !== "") {
+      obj.deviceId = message.deviceId;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CRemoveDevice>, I>>(base?: I): CRemoveDevice {
+    return CRemoveDevice.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CRemoveDevice>, I>>(object: I): CRemoveDevice {
+    const message = createBaseCRemoveDevice();
+    message.deviceId = object.deviceId ?? "";
+    return message;
+  },
+};
+
+function createBaseSRemoveDevice(): SRemoveDevice {
+  return { success: false, message: "" };
+}
+
+export const SRemoveDevice = {
+  encode(message: SRemoveDevice, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.success !== false) {
+      writer.uint32(8).bool(message.success);
+    }
+    if (message.message !== "") {
+      writer.uint32(18).string(message.message);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SRemoveDevice {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSRemoveDevice();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.success = reader.bool();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.message = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SRemoveDevice {
+    return {
+      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
+      message: isSet(object.message) ? globalThis.String(object.message) : "",
+    };
+  },
+
+  toJSON(message: SRemoveDevice): unknown {
+    const obj: any = {};
+    if (message.success !== false) {
+      obj.success = message.success;
+    }
+    if (message.message !== "") {
+      obj.message = message.message;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SRemoveDevice>, I>>(base?: I): SRemoveDevice {
+    return SRemoveDevice.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SRemoveDevice>, I>>(object: I): SRemoveDevice {
+    const message = createBaseSRemoveDevice();
     message.success = object.success ?? false;
     message.message = object.message ?? "";
     return message;

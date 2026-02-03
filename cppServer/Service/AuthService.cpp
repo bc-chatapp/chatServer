@@ -589,6 +589,47 @@ bool AuthService::HandleChangePassword(sessionPtr& session, uint64 reqId, const 
 
 
 /*--------------------
+    Logout (로그아웃)
+---------------------*/
+bool AuthService::HandleLogout(sessionPtr& session, uint64 reqId, const string& fcmToken, const string& deviceId)
+{
+    auto serverSession = static_pointer_cast<ServerSession>(session);
+    string userId = serverSession->GetUserId();
+
+    cout << "[AuthService] 로그아웃 요청: userId=" << userId << endl;
+
+    Protocol::S_Logout pkt;
+
+    if (userId.empty()) {
+        pkt.set_success(false);
+    } else {
+        // FCM 토큰 삭제
+        if (!fcmToken.empty()) {
+            FcmTokenRepository::DeleteToken(userId, fcmToken);
+            cout << "[AuthService] FCM 토큰 삭제: " << fcmToken.substr(0, 20) << "..." << endl;
+        }
+
+        // 세션 정리
+        _userManager.RemoveSession(userId, session);
+
+        // LastSeen 업데이트
+        UserRepository::UpdateLastSeen(userId);
+
+        pkt.set_success(true);
+        cout << "[AuthService] 로그아웃 완료: " << userId << endl;
+    }
+
+    Protocol::Envelope env;
+    env.set_version(GProtoVersion);
+    env.set_request_id(reqId);
+    env.mutable_s_logout()->CopyFrom(pkt);
+    PacketDispatcher::SendEnvelope(session, env);
+
+    return pkt.success();
+}
+
+
+/*--------------------
     Withdraw (회원 탈퇴)
 ---------------------*/
 bool AuthService::HandleWithdraw(sessionPtr& session, uint64 reqId, const string& password, const string& reason)

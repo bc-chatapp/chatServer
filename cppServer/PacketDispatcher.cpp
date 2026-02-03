@@ -83,6 +83,15 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 	case Protocol::Envelope::kCLogin:
 		Dispatch_C_Login(session, envelope.request_id(), envelope);
 		break;
+	case Protocol::Envelope::kCLogout:
+		Dispatch_C_Logout(session, envelope.request_id(), envelope.c_logout());
+		break;
+	case Protocol::Envelope::kCGetMyDevices:
+		Dispatch_C_GetMyDevices(session, envelope.request_id(), envelope.c_get_my_devices());
+		break;
+	case Protocol::Envelope::kCRemoveDevice:
+		Dispatch_C_RemoveDevice(session, envelope.request_id(), envelope.c_remove_device());
+		break;
 	case Protocol::Envelope::kCFetchOffline:
 		Dispatch_C_FetchOffline(session, envelope.request_id(), envelope.c_fetch_offline());
 		break;
@@ -816,5 +825,54 @@ bool PacketDispatcher::Dispatch_C_Withdraw(sessionPtr& session, uint64 reqId, co
 	}
 
 	return GAuthService->HandleWithdraw(session, reqId, pkt.password(), pkt.reason());
+}
+
+
+/*---------------------------------
+	Logout Handler (로그아웃)
+-----------------------------------*/
+
+bool PacketDispatcher::Dispatch_C_Logout(sessionPtr& session, uint64 reqId, const Protocol::C_Logout& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED);
+		return false;
+	}
+
+	return GAuthService->HandleLogout(session, reqId, pkt.fcm_token(), pkt.device_id());
+}
+
+
+/*---------------------------------
+	Device Management Handler
+-----------------------------------*/
+
+bool PacketDispatcher::Dispatch_C_GetMyDevices(sessionPtr& session, uint64 reqId, const Protocol::C_GetMyDevices& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED);
+		return false;
+	}
+
+	// 현재 세션의 deviceId 가져오기 (TODO: 세션에 deviceId 저장 필요)
+	string currentDeviceId = ""; // serverSession->GetDeviceId();
+
+	return GNotificationService->GetMyDevices(session, reqId, currentDeviceId);
+}
+
+bool PacketDispatcher::Dispatch_C_RemoveDevice(sessionPtr& session, uint64 reqId, const Protocol::C_RemoveDevice& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED);
+		return false;
+	}
+
+	return GNotificationService->RemoveDevice(session, reqId, pkt.device_id());
 }
 

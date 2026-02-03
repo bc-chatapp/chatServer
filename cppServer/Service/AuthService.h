@@ -41,6 +41,9 @@ public:
 	// 회원 탈퇴
 	bool HandleWithdraw(sessionPtr& session, uint64 reqId, const string& password, const string& reason);
 
+	// 로그아웃
+	bool HandleLogout(sessionPtr& session, uint64 reqId, const string& fcmToken, const string& deviceId);
+
 private:
 	UserManager& _userManager;
 	
