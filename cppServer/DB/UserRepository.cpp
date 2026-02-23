@@ -314,7 +314,7 @@ bool UserRepository::GetUserIdByToken(const string& authToken, string& userId) {
         auto users = schema.getTable("users");
 
         auto result = users.select("user_id")
-                     .where("auth_token = :token")
+                     .where("auth_token = :token AND is_deleted = 0")
                      .bind("token", authToken)
                      .execute();
 

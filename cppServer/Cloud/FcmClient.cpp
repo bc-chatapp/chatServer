@@ -61,7 +61,7 @@ bool FcmClient::Initialize()
 
 
 bool FcmClient::SendPush(const string& fcmToken, const string& title, const string& body,
-                         const map<string, string>& data)
+                         const map<string, string>& data, bool* outInvalidToken)
 {
     if (!CheckValidToken()) {
         HandleErr("SendPush", "Token validation failed");
@@ -127,6 +127,26 @@ bool FcmClient::SendPush(const string& fcmToken, const string& title, const stri
         }
         else {
             HandleErr("SendPush", "HTTP " + to_string(res->status) + ": " + res->body);
+
+            // UNREGISTERED 토큰 감지 (404 응답의 errorCode 파싱)
+            if (outInvalidToken) {
+                try {
+                    json errJson = json::parse(res->body);
+                    if (errJson.contains("error")) {
+                        auto& errObj = errJson["error"];
+                        if (errObj.contains("details")) {
+                            for (auto& detail : errObj["details"]) {
+                                if (detail.contains("errorCode") &&
+                                    detail["errorCode"].get<string>() == "UNREGISTERED") {
+                                    *outInvalidToken = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                } catch (...) {}
+            }
+
             return false;
         }
     }

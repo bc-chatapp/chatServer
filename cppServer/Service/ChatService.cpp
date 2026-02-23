@@ -94,7 +94,12 @@ bool ChatService::SendDirect(sessionPtr& senderSession, uint64 reqId, const stri
                 for (const auto& tokenInfo : tokens) {
                     cout << "[ChatService] Sending FCM to userId=" << tokenInfo.userId
                          << ", token=" << tokenInfo.fcmToken.substr(0, 20) << "..." << endl;
-                    GFcmClient->SendPush(tokenInfo.fcmToken, senderName, msgPreview, data);
+                    bool invalidToken = false;
+                    bool ok = GFcmClient->SendPush(tokenInfo.fcmToken, senderName, msgPreview, data, &invalidToken);
+                    if (!ok && invalidToken) {
+                        cout << "[ChatService] Deleting stale FCM token for " << tokenInfo.userId << endl;
+                        FcmTokenRepository::DeleteToken(tokenInfo.userId, tokenInfo.fcmToken);
+                    }
                 }
             }
         }
@@ -182,7 +187,12 @@ bool ChatService::SendGroup(sessionPtr& senderSession, uint64 reqId, const strin
                 };
 
                 for (const auto& tokenInfo : tokens) {
-                    GFcmClient->SendPush(tokenInfo.fcmToken, title, msgPreview, data);
+                    bool invalidToken = false;
+                    bool ok = GFcmClient->SendPush(tokenInfo.fcmToken, title, msgPreview, data, &invalidToken);
+                    if (!ok && invalidToken) {
+                        cout << "[ChatService] Deleting stale FCM token for " << tokenInfo.userId << endl;
+                        FcmTokenRepository::DeleteToken(tokenInfo.userId, tokenInfo.fcmToken);
+                    }
                 }
             }
         }
