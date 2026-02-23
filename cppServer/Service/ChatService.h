@@ -21,6 +21,10 @@ public:
 	bool HandleAck(sessionPtr& session, uint64 reqId, bool bDirect, const string& targetId, int64 msg_seq);
 	bool HandleReqHistory(sessionPtr& session, uint64 reqId, const Protocol::C_ReqHistory& pkt);
 
+	bool HandleDeleteMessage(sessionPtr& session, uint64 reqId, const Protocol::C_DeleteMessage& pkt);
+	bool HandleEditMessage(sessionPtr& session, uint64 reqId, const Protocol::C_EditMessage& pkt);
+	bool HandleReadReceipt(sessionPtr& session, uint64 reqId, const Protocol::C_ReadReceipt& pkt);
+
 
 protected:
 	/* Helpers */

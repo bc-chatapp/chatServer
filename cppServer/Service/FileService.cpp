@@ -3,6 +3,8 @@
 #include "ServerSession.h"
 #include "Cloud/CloudStorage.h"
 #include "PacketDispatcher.h"
+#include "../DB/UserRepository.h"
+#include "../DB/GroupRepository.h"
 
 #include <random>
 #include <sstream>
@@ -46,6 +48,29 @@ bool FileService::HandleUploadFileRequest(sessionPtr& session, uint64 reqId, con
     try {
         auto serverSession = static_pointer_cast<ServerSession>(session);
         string userId = serverSession->GetUserId();
+
+        // ─── 파일 크기 체크 (용량 쿼터와 무관한 단순 크기 제한) ───
+        // 정책: 사진/동영상/파일 메시지는 구독 상태와 무관하게 항상 전송 가능.
+        //       클라우드 저장 용량 관리(ERR_STORAGE_EXCEEDED)는 추후 구독 기능에서 처리.
+        if (pkt.upload_type() == Protocol::C_UploadFile_UploadType_DIRECT_CHAT ||
+            pkt.upload_type() == Protocol::C_UploadFile_UploadType_GROUP_CHAT) {
+            UserRepository::StorageInfo storageInfo;
+            if (UserRepository::GetStorageInfo(userId, storageInfo)) {
+                if (pkt.size() > storageInfo.maxFileSize) {
+                    HandleErr(session, reqId, ERR_FILE_TOO_LARGE, "파일 크기가 제한을 초과했습니다.");
+                    return false;
+                }
+            }
+        }
+
+        // 그룹 업로드 시 target_id 필수 검증
+        if (pkt.upload_type() == Protocol::C_UploadFile_UploadType_GROUP_CHAT) {
+            if (pkt.target_id().empty()) {
+                HandleErr(session, reqId, ERR_INVALID_ARGUMENT, "Group ID (target_id) is required.");
+                return false;
+            }
+        }
+
         string fileId = GenerateFileId(pkt.filename());
 
         string extension = "";

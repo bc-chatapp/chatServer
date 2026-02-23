@@ -20,6 +20,7 @@ public:
 
 	bool GetGroupInfo(sessionPtr& session, uint64 reqId, const string& groupId);
 	bool UpdateGroupInfo(sessionPtr& session, uint64 reqId, Protocol::C_EditGroup& pkt);
+	bool DeleteGroup(sessionPtr& session, uint64 reqId, const string& groupId);
 
 	bool InviteFriend(sessionPtr& session, const Protocol::C_InviteFriend& pkt);
 

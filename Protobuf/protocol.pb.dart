@@ -59,6 +59,16 @@ enum Envelope_Body {
   sMessageBatch,
   cUploadFile,
   sUploadFile,
+  cDeleteMessage,
+  sDeleteMessage,
+  cEditMessage,
+  sEditMessage,
+  cGetSubscription,
+  sGetSubscription,
+  cVerifyPurchase,
+  sVerifyPurchase,
+  cReadReceipt,
+  sReadReceipt,
   cSearchUser,
   sSearchUser,
   cFriendAction,
@@ -66,6 +76,14 @@ enum Envelope_Body {
   cFetchFriendData,
   sFetchFriendData,
   sFriendPush,
+  cBlockUser,
+  sBlockUser,
+  cUnblockUser,
+  sUnblockUser,
+  cGetBlockedList,
+  sGetBlockedList,
+  cReportUser,
+  sReportUser,
   cCreateGroup,
   sCreateGroup,
   cGroupList,
@@ -84,6 +102,8 @@ enum Envelope_Body {
   sEditGroup,
   cWithdraw,
   sWithdraw,
+  cDeleteGroup,
+  sDeleteGroup,
   sError,
   cHeartbeat,
   sHeartbeat,
@@ -132,6 +152,16 @@ class Envelope extends $pb.GeneratedMessage {
     S_MessageBatch? sMessageBatch,
     C_UploadFile? cUploadFile,
     S_UploadFile? sUploadFile,
+    C_DeleteMessage? cDeleteMessage,
+    S_DeleteMessage? sDeleteMessage,
+    C_EditMessage? cEditMessage,
+    S_EditMessage? sEditMessage,
+    C_GetSubscription? cGetSubscription,
+    S_GetSubscription? sGetSubscription,
+    C_VerifyPurchase? cVerifyPurchase,
+    S_VerifyPurchase? sVerifyPurchase,
+    C_ReadReceipt? cReadReceipt,
+    S_ReadReceipt? sReadReceipt,
     C_SearchUser? cSearchUser,
     S_SearchUser? sSearchUser,
     C_FriendAction? cFriendAction,
@@ -139,6 +169,14 @@ class Envelope extends $pb.GeneratedMessage {
     C_FetchFriendData? cFetchFriendData,
     S_FetchFriendData? sFetchFriendData,
     S_FriendPush? sFriendPush,
+    C_BlockUser? cBlockUser,
+    S_BlockUser? sBlockUser,
+    C_UnblockUser? cUnblockUser,
+    S_UnblockUser? sUnblockUser,
+    C_GetBlockedList? cGetBlockedList,
+    S_GetBlockedList? sGetBlockedList,
+    C_ReportUser? cReportUser,
+    S_ReportUser? sReportUser,
     C_CreateGroup? cCreateGroup,
     S_CreateGroup? sCreateGroup,
     C_GroupList? cGroupList,
@@ -157,6 +195,8 @@ class Envelope extends $pb.GeneratedMessage {
     S_EditGroup? sEditGroup,
     C_Withdraw? cWithdraw,
     S_Withdraw? sWithdraw,
+    C_DeleteGroup? cDeleteGroup,
+    S_DeleteGroup? sDeleteGroup,
     S_Error? sError,
     C_Heartbeat? cHeartbeat,
     S_Heartbeat? sHeartbeat,
@@ -204,6 +244,16 @@ class Envelope extends $pb.GeneratedMessage {
     if (sMessageBatch != null) result.sMessageBatch = sMessageBatch;
     if (cUploadFile != null) result.cUploadFile = cUploadFile;
     if (sUploadFile != null) result.sUploadFile = sUploadFile;
+    if (cDeleteMessage != null) result.cDeleteMessage = cDeleteMessage;
+    if (sDeleteMessage != null) result.sDeleteMessage = sDeleteMessage;
+    if (cEditMessage != null) result.cEditMessage = cEditMessage;
+    if (sEditMessage != null) result.sEditMessage = sEditMessage;
+    if (cGetSubscription != null) result.cGetSubscription = cGetSubscription;
+    if (sGetSubscription != null) result.sGetSubscription = sGetSubscription;
+    if (cVerifyPurchase != null) result.cVerifyPurchase = cVerifyPurchase;
+    if (sVerifyPurchase != null) result.sVerifyPurchase = sVerifyPurchase;
+    if (cReadReceipt != null) result.cReadReceipt = cReadReceipt;
+    if (sReadReceipt != null) result.sReadReceipt = sReadReceipt;
     if (cSearchUser != null) result.cSearchUser = cSearchUser;
     if (sSearchUser != null) result.sSearchUser = sSearchUser;
     if (cFriendAction != null) result.cFriendAction = cFriendAction;
@@ -211,6 +261,14 @@ class Envelope extends $pb.GeneratedMessage {
     if (cFetchFriendData != null) result.cFetchFriendData = cFetchFriendData;
     if (sFetchFriendData != null) result.sFetchFriendData = sFetchFriendData;
     if (sFriendPush != null) result.sFriendPush = sFriendPush;
+    if (cBlockUser != null) result.cBlockUser = cBlockUser;
+    if (sBlockUser != null) result.sBlockUser = sBlockUser;
+    if (cUnblockUser != null) result.cUnblockUser = cUnblockUser;
+    if (sUnblockUser != null) result.sUnblockUser = sUnblockUser;
+    if (cGetBlockedList != null) result.cGetBlockedList = cGetBlockedList;
+    if (sGetBlockedList != null) result.sGetBlockedList = sGetBlockedList;
+    if (cReportUser != null) result.cReportUser = cReportUser;
+    if (sReportUser != null) result.sReportUser = sReportUser;
     if (cCreateGroup != null) result.cCreateGroup = cCreateGroup;
     if (sCreateGroup != null) result.sCreateGroup = sCreateGroup;
     if (cGroupList != null) result.cGroupList = cGroupList;
@@ -229,6 +287,8 @@ class Envelope extends $pb.GeneratedMessage {
     if (sEditGroup != null) result.sEditGroup = sEditGroup;
     if (cWithdraw != null) result.cWithdraw = cWithdraw;
     if (sWithdraw != null) result.sWithdraw = sWithdraw;
+    if (cDeleteGroup != null) result.cDeleteGroup = cDeleteGroup;
+    if (sDeleteGroup != null) result.sDeleteGroup = sDeleteGroup;
     if (sError != null) result.sError = sError;
     if (cHeartbeat != null) result.cHeartbeat = cHeartbeat;
     if (sHeartbeat != null) result.sHeartbeat = sHeartbeat;
@@ -282,6 +342,16 @@ class Envelope extends $pb.GeneratedMessage {
     46: Envelope_Body.sMessageBatch,
     47: Envelope_Body.cUploadFile,
     48: Envelope_Body.sUploadFile,
+    49: Envelope_Body.cDeleteMessage,
+    50: Envelope_Body.sDeleteMessage,
+    51: Envelope_Body.cEditMessage,
+    52: Envelope_Body.sEditMessage,
+    53: Envelope_Body.cGetSubscription,
+    54: Envelope_Body.sGetSubscription,
+    55: Envelope_Body.cVerifyPurchase,
+    56: Envelope_Body.sVerifyPurchase,
+    57: Envelope_Body.cReadReceipt,
+    58: Envelope_Body.sReadReceipt,
     60: Envelope_Body.cSearchUser,
     61: Envelope_Body.sSearchUser,
     62: Envelope_Body.cFriendAction,
@@ -289,6 +359,14 @@ class Envelope extends $pb.GeneratedMessage {
     64: Envelope_Body.cFetchFriendData,
     65: Envelope_Body.sFetchFriendData,
     66: Envelope_Body.sFriendPush,
+    67: Envelope_Body.cBlockUser,
+    68: Envelope_Body.sBlockUser,
+    69: Envelope_Body.cUnblockUser,
+    70: Envelope_Body.sUnblockUser,
+    71: Envelope_Body.cGetBlockedList,
+    72: Envelope_Body.sGetBlockedList,
+    73: Envelope_Body.cReportUser,
+    74: Envelope_Body.sReportUser,
     80: Envelope_Body.cCreateGroup,
     81: Envelope_Body.sCreateGroup,
     82: Envelope_Body.cGroupList,
@@ -307,6 +385,8 @@ class Envelope extends $pb.GeneratedMessage {
     95: Envelope_Body.sEditGroup,
     96: Envelope_Body.cWithdraw,
     97: Envelope_Body.sWithdraw,
+    98: Envelope_Body.cDeleteGroup,
+    99: Envelope_Body.sDeleteGroup,
     100: Envelope_Body.sError,
     101: Envelope_Body.cHeartbeat,
     102: Envelope_Body.sHeartbeat,
@@ -354,6 +434,16 @@ class Envelope extends $pb.GeneratedMessage {
       46,
       47,
       48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
       60,
       61,
       62,
@@ -361,6 +451,14 @@ class Envelope extends $pb.GeneratedMessage {
       64,
       65,
       66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74,
       80,
       81,
       82,
@@ -379,6 +477,8 @@ class Envelope extends $pb.GeneratedMessage {
       95,
       96,
       97,
+      98,
+      99,
       100,
       101,
       102
@@ -461,6 +561,26 @@ class Envelope extends $pb.GeneratedMessage {
         subBuilder: C_UploadFile.create)
     ..aOM<S_UploadFile>(48, _omitFieldNames ? '' : 'sUploadFile',
         subBuilder: S_UploadFile.create)
+    ..aOM<C_DeleteMessage>(49, _omitFieldNames ? '' : 'cDeleteMessage',
+        subBuilder: C_DeleteMessage.create)
+    ..aOM<S_DeleteMessage>(50, _omitFieldNames ? '' : 'sDeleteMessage',
+        subBuilder: S_DeleteMessage.create)
+    ..aOM<C_EditMessage>(51, _omitFieldNames ? '' : 'cEditMessage',
+        subBuilder: C_EditMessage.create)
+    ..aOM<S_EditMessage>(52, _omitFieldNames ? '' : 'sEditMessage',
+        subBuilder: S_EditMessage.create)
+    ..aOM<C_GetSubscription>(53, _omitFieldNames ? '' : 'cGetSubscription',
+        subBuilder: C_GetSubscription.create)
+    ..aOM<S_GetSubscription>(54, _omitFieldNames ? '' : 'sGetSubscription',
+        subBuilder: S_GetSubscription.create)
+    ..aOM<C_VerifyPurchase>(55, _omitFieldNames ? '' : 'cVerifyPurchase',
+        subBuilder: C_VerifyPurchase.create)
+    ..aOM<S_VerifyPurchase>(56, _omitFieldNames ? '' : 'sVerifyPurchase',
+        subBuilder: S_VerifyPurchase.create)
+    ..aOM<C_ReadReceipt>(57, _omitFieldNames ? '' : 'cReadReceipt',
+        subBuilder: C_ReadReceipt.create)
+    ..aOM<S_ReadReceipt>(58, _omitFieldNames ? '' : 'sReadReceipt',
+        subBuilder: S_ReadReceipt.create)
     ..aOM<C_SearchUser>(60, _omitFieldNames ? '' : 'cSearchUser',
         subBuilder: C_SearchUser.create)
     ..aOM<S_SearchUser>(61, _omitFieldNames ? '' : 'sSearchUser',
@@ -475,6 +595,22 @@ class Envelope extends $pb.GeneratedMessage {
         subBuilder: S_FetchFriendData.create)
     ..aOM<S_FriendPush>(66, _omitFieldNames ? '' : 'sFriendPush',
         subBuilder: S_FriendPush.create)
+    ..aOM<C_BlockUser>(67, _omitFieldNames ? '' : 'cBlockUser',
+        subBuilder: C_BlockUser.create)
+    ..aOM<S_BlockUser>(68, _omitFieldNames ? '' : 'sBlockUser',
+        subBuilder: S_BlockUser.create)
+    ..aOM<C_UnblockUser>(69, _omitFieldNames ? '' : 'cUnblockUser',
+        subBuilder: C_UnblockUser.create)
+    ..aOM<S_UnblockUser>(70, _omitFieldNames ? '' : 'sUnblockUser',
+        subBuilder: S_UnblockUser.create)
+    ..aOM<C_GetBlockedList>(71, _omitFieldNames ? '' : 'cGetBlockedList',
+        subBuilder: C_GetBlockedList.create)
+    ..aOM<S_GetBlockedList>(72, _omitFieldNames ? '' : 'sGetBlockedList',
+        subBuilder: S_GetBlockedList.create)
+    ..aOM<C_ReportUser>(73, _omitFieldNames ? '' : 'cReportUser',
+        subBuilder: C_ReportUser.create)
+    ..aOM<S_ReportUser>(74, _omitFieldNames ? '' : 'sReportUser',
+        subBuilder: S_ReportUser.create)
     ..aOM<C_CreateGroup>(80, _omitFieldNames ? '' : 'cCreateGroup',
         subBuilder: C_CreateGroup.create)
     ..aOM<S_CreateGroup>(81, _omitFieldNames ? '' : 'sCreateGroup',
@@ -511,6 +647,10 @@ class Envelope extends $pb.GeneratedMessage {
         subBuilder: C_Withdraw.create)
     ..aOM<S_Withdraw>(97, _omitFieldNames ? '' : 'sWithdraw',
         subBuilder: S_Withdraw.create)
+    ..aOM<C_DeleteGroup>(98, _omitFieldNames ? '' : 'cDeleteGroup',
+        subBuilder: C_DeleteGroup.create)
+    ..aOM<S_DeleteGroup>(99, _omitFieldNames ? '' : 'sDeleteGroup',
+        subBuilder: S_DeleteGroup.create)
     ..aOM<S_Error>(100, _omitFieldNames ? '' : 'sError',
         subBuilder: S_Error.create)
     ..aOM<C_Heartbeat>(101, _omitFieldNames ? '' : 'cHeartbeat',
@@ -574,6 +714,16 @@ class Envelope extends $pb.GeneratedMessage {
   @$pb.TagNumber(46)
   @$pb.TagNumber(47)
   @$pb.TagNumber(48)
+  @$pb.TagNumber(49)
+  @$pb.TagNumber(50)
+  @$pb.TagNumber(51)
+  @$pb.TagNumber(52)
+  @$pb.TagNumber(53)
+  @$pb.TagNumber(54)
+  @$pb.TagNumber(55)
+  @$pb.TagNumber(56)
+  @$pb.TagNumber(57)
+  @$pb.TagNumber(58)
   @$pb.TagNumber(60)
   @$pb.TagNumber(61)
   @$pb.TagNumber(62)
@@ -581,6 +731,14 @@ class Envelope extends $pb.GeneratedMessage {
   @$pb.TagNumber(64)
   @$pb.TagNumber(65)
   @$pb.TagNumber(66)
+  @$pb.TagNumber(67)
+  @$pb.TagNumber(68)
+  @$pb.TagNumber(69)
+  @$pb.TagNumber(70)
+  @$pb.TagNumber(71)
+  @$pb.TagNumber(72)
+  @$pb.TagNumber(73)
+  @$pb.TagNumber(74)
   @$pb.TagNumber(80)
   @$pb.TagNumber(81)
   @$pb.TagNumber(82)
@@ -599,6 +757,8 @@ class Envelope extends $pb.GeneratedMessage {
   @$pb.TagNumber(95)
   @$pb.TagNumber(96)
   @$pb.TagNumber(97)
+  @$pb.TagNumber(98)
+  @$pb.TagNumber(99)
   @$pb.TagNumber(100)
   @$pb.TagNumber(101)
   @$pb.TagNumber(102)
@@ -640,6 +800,16 @@ class Envelope extends $pb.GeneratedMessage {
   @$pb.TagNumber(46)
   @$pb.TagNumber(47)
   @$pb.TagNumber(48)
+  @$pb.TagNumber(49)
+  @$pb.TagNumber(50)
+  @$pb.TagNumber(51)
+  @$pb.TagNumber(52)
+  @$pb.TagNumber(53)
+  @$pb.TagNumber(54)
+  @$pb.TagNumber(55)
+  @$pb.TagNumber(56)
+  @$pb.TagNumber(57)
+  @$pb.TagNumber(58)
   @$pb.TagNumber(60)
   @$pb.TagNumber(61)
   @$pb.TagNumber(62)
@@ -647,6 +817,14 @@ class Envelope extends $pb.GeneratedMessage {
   @$pb.TagNumber(64)
   @$pb.TagNumber(65)
   @$pb.TagNumber(66)
+  @$pb.TagNumber(67)
+  @$pb.TagNumber(68)
+  @$pb.TagNumber(69)
+  @$pb.TagNumber(70)
+  @$pb.TagNumber(71)
+  @$pb.TagNumber(72)
+  @$pb.TagNumber(73)
+  @$pb.TagNumber(74)
   @$pb.TagNumber(80)
   @$pb.TagNumber(81)
   @$pb.TagNumber(82)
@@ -665,6 +843,8 @@ class Envelope extends $pb.GeneratedMessage {
   @$pb.TagNumber(95)
   @$pb.TagNumber(96)
   @$pb.TagNumber(97)
+  @$pb.TagNumber(98)
+  @$pb.TagNumber(99)
   @$pb.TagNumber(100)
   @$pb.TagNumber(101)
   @$pb.TagNumber(102)
@@ -1107,316 +1287,537 @@ class Envelope extends $pb.GeneratedMessage {
   @$pb.TagNumber(48)
   S_UploadFile ensureSUploadFile() => $_ensure(39);
 
+  @$pb.TagNumber(49)
+  C_DeleteMessage get cDeleteMessage => $_getN(40);
+  @$pb.TagNumber(49)
+  set cDeleteMessage(C_DeleteMessage value) => $_setField(49, value);
+  @$pb.TagNumber(49)
+  $core.bool hasCDeleteMessage() => $_has(40);
+  @$pb.TagNumber(49)
+  void clearCDeleteMessage() => $_clearField(49);
+  @$pb.TagNumber(49)
+  C_DeleteMessage ensureCDeleteMessage() => $_ensure(40);
+
+  @$pb.TagNumber(50)
+  S_DeleteMessage get sDeleteMessage => $_getN(41);
+  @$pb.TagNumber(50)
+  set sDeleteMessage(S_DeleteMessage value) => $_setField(50, value);
+  @$pb.TagNumber(50)
+  $core.bool hasSDeleteMessage() => $_has(41);
+  @$pb.TagNumber(50)
+  void clearSDeleteMessage() => $_clearField(50);
+  @$pb.TagNumber(50)
+  S_DeleteMessage ensureSDeleteMessage() => $_ensure(41);
+
+  @$pb.TagNumber(51)
+  C_EditMessage get cEditMessage => $_getN(42);
+  @$pb.TagNumber(51)
+  set cEditMessage(C_EditMessage value) => $_setField(51, value);
+  @$pb.TagNumber(51)
+  $core.bool hasCEditMessage() => $_has(42);
+  @$pb.TagNumber(51)
+  void clearCEditMessage() => $_clearField(51);
+  @$pb.TagNumber(51)
+  C_EditMessage ensureCEditMessage() => $_ensure(42);
+
+  @$pb.TagNumber(52)
+  S_EditMessage get sEditMessage => $_getN(43);
+  @$pb.TagNumber(52)
+  set sEditMessage(S_EditMessage value) => $_setField(52, value);
+  @$pb.TagNumber(52)
+  $core.bool hasSEditMessage() => $_has(43);
+  @$pb.TagNumber(52)
+  void clearSEditMessage() => $_clearField(52);
+  @$pb.TagNumber(52)
+  S_EditMessage ensureSEditMessage() => $_ensure(43);
+
+  @$pb.TagNumber(53)
+  C_GetSubscription get cGetSubscription => $_getN(44);
+  @$pb.TagNumber(53)
+  set cGetSubscription(C_GetSubscription value) => $_setField(53, value);
+  @$pb.TagNumber(53)
+  $core.bool hasCGetSubscription() => $_has(44);
+  @$pb.TagNumber(53)
+  void clearCGetSubscription() => $_clearField(53);
+  @$pb.TagNumber(53)
+  C_GetSubscription ensureCGetSubscription() => $_ensure(44);
+
+  @$pb.TagNumber(54)
+  S_GetSubscription get sGetSubscription => $_getN(45);
+  @$pb.TagNumber(54)
+  set sGetSubscription(S_GetSubscription value) => $_setField(54, value);
+  @$pb.TagNumber(54)
+  $core.bool hasSGetSubscription() => $_has(45);
+  @$pb.TagNumber(54)
+  void clearSGetSubscription() => $_clearField(54);
+  @$pb.TagNumber(54)
+  S_GetSubscription ensureSGetSubscription() => $_ensure(45);
+
+  @$pb.TagNumber(55)
+  C_VerifyPurchase get cVerifyPurchase => $_getN(46);
+  @$pb.TagNumber(55)
+  set cVerifyPurchase(C_VerifyPurchase value) => $_setField(55, value);
+  @$pb.TagNumber(55)
+  $core.bool hasCVerifyPurchase() => $_has(46);
+  @$pb.TagNumber(55)
+  void clearCVerifyPurchase() => $_clearField(55);
+  @$pb.TagNumber(55)
+  C_VerifyPurchase ensureCVerifyPurchase() => $_ensure(46);
+
+  @$pb.TagNumber(56)
+  S_VerifyPurchase get sVerifyPurchase => $_getN(47);
+  @$pb.TagNumber(56)
+  set sVerifyPurchase(S_VerifyPurchase value) => $_setField(56, value);
+  @$pb.TagNumber(56)
+  $core.bool hasSVerifyPurchase() => $_has(47);
+  @$pb.TagNumber(56)
+  void clearSVerifyPurchase() => $_clearField(56);
+  @$pb.TagNumber(56)
+  S_VerifyPurchase ensureSVerifyPurchase() => $_ensure(47);
+
+  @$pb.TagNumber(57)
+  C_ReadReceipt get cReadReceipt => $_getN(48);
+  @$pb.TagNumber(57)
+  set cReadReceipt(C_ReadReceipt value) => $_setField(57, value);
+  @$pb.TagNumber(57)
+  $core.bool hasCReadReceipt() => $_has(48);
+  @$pb.TagNumber(57)
+  void clearCReadReceipt() => $_clearField(57);
+  @$pb.TagNumber(57)
+  C_ReadReceipt ensureCReadReceipt() => $_ensure(48);
+
+  @$pb.TagNumber(58)
+  S_ReadReceipt get sReadReceipt => $_getN(49);
+  @$pb.TagNumber(58)
+  set sReadReceipt(S_ReadReceipt value) => $_setField(58, value);
+  @$pb.TagNumber(58)
+  $core.bool hasSReadReceipt() => $_has(49);
+  @$pb.TagNumber(58)
+  void clearSReadReceipt() => $_clearField(58);
+  @$pb.TagNumber(58)
+  S_ReadReceipt ensureSReadReceipt() => $_ensure(49);
+
   /// ─── FRIENDS (60 ~ 79) ───
   @$pb.TagNumber(60)
-  C_SearchUser get cSearchUser => $_getN(40);
+  C_SearchUser get cSearchUser => $_getN(50);
   @$pb.TagNumber(60)
   set cSearchUser(C_SearchUser value) => $_setField(60, value);
   @$pb.TagNumber(60)
-  $core.bool hasCSearchUser() => $_has(40);
+  $core.bool hasCSearchUser() => $_has(50);
   @$pb.TagNumber(60)
   void clearCSearchUser() => $_clearField(60);
   @$pb.TagNumber(60)
-  C_SearchUser ensureCSearchUser() => $_ensure(40);
+  C_SearchUser ensureCSearchUser() => $_ensure(50);
 
   @$pb.TagNumber(61)
-  S_SearchUser get sSearchUser => $_getN(41);
+  S_SearchUser get sSearchUser => $_getN(51);
   @$pb.TagNumber(61)
   set sSearchUser(S_SearchUser value) => $_setField(61, value);
   @$pb.TagNumber(61)
-  $core.bool hasSSearchUser() => $_has(41);
+  $core.bool hasSSearchUser() => $_has(51);
   @$pb.TagNumber(61)
   void clearSSearchUser() => $_clearField(61);
   @$pb.TagNumber(61)
-  S_SearchUser ensureSSearchUser() => $_ensure(41);
+  S_SearchUser ensureSSearchUser() => $_ensure(51);
 
   @$pb.TagNumber(62)
-  C_FriendAction get cFriendAction => $_getN(42);
+  C_FriendAction get cFriendAction => $_getN(52);
   @$pb.TagNumber(62)
   set cFriendAction(C_FriendAction value) => $_setField(62, value);
   @$pb.TagNumber(62)
-  $core.bool hasCFriendAction() => $_has(42);
+  $core.bool hasCFriendAction() => $_has(52);
   @$pb.TagNumber(62)
   void clearCFriendAction() => $_clearField(62);
   @$pb.TagNumber(62)
-  C_FriendAction ensureCFriendAction() => $_ensure(42);
+  C_FriendAction ensureCFriendAction() => $_ensure(52);
 
   @$pb.TagNumber(63)
-  S_FriendAction get sFriendAction => $_getN(43);
+  S_FriendAction get sFriendAction => $_getN(53);
   @$pb.TagNumber(63)
   set sFriendAction(S_FriendAction value) => $_setField(63, value);
   @$pb.TagNumber(63)
-  $core.bool hasSFriendAction() => $_has(43);
+  $core.bool hasSFriendAction() => $_has(53);
   @$pb.TagNumber(63)
   void clearSFriendAction() => $_clearField(63);
   @$pb.TagNumber(63)
-  S_FriendAction ensureSFriendAction() => $_ensure(43);
+  S_FriendAction ensureSFriendAction() => $_ensure(53);
 
   @$pb.TagNumber(64)
-  C_FetchFriendData get cFetchFriendData => $_getN(44);
+  C_FetchFriendData get cFetchFriendData => $_getN(54);
   @$pb.TagNumber(64)
   set cFetchFriendData(C_FetchFriendData value) => $_setField(64, value);
   @$pb.TagNumber(64)
-  $core.bool hasCFetchFriendData() => $_has(44);
+  $core.bool hasCFetchFriendData() => $_has(54);
   @$pb.TagNumber(64)
   void clearCFetchFriendData() => $_clearField(64);
   @$pb.TagNumber(64)
-  C_FetchFriendData ensureCFetchFriendData() => $_ensure(44);
+  C_FetchFriendData ensureCFetchFriendData() => $_ensure(54);
 
   @$pb.TagNumber(65)
-  S_FetchFriendData get sFetchFriendData => $_getN(45);
+  S_FetchFriendData get sFetchFriendData => $_getN(55);
   @$pb.TagNumber(65)
   set sFetchFriendData(S_FetchFriendData value) => $_setField(65, value);
   @$pb.TagNumber(65)
-  $core.bool hasSFetchFriendData() => $_has(45);
+  $core.bool hasSFetchFriendData() => $_has(55);
   @$pb.TagNumber(65)
   void clearSFetchFriendData() => $_clearField(65);
   @$pb.TagNumber(65)
-  S_FetchFriendData ensureSFetchFriendData() => $_ensure(45);
+  S_FetchFriendData ensureSFetchFriendData() => $_ensure(55);
 
   @$pb.TagNumber(66)
-  S_FriendPush get sFriendPush => $_getN(46);
+  S_FriendPush get sFriendPush => $_getN(56);
   @$pb.TagNumber(66)
   set sFriendPush(S_FriendPush value) => $_setField(66, value);
   @$pb.TagNumber(66)
-  $core.bool hasSFriendPush() => $_has(46);
+  $core.bool hasSFriendPush() => $_has(56);
   @$pb.TagNumber(66)
   void clearSFriendPush() => $_clearField(66);
   @$pb.TagNumber(66)
-  S_FriendPush ensureSFriendPush() => $_ensure(46);
+  S_FriendPush ensureSFriendPush() => $_ensure(56);
+
+  /// ─── BLOCK / REPORT (67 ~ 74) ───
+  @$pb.TagNumber(67)
+  C_BlockUser get cBlockUser => $_getN(57);
+  @$pb.TagNumber(67)
+  set cBlockUser(C_BlockUser value) => $_setField(67, value);
+  @$pb.TagNumber(67)
+  $core.bool hasCBlockUser() => $_has(57);
+  @$pb.TagNumber(67)
+  void clearCBlockUser() => $_clearField(67);
+  @$pb.TagNumber(67)
+  C_BlockUser ensureCBlockUser() => $_ensure(57);
+
+  @$pb.TagNumber(68)
+  S_BlockUser get sBlockUser => $_getN(58);
+  @$pb.TagNumber(68)
+  set sBlockUser(S_BlockUser value) => $_setField(68, value);
+  @$pb.TagNumber(68)
+  $core.bool hasSBlockUser() => $_has(58);
+  @$pb.TagNumber(68)
+  void clearSBlockUser() => $_clearField(68);
+  @$pb.TagNumber(68)
+  S_BlockUser ensureSBlockUser() => $_ensure(58);
+
+  @$pb.TagNumber(69)
+  C_UnblockUser get cUnblockUser => $_getN(59);
+  @$pb.TagNumber(69)
+  set cUnblockUser(C_UnblockUser value) => $_setField(69, value);
+  @$pb.TagNumber(69)
+  $core.bool hasCUnblockUser() => $_has(59);
+  @$pb.TagNumber(69)
+  void clearCUnblockUser() => $_clearField(69);
+  @$pb.TagNumber(69)
+  C_UnblockUser ensureCUnblockUser() => $_ensure(59);
+
+  @$pb.TagNumber(70)
+  S_UnblockUser get sUnblockUser => $_getN(60);
+  @$pb.TagNumber(70)
+  set sUnblockUser(S_UnblockUser value) => $_setField(70, value);
+  @$pb.TagNumber(70)
+  $core.bool hasSUnblockUser() => $_has(60);
+  @$pb.TagNumber(70)
+  void clearSUnblockUser() => $_clearField(70);
+  @$pb.TagNumber(70)
+  S_UnblockUser ensureSUnblockUser() => $_ensure(60);
+
+  @$pb.TagNumber(71)
+  C_GetBlockedList get cGetBlockedList => $_getN(61);
+  @$pb.TagNumber(71)
+  set cGetBlockedList(C_GetBlockedList value) => $_setField(71, value);
+  @$pb.TagNumber(71)
+  $core.bool hasCGetBlockedList() => $_has(61);
+  @$pb.TagNumber(71)
+  void clearCGetBlockedList() => $_clearField(71);
+  @$pb.TagNumber(71)
+  C_GetBlockedList ensureCGetBlockedList() => $_ensure(61);
+
+  @$pb.TagNumber(72)
+  S_GetBlockedList get sGetBlockedList => $_getN(62);
+  @$pb.TagNumber(72)
+  set sGetBlockedList(S_GetBlockedList value) => $_setField(72, value);
+  @$pb.TagNumber(72)
+  $core.bool hasSGetBlockedList() => $_has(62);
+  @$pb.TagNumber(72)
+  void clearSGetBlockedList() => $_clearField(72);
+  @$pb.TagNumber(72)
+  S_GetBlockedList ensureSGetBlockedList() => $_ensure(62);
+
+  @$pb.TagNumber(73)
+  C_ReportUser get cReportUser => $_getN(63);
+  @$pb.TagNumber(73)
+  set cReportUser(C_ReportUser value) => $_setField(73, value);
+  @$pb.TagNumber(73)
+  $core.bool hasCReportUser() => $_has(63);
+  @$pb.TagNumber(73)
+  void clearCReportUser() => $_clearField(73);
+  @$pb.TagNumber(73)
+  C_ReportUser ensureCReportUser() => $_ensure(63);
+
+  @$pb.TagNumber(74)
+  S_ReportUser get sReportUser => $_getN(64);
+  @$pb.TagNumber(74)
+  set sReportUser(S_ReportUser value) => $_setField(74, value);
+  @$pb.TagNumber(74)
+  $core.bool hasSReportUser() => $_has(64);
+  @$pb.TagNumber(74)
+  void clearSReportUser() => $_clearField(74);
+  @$pb.TagNumber(74)
+  S_ReportUser ensureSReportUser() => $_ensure(64);
 
   /// ─── GROUPS (80 ~ 99) ───
   @$pb.TagNumber(80)
-  C_CreateGroup get cCreateGroup => $_getN(47);
+  C_CreateGroup get cCreateGroup => $_getN(65);
   @$pb.TagNumber(80)
   set cCreateGroup(C_CreateGroup value) => $_setField(80, value);
   @$pb.TagNumber(80)
-  $core.bool hasCCreateGroup() => $_has(47);
+  $core.bool hasCCreateGroup() => $_has(65);
   @$pb.TagNumber(80)
   void clearCCreateGroup() => $_clearField(80);
   @$pb.TagNumber(80)
-  C_CreateGroup ensureCCreateGroup() => $_ensure(47);
+  C_CreateGroup ensureCCreateGroup() => $_ensure(65);
 
   @$pb.TagNumber(81)
-  S_CreateGroup get sCreateGroup => $_getN(48);
+  S_CreateGroup get sCreateGroup => $_getN(66);
   @$pb.TagNumber(81)
   set sCreateGroup(S_CreateGroup value) => $_setField(81, value);
   @$pb.TagNumber(81)
-  $core.bool hasSCreateGroup() => $_has(48);
+  $core.bool hasSCreateGroup() => $_has(66);
   @$pb.TagNumber(81)
   void clearSCreateGroup() => $_clearField(81);
   @$pb.TagNumber(81)
-  S_CreateGroup ensureSCreateGroup() => $_ensure(48);
+  S_CreateGroup ensureSCreateGroup() => $_ensure(66);
 
   @$pb.TagNumber(82)
-  C_GroupList get cGroupList => $_getN(49);
+  C_GroupList get cGroupList => $_getN(67);
   @$pb.TagNumber(82)
   set cGroupList(C_GroupList value) => $_setField(82, value);
   @$pb.TagNumber(82)
-  $core.bool hasCGroupList() => $_has(49);
+  $core.bool hasCGroupList() => $_has(67);
   @$pb.TagNumber(82)
   void clearCGroupList() => $_clearField(82);
   @$pb.TagNumber(82)
-  C_GroupList ensureCGroupList() => $_ensure(49);
+  C_GroupList ensureCGroupList() => $_ensure(67);
 
   @$pb.TagNumber(83)
-  S_GroupList get sGroupList => $_getN(50);
+  S_GroupList get sGroupList => $_getN(68);
   @$pb.TagNumber(83)
   set sGroupList(S_GroupList value) => $_setField(83, value);
   @$pb.TagNumber(83)
-  $core.bool hasSGroupList() => $_has(50);
+  $core.bool hasSGroupList() => $_has(68);
   @$pb.TagNumber(83)
   void clearSGroupList() => $_clearField(83);
   @$pb.TagNumber(83)
-  S_GroupList ensureSGroupList() => $_ensure(50);
+  S_GroupList ensureSGroupList() => $_ensure(68);
 
   @$pb.TagNumber(84)
-  C_JoinGroup get cJoinGroup => $_getN(51);
+  C_JoinGroup get cJoinGroup => $_getN(69);
   @$pb.TagNumber(84)
   set cJoinGroup(C_JoinGroup value) => $_setField(84, value);
   @$pb.TagNumber(84)
-  $core.bool hasCJoinGroup() => $_has(51);
+  $core.bool hasCJoinGroup() => $_has(69);
   @$pb.TagNumber(84)
   void clearCJoinGroup() => $_clearField(84);
   @$pb.TagNumber(84)
-  C_JoinGroup ensureCJoinGroup() => $_ensure(51);
+  C_JoinGroup ensureCJoinGroup() => $_ensure(69);
 
   @$pb.TagNumber(85)
-  S_JoinGroup get sJoinGroup => $_getN(52);
+  S_JoinGroup get sJoinGroup => $_getN(70);
   @$pb.TagNumber(85)
   set sJoinGroup(S_JoinGroup value) => $_setField(85, value);
   @$pb.TagNumber(85)
-  $core.bool hasSJoinGroup() => $_has(52);
+  $core.bool hasSJoinGroup() => $_has(70);
   @$pb.TagNumber(85)
   void clearSJoinGroup() => $_clearField(85);
   @$pb.TagNumber(85)
-  S_JoinGroup ensureSJoinGroup() => $_ensure(52);
+  S_JoinGroup ensureSJoinGroup() => $_ensure(70);
 
   @$pb.TagNumber(86)
-  C_InviteFriend get cInviteFriend => $_getN(53);
+  C_InviteFriend get cInviteFriend => $_getN(71);
   @$pb.TagNumber(86)
   set cInviteFriend(C_InviteFriend value) => $_setField(86, value);
   @$pb.TagNumber(86)
-  $core.bool hasCInviteFriend() => $_has(53);
+  $core.bool hasCInviteFriend() => $_has(71);
   @$pb.TagNumber(86)
   void clearCInviteFriend() => $_clearField(86);
   @$pb.TagNumber(86)
-  C_InviteFriend ensureCInviteFriend() => $_ensure(53);
+  C_InviteFriend ensureCInviteFriend() => $_ensure(71);
 
   @$pb.TagNumber(87)
-  S_InviteFriend get sInviteFriend => $_getN(54);
+  S_InviteFriend get sInviteFriend => $_getN(72);
   @$pb.TagNumber(87)
   set sInviteFriend(S_InviteFriend value) => $_setField(87, value);
   @$pb.TagNumber(87)
-  $core.bool hasSInviteFriend() => $_has(54);
+  $core.bool hasSInviteFriend() => $_has(72);
   @$pb.TagNumber(87)
   void clearSInviteFriend() => $_clearField(87);
   @$pb.TagNumber(87)
-  S_InviteFriend ensureSInviteFriend() => $_ensure(54);
+  S_InviteFriend ensureSInviteFriend() => $_ensure(72);
 
   @$pb.TagNumber(88)
-  C_LeaveGroup get cLeaveGroup => $_getN(55);
+  C_LeaveGroup get cLeaveGroup => $_getN(73);
   @$pb.TagNumber(88)
   set cLeaveGroup(C_LeaveGroup value) => $_setField(88, value);
   @$pb.TagNumber(88)
-  $core.bool hasCLeaveGroup() => $_has(55);
+  $core.bool hasCLeaveGroup() => $_has(73);
   @$pb.TagNumber(88)
   void clearCLeaveGroup() => $_clearField(88);
   @$pb.TagNumber(88)
-  C_LeaveGroup ensureCLeaveGroup() => $_ensure(55);
+  C_LeaveGroup ensureCLeaveGroup() => $_ensure(73);
 
   @$pb.TagNumber(89)
-  S_LeaveGroup get sLeaveGroup => $_getN(56);
+  S_LeaveGroup get sLeaveGroup => $_getN(74);
   @$pb.TagNumber(89)
   set sLeaveGroup(S_LeaveGroup value) => $_setField(89, value);
   @$pb.TagNumber(89)
-  $core.bool hasSLeaveGroup() => $_has(56);
+  $core.bool hasSLeaveGroup() => $_has(74);
   @$pb.TagNumber(89)
   void clearSLeaveGroup() => $_clearField(89);
   @$pb.TagNumber(89)
-  S_LeaveGroup ensureSLeaveGroup() => $_ensure(56);
+  S_LeaveGroup ensureSLeaveGroup() => $_ensure(74);
 
   @$pb.TagNumber(90)
-  C_GroupMemberList get cGroupMemberList => $_getN(57);
+  C_GroupMemberList get cGroupMemberList => $_getN(75);
   @$pb.TagNumber(90)
   set cGroupMemberList(C_GroupMemberList value) => $_setField(90, value);
   @$pb.TagNumber(90)
-  $core.bool hasCGroupMemberList() => $_has(57);
+  $core.bool hasCGroupMemberList() => $_has(75);
   @$pb.TagNumber(90)
   void clearCGroupMemberList() => $_clearField(90);
   @$pb.TagNumber(90)
-  C_GroupMemberList ensureCGroupMemberList() => $_ensure(57);
+  C_GroupMemberList ensureCGroupMemberList() => $_ensure(75);
 
   @$pb.TagNumber(91)
-  S_GroupMemberList get sGroupMemberList => $_getN(58);
+  S_GroupMemberList get sGroupMemberList => $_getN(76);
   @$pb.TagNumber(91)
   set sGroupMemberList(S_GroupMemberList value) => $_setField(91, value);
   @$pb.TagNumber(91)
-  $core.bool hasSGroupMemberList() => $_has(58);
+  $core.bool hasSGroupMemberList() => $_has(76);
   @$pb.TagNumber(91)
   void clearSGroupMemberList() => $_clearField(91);
   @$pb.TagNumber(91)
-  S_GroupMemberList ensureSGroupMemberList() => $_ensure(58);
+  S_GroupMemberList ensureSGroupMemberList() => $_ensure(76);
 
   @$pb.TagNumber(92)
-  C_GroupInfo get cGroupInfo => $_getN(59);
+  C_GroupInfo get cGroupInfo => $_getN(77);
   @$pb.TagNumber(92)
   set cGroupInfo(C_GroupInfo value) => $_setField(92, value);
   @$pb.TagNumber(92)
-  $core.bool hasCGroupInfo() => $_has(59);
+  $core.bool hasCGroupInfo() => $_has(77);
   @$pb.TagNumber(92)
   void clearCGroupInfo() => $_clearField(92);
   @$pb.TagNumber(92)
-  C_GroupInfo ensureCGroupInfo() => $_ensure(59);
+  C_GroupInfo ensureCGroupInfo() => $_ensure(77);
 
   @$pb.TagNumber(93)
-  S_GroupInfo get sGroupInfo => $_getN(60);
+  S_GroupInfo get sGroupInfo => $_getN(78);
   @$pb.TagNumber(93)
   set sGroupInfo(S_GroupInfo value) => $_setField(93, value);
   @$pb.TagNumber(93)
-  $core.bool hasSGroupInfo() => $_has(60);
+  $core.bool hasSGroupInfo() => $_has(78);
   @$pb.TagNumber(93)
   void clearSGroupInfo() => $_clearField(93);
   @$pb.TagNumber(93)
-  S_GroupInfo ensureSGroupInfo() => $_ensure(60);
+  S_GroupInfo ensureSGroupInfo() => $_ensure(78);
 
   @$pb.TagNumber(94)
-  C_EditGroup get cEditGroup => $_getN(61);
+  C_EditGroup get cEditGroup => $_getN(79);
   @$pb.TagNumber(94)
   set cEditGroup(C_EditGroup value) => $_setField(94, value);
   @$pb.TagNumber(94)
-  $core.bool hasCEditGroup() => $_has(61);
+  $core.bool hasCEditGroup() => $_has(79);
   @$pb.TagNumber(94)
   void clearCEditGroup() => $_clearField(94);
   @$pb.TagNumber(94)
-  C_EditGroup ensureCEditGroup() => $_ensure(61);
+  C_EditGroup ensureCEditGroup() => $_ensure(79);
 
   @$pb.TagNumber(95)
-  S_EditGroup get sEditGroup => $_getN(62);
+  S_EditGroup get sEditGroup => $_getN(80);
   @$pb.TagNumber(95)
   set sEditGroup(S_EditGroup value) => $_setField(95, value);
   @$pb.TagNumber(95)
-  $core.bool hasSEditGroup() => $_has(62);
+  $core.bool hasSEditGroup() => $_has(80);
   @$pb.TagNumber(95)
   void clearSEditGroup() => $_clearField(95);
   @$pb.TagNumber(95)
-  S_EditGroup ensureSEditGroup() => $_ensure(62);
+  S_EditGroup ensureSEditGroup() => $_ensure(80);
 
   @$pb.TagNumber(96)
-  C_Withdraw get cWithdraw => $_getN(63);
+  C_Withdraw get cWithdraw => $_getN(81);
   @$pb.TagNumber(96)
   set cWithdraw(C_Withdraw value) => $_setField(96, value);
   @$pb.TagNumber(96)
-  $core.bool hasCWithdraw() => $_has(63);
+  $core.bool hasCWithdraw() => $_has(81);
   @$pb.TagNumber(96)
   void clearCWithdraw() => $_clearField(96);
   @$pb.TagNumber(96)
-  C_Withdraw ensureCWithdraw() => $_ensure(63);
+  C_Withdraw ensureCWithdraw() => $_ensure(81);
 
   @$pb.TagNumber(97)
-  S_Withdraw get sWithdraw => $_getN(64);
+  S_Withdraw get sWithdraw => $_getN(82);
   @$pb.TagNumber(97)
   set sWithdraw(S_Withdraw value) => $_setField(97, value);
   @$pb.TagNumber(97)
-  $core.bool hasSWithdraw() => $_has(64);
+  $core.bool hasSWithdraw() => $_has(82);
   @$pb.TagNumber(97)
   void clearSWithdraw() => $_clearField(97);
   @$pb.TagNumber(97)
-  S_Withdraw ensureSWithdraw() => $_ensure(64);
+  S_Withdraw ensureSWithdraw() => $_ensure(82);
+
+  @$pb.TagNumber(98)
+  C_DeleteGroup get cDeleteGroup => $_getN(83);
+  @$pb.TagNumber(98)
+  set cDeleteGroup(C_DeleteGroup value) => $_setField(98, value);
+  @$pb.TagNumber(98)
+  $core.bool hasCDeleteGroup() => $_has(83);
+  @$pb.TagNumber(98)
+  void clearCDeleteGroup() => $_clearField(98);
+  @$pb.TagNumber(98)
+  C_DeleteGroup ensureCDeleteGroup() => $_ensure(83);
+
+  @$pb.TagNumber(99)
+  S_DeleteGroup get sDeleteGroup => $_getN(84);
+  @$pb.TagNumber(99)
+  set sDeleteGroup(S_DeleteGroup value) => $_setField(99, value);
+  @$pb.TagNumber(99)
+  $core.bool hasSDeleteGroup() => $_has(84);
+  @$pb.TagNumber(99)
+  void clearSDeleteGroup() => $_clearField(99);
+  @$pb.TagNumber(99)
+  S_DeleteGroup ensureSDeleteGroup() => $_ensure(84);
 
   /// ─── SYSTEM (100 ~ ) ───
   @$pb.TagNumber(100)
-  S_Error get sError => $_getN(65);
+  S_Error get sError => $_getN(85);
   @$pb.TagNumber(100)
   set sError(S_Error value) => $_setField(100, value);
   @$pb.TagNumber(100)
-  $core.bool hasSError() => $_has(65);
+  $core.bool hasSError() => $_has(85);
   @$pb.TagNumber(100)
   void clearSError() => $_clearField(100);
   @$pb.TagNumber(100)
-  S_Error ensureSError() => $_ensure(65);
+  S_Error ensureSError() => $_ensure(85);
 
   @$pb.TagNumber(101)
-  C_Heartbeat get cHeartbeat => $_getN(66);
+  C_Heartbeat get cHeartbeat => $_getN(86);
   @$pb.TagNumber(101)
   set cHeartbeat(C_Heartbeat value) => $_setField(101, value);
   @$pb.TagNumber(101)
-  $core.bool hasCHeartbeat() => $_has(66);
+  $core.bool hasCHeartbeat() => $_has(86);
   @$pb.TagNumber(101)
   void clearCHeartbeat() => $_clearField(101);
   @$pb.TagNumber(101)
-  C_Heartbeat ensureCHeartbeat() => $_ensure(66);
+  C_Heartbeat ensureCHeartbeat() => $_ensure(86);
 
   @$pb.TagNumber(102)
-  S_Heartbeat get sHeartbeat => $_getN(67);
+  S_Heartbeat get sHeartbeat => $_getN(87);
   @$pb.TagNumber(102)
   set sHeartbeat(S_Heartbeat value) => $_setField(102, value);
   @$pb.TagNumber(102)
-  $core.bool hasSHeartbeat() => $_has(67);
+  $core.bool hasSHeartbeat() => $_has(87);
   @$pb.TagNumber(102)
   void clearSHeartbeat() => $_clearField(102);
   @$pb.TagNumber(102)
-  S_Heartbeat ensureSHeartbeat() => $_ensure(67);
+  S_Heartbeat ensureSHeartbeat() => $_ensure(87);
 }
 
 /// 통합 사용자 정보 (본인, 친구, 그룹원 공통 사용)
@@ -4175,6 +4576,11 @@ class S_Chat extends $pb.GeneratedMessage {
     ChatPayload? payload,
     $fixnum.Int64? tsServer,
     $fixnum.Int64? replyToSeq,
+    $core.String? replyToSenderName,
+    $core.String? replyToText,
+    $core.bool? isDeleted,
+    $core.bool? isEdited,
+    $core.int? unreadCount,
   }) {
     final result = create();
     if (convId != null) result.convId = convId;
@@ -4185,6 +4591,11 @@ class S_Chat extends $pb.GeneratedMessage {
     if (payload != null) result.payload = payload;
     if (tsServer != null) result.tsServer = tsServer;
     if (replyToSeq != null) result.replyToSeq = replyToSeq;
+    if (replyToSenderName != null) result.replyToSenderName = replyToSenderName;
+    if (replyToText != null) result.replyToText = replyToText;
+    if (isDeleted != null) result.isDeleted = isDeleted;
+    if (isEdited != null) result.isEdited = isEdited;
+    if (unreadCount != null) result.unreadCount = unreadCount;
     return result;
   }
 
@@ -4210,6 +4621,11 @@ class S_Chat extends $pb.GeneratedMessage {
         subBuilder: ChatPayload.create)
     ..aInt64(7, _omitFieldNames ? '' : 'tsServer')
     ..aInt64(8, _omitFieldNames ? '' : 'replyToSeq')
+    ..aOS(9, _omitFieldNames ? '' : 'replyToSenderName')
+    ..aOS(10, _omitFieldNames ? '' : 'replyToText')
+    ..aOB(11, _omitFieldNames ? '' : 'isDeleted')
+    ..aOB(12, _omitFieldNames ? '' : 'isEdited')
+    ..aI(13, _omitFieldNames ? '' : 'unreadCount')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -4303,6 +4719,519 @@ class S_Chat extends $pb.GeneratedMessage {
   $core.bool hasReplyToSeq() => $_has(7);
   @$pb.TagNumber(8)
   void clearReplyToSeq() => $_clearField(8);
+
+  @$pb.TagNumber(9)
+  $core.String get replyToSenderName => $_getSZ(8);
+  @$pb.TagNumber(9)
+  set replyToSenderName($core.String value) => $_setString(8, value);
+  @$pb.TagNumber(9)
+  $core.bool hasReplyToSenderName() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearReplyToSenderName() => $_clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.String get replyToText => $_getSZ(9);
+  @$pb.TagNumber(10)
+  set replyToText($core.String value) => $_setString(9, value);
+  @$pb.TagNumber(10)
+  $core.bool hasReplyToText() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearReplyToText() => $_clearField(10);
+
+  @$pb.TagNumber(11)
+  $core.bool get isDeleted => $_getBF(10);
+  @$pb.TagNumber(11)
+  set isDeleted($core.bool value) => $_setBool(10, value);
+  @$pb.TagNumber(11)
+  $core.bool hasIsDeleted() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearIsDeleted() => $_clearField(11);
+
+  @$pb.TagNumber(12)
+  $core.bool get isEdited => $_getBF(11);
+  @$pb.TagNumber(12)
+  set isEdited($core.bool value) => $_setBool(11, value);
+  @$pb.TagNumber(12)
+  $core.bool hasIsEdited() => $_has(11);
+  @$pb.TagNumber(12)
+  void clearIsEdited() => $_clearField(12);
+
+  @$pb.TagNumber(13)
+  $core.int get unreadCount => $_getIZ(12);
+  @$pb.TagNumber(13)
+  set unreadCount($core.int value) => $_setSignedInt32(12, value);
+  @$pb.TagNumber(13)
+  $core.bool hasUnreadCount() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearUnreadCount() => $_clearField(13);
+}
+
+class C_ReadReceipt extends $pb.GeneratedMessage {
+  factory C_ReadReceipt({
+    $core.String? convId,
+    $fixnum.Int64? lastReadSeq,
+  }) {
+    final result = create();
+    if (convId != null) result.convId = convId;
+    if (lastReadSeq != null) result.lastReadSeq = lastReadSeq;
+    return result;
+  }
+
+  C_ReadReceipt._();
+
+  factory C_ReadReceipt.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory C_ReadReceipt.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'C_ReadReceipt',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'convId')
+    ..aInt64(2, _omitFieldNames ? '' : 'lastReadSeq')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_ReadReceipt clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_ReadReceipt copyWith(void Function(C_ReadReceipt) updates) =>
+      super.copyWith((message) => updates(message as C_ReadReceipt))
+          as C_ReadReceipt;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static C_ReadReceipt create() => C_ReadReceipt._();
+  @$core.override
+  C_ReadReceipt createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static C_ReadReceipt getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<C_ReadReceipt>(create);
+  static C_ReadReceipt? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get convId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set convId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasConvId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearConvId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $fixnum.Int64 get lastReadSeq => $_getI64(1);
+  @$pb.TagNumber(2)
+  set lastReadSeq($fixnum.Int64 value) => $_setInt64(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasLastReadSeq() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearLastReadSeq() => $_clearField(2);
+}
+
+class S_ReadReceipt extends $pb.GeneratedMessage {
+  factory S_ReadReceipt({
+    $core.String? convId,
+    $core.String? readerId,
+    $fixnum.Int64? lastReadSeq,
+  }) {
+    final result = create();
+    if (convId != null) result.convId = convId;
+    if (readerId != null) result.readerId = readerId;
+    if (lastReadSeq != null) result.lastReadSeq = lastReadSeq;
+    return result;
+  }
+
+  S_ReadReceipt._();
+
+  factory S_ReadReceipt.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory S_ReadReceipt.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'S_ReadReceipt',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'convId')
+    ..aOS(2, _omitFieldNames ? '' : 'readerId')
+    ..aInt64(3, _omitFieldNames ? '' : 'lastReadSeq')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_ReadReceipt clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_ReadReceipt copyWith(void Function(S_ReadReceipt) updates) =>
+      super.copyWith((message) => updates(message as S_ReadReceipt))
+          as S_ReadReceipt;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static S_ReadReceipt create() => S_ReadReceipt._();
+  @$core.override
+  S_ReadReceipt createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static S_ReadReceipt getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<S_ReadReceipt>(create);
+  static S_ReadReceipt? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get convId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set convId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasConvId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearConvId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get readerId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set readerId($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasReaderId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearReaderId() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $fixnum.Int64 get lastReadSeq => $_getI64(2);
+  @$pb.TagNumber(3)
+  set lastReadSeq($fixnum.Int64 value) => $_setInt64(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasLastReadSeq() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearLastReadSeq() => $_clearField(3);
+}
+
+class C_DeleteMessage extends $pb.GeneratedMessage {
+  factory C_DeleteMessage({
+    $core.String? convId,
+    $fixnum.Int64? msgSeq,
+  }) {
+    final result = create();
+    if (convId != null) result.convId = convId;
+    if (msgSeq != null) result.msgSeq = msgSeq;
+    return result;
+  }
+
+  C_DeleteMessage._();
+
+  factory C_DeleteMessage.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory C_DeleteMessage.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'C_DeleteMessage',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'convId')
+    ..aInt64(2, _omitFieldNames ? '' : 'msgSeq')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_DeleteMessage clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_DeleteMessage copyWith(void Function(C_DeleteMessage) updates) =>
+      super.copyWith((message) => updates(message as C_DeleteMessage))
+          as C_DeleteMessage;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static C_DeleteMessage create() => C_DeleteMessage._();
+  @$core.override
+  C_DeleteMessage createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static C_DeleteMessage getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<C_DeleteMessage>(create);
+  static C_DeleteMessage? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get convId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set convId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasConvId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearConvId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $fixnum.Int64 get msgSeq => $_getI64(1);
+  @$pb.TagNumber(2)
+  set msgSeq($fixnum.Int64 value) => $_setInt64(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasMsgSeq() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearMsgSeq() => $_clearField(2);
+}
+
+class S_DeleteMessage extends $pb.GeneratedMessage {
+  factory S_DeleteMessage({
+    $core.bool? success,
+    $core.String? convId,
+    $fixnum.Int64? msgSeq,
+  }) {
+    final result = create();
+    if (success != null) result.success = success;
+    if (convId != null) result.convId = convId;
+    if (msgSeq != null) result.msgSeq = msgSeq;
+    return result;
+  }
+
+  S_DeleteMessage._();
+
+  factory S_DeleteMessage.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory S_DeleteMessage.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'S_DeleteMessage',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'success')
+    ..aOS(2, _omitFieldNames ? '' : 'convId')
+    ..aInt64(3, _omitFieldNames ? '' : 'msgSeq')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_DeleteMessage clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_DeleteMessage copyWith(void Function(S_DeleteMessage) updates) =>
+      super.copyWith((message) => updates(message as S_DeleteMessage))
+          as S_DeleteMessage;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static S_DeleteMessage create() => S_DeleteMessage._();
+  @$core.override
+  S_DeleteMessage createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static S_DeleteMessage getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<S_DeleteMessage>(create);
+  static S_DeleteMessage? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get success => $_getBF(0);
+  @$pb.TagNumber(1)
+  set success($core.bool value) => $_setBool(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasSuccess() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSuccess() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get convId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set convId($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasConvId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearConvId() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $fixnum.Int64 get msgSeq => $_getI64(2);
+  @$pb.TagNumber(3)
+  set msgSeq($fixnum.Int64 value) => $_setInt64(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasMsgSeq() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearMsgSeq() => $_clearField(3);
+}
+
+class C_EditMessage extends $pb.GeneratedMessage {
+  factory C_EditMessage({
+    $core.String? convId,
+    $fixnum.Int64? msgSeq,
+    $core.String? newText,
+  }) {
+    final result = create();
+    if (convId != null) result.convId = convId;
+    if (msgSeq != null) result.msgSeq = msgSeq;
+    if (newText != null) result.newText = newText;
+    return result;
+  }
+
+  C_EditMessage._();
+
+  factory C_EditMessage.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory C_EditMessage.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'C_EditMessage',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'convId')
+    ..aInt64(2, _omitFieldNames ? '' : 'msgSeq')
+    ..aOS(3, _omitFieldNames ? '' : 'newText')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_EditMessage clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_EditMessage copyWith(void Function(C_EditMessage) updates) =>
+      super.copyWith((message) => updates(message as C_EditMessage))
+          as C_EditMessage;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static C_EditMessage create() => C_EditMessage._();
+  @$core.override
+  C_EditMessage createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static C_EditMessage getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<C_EditMessage>(create);
+  static C_EditMessage? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get convId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set convId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasConvId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearConvId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $fixnum.Int64 get msgSeq => $_getI64(1);
+  @$pb.TagNumber(2)
+  set msgSeq($fixnum.Int64 value) => $_setInt64(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasMsgSeq() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearMsgSeq() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get newText => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set newText($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasNewText() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearNewText() => $_clearField(3);
+}
+
+class S_EditMessage extends $pb.GeneratedMessage {
+  factory S_EditMessage({
+    $core.bool? success,
+    $core.String? convId,
+    $fixnum.Int64? msgSeq,
+    $core.String? newText,
+    $fixnum.Int64? editedAt,
+  }) {
+    final result = create();
+    if (success != null) result.success = success;
+    if (convId != null) result.convId = convId;
+    if (msgSeq != null) result.msgSeq = msgSeq;
+    if (newText != null) result.newText = newText;
+    if (editedAt != null) result.editedAt = editedAt;
+    return result;
+  }
+
+  S_EditMessage._();
+
+  factory S_EditMessage.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory S_EditMessage.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'S_EditMessage',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'success')
+    ..aOS(2, _omitFieldNames ? '' : 'convId')
+    ..aInt64(3, _omitFieldNames ? '' : 'msgSeq')
+    ..aOS(4, _omitFieldNames ? '' : 'newText')
+    ..aInt64(5, _omitFieldNames ? '' : 'editedAt')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_EditMessage clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_EditMessage copyWith(void Function(S_EditMessage) updates) =>
+      super.copyWith((message) => updates(message as S_EditMessage))
+          as S_EditMessage;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static S_EditMessage create() => S_EditMessage._();
+  @$core.override
+  S_EditMessage createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static S_EditMessage getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<S_EditMessage>(create);
+  static S_EditMessage? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get success => $_getBF(0);
+  @$pb.TagNumber(1)
+  set success($core.bool value) => $_setBool(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasSuccess() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSuccess() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get convId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set convId($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasConvId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearConvId() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $fixnum.Int64 get msgSeq => $_getI64(2);
+  @$pb.TagNumber(3)
+  set msgSeq($fixnum.Int64 value) => $_setInt64(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasMsgSeq() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearMsgSeq() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get newText => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set newText($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasNewText() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearNewText() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $fixnum.Int64 get editedAt => $_getI64(4);
+  @$pb.TagNumber(5)
+  set editedAt($fixnum.Int64 value) => $_setInt64(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasEditedAt() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearEditedAt() => $_clearField(5);
 }
 
 class C_ReqHistory extends $pb.GeneratedMessage {
@@ -6695,6 +7624,114 @@ class S_EditGroup extends $pb.GeneratedMessage {
   GroupInfo ensureGroup() => $_ensure(1);
 }
 
+class C_DeleteGroup extends $pb.GeneratedMessage {
+  factory C_DeleteGroup({
+    $core.String? groupId,
+  }) {
+    final result = create();
+    if (groupId != null) result.groupId = groupId;
+    return result;
+  }
+
+  C_DeleteGroup._();
+
+  factory C_DeleteGroup.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory C_DeleteGroup.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'C_DeleteGroup',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'groupId')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_DeleteGroup clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_DeleteGroup copyWith(void Function(C_DeleteGroup) updates) =>
+      super.copyWith((message) => updates(message as C_DeleteGroup))
+          as C_DeleteGroup;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static C_DeleteGroup create() => C_DeleteGroup._();
+  @$core.override
+  C_DeleteGroup createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static C_DeleteGroup getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<C_DeleteGroup>(create);
+  static C_DeleteGroup? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get groupId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set groupId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasGroupId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearGroupId() => $_clearField(1);
+}
+
+class S_DeleteGroup extends $pb.GeneratedMessage {
+  factory S_DeleteGroup({
+    $core.bool? success,
+  }) {
+    final result = create();
+    if (success != null) result.success = success;
+    return result;
+  }
+
+  S_DeleteGroup._();
+
+  factory S_DeleteGroup.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory S_DeleteGroup.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'S_DeleteGroup',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'success')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_DeleteGroup clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_DeleteGroup copyWith(void Function(S_DeleteGroup) updates) =>
+      super.copyWith((message) => updates(message as S_DeleteGroup))
+          as S_DeleteGroup;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static S_DeleteGroup create() => S_DeleteGroup._();
+  @$core.override
+  S_DeleteGroup createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static S_DeleteGroup getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<S_DeleteGroup>(create);
+  static S_DeleteGroup? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get success => $_getBF(0);
+  @$pb.TagNumber(1)
+  set success($core.bool value) => $_setBool(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasSuccess() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSuccess() => $_clearField(1);
+}
+
 /// -----------------------------
 /// 회원 탈퇴
 /// -----------------------------
@@ -6826,6 +7863,1039 @@ class S_Withdraw extends $pb.GeneratedMessage {
   $core.bool hasMessage() => $_has(1);
   @$pb.TagNumber(2)
   void clearMessage() => $_clearField(2);
+}
+
+class C_GetSubscription extends $pb.GeneratedMessage {
+  factory C_GetSubscription() => create();
+
+  C_GetSubscription._();
+
+  factory C_GetSubscription.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory C_GetSubscription.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'C_GetSubscription',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_GetSubscription clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_GetSubscription copyWith(void Function(C_GetSubscription) updates) =>
+      super.copyWith((message) => updates(message as C_GetSubscription))
+          as C_GetSubscription;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static C_GetSubscription create() => C_GetSubscription._();
+  @$core.override
+  C_GetSubscription createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static C_GetSubscription getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<C_GetSubscription>(create);
+  static C_GetSubscription? _defaultInstance;
+}
+
+class SubscriptionPlan extends $pb.GeneratedMessage {
+  factory SubscriptionPlan({
+    $core.int? planId,
+    $core.String? planType,
+    $core.String? name,
+    $core.int? grade,
+    $fixnum.Int64? storageBytes,
+    $fixnum.Int64? maxFileSize,
+    $core.double? monthlyPrice,
+    $core.Iterable<$core.String>? features,
+  }) {
+    final result = create();
+    if (planId != null) result.planId = planId;
+    if (planType != null) result.planType = planType;
+    if (name != null) result.name = name;
+    if (grade != null) result.grade = grade;
+    if (storageBytes != null) result.storageBytes = storageBytes;
+    if (maxFileSize != null) result.maxFileSize = maxFileSize;
+    if (monthlyPrice != null) result.monthlyPrice = monthlyPrice;
+    if (features != null) result.features.addAll(features);
+    return result;
+  }
+
+  SubscriptionPlan._();
+
+  factory SubscriptionPlan.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory SubscriptionPlan.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SubscriptionPlan',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aI(1, _omitFieldNames ? '' : 'planId')
+    ..aOS(2, _omitFieldNames ? '' : 'planType')
+    ..aOS(3, _omitFieldNames ? '' : 'name')
+    ..aI(4, _omitFieldNames ? '' : 'grade')
+    ..aInt64(5, _omitFieldNames ? '' : 'storageBytes')
+    ..aInt64(6, _omitFieldNames ? '' : 'maxFileSize')
+    ..aD(7, _omitFieldNames ? '' : 'monthlyPrice')
+    ..pPS(8, _omitFieldNames ? '' : 'features')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SubscriptionPlan clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SubscriptionPlan copyWith(void Function(SubscriptionPlan) updates) =>
+      super.copyWith((message) => updates(message as SubscriptionPlan))
+          as SubscriptionPlan;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static SubscriptionPlan create() => SubscriptionPlan._();
+  @$core.override
+  SubscriptionPlan createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static SubscriptionPlan getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SubscriptionPlan>(create);
+  static SubscriptionPlan? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get planId => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set planId($core.int value) => $_setSignedInt32(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasPlanId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearPlanId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get planType => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set planType($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasPlanType() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearPlanType() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get name => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set name($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasName() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearName() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.int get grade => $_getIZ(3);
+  @$pb.TagNumber(4)
+  set grade($core.int value) => $_setSignedInt32(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasGrade() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearGrade() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $fixnum.Int64 get storageBytes => $_getI64(4);
+  @$pb.TagNumber(5)
+  set storageBytes($fixnum.Int64 value) => $_setInt64(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasStorageBytes() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearStorageBytes() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $fixnum.Int64 get maxFileSize => $_getI64(5);
+  @$pb.TagNumber(6)
+  set maxFileSize($fixnum.Int64 value) => $_setInt64(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasMaxFileSize() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearMaxFileSize() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.double get monthlyPrice => $_getN(6);
+  @$pb.TagNumber(7)
+  set monthlyPrice($core.double value) => $_setDouble(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasMonthlyPrice() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearMonthlyPrice() => $_clearField(7);
+
+  @$pb.TagNumber(8)
+  $pb.PbList<$core.String> get features => $_getList(7);
+}
+
+class S_GetSubscription extends $pb.GeneratedMessage {
+  factory S_GetSubscription({
+    $core.bool? success,
+    $core.int? currentGrade,
+    $core.String? currentPlanName,
+    $fixnum.Int64? storageCapacityBytes,
+    $fixnum.Int64? storageUsageBytes,
+    $fixnum.Int64? expiresAt,
+    $core.bool? autoRenew,
+    $core.Iterable<SubscriptionPlan>? availablePlans,
+  }) {
+    final result = create();
+    if (success != null) result.success = success;
+    if (currentGrade != null) result.currentGrade = currentGrade;
+    if (currentPlanName != null) result.currentPlanName = currentPlanName;
+    if (storageCapacityBytes != null)
+      result.storageCapacityBytes = storageCapacityBytes;
+    if (storageUsageBytes != null) result.storageUsageBytes = storageUsageBytes;
+    if (expiresAt != null) result.expiresAt = expiresAt;
+    if (autoRenew != null) result.autoRenew = autoRenew;
+    if (availablePlans != null) result.availablePlans.addAll(availablePlans);
+    return result;
+  }
+
+  S_GetSubscription._();
+
+  factory S_GetSubscription.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory S_GetSubscription.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'S_GetSubscription',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'success')
+    ..aI(2, _omitFieldNames ? '' : 'currentGrade')
+    ..aOS(3, _omitFieldNames ? '' : 'currentPlanName')
+    ..aInt64(4, _omitFieldNames ? '' : 'storageCapacityBytes')
+    ..aInt64(5, _omitFieldNames ? '' : 'storageUsageBytes')
+    ..aInt64(6, _omitFieldNames ? '' : 'expiresAt')
+    ..aOB(7, _omitFieldNames ? '' : 'autoRenew')
+    ..pPM<SubscriptionPlan>(8, _omitFieldNames ? '' : 'availablePlans',
+        subBuilder: SubscriptionPlan.create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_GetSubscription clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_GetSubscription copyWith(void Function(S_GetSubscription) updates) =>
+      super.copyWith((message) => updates(message as S_GetSubscription))
+          as S_GetSubscription;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static S_GetSubscription create() => S_GetSubscription._();
+  @$core.override
+  S_GetSubscription createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static S_GetSubscription getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<S_GetSubscription>(create);
+  static S_GetSubscription? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get success => $_getBF(0);
+  @$pb.TagNumber(1)
+  set success($core.bool value) => $_setBool(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasSuccess() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSuccess() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.int get currentGrade => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set currentGrade($core.int value) => $_setSignedInt32(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasCurrentGrade() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearCurrentGrade() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get currentPlanName => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set currentPlanName($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasCurrentPlanName() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearCurrentPlanName() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $fixnum.Int64 get storageCapacityBytes => $_getI64(3);
+  @$pb.TagNumber(4)
+  set storageCapacityBytes($fixnum.Int64 value) => $_setInt64(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasStorageCapacityBytes() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearStorageCapacityBytes() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $fixnum.Int64 get storageUsageBytes => $_getI64(4);
+  @$pb.TagNumber(5)
+  set storageUsageBytes($fixnum.Int64 value) => $_setInt64(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasStorageUsageBytes() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearStorageUsageBytes() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $fixnum.Int64 get expiresAt => $_getI64(5);
+  @$pb.TagNumber(6)
+  set expiresAt($fixnum.Int64 value) => $_setInt64(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasExpiresAt() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearExpiresAt() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.bool get autoRenew => $_getBF(6);
+  @$pb.TagNumber(7)
+  set autoRenew($core.bool value) => $_setBool(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasAutoRenew() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearAutoRenew() => $_clearField(7);
+
+  @$pb.TagNumber(8)
+  $pb.PbList<SubscriptionPlan> get availablePlans => $_getList(7);
+}
+
+class C_VerifyPurchase extends $pb.GeneratedMessage {
+  factory C_VerifyPurchase({
+    $core.String? platform,
+    $core.String? productId,
+    $core.String? transactionId,
+    $core.String? purchaseToken,
+  }) {
+    final result = create();
+    if (platform != null) result.platform = platform;
+    if (productId != null) result.productId = productId;
+    if (transactionId != null) result.transactionId = transactionId;
+    if (purchaseToken != null) result.purchaseToken = purchaseToken;
+    return result;
+  }
+
+  C_VerifyPurchase._();
+
+  factory C_VerifyPurchase.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory C_VerifyPurchase.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'C_VerifyPurchase',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'platform')
+    ..aOS(2, _omitFieldNames ? '' : 'productId')
+    ..aOS(3, _omitFieldNames ? '' : 'transactionId')
+    ..aOS(4, _omitFieldNames ? '' : 'purchaseToken')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_VerifyPurchase clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_VerifyPurchase copyWith(void Function(C_VerifyPurchase) updates) =>
+      super.copyWith((message) => updates(message as C_VerifyPurchase))
+          as C_VerifyPurchase;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static C_VerifyPurchase create() => C_VerifyPurchase._();
+  @$core.override
+  C_VerifyPurchase createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static C_VerifyPurchase getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<C_VerifyPurchase>(create);
+  static C_VerifyPurchase? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get platform => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set platform($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasPlatform() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearPlatform() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get productId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set productId($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasProductId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearProductId() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get transactionId => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set transactionId($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasTransactionId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearTransactionId() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get purchaseToken => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set purchaseToken($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasPurchaseToken() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearPurchaseToken() => $_clearField(4);
+}
+
+class S_VerifyPurchase extends $pb.GeneratedMessage {
+  factory S_VerifyPurchase({
+    $core.bool? success,
+    $core.String? message,
+    $core.int? newGrade,
+    $fixnum.Int64? expiresAt,
+    $fixnum.Int64? storageCapacity,
+  }) {
+    final result = create();
+    if (success != null) result.success = success;
+    if (message != null) result.message = message;
+    if (newGrade != null) result.newGrade = newGrade;
+    if (expiresAt != null) result.expiresAt = expiresAt;
+    if (storageCapacity != null) result.storageCapacity = storageCapacity;
+    return result;
+  }
+
+  S_VerifyPurchase._();
+
+  factory S_VerifyPurchase.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory S_VerifyPurchase.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'S_VerifyPurchase',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'success')
+    ..aOS(2, _omitFieldNames ? '' : 'message')
+    ..aI(3, _omitFieldNames ? '' : 'newGrade')
+    ..aInt64(4, _omitFieldNames ? '' : 'expiresAt')
+    ..aInt64(5, _omitFieldNames ? '' : 'storageCapacity')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_VerifyPurchase clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_VerifyPurchase copyWith(void Function(S_VerifyPurchase) updates) =>
+      super.copyWith((message) => updates(message as S_VerifyPurchase))
+          as S_VerifyPurchase;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static S_VerifyPurchase create() => S_VerifyPurchase._();
+  @$core.override
+  S_VerifyPurchase createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static S_VerifyPurchase getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<S_VerifyPurchase>(create);
+  static S_VerifyPurchase? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get success => $_getBF(0);
+  @$pb.TagNumber(1)
+  set success($core.bool value) => $_setBool(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasSuccess() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSuccess() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get message => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set message($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasMessage() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearMessage() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.int get newGrade => $_getIZ(2);
+  @$pb.TagNumber(3)
+  set newGrade($core.int value) => $_setSignedInt32(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasNewGrade() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearNewGrade() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $fixnum.Int64 get expiresAt => $_getI64(3);
+  @$pb.TagNumber(4)
+  set expiresAt($fixnum.Int64 value) => $_setInt64(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasExpiresAt() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearExpiresAt() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $fixnum.Int64 get storageCapacity => $_getI64(4);
+  @$pb.TagNumber(5)
+  set storageCapacity($fixnum.Int64 value) => $_setInt64(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasStorageCapacity() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearStorageCapacity() => $_clearField(5);
+}
+
+class BlockedUserInfo extends $pb.GeneratedMessage {
+  factory BlockedUserInfo({
+    $core.String? userId,
+    $core.String? name,
+    $core.String? profileImg,
+    $fixnum.Int64? blockedAt,
+  }) {
+    final result = create();
+    if (userId != null) result.userId = userId;
+    if (name != null) result.name = name;
+    if (profileImg != null) result.profileImg = profileImg;
+    if (blockedAt != null) result.blockedAt = blockedAt;
+    return result;
+  }
+
+  BlockedUserInfo._();
+
+  factory BlockedUserInfo.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory BlockedUserInfo.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'BlockedUserInfo',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'userId')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..aOS(3, _omitFieldNames ? '' : 'profileImg')
+    ..aInt64(4, _omitFieldNames ? '' : 'blockedAt')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BlockedUserInfo clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BlockedUserInfo copyWith(void Function(BlockedUserInfo) updates) =>
+      super.copyWith((message) => updates(message as BlockedUserInfo))
+          as BlockedUserInfo;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static BlockedUserInfo create() => BlockedUserInfo._();
+  @$core.override
+  BlockedUserInfo createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static BlockedUserInfo getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<BlockedUserInfo>(create);
+  static BlockedUserInfo? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get userId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set userId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasUserId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearUserId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get profileImg => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set profileImg($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasProfileImg() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearProfileImg() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $fixnum.Int64 get blockedAt => $_getI64(3);
+  @$pb.TagNumber(4)
+  set blockedAt($fixnum.Int64 value) => $_setInt64(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasBlockedAt() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearBlockedAt() => $_clearField(4);
+}
+
+class C_BlockUser extends $pb.GeneratedMessage {
+  factory C_BlockUser({
+    $core.String? targetUserId,
+  }) {
+    final result = create();
+    if (targetUserId != null) result.targetUserId = targetUserId;
+    return result;
+  }
+
+  C_BlockUser._();
+
+  factory C_BlockUser.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory C_BlockUser.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'C_BlockUser',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'targetUserId')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_BlockUser clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_BlockUser copyWith(void Function(C_BlockUser) updates) =>
+      super.copyWith((message) => updates(message as C_BlockUser))
+          as C_BlockUser;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static C_BlockUser create() => C_BlockUser._();
+  @$core.override
+  C_BlockUser createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static C_BlockUser getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<C_BlockUser>(create);
+  static C_BlockUser? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get targetUserId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set targetUserId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasTargetUserId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearTargetUserId() => $_clearField(1);
+}
+
+class S_BlockUser extends $pb.GeneratedMessage {
+  factory S_BlockUser({
+    $core.bool? success,
+    $core.String? message,
+  }) {
+    final result = create();
+    if (success != null) result.success = success;
+    if (message != null) result.message = message;
+    return result;
+  }
+
+  S_BlockUser._();
+
+  factory S_BlockUser.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory S_BlockUser.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'S_BlockUser',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'success')
+    ..aOS(2, _omitFieldNames ? '' : 'message')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_BlockUser clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_BlockUser copyWith(void Function(S_BlockUser) updates) =>
+      super.copyWith((message) => updates(message as S_BlockUser))
+          as S_BlockUser;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static S_BlockUser create() => S_BlockUser._();
+  @$core.override
+  S_BlockUser createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static S_BlockUser getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<S_BlockUser>(create);
+  static S_BlockUser? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get success => $_getBF(0);
+  @$pb.TagNumber(1)
+  set success($core.bool value) => $_setBool(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasSuccess() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSuccess() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get message => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set message($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasMessage() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearMessage() => $_clearField(2);
+}
+
+class C_UnblockUser extends $pb.GeneratedMessage {
+  factory C_UnblockUser({
+    $core.String? targetUserId,
+  }) {
+    final result = create();
+    if (targetUserId != null) result.targetUserId = targetUserId;
+    return result;
+  }
+
+  C_UnblockUser._();
+
+  factory C_UnblockUser.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory C_UnblockUser.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'C_UnblockUser',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'targetUserId')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_UnblockUser clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_UnblockUser copyWith(void Function(C_UnblockUser) updates) =>
+      super.copyWith((message) => updates(message as C_UnblockUser))
+          as C_UnblockUser;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static C_UnblockUser create() => C_UnblockUser._();
+  @$core.override
+  C_UnblockUser createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static C_UnblockUser getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<C_UnblockUser>(create);
+  static C_UnblockUser? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get targetUserId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set targetUserId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasTargetUserId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearTargetUserId() => $_clearField(1);
+}
+
+class S_UnblockUser extends $pb.GeneratedMessage {
+  factory S_UnblockUser({
+    $core.bool? success,
+  }) {
+    final result = create();
+    if (success != null) result.success = success;
+    return result;
+  }
+
+  S_UnblockUser._();
+
+  factory S_UnblockUser.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory S_UnblockUser.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'S_UnblockUser',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'success')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_UnblockUser clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_UnblockUser copyWith(void Function(S_UnblockUser) updates) =>
+      super.copyWith((message) => updates(message as S_UnblockUser))
+          as S_UnblockUser;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static S_UnblockUser create() => S_UnblockUser._();
+  @$core.override
+  S_UnblockUser createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static S_UnblockUser getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<S_UnblockUser>(create);
+  static S_UnblockUser? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get success => $_getBF(0);
+  @$pb.TagNumber(1)
+  set success($core.bool value) => $_setBool(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasSuccess() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSuccess() => $_clearField(1);
+}
+
+class C_GetBlockedList extends $pb.GeneratedMessage {
+  factory C_GetBlockedList() => create();
+
+  C_GetBlockedList._();
+
+  factory C_GetBlockedList.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory C_GetBlockedList.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'C_GetBlockedList',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_GetBlockedList clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_GetBlockedList copyWith(void Function(C_GetBlockedList) updates) =>
+      super.copyWith((message) => updates(message as C_GetBlockedList))
+          as C_GetBlockedList;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static C_GetBlockedList create() => C_GetBlockedList._();
+  @$core.override
+  C_GetBlockedList createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static C_GetBlockedList getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<C_GetBlockedList>(create);
+  static C_GetBlockedList? _defaultInstance;
+}
+
+class S_GetBlockedList extends $pb.GeneratedMessage {
+  factory S_GetBlockedList({
+    $core.Iterable<BlockedUserInfo>? blockedUsers,
+  }) {
+    final result = create();
+    if (blockedUsers != null) result.blockedUsers.addAll(blockedUsers);
+    return result;
+  }
+
+  S_GetBlockedList._();
+
+  factory S_GetBlockedList.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory S_GetBlockedList.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'S_GetBlockedList',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..pPM<BlockedUserInfo>(1, _omitFieldNames ? '' : 'blockedUsers',
+        subBuilder: BlockedUserInfo.create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_GetBlockedList clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_GetBlockedList copyWith(void Function(S_GetBlockedList) updates) =>
+      super.copyWith((message) => updates(message as S_GetBlockedList))
+          as S_GetBlockedList;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static S_GetBlockedList create() => S_GetBlockedList._();
+  @$core.override
+  S_GetBlockedList createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static S_GetBlockedList getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<S_GetBlockedList>(create);
+  static S_GetBlockedList? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<BlockedUserInfo> get blockedUsers => $_getList(0);
+}
+
+class C_ReportUser extends $pb.GeneratedMessage {
+  factory C_ReportUser({
+    $core.String? targetUserId,
+    $core.String? reason,
+    $core.String? detail,
+  }) {
+    final result = create();
+    if (targetUserId != null) result.targetUserId = targetUserId;
+    if (reason != null) result.reason = reason;
+    if (detail != null) result.detail = detail;
+    return result;
+  }
+
+  C_ReportUser._();
+
+  factory C_ReportUser.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory C_ReportUser.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'C_ReportUser',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'targetUserId')
+    ..aOS(2, _omitFieldNames ? '' : 'reason')
+    ..aOS(3, _omitFieldNames ? '' : 'detail')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_ReportUser clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_ReportUser copyWith(void Function(C_ReportUser) updates) =>
+      super.copyWith((message) => updates(message as C_ReportUser))
+          as C_ReportUser;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static C_ReportUser create() => C_ReportUser._();
+  @$core.override
+  C_ReportUser createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static C_ReportUser getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<C_ReportUser>(create);
+  static C_ReportUser? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get targetUserId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set targetUserId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasTargetUserId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearTargetUserId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get reason => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set reason($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasReason() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearReason() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get detail => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set detail($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasDetail() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearDetail() => $_clearField(3);
+}
+
+class S_ReportUser extends $pb.GeneratedMessage {
+  factory S_ReportUser({
+    $core.bool? success,
+  }) {
+    final result = create();
+    if (success != null) result.success = success;
+    return result;
+  }
+
+  S_ReportUser._();
+
+  factory S_ReportUser.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory S_ReportUser.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'S_ReportUser',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'success')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_ReportUser clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_ReportUser copyWith(void Function(S_ReportUser) updates) =>
+      super.copyWith((message) => updates(message as S_ReportUser))
+          as S_ReportUser;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static S_ReportUser create() => S_ReportUser._();
+  @$core.override
+  S_ReportUser createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static S_ReportUser getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<S_ReportUser>(create);
+  static S_ReportUser? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get success => $_getBF(0);
+  @$pb.TagNumber(1)
+  set success($core.bool value) => $_setBool(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasSuccess() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSuccess() => $_clearField(1);
 }
 
 class S_Error extends $pb.GeneratedMessage {

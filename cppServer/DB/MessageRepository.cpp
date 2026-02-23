@@ -172,10 +172,12 @@ int64 MessageRepository::SaveMessage(const string& convId, const string& senderI
             .bind(convId).execute();
         int64 nextSeq = result.fetchOne()[0].get<int64>();
 
+        int64 replyToSeq = pkt.reply_to_seq();
+
         // INSERT
-        session.sql("INSERT INTO messages (conv_id, msg_seq, sender_id, msg_type, message, media_url, thumbnail_url, file_name, timestamp) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
-            .bind(convId, nextSeq, senderId, msg_type, content, media_url, thumbnail_url, file_name, pkt.ts_server())
+        session.sql("INSERT INTO messages (conv_id, msg_seq, sender_id, msg_type, message, media_url, thumbnail_url, file_name, timestamp, reply_to_seq) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+            .bind(convId, nextSeq, senderId, msg_type, content, media_url, thumbnail_url, file_name, pkt.ts_server(), replyToSeq)
             .execute();
 
         session.commit();
@@ -256,16 +258,41 @@ vector<string> MessageRepository::GetUserConversations(const string& userId)
 
 void MessageRepository::ParseChatPacket(Protocol::S_Chat& sChat, const mysqlx::Row& row)
 {
-    // SELECT 순서: 
+    // SELECT 순서:
     // 0:conv_id, 1:msg_seq, 2:sender_id, 3:msg_type, 4:message, 5:media_url, 6:thumbnail_url, 7:timestamp, 8:name(option)
-    
+    // 9:reply_to_seq, 10:is_deleted, 11:is_edited, 12:edited_at
+
     sChat.set_conv_id(row[0].get<string>());
     sChat.set_msg_seq(row[1].get<int64>());
     sChat.set_sender_id(row[2].get<string>());
     sChat.set_ts_server(row[7].get<int64>());
 
+    // 삭제/수정 상태
+    bool isDeleted = (!row[10].isNull() && row[10].get<int>() == 1);
+    bool isEdited = (!row[11].isNull() && row[11].get<int>() == 1);
+    sChat.set_is_deleted(isDeleted);
+    sChat.set_is_edited(isEdited);
+
+    // 답장 정보
+    int64 replyToSeq = (!row[9].isNull()) ? row[9].get<int64>() : 0;
+    if (replyToSeq > 0) {
+        sChat.set_reply_to_seq(replyToSeq);
+        // 원본 메시지의 sender_name, text 조회
+        auto replyInfo = GetMessageBySeq(row[0].get<string>(), replyToSeq);
+        if (replyInfo.found) {
+            sChat.set_reply_to_sender_name(replyInfo.senderName);
+            sChat.set_reply_to_text(replyInfo.text);
+        }
+    }
+
     int8_t msgType = static_cast<int8_t>(row[3].get<int>());
     auto* payload = sChat.mutable_payload();
+
+    // 삭제된 메시지는 payload를 '[삭제된 메시지입니다]'로 대체
+    if (isDeleted) {
+        payload->mutable_text()->set_message("[삭제된 메시지입니다]");
+        return;
+    }
 
     switch (msgType) {
     case 0: // TEXT
@@ -302,7 +329,7 @@ vector<MessageInfo> MessageRepository::GetRecentMessages(const string& convId, i
 
         // 핵심: msg_seq 역순(DESC)으로 최신 거 limit개 가져옴
         string query =
-            "SELECT m.conv_id, m.msg_seq, m.sender_id, m.msg_type, m.message, m.media_url, m.thumbnail_url, m.timestamp, u.name "
+            "SELECT m.conv_id, m.msg_seq, m.sender_id, m.msg_type, m.message, m.media_url, m.thumbnail_url, m.timestamp, u.name, m.reply_to_seq, m.is_deleted, m.is_edited, m.edited_at "
             "FROM messages m "
             "LEFT JOIN users u ON m.sender_id = u.user_id "
             "WHERE m.conv_id = ? "
@@ -352,7 +379,7 @@ vector<MessageInfo> MessageRepository::GetMessagesAfter(const string& convId, in
         auto& session = db.GetSession();
 
         string query =
-            "SELECT m.conv_id, m.msg_seq, m.sender_id, m.msg_type, m.message, m.media_url, m.thumbnail_url, m.timestamp, u.name "
+            "SELECT m.conv_id, m.msg_seq, m.sender_id, m.msg_type, m.message, m.media_url, m.thumbnail_url, m.timestamp, u.name, m.reply_to_seq, m.is_deleted, m.is_edited, m.edited_at "
             "FROM messages m "
             "LEFT JOIN users u ON m.sender_id = u.user_id "
             "WHERE m.conv_id = ? AND m.timestamp > ? "
@@ -402,7 +429,7 @@ vector<MessageInfo> MessageRepository::GetHistoryMessages(string convId, int64 l
         auto& session = db.GetSession();
 
         string query =
-            "SELECT m.conv_id, m.msg_seq, m.sender_id, m.msg_type, m.message, m.media_url, m.thumbnail_url, m.timestamp, u.name "
+            "SELECT m.conv_id, m.msg_seq, m.sender_id, m.msg_type, m.message, m.media_url, m.thumbnail_url, m.timestamp, u.name, m.reply_to_seq, m.is_deleted, m.is_edited, m.edited_at "
             "FROM messages m "
             "LEFT JOIN users u ON m.sender_id = u.user_id "
             "WHERE m.conv_id = ? AND m.msg_seq < ? "
@@ -462,6 +489,120 @@ bool MessageRepository::DeleteMessage(const string& convId, int64 msgSeq) {
         cerr << "[MessageRepository] 메시지 삭제 실패: " << err.what() << endl;
         return false;
     }
+}
+
+
+bool MessageRepository::SoftDeleteMessage(const string& convId, int64 msgSeq, const string& senderId)
+{
+    try {
+        auto& db = DBManager::GetInstance();
+        auto& session = db.GetSession();
+
+        // 본인 메시지인지 확인
+        string checkSender = GetMessageSenderId(convId, msgSeq);
+        if (checkSender.empty()) {
+            cerr << "[MessageRepository] SoftDelete: 메시지를 찾을 수 없음 (conv=" << convId << ", seq=" << msgSeq << ")" << endl;
+            return false;
+        }
+        if (checkSender != senderId) {
+            cerr << "[MessageRepository] SoftDelete: 본인 메시지가 아님 (sender=" << senderId << ", actual=" << checkSender << ")" << endl;
+            return false;
+        }
+
+        session.sql("UPDATE messages SET is_deleted = 1, message = '[삭제된 메시지입니다]' WHERE conv_id = ? AND msg_seq = ?")
+            .bind(convId, msgSeq)
+            .execute();
+
+        cout << "[MessageRepository] SoftDelete 완료: conv=" << convId << " seq=" << msgSeq << endl;
+        return true;
+    }
+    catch (const mysqlx::Error& err) {
+        cerr << "[MessageRepository] SoftDelete 실패: " << err.what() << endl;
+        return false;
+    }
+}
+
+
+bool MessageRepository::EditMessage(const string& convId, int64 msgSeq, const string& senderId, const string& newText, int64 editedAt)
+{
+    try {
+        auto& db = DBManager::GetInstance();
+        auto& session = db.GetSession();
+
+        // 본인 메시지인지 확인
+        string checkSender = GetMessageSenderId(convId, msgSeq);
+        if (checkSender.empty()) {
+            cerr << "[MessageRepository] EditMessage: 메시지를 찾을 수 없음" << endl;
+            return false;
+        }
+        if (checkSender != senderId) {
+            cerr << "[MessageRepository] EditMessage: 본인 메시지가 아님" << endl;
+            return false;
+        }
+
+        session.sql("UPDATE messages SET message = ?, is_edited = 1, edited_at = ? WHERE conv_id = ? AND msg_seq = ?")
+            .bind(newText, editedAt, convId, msgSeq)
+            .execute();
+
+        cout << "[MessageRepository] EditMessage 완료: conv=" << convId << " seq=" << msgSeq << endl;
+        return true;
+    }
+    catch (const mysqlx::Error& err) {
+        cerr << "[MessageRepository] EditMessage 실패: " << err.what() << endl;
+        return false;
+    }
+}
+
+
+MessageRepository::ReplyInfo MessageRepository::GetMessageBySeq(const string& convId, int64 msgSeq)
+{
+    ReplyInfo info;
+    try {
+        auto& db = DBManager::GetInstance();
+        auto& session = db.GetSession();
+
+        auto result = session.sql(
+            "SELECT m.message, m.sender_id, u.name, m.is_deleted "
+            "FROM messages m "
+            "LEFT JOIN users u ON m.sender_id = u.user_id "
+            "WHERE m.conv_id = ? AND m.msg_seq = ? LIMIT 1")
+            .bind(convId, msgSeq)
+            .execute();
+
+        auto row = result.fetchOne();
+        if (row) {
+            info.found = true;
+            bool deleted = (!row[3].isNull() && row[3].get<int>() == 1);
+            info.text = deleted ? "[삭제된 메시지입니다]" : row[0].get<string>();
+            info.senderName = (!row[2].isNull()) ? row[2].get<string>() : row[1].get<string>();
+        }
+    }
+    catch (const mysqlx::Error& err) {
+        cerr << "[MessageRepository] GetMessageBySeq 실패: " << err.what() << endl;
+    }
+    return info;
+}
+
+
+string MessageRepository::GetMessageSenderId(const string& convId, int64 msgSeq)
+{
+    try {
+        auto& db = DBManager::GetInstance();
+        auto& session = db.GetSession();
+
+        auto result = session.sql("SELECT sender_id FROM messages WHERE conv_id = ? AND msg_seq = ? LIMIT 1")
+            .bind(convId, msgSeq)
+            .execute();
+
+        auto row = result.fetchOne();
+        if (row) {
+            return row[0].get<string>();
+        }
+    }
+    catch (const mysqlx::Error& err) {
+        cerr << "[MessageRepository] GetMessageSenderId 실패: " << err.what() << endl;
+    }
+    return "";
 }
 
 
@@ -543,8 +684,35 @@ int MessageRepository::GetUnreadCount(const string& userId, const string& convId
     }
 }
 
+// 특정 메시지의 읽지 않은 참여자 수
+// = 해당 conv 참여자 수 - (read_status에서 last_read_seq >= msgSeq인 사람 수)
+int MessageRepository::GetMsgUnreadCount(const string& convId, int64 msgSeq)
+{
+    try {
+        auto& db = DBManager::GetInstance();
+        auto& session = db.GetSession();
 
+        // 참여자 수
+        string totalQuery = "SELECT COUNT(*) FROM conversation_participants WHERE conv_id = ?";
+        auto totalResult = session.sql(totalQuery).bind(convId).execute();
+        auto totalRow = totalResult.fetchOne();
+        int totalCount = totalRow[0].isNull() ? 0 : totalRow[0].get<int>();
 
+        // 이 메시지 이상까지 읽은 사람 수
+        string readQuery =
+            "SELECT COUNT(*) FROM read_status WHERE conv_id = ? AND last_read_seq >= ?";
+        auto readResult = session.sql(readQuery).bind(convId, msgSeq).execute();
+        auto readRow = readResult.fetchOne();
+        int readCount = readRow[0].isNull() ? 0 : readRow[0].get<int>();
+
+        int unread = totalCount - readCount;
+        return unread > 0 ? unread : 0;
+    }
+    catch (const mysqlx::Error& err) {
+        cerr << "[MessageRepository] GetMsgUnreadCount 실패: " << err.what() << endl;
+        return 0;
+    }
+}
 
 
 

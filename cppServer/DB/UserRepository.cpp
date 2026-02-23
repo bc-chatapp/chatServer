@@ -428,6 +428,73 @@ bool UserRepository::HardDeleteUser(const string& userId) {
 
 
 
+bool UserRepository::GetStorageInfo(const string& userId, StorageInfo& OUT info) {
+    try {
+        auto& db = DBManager::GetInstance();
+        auto schema = db.GetSchema();
+
+        // 1) users 테이블에서 capacity, usage 조회
+        auto users = schema.getTable("users");
+        auto result = users.select("storage_capacity_bytes", "storage_usage_bytes", "sub_grade")
+            .where("user_id = :uid")
+            .bind("uid", userId)
+            .execute();
+
+        auto row = result.fetchOne();
+        if (!row) return false;
+
+        info.storageCapacity = row[0].get<int64>();
+        info.storageUsage = row[1].get<int64>();
+        int grade = static_cast<int>(row[2].get<int64>());
+
+        // 2) subscription_plans에서 max_file_size 조회
+        auto plans = schema.getTable("subscription_plans");
+        auto planResult = plans.select("max_file_size")
+            .where("plan_type = 'personal' AND grade = :grade AND is_active = 1")
+            .bind("grade", grade)
+            .execute();
+
+        auto planRow = planResult.fetchOne();
+        if (planRow) {
+            info.maxFileSize = planRow[0].get<int64>();
+        }
+
+        return true;
+    } catch (const mysqlx::Error& err) {
+        cerr << "[UserRepository] GetStorageInfo 실패: " << err.what() << endl;
+        return false;
+    }
+}
+
+
+bool UserRepository::SaveUserAsset(const string& userId, int64 msgSeq, int64 fileSize, const string& fileType) {
+    try {
+        auto& db = DBManager::GetInstance();
+        auto schema = db.GetSchema();
+
+        // 1) user_assets에 파일 기록 INSERT
+        auto assets = schema.getTable("user_assets");
+        assets.insert("user_id", "msg_seq", "file_size", "file_type")
+            .values(userId, msgSeq, fileSize, fileType)
+            .execute();
+
+        // 2) users.storage_usage_bytes 직접 증가 (트리거 대체)
+        auto users = schema.getTable("users");
+        users.update()
+            .set("storage_usage_bytes", mysqlx::expr("storage_usage_bytes + " + to_string(fileSize)))
+            .where("user_id = :uid")
+            .bind("uid", userId)
+            .execute();
+
+        cout << "[UserRepository] SaveUserAsset: userId=" << userId << ", size=" << fileSize << endl;
+        return true;
+    } catch (const mysqlx::Error& err) {
+        cerr << "[UserRepository] SaveUserAsset 실패: " << err.what() << endl;
+        return false;
+    }
+}
+
+
 void UserRepository::ConvertToProto(const cUserInfo& dbUser, Protocol::UserInfo* outProto)
 {
     if (!outProto) return;

@@ -97,8 +97,15 @@ bool GroupService::JoinGroup(sessionPtr& session, uint64 reqId, const string& gr
 	if (userId.empty()) return false;
 
 	cGroupInfo groupInfo;
-	if (!GroupRepository::GetGroupInfoById(groupCode, groupInfo)) {
+	if (!GroupRepository::GetGroupInfoByCode(groupCode, groupInfo)) {
 		HandleErr(session, reqId, Protocol::ERR_INVALID_PACKET, "유효하지 않은 초대 코드입니다.");
+		return false;
+	}
+
+	// 그룹 인원 제한 체크
+	if (groupInfo.memberCount >= MAX_GROUP_MEMBERS) {
+		HandleErr(session, reqId, Protocol::ERR_INVALID_PACKET,
+			"그룹 인원이 가득 찼습니다. (최대 " + to_string(MAX_GROUP_MEMBERS) + "명)");
 		return false;
 	}
 
@@ -112,6 +119,9 @@ bool GroupService::JoinGroup(sessionPtr& session, uint64 reqId, const string& gr
 		return false;
 	}
 
+	// 최신 그룹 정보 다시 조회 (member_count 반영)
+	GroupRepository::GetGroupInfoById(groupInfo.groupId, groupInfo);
+
 	Protocol::S_JoinGroup pkt_s_join;
 	pkt_s_join.set_success(true);
 
@@ -121,6 +131,7 @@ bool GroupService::JoinGroup(sessionPtr& session, uint64 reqId, const string& gr
 	info->set_group_code(groupInfo.groupCode);
 	info->set_description(groupInfo.description);
 	info->set_group_image_url(groupInfo.groupImageUrl);
+	info->set_member_count(groupInfo.memberCount);
 	info->set_storage_capacity_bytes(groupInfo.storageLimit);
 	info->set_storage_usage_bytes(groupInfo.storageUsage);
 
@@ -260,6 +271,39 @@ bool GroupService::UpdateGroupInfo(sessionPtr& session, uint64 reqId, Protocol::
 }
 
 
+
+
+
+bool GroupService::DeleteGroup(sessionPtr& session, uint64 reqId, const string& groupId)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) return false;
+
+	// 방장만 삭제 가능
+	string role = GroupRepository::GetMemberRole(groupId, userId);
+	if (role != "owner") {
+		HandleErr(session, reqId, Protocol::ERR_UNAUTHORIZED, "방장만 그룹을 삭제할 수 있습니다.");
+		return false;
+	}
+
+	if (!GroupRepository::DeleteGroup(groupId)) {
+		HandleErr(session, reqId, Protocol::ERR_SERVER_INTERNAL, "그룹 삭제에 실패했습니다.");
+		return false;
+	}
+
+	Protocol::S_DeleteGroup res;
+	res.set_success(true);
+
+	Protocol::Envelope env;
+	env.set_version(GProtoVersion);
+	env.set_request_id(reqId);
+	*env.mutable_s_delete_group() = res;
+	PacketDispatcher::SendEnvelope(session, env);
+
+	cout << "[GroupService] 그룹 삭제: " << groupId << " by " << userId << endl;
+	return true;
+}
 
 
 

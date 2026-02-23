@@ -110,10 +110,28 @@ class ErrorCode extends $pb.ProtobufEnum {
       ErrorCode._(406, _omitEnumNames ? '' : 'ERR_INVALID_FILE_URL');
   static const ErrorCode ERR_INVALID_ARGUMENT =
       ErrorCode._(407, _omitEnumNames ? '' : 'ERR_INVALID_ARGUMENT');
+  static const ErrorCode ERR_STORAGE_EXCEEDED =
+      ErrorCode._(408, _omitEnumNames ? '' : 'ERR_STORAGE_EXCEEDED');
+  static const ErrorCode ERR_FILE_TOO_LARGE =
+      ErrorCode._(409, _omitEnumNames ? '' : 'ERR_FILE_TOO_LARGE');
+  static const ErrorCode ERR_PAYMENT_FAILED =
+      ErrorCode._(410, _omitEnumNames ? '' : 'ERR_PAYMENT_FAILED');
+  static const ErrorCode ERR_RECEIPT_INVALID =
+      ErrorCode._(411, _omitEnumNames ? '' : 'ERR_RECEIPT_INVALID');
 
   /// 500 그룹관련
   static const ErrorCode ERR_NO_PERMISSION =
       ErrorCode._(500, _omitEnumNames ? '' : 'ERR_NO_PERMISSION');
+
+  /// 600 차단 관련
+  static const ErrorCode ERR_ALREADY_BLOCKED =
+      ErrorCode._(600, _omitEnumNames ? '' : 'ERR_ALREADY_BLOCKED');
+  static const ErrorCode ERR_NOT_BLOCKED =
+      ErrorCode._(601, _omitEnumNames ? '' : 'ERR_NOT_BLOCKED');
+  static const ErrorCode ERR_CANNOT_BLOCK_SELF =
+      ErrorCode._(602, _omitEnumNames ? '' : 'ERR_CANNOT_BLOCK_SELF');
+  static const ErrorCode ERR_REPORT_DUPLICATE =
+      ErrorCode._(610, _omitEnumNames ? '' : 'ERR_REPORT_DUPLICATE');
 
   static const $core.List<ErrorCode> values = <ErrorCode>[
     ERR_SUCCESS,
@@ -148,7 +166,15 @@ class ErrorCode extends $pb.ProtobufEnum {
     ERR_FAILED_TO_GENERATE_URL,
     ERR_INVALID_FILE_URL,
     ERR_INVALID_ARGUMENT,
+    ERR_STORAGE_EXCEEDED,
+    ERR_FILE_TOO_LARGE,
+    ERR_PAYMENT_FAILED,
+    ERR_RECEIPT_INVALID,
     ERR_NO_PERMISSION,
+    ERR_ALREADY_BLOCKED,
+    ERR_NOT_BLOCKED,
+    ERR_CANNOT_BLOCK_SELF,
+    ERR_REPORT_DUPLICATE,
   ];
 
   static final $core.Map<$core.int, ErrorCode> _byValue =

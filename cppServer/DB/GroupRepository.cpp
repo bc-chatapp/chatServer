@@ -92,6 +92,8 @@ bool GroupRepository::CreateGroup(const string& groupName, const string& creator
         groupInfo.storageUsage = 0;
         groupInfo.createdAt = ::time(nullptr) * 1000;
 
+        groupInfo.memberCount = 1;
+
         cout << "[GroupRepo] Created: " << groupName << " (" << groupCode << ")" << endl;
         return true;
     }
@@ -107,12 +109,22 @@ bool GroupRepository::AddMember(const string& groupId, const string& userId, con
 {
     try {
         auto& db = DBManager::GetInstance();
-        auto members = db.GetSchema().getTable("group_members");
+        auto& session = db.GetSession();
 
+        session.startTransaction();
+
+        // 1. 멤버 테이블에 추가
+        auto members = db.GetSchema().getTable("group_members");
         members.insert("group_id", "user_id", "role")
             .values(groupId, userId, role)
             .execute();
 
+        // 2. 그룹 테이블 카운트 증가
+        session.sql("UPDATE `groups` SET member_count = member_count + 1 WHERE group_id = ?")
+            .bind(groupId)
+            .execute();
+
+        session.commit();
         return true;
     }
     catch (const mysqlx::Error& err) 
@@ -128,14 +140,24 @@ bool GroupRepository::RemoveMember(const string& groupId, const string& userId)
 {
     try {
         auto& db = DBManager::GetInstance();
-        auto members = db.GetSchema().getTable("group_members");
+        auto& session = db.GetSession();
 
+        session.startTransaction();
+
+        // 1. 멤버 테이블에서 삭제
+        auto members = db.GetSchema().getTable("group_members");
         members.remove()
             .where("group_id = :gid AND user_id = :uid")
             .bind("gid", groupId)
             .bind("uid", userId)
             .execute();
 
+        // 2. 그룹 테이블 카운트 감소
+        session.sql("UPDATE `groups` SET member_count = member_count - 1 WHERE group_id = ? AND member_count > 0")
+            .bind(groupId)
+            .execute();
+
+        session.commit();
         return true;
     }
     catch (const mysqlx::Error& err)
@@ -199,6 +221,56 @@ bool GroupRepository::UpdateGroupInfo(const string& groupId, const string& newNa
     }
     catch (const std::exception& e) {
         cerr << "[GroupRepository] Std Exception: " << e.what() << endl;
+        return false;
+    }
+}
+
+
+bool GroupRepository::DeleteGroup(const string& groupId)
+{
+    try {
+        auto& db = DBManager::GetInstance();
+        auto& session = db.GetSession();
+
+        session.startTransaction();
+
+        const string convId = "group:" + groupId;
+
+        // 1. 메시지 삭제
+        session.sql("DELETE FROM `messages` WHERE conv_id = ?")
+            .bind(convId)
+            .execute();
+
+        // 2. read_status 삭제
+        session.sql("DELETE FROM `read_status` WHERE conv_id = ?")
+            .bind(convId)
+            .execute();
+
+        // 3. group_assets 삭제
+        session.sql("DELETE FROM `group_assets` WHERE group_id = ?")
+            .bind(groupId)
+            .execute();
+
+        // 4. group_members 삭제
+        session.sql("DELETE FROM `group_members` WHERE group_id = ?")
+            .bind(groupId)
+            .execute();
+
+        // 5. groups 삭제
+        session.sql("DELETE FROM `groups` WHERE group_id = ?")
+            .bind(groupId)
+            .execute();
+
+        session.commit();
+        cout << "[DB] 그룹 영구 삭제 완료: " << groupId << endl;
+        return true;
+    }
+    catch (const mysqlx::Error& err) {
+        cerr << "[GroupRepository] DeleteGroup Error: " << err.what() << endl;
+        return false;
+    }
+    catch (const std::exception& e) {
+        cerr << "[GroupRepository] DeleteGroup Exception: " << e.what() << endl;
         return false;
     }
 }
@@ -297,6 +369,59 @@ bool GroupRepository::GetGroupInfoById(const string& groupId, cGroupInfo& OUT in
     }
     return false;
 }
+
+
+
+bool GroupRepository::GetGroupInfoByCode(const string& groupCode, cGroupInfo& OUT info)
+{
+    try {
+        auto& db = DBManager::GetInstance();
+        auto groups = db.GetSchema().getTable("groups");
+
+
+        auto rows = groups.select(
+            "group_id", "group_name", "group_code", "creator_id",
+            "description", "group_image_url",
+            "storage_usage_bytes", "storage_capacity_bytes", "member_count", "created_at"
+        )
+            .where("group_code = :code") 
+            .bind("code", groupCode)     
+            .execute();
+
+
+        if (rows.count() == 0) return false;
+
+
+        auto row = rows.fetchOne();
+
+        // 3. 인덱스 번호에 맞춰 정확하게 매핑 (row[0]은 group_id입니다)
+        info.groupId = row[0].get<string>();
+        info.groupName = row[1].get<string>();
+        info.groupCode = row[2].get<string>();
+        info.creatorId = row[3].get<string>();
+
+        if (!row[4].isNull()) info.description = row[4].get<string>();
+        if (!row[5].isNull()) info.groupImageUrl = row[5].get<string>();
+
+        // 4. 숫자형 데이터 안전하게 파싱 (Null 체크 권장)
+        info.storageUsage = !row[6].isNull() ? row[6].get<int64_t>() : 0;
+        info.storageLimit = !row[7].isNull() ? row[7].get<int64_t>() : 0;
+        info.memberCount = !row[8].isNull() ? (int)row[8].get<int64_t>() : 0;
+
+        if (!row[9].isNull()) {
+            info.createdAt = ParseTimestamp(row[9]);
+        }
+
+        return true;
+    }
+    catch (const mysqlx::Error& err)
+    {
+        cerr << "[GroupRepo] GetUserGroups Error: " << err.what() << endl;
+    }
+    return false;
+}
+
+
 
 
 
