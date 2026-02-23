@@ -671,14 +671,11 @@ bool AuthService::HandleWithdraw(sessionPtr& session, uint64 reqId, const string
         FcmTokenRepository::DeleteAllUserTokens(userId);
         cout << "[AuthService] FCM 토큰 삭제 완료" << endl;
 
-        // 4. 회원 삭제 처리
-        // 현재: Soft Delete (논리적 삭제) - 데이터 보존, 복구 가능, 채팅 기록에 "탈퇴한 사용자" 표시
-        // TODO: Hard Delete (물리적 삭제) 필요 시 아래 주석 해제
-        //       - 연관 데이터(messages, friends, group_members 등) 먼저 삭제 필요
-        //       - GDPR 등 완전 삭제 요구 시 사용
-        // if (!UserRepository::HardDeleteUser(userId)) { ... }
-
-        if (!UserRepository::SoftDeleteUser(userId)) {
+        // 4. 회원 완전 삭제 (Hard Delete)
+        //    - messages.sender_id 익명화 → 채팅 기록에 "[탈퇴한 사용자]" 표시
+        //    - friends, group_members: FK ON DELETE CASCADE 자동 삭제
+        //    - user_assets, subscriptions, payment_transactions, block_list 등 삭제
+        if (!UserRepository::HardDeleteUser(userId)) {
             pkt.set_success(false);
             pkt.set_message("탈퇴 처리 중 오류가 발생했습니다.");
             goto SEND_RESPONSE;

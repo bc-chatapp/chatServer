@@ -407,20 +407,60 @@ bool UserRepository::SoftDeleteUser(const string& userId) {
 bool UserRepository::HardDeleteUser(const string& userId) {
     try {
         auto& db = DBManager::GetInstance();
+        auto& sess = db.GetSession();
+
+        cout << "[UserRepository] Hard Delete 시작: " << userId << endl;
+
+        // 1. 메시지 발신자 익명화 (대화 맥락은 상대방에게 남기되, 발신자 식별 정보 제거)
+        //    채팅 히스토리에는 "[탈퇴한 사용자]"로 표시됨
+        sess.sql("UPDATE messages SET sender_id = '[withdrawn]' WHERE sender_id = ?")
+            .bind(userId).execute();
+
+        // 2. 읽음 상태 삭제
+        sess.sql("DELETE FROM read_status WHERE user_id = ?")
+            .bind(userId).execute();
+
+        // 3. 개인 파일 용량 기록 삭제
+        sess.sql("DELETE FROM user_assets WHERE user_id = ?")
+            .bind(userId).execute();
+
+        // 4. 구독 정보 삭제
+        sess.sql("DELETE FROM subscriptions WHERE user_id = ?")
+            .bind(userId).execute();
+
+        // 5. 결제 기록 삭제
+        sess.sql("DELETE FROM payment_transactions WHERE user_id = ?")
+            .bind(userId).execute();
+
+        // 6. 차단 목록 삭제 (양방향 — 내가 차단한 것 + 나를 차단한 것)
+        sess.sql("DELETE FROM block_list WHERE user_id = ? OR blocked_id = ?")
+            .bind(userId).bind(userId).execute();
+
+        // 7. 신고 기록: reporter_id 익명화 (신고 내용은 운영 목적으로 보존)
+        sess.sql("UPDATE reports SET reporter_id = '[withdrawn]' WHERE reporter_id = ?")
+            .bind(userId).execute();
+
+        // 8. 대화방 참여 정보 삭제 (FK 없으므로 수동 삭제)
+        sess.sql("DELETE FROM conversation_participants WHERE user_id = ?")
+            .bind(userId).execute();
+
+        // 9. FCM 토큰 삭제 (HandleWithdraw에서 이미 처리되지만 보장용)
+        sess.sql("DELETE FROM fcm_tokens WHERE user_id = ?")
+            .bind(userId).execute();
+
+        // 10. users 테이블 삭제
+        //     FK ON DELETE CASCADE → friends, group_members 자동 삭제
         auto schema = db.GetSchema();
-        auto users = schema.getTable("users");
+        schema.getTable("users")
+              .remove()
+              .where("user_id = :uid")
+              .bind("uid", userId)
+              .execute();
 
-        // Hard Delete: DB에서 완전히 삭제
-        // 주의: 외래키로 연결된 데이터(messages, friends 등)도 함께 처리 필요
-        users.remove()
-             .where("user_id = :uid")
-             .bind("uid", userId)
-             .execute();
-
-        cout << "[UserRepository] 회원 완전 삭제 완료 (Hard Delete): " << userId << endl;
+        cout << "[UserRepository] Hard Delete 완료: " << userId << endl;
         return true;
     } catch (const mysqlx::Error& err) {
-        cerr << "[UserRepository] 회원 완전 삭제 실패: " << err.what() << endl;
+        cerr << "[UserRepository] Hard Delete 실패: " << err.what() << endl;
         return false;
     }
 }
