@@ -78,7 +78,7 @@ vector<BlockedUserEntry> BlockRepository::GetBlockedUsers(const string& userId)
     try {
         auto& db = DBManager::GetInstance();
         // block_list JOIN users
-        auto sess = db.GetSession();
+        auto& sess = db.GetSession();
         string sql =
             "SELECT b.blocked_id, u.name, u.profile_image_url, "
             "UNIX_TIMESTAMP(b.created_at) * 1000 AS blocked_at "
@@ -87,7 +87,7 @@ vector<BlockedUserEntry> BlockRepository::GetBlockedUsers(const string& userId)
             "WHERE b.user_id = ? "
             "ORDER BY b.created_at DESC";
 
-        auto res = sess->sql(sql).bind(userId).execute();
+        auto res = sess.sql(sql).bind(userId).execute();
         for (auto row : res.fetchAll()) {
             BlockedUserEntry entry;
             entry.userId    = row[0].isNull() ? "" : row[0].get<string>();
