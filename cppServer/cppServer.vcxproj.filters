@@ -93,6 +93,9 @@
     <ClCompile Include="Service\NotificationService.cpp">
       <Filter>Service</Filter>
     </ClCompile>
+    <ClCompile Include="DB\BlockRepository.cpp">
+      <Filter>DB</Filter>
+    </ClCompile>
     <ClCompile Include="DB\FcmTokenRepository.cpp">
       <Filter>DB</Filter>
     </ClCompile>
@@ -101,6 +104,9 @@
     </ClCompile>
     <ClCompile Include="DB\SubscriptionRepository.cpp">
       <Filter>DB</Filter>
+    </ClCompile>
+    <ClCompile Include="Service\BlockService.cpp">
+      <Filter>Service</Filter>
     </ClCompile>
     <ClCompile Include="Service\PaymentService.cpp">
       <Filter>Service</Filter>
@@ -176,6 +182,9 @@
     <ClInclude Include="Service\NotificationService.h">
       <Filter>Service</Filter>
     </ClInclude>
+    <ClInclude Include="DB\BlockRepository.h">
+      <Filter>DB</Filter>
+    </ClInclude>
     <ClInclude Include="DB\FcmTokenRepository.h">
       <Filter>DB</Filter>
     </ClInclude>
@@ -184,6 +193,9 @@
     </ClInclude>
     <ClInclude Include="DB\SubscriptionRepository.h">
       <Filter>DB</Filter>
+    </ClInclude>
+    <ClInclude Include="Service\BlockService.h">
+      <Filter>Service</Filter>
     </ClInclude>
     <ClInclude Include="Service\PaymentService.h">
       <Filter>Service</Filter>
