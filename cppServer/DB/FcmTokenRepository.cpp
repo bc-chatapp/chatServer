@@ -64,6 +64,24 @@ bool FcmTokenRepository::UpsertFcmToken(const string& userId, const string& fcmT
             cout << "[FcmTokenRepository] FCM 토큰 업데이트 (계정 전환): " << userId << endl;
         }
         else {
+            // 유저당 최대 토큰 수 초과 시 가장 오래된 토큰 삭제
+            const int MAX_TOKENS_PER_USER = 5;
+            auto& sess = db.GetSession();
+            string countSql = "SELECT COUNT(*) FROM fcm_tokens WHERE user_id = ?";
+            auto countRes = sess.sql(countSql).bind(userId).execute();
+            auto countRow = countRes.fetchOne();
+            int tokenCount = countRow[0].get<int>();
+
+            if (tokenCount >= MAX_TOKENS_PER_USER) {
+                string deleteSql =
+                    "DELETE FROM fcm_tokens WHERE user_id = ? "
+                    "ORDER BY last_active ASC LIMIT ?";
+                int deleteCount = tokenCount - MAX_TOKENS_PER_USER + 1;
+                sess.sql(deleteSql).bind(userId).bind(deleteCount).execute();
+                cout << "[FcmTokenRepository] 오래된 FCM 토큰 " << deleteCount
+                     << "개 삭제 (최대 " << MAX_TOKENS_PER_USER << "개 제한): " << userId << endl;
+            }
+
             // 새 토큰 삽입
             tokens.insert("user_id", "fcm_token", "platform", "device_id", "device_name", "app_version", "last_active")
                 .values(userId, fcmToken, platform, deviceId, deviceName, appVersion, mysqlx::Value(mysqlx::expr("NOW()"))

@@ -603,10 +603,13 @@ bool AuthService::HandleLogout(sessionPtr& session, uint64 reqId, const string& 
     if (userId.empty()) {
         pkt.set_success(false);
     } else {
-        // FCM 토큰 삭제
+        // FCM 토큰 삭제 (토큰값 우선, 없으면 deviceId 기준)
         if (!fcmToken.empty()) {
             FcmTokenRepository::DeleteToken(userId, fcmToken);
             cout << "[AuthService] FCM 토큰 삭제: " << fcmToken.substr(0, 20) << "..." << endl;
+        }
+        if (!deviceId.empty()) {
+            FcmTokenRepository::DeleteTokenByDeviceId(userId, deviceId);
         }
 
         // 세션 정리
