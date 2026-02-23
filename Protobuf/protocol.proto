@@ -53,8 +53,18 @@ message Envelope {
       S_ReqHistory            s_req_history             = 44;
       C_FetchOffline          c_fetch_offline           = 45;
       S_MessageBatch          s_message_batch           = 46;
-      C_UploadFile            c_upload_file             = 47; 
+      C_UploadFile            c_upload_file             = 47;
       S_UploadFile            s_upload_file             = 48;
+      C_DeleteMessage         c_delete_message          = 49;
+      S_DeleteMessage         s_delete_message          = 50;
+      C_EditMessage           c_edit_message            = 51;
+      S_EditMessage           s_edit_message            = 52;
+      C_GetSubscription       c_get_subscription        = 53;
+      S_GetSubscription       s_get_subscription        = 54;
+      C_VerifyPurchase        c_verify_purchase         = 55;
+      S_VerifyPurchase        s_verify_purchase         = 56;
+      C_ReadReceipt           c_read_receipt            = 57;
+      S_ReadReceipt           s_read_receipt            = 58;
 
 
       // ─── FRIENDS (60 ~ 79) ───
@@ -65,6 +75,16 @@ message Envelope {
       C_FetchFriendData       c_fetch_friend_data       = 64;
       S_FetchFriendData       s_fetch_friend_data       = 65;
       S_FriendPush            s_friend_push             = 66;
+
+      // ─── BLOCK / REPORT (67 ~ 74) ───
+      C_BlockUser             c_block_user              = 67;
+      S_BlockUser             s_block_user              = 68;
+      C_UnblockUser           c_unblock_user            = 69;
+      S_UnblockUser           s_unblock_user            = 70;
+      C_GetBlockedList        c_get_blocked_list        = 71;
+      S_GetBlockedList        s_get_blocked_list        = 72;
+      C_ReportUser            c_report_user             = 73;
+      S_ReportUser            s_report_user             = 74;
 
 
       // ─── GROUPS (80 ~ 99) ───
@@ -86,6 +106,8 @@ message Envelope {
       S_EditGroup             s_edit_group              = 95;
       C_Withdraw              c_withdraw                = 96;
       S_Withdraw              s_withdraw                = 97;
+      C_DeleteGroup           c_delete_group            = 98;
+      S_DeleteGroup           s_delete_group            = 99;
 
       // ─── SYSTEM (100 ~ ) ───
       S_Error                 s_error                   = 100;
@@ -310,8 +332,50 @@ message S_Chat {
   ChatPayload payload       = 6;
   int64       ts_server     = 7;
   int64       reply_to_seq  = 8;
+  string      reply_to_sender_name = 9;
+  string      reply_to_text = 10;
+  bool        is_deleted    = 11;
+  bool        is_edited     = 12;
+  int32       unread_count  = 13; // 아직 읽지 않은 멤버 수
 }
 
+message C_ReadReceipt {
+  string conv_id        = 1;
+  int64  last_read_seq  = 2; // 클라이언트가 읽은 마지막 메시지 seq
+}
+
+message S_ReadReceipt {
+  string conv_id        = 1;
+  string reader_id      = 2; // 읽은 사람 userId
+  int64  last_read_seq  = 3; // 그 사람이 읽은 마지막 seq
+}
+
+
+
+message C_DeleteMessage {
+  string conv_id  = 1;
+  int64  msg_seq  = 2;
+}
+
+message S_DeleteMessage {
+  bool   success  = 1;
+  string conv_id  = 2;
+  int64  msg_seq  = 3;
+}
+
+message C_EditMessage {
+  string conv_id  = 1;
+  int64  msg_seq  = 2;
+  string new_text = 3;
+}
+
+message S_EditMessage {
+  bool   success   = 1;
+  string conv_id   = 2;
+  int64  msg_seq   = 3;
+  string new_text  = 4;
+  int64  edited_at = 5;
+}
 
 
 message C_ReqHistory {
@@ -524,6 +588,14 @@ message C_EditGroup {
 
 message S_EditGroup { bool success = 1; GroupInfo group = 2; }
 
+message C_DeleteGroup {
+    string group_id = 1;
+}
+
+message S_DeleteGroup {
+    bool success = 1;
+}
+
 
 /*-----------------------------
       회원 탈퇴
@@ -544,6 +616,78 @@ message S_Withdraw {
 
 
 
+
+
+/*-----------------------------
+      구독 관리
+-----------------------------*/
+
+message C_GetSubscription {}
+
+message SubscriptionPlan {
+    int32  plan_id        = 1;
+    string plan_type      = 2;   // "personal" | "group"
+    string name           = 3;
+    int32  grade          = 4;
+    int64  storage_bytes  = 5;
+    int64  max_file_size  = 6;
+    double monthly_price  = 7;
+    repeated string features = 8;
+}
+
+message S_GetSubscription {
+    bool   success                    = 1;
+    int32  current_grade              = 2;
+    string current_plan_name          = 3;
+    int64  storage_capacity_bytes     = 4;
+    int64  storage_usage_bytes        = 5;
+    int64  expires_at                 = 6;
+    bool   auto_renew                 = 7;
+    repeated SubscriptionPlan available_plans = 8;
+}
+
+message C_VerifyPurchase {
+    string platform       = 1;  // "android" | "ios"
+    string product_id     = 2;
+    string transaction_id = 3;
+    string purchase_token = 4;  // Google: purchaseToken / Apple: receipt (base64)
+}
+
+message S_VerifyPurchase {
+    bool   success          = 1;
+    string message          = 2;
+    int32  new_grade        = 3;
+    int64  expires_at       = 4;
+    int64  storage_capacity = 5;
+}
+
+
+/*-----------------------------
+      차단 / 신고
+-----------------------------*/
+
+message BlockedUserInfo {
+    string user_id      = 1;
+    string name         = 2;
+    string profile_img  = 3;
+    int64  blocked_at   = 4;
+}
+
+message C_BlockUser    { string target_user_id = 1; }
+message S_BlockUser    { bool success = 1; string message = 2; }
+
+message C_UnblockUser  { string target_user_id = 1; }
+message S_UnblockUser  { bool success = 1; }
+
+message C_GetBlockedList {}
+message S_GetBlockedList { repeated BlockedUserInfo blocked_users = 1; }
+
+message C_ReportUser {
+    string target_user_id = 1;
+    string reason = 2;   // "spam" | "abuse" | "other"
+    string detail = 3;   // 추가 설명 (선택)
+}
+message S_ReportUser   { bool success = 1; }
 
 
 /*-------------
@@ -595,11 +739,20 @@ enum ErrorCode {
     ERR_FAILED_TO_GENERATE_URL = 405; // URL 생성 실패
     ERR_INVALID_FILE_URL = 406;       // 파일 URL이 유효하지 않음
     ERR_INVALID_ARGUMENT = 407;       // 잘못된 인자 (예: Group ID 누락)
+    ERR_STORAGE_EXCEEDED = 408;       // 저장 용량 초과
+    ERR_FILE_TOO_LARGE = 409;         // 파일 크기 제한 초과
+    ERR_PAYMENT_FAILED = 410;         // 결제 실패
+    ERR_RECEIPT_INVALID = 411;        // 영수증 검증 실패
 
 
     //500 그룹관련
     ERR_NO_PERMISSION =500;
 
+    // 600 차단 관련
+    ERR_ALREADY_BLOCKED = 600;    // 이미 차단된 사용자
+    ERR_NOT_BLOCKED = 601;        // 차단되지 않은 사용자
+    ERR_CANNOT_BLOCK_SELF = 602;  // 자기 자신을 차단할 수 없음
+    ERR_REPORT_DUPLICATE = 610;   // 이미 신고한 사용자
 }
 
 message S_Error {

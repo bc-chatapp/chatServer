@@ -12,11 +12,14 @@ class AuthService;
 class FileService;
 class CloudStorage;
 class NotificationService;
+class PaymentService;
+class BlockService;
 class FcmClient;
 
 
 extern const int32 GProtoVersion;
 extern const int64 TIMEOUT_MS;
+extern const int32 MAX_GROUP_MEMBERS;
 
 int64 Nowts();
 
@@ -29,6 +32,8 @@ extern VerificationManager* GVerificationManager;
 extern AuthService* GAuthService;
 extern FileService* GFileService;
 extern NotificationService* GNotificationService;
+extern PaymentService* GPaymentService;
+extern BlockService* GBlockService;
 
 
 class CoreGlobal
@@ -50,6 +55,8 @@ private:
     unique_ptr<CloudStorage> _cloudStorage;
     unique_ptr<FileService> _fileService;
     unique_ptr<NotificationService> _notificationService;
+    unique_ptr<PaymentService> _paymentService;
+    unique_ptr<BlockService> _blockService;
     unique_ptr<FcmClient> _fcmClient;
 };
 

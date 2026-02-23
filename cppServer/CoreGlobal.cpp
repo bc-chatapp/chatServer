@@ -13,6 +13,8 @@
 #include "Service/NotificationService.h"
 #include "Cloud/CloudStorageGCS.h"
 #include "Cloud/FcmClient.h"
+#include "Service/PaymentService.h"
+#include "Service/BlockService.h"
 
 #include <chrono>
 #include <fstream>
@@ -23,6 +25,7 @@
 const int32 GProtoVersion = 1;
 
 const int64 TIMEOUT_MS = 120 * 1000;
+const int32 MAX_GROUP_MEMBERS = 100;  // 그룹 최대 인원 수
 
 UserManager* GUserManager = nullptr;
 ChatService* GChatService = nullptr;
@@ -33,6 +36,7 @@ VerificationManager* GVerificationManager = nullptr;
 AuthService* GAuthService = nullptr;
 FileService* GFileService = nullptr;
 NotificationService* GNotificationService = nullptr;
+BlockService* GBlockService = nullptr;
 
 CoreGlobal GCoreGlobal;
 
@@ -113,6 +117,7 @@ CoreGlobal::CoreGlobal()
 
     _authService = make_unique<AuthService>(*_userManager);
     _notificationService = make_unique<NotificationService>(*_userManager);
+    _blockService = make_unique<BlockService>(*_userManager);
 
     // CloudStorage 초기화 (파일에서 설정 읽기)
     string projectId, bucketName, credentialsPath;
@@ -136,6 +141,13 @@ CoreGlobal::CoreGlobal()
             cerr << "[CoreGlobal] FcmClient Initialize Failed" << endl;
             _fcmClient = nullptr;
         }
+
+        // PaymentService 초기화 (같은 credentials 사용)
+        _paymentService = make_unique<PaymentService>(*_userManager);
+        if (!_paymentService->Initialize(credentialsPath)) {
+            cerr << "[CoreGlobal] PaymentService Initialize Failed" << endl;
+            _paymentService = nullptr;
+        }
     }
 
     GUserManager = _userManager.get();
@@ -147,12 +159,16 @@ CoreGlobal::CoreGlobal()
     GAuthService = _authService.get();
     GFileService = _fileService.get();
     GNotificationService = _notificationService.get();
+    GPaymentService = _paymentService.get();
+    GBlockService = _blockService.get();
     GFcmClient = _fcmClient.get();
 }
 
 CoreGlobal::~CoreGlobal()
 {
     GFcmClient = nullptr;
+    GPaymentService = nullptr;
+    GBlockService = nullptr;
     GNotificationService = nullptr;
     GFileService = nullptr;
     GAuthService = nullptr;
@@ -164,6 +180,8 @@ CoreGlobal::~CoreGlobal()
     GUserManager = nullptr;
 
     _fcmClient.reset();
+    _paymentService.reset();
+    _blockService.reset();
     _notificationService.reset();
     _fileService.reset();
     _cloudStorage.reset();
@@ -180,6 +198,8 @@ CoreGlobal::~CoreGlobal()
 void CoreGlobal::Reset()
 {
     _fcmClient.reset();
+    _paymentService.reset();
+    _blockService.reset();
     _notificationService.reset();
     _fileService.reset();
     _cloudStorage.reset();
@@ -192,6 +212,8 @@ void CoreGlobal::Reset()
     _userManager.reset();
 
     GFcmClient = nullptr;
+    GPaymentService = nullptr;
+    GBlockService = nullptr;
     GNotificationService = nullptr;
     GFileService = nullptr;
     GAuthService = nullptr;
@@ -210,6 +232,7 @@ void CoreGlobal::Reset()
 
     _authService = make_unique<AuthService>(*_userManager);
     _notificationService = make_unique<NotificationService>(*_userManager);
+    _blockService = make_unique<BlockService>(*_userManager);
 
     // CloudStorage 초기화 (파일에서 설정 읽기)
     string projectId, bucketName, credentialsPath;
@@ -233,6 +256,13 @@ void CoreGlobal::Reset()
             cerr << "[CoreGlobal] FcmClient Initialize Failed" << endl;
             _fcmClient = nullptr;
         }
+
+        // PaymentService 초기화 (같은 credentials 사용)
+        _paymentService = make_unique<PaymentService>(*_userManager);
+        if (!_paymentService->Initialize(credentialsPath)) {
+            cerr << "[CoreGlobal] PaymentService Initialize Failed" << endl;
+            _paymentService = nullptr;
+        }
     }
 
     GUserManager = _userManager.get();
@@ -244,6 +274,8 @@ void CoreGlobal::Reset()
     GAuthService = _authService.get();
     GFileService = _fileService.get();
     GNotificationService = _notificationService.get();
+    GPaymentService = _paymentService.get();
+    GBlockService = _blockService.get();
     GFcmClient = _fcmClient.get();
 }
 
