@@ -24,11 +24,16 @@ public:
 	bool HandleDeleteMessage(sessionPtr& session, uint64 reqId, const Protocol::C_DeleteMessage& pkt);
 	bool HandleEditMessage(sessionPtr& session, uint64 reqId, const Protocol::C_EditMessage& pkt);
 	bool HandleReadReceipt(sessionPtr& session, uint64 reqId, const Protocol::C_ReadReceipt& pkt);
+	bool HandleAddReaction(sessionPtr& session, uint64 reqId, const Protocol::C_AddReaction& pkt);
+
+	bool HandleCreatePoll(sessionPtr& session, uint64 reqId, const Protocol::C_CreatePoll& pkt);
+	bool HandleVote(sessionPtr& session, uint64 reqId, const Protocol::C_Vote& pkt);
+	bool HandleClosePoll(sessionPtr& session, uint64 reqId, const Protocol::C_ClosePoll& pkt);
 
 
 protected:
 	/* Helpers */
-	static Protocol::S_Chat Build_S_Chat(const string& convId, const string& senderId, int64& OUT fileSize, string& OUT fileType, const Protocol::C_Chat& pkt);
+	static Protocol::S_Chat Build_S_Chat(const string& convId, const string& senderId, int64& OUT fileSize, string& OUT fileType, int64& OUT fileRetentionExpiresAt, const Protocol::C_Chat& pkt);
 	static void PushEnvelope(sessionPtr& session, uint64 reqId, const Protocol::S_Chat& pkt_s_chat);
 	static string GetUserNameWithId(const string& userId);
 private:

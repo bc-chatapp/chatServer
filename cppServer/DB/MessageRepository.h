@@ -35,7 +35,14 @@ public:
     static bool AddParticipants(const string& convId, const vector<string>& userIds);
 
     /* 저장 */ //저장된 msg_seq (실패 시 -1)
-    static int64 SaveMessage(const string& convId, const string& senderId, const Protocol::S_Chat& sChat);
+    static int64 SaveMessage(const string& convId, const string& senderId, const Protocol::S_Chat& sChat,
+                             const string& gcsPath = "",
+                             int64 fileRetentionExpiresAt = 0,
+                             const string& mentionedUserIds = "",
+                             int8_t msgTypeOverride = -1);
+
+    // 파일 만료 배치 잡: gcs_path로 메시지 file_status 업데이트
+    static bool UpdateFileStatusByGcsPath(const string& gcsPath, const string& fileStatus);
     
 
     /* 조회 */
@@ -67,6 +74,20 @@ public:
 
     // 메시지 발신자 확인
     static string GetMessageSenderId(const string& convId, int64 msgSeq);
+
+    // 이모지 반응 토글 (없으면 INSERT, 있으면 DELETE)
+    static bool ToggleReaction(const string& convId, int64 msgSeq,
+                               const string& userId, const string& emoji,
+                               bool& outRemoved);
+
+    // 오프라인 동기화용: 유저가 참여하는 모든 대화의 현재 반응 목록
+    struct ReactionInfo {
+        string convId;
+        int64  msgSeq;
+        string userId;
+        string emoji;
+    };
+    static vector<ReactionInfo> GetAllReactionsForUser(const string& userId);
 
 
     /* 읽음 상태 */

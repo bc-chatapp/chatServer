@@ -122,6 +122,14 @@ protected:
     static bool Dispatch_C_GetBlockedList(sessionPtr& session, uint64 reqId, const Protocol::C_GetBlockedList& pkt);
     static bool Dispatch_C_ReportUser    (sessionPtr& session, uint64 reqId, const Protocol::C_ReportUser&     pkt);
 
+    // Reaction Handler (이모지 반응)
+    static bool Dispatch_C_AddReaction(sessionPtr& session, uint64 reqId, const Protocol::C_AddReaction& pkt);
+
+    // Poll Handlers (투표)
+    static bool Dispatch_C_CreatePoll(sessionPtr& session, uint64 reqId, const Protocol::C_CreatePoll& pkt);
+    static bool Dispatch_C_Vote(sessionPtr& session, uint64 reqId, const Protocol::C_Vote& pkt);
+    static bool Dispatch_C_ClosePoll(sessionPtr& session, uint64 reqId, const Protocol::C_ClosePoll& pkt);
+
 private:
 
     enum class ConvType { Error = 0, Direct = 1, Group = 2 };

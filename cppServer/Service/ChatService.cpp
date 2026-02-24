@@ -8,6 +8,7 @@
 #include "../DB/GroupRepository.h"
 #include "../DB/FcmTokenRepository.h"
 #include "../DB/BlockRepository.h"
+#include "../DB/PollRepository.h"
 #include "../Cloud/FcmClient.h"
 
 #include "../CoreGlobal.h"
@@ -32,12 +33,25 @@ bool ChatService::SendDirect(sessionPtr& senderSession, uint64 reqId, const stri
 
     const string convId = MessageRepository::CreateConversationId(senderId, receiverId);
     MessageRepository::CreateOrGetConversation(convId, "direct", senderId, receiverId);
-    
+
     int64 fileSize = 0;
     string fileType;
-    auto pkt_s_chat = Build_S_Chat(convId, senderId, fileSize, fileType, pkt);
-    int64 msgSeq = MessageRepository::SaveMessage(convId, senderId, pkt_s_chat);
-    
+    int64 fileRetentionExpiresAt = 0;
+    auto pkt_s_chat = Build_S_Chat(convId, senderId, fileSize, fileType, fileRetentionExpiresAt, pkt);
+    // mentionedUserIds → JSON 배열 문자열
+    string mentionJson;
+    if (pkt.mentioned_user_ids_size() > 0) {
+        mentionJson = "[";
+        for (int i = 0; i < pkt.mentioned_user_ids_size(); ++i) {
+            if (i > 0) mentionJson += ",";
+            mentionJson += "\"" + pkt.mentioned_user_ids(i) + "\"";
+        }
+        mentionJson += "]";
+    }
+
+    int64 msgSeq = MessageRepository::SaveMessage(convId, senderId, pkt_s_chat,
+                                                   pkt.gcs_path(), fileRetentionExpiresAt, mentionJson);
+
     // server_msg_id를 실제 msg_seq로 설정
     if (msgSeq >= 0) {
         pkt_s_chat.set_msg_seq(msgSeq);
@@ -120,15 +134,28 @@ bool ChatService::SendGroup(sessionPtr& senderSession, uint64 reqId, const strin
 
     const string convId = "group:" + groupId;
     MessageRepository::CreateOrGetConversation(convId, "group");
-  
+
     int64 fileSize = 0;
     string fileType;
-    auto pkt_s_chat = Build_S_Chat(convId, senderId, fileSize, fileType, pkt);
+    int64 fileRetentionExpiresAt = 0;
+    auto pkt_s_chat = Build_S_Chat(convId, senderId, fileSize, fileType, fileRetentionExpiresAt, pkt);
 
     /* To Group (멤버 목록 먼저 조회 — unread count 계산에도 활용) */
     auto members = GroupRepository::GetGroupMembers(groupId);
 
-    int64 msgSeq = MessageRepository::SaveMessage(convId, senderId, pkt_s_chat);
+    // mentionedUserIds → JSON 배열 문자열
+    string mentionJsonGroup;
+    if (pkt.mentioned_user_ids_size() > 0) {
+        mentionJsonGroup = "[";
+        for (int i = 0; i < pkt.mentioned_user_ids_size(); ++i) {
+            if (i > 0) mentionJsonGroup += ",";
+            mentionJsonGroup += "\"" + pkt.mentioned_user_ids(i) + "\"";
+        }
+        mentionJsonGroup += "]";
+    }
+
+    int64 msgSeq = MessageRepository::SaveMessage(convId, senderId, pkt_s_chat,
+                                                   pkt.gcs_path(), fileRetentionExpiresAt, mentionJsonGroup);
     if (msgSeq >= 0) {
         pkt_s_chat.set_msg_seq(msgSeq);
 
@@ -320,7 +347,10 @@ bool ChatService::HandleReqHistory(sessionPtr& session, uint64 reqId, const Prot
 
 
 
-Protocol::S_Chat ChatService::Build_S_Chat(const string& convId, const string& senderId, int64& OUT fileSize, string& OUT fileType, const Protocol::C_Chat& pkt)
+Protocol::S_Chat ChatService::Build_S_Chat(const string& convId, const string& senderId,
+                                           int64& OUT fileSize, string& OUT fileType,
+                                           int64& OUT fileRetentionExpiresAt,
+                                           const Protocol::C_Chat& pkt)
 {
     string senderName = GetUserNameWithId(senderId);
 
@@ -341,6 +371,11 @@ Protocol::S_Chat ChatService::Build_S_Chat(const string& convId, const string& s
         }
     }
 
+    // 멘션 정보 복사
+    for (const auto& uid : pkt.mentioned_user_ids()) {
+        pkt_s_chat.add_mentioned_user_ids(uid);
+    }
+
     if (pkt.has_payload()) {
         auto* payload = pkt_s_chat.mutable_payload();
         if (pkt.payload().has_text()) {
@@ -350,24 +385,48 @@ Protocol::S_Chat ChatService::Build_S_Chat(const string& convId, const string& s
             payload->mutable_image()->set_url(pkt.payload().image().url());
             payload->mutable_image()->set_thumbnail(pkt.payload().image().thumbnail());
             payload->mutable_image()->set_size(pkt.payload().image().size());
-            fileSize = pkt.payload().image().size(); 
+            fileSize = pkt.payload().image().size();
             fileType = "image";
         }
         else if (pkt.payload().has_video()) {
             payload->mutable_video()->set_url(pkt.payload().video().url());
             payload->mutable_video()->set_thumbnail(pkt.payload().video().thumbnail());
             payload->mutable_video()->set_size(pkt.payload().video().size());
-            payload->mutable_video()->set_thumbnail(pkt.payload().video().thumbnail());
-            fileSize = pkt.payload().video().size(); 
+            fileSize = pkt.payload().video().size();
             fileType = "video";
         }
         else if (pkt.payload().has_file()) {
             payload->mutable_file()->set_url(pkt.payload().file().url());
             payload->mutable_file()->set_filename(pkt.payload().file().filename());
             payload->mutable_file()->set_size(pkt.payload().file().size());
-            fileSize = pkt.payload().file().size(); 
+            fileSize = pkt.payload().file().size();
             fileType = "file";
         }
+    }
+
+    // 파일 보관 만료 정보 설정 (미디어 메시지이고 gcs_path가 있는 경우)
+    // FileService에서 이미 계산한 만료 시각을 클라이언트가 gcs_path와 함께 전달
+    // 현재는 gcs_path 기반으로 file_uploads 테이블에서 조회 가능하지만,
+    // 클라이언트가 S_UploadFile.file_retention_expires_at을 저장해두고 C_Chat에는 없으므로
+    // DB에서 gcs_path로 조회
+    if (!pkt.gcs_path().empty() && fileSize > 0) {
+        // gcs_path로 file_uploads에서 retention 만료 시각 조회
+        // (이 정보는 FileService가 DB에 저장)
+        // TODO: FileRepository::GetFileMetadataByPath(gcsPath, fileInfo) 구현 시 사용
+        // 현재는 pkt에 file_retention_expires_at 필드가 없으므로
+        // FileService 저장값을 GetStorageInfo의 subGrade로 재계산
+        UserRepository::StorageInfo storInfo;
+        if (UserRepository::GetStorageInfo(senderId, storInfo)) {
+            if (storInfo.subGrade <= 0) {
+                const int64 FREE_RETENTION_MS = 7LL * 24 * 3600 * 1000;
+                fileRetentionExpiresAt = pkt_s_chat.ts_server() + FREE_RETENTION_MS;
+            }
+            // subGrade > 0: 영구 (fileRetentionExpiresAt = 0)
+        }
+
+        // S_Chat에 파일 만료 정보 포함
+        pkt_s_chat.set_file_expires_at(fileRetentionExpiresAt);
+        pkt_s_chat.set_file_status("active");
     }
 
     return pkt_s_chat;
@@ -611,6 +670,317 @@ bool ChatService::HandleReadReceipt(sessionPtr& session, uint64 reqId, const Pro
         }
     }
 
+    return true;
+}
+
+
+bool ChatService::HandleAddReaction(sessionPtr& session, uint64 reqId, const Protocol::C_AddReaction& pkt)
+{
+    auto serverSession = static_pointer_cast<ServerSession>(session);
+    const string userId = serverSession->GetUserId();
+    if (userId.empty()) {
+        HandleErr(session, reqId, ERR_UNAUTHORIZED);
+        return false;
+    }
+
+    const string clientConvId = pkt.conv_id();
+    int64 msgSeq = pkt.msg_seq();
+    const string& emoji = pkt.emoji();
+
+    // 클라이언트 convId → DB convId 변환
+    // 클라이언트: "direct:targetId" → DB: "direct:userA_userB" (정렬)
+    string convId = clientConvId;
+    string directTargetId; // 1:1일 때 상대방 userId
+    if (clientConvId.find("direct:") == 0) {
+        directTargetId = clientConvId.substr(7);
+        convId = MessageRepository::CreateConversationId(userId, directTargetId);
+    }
+
+    bool outRemoved = false;
+    if (!MessageRepository::ToggleReaction(convId, msgSeq, userId, emoji, outRemoved)) {
+        HandleErr(session, reqId, ERR_SERVER_INTERNAL, "반응 처리 실패");
+        return false;
+    }
+
+    // S_AddReaction 구성 (convId는 클라이언트 원본 형식으로 전달)
+    Protocol::S_AddReaction pkt_res;
+    pkt_res.set_conv_id(clientConvId);
+    pkt_res.set_msg_seq(msgSeq);
+    pkt_res.set_user_id(userId);
+    pkt_res.set_emoji(emoji);
+    pkt_res.set_removed(outRemoved);
+
+    // 브로드캐스트
+    if (clientConvId.find("group:") == 0) {
+        // 그룹 채팅
+        string groupId = clientConvId.substr(6); // "group:" 제거
+        auto members = GroupRepository::GetGroupMembers(groupId);
+        for (const auto& member : members) {
+            if (auto memberSession = _userManager.FindSession(member.userId)) {
+                Protocol::Envelope env;
+                env.set_version(GProtoVersion);
+                env.set_request_id(member.userId == userId ? reqId : 0);
+                *env.mutable_s_add_reaction() = pkt_res;
+                PacketDispatcher::SendEnvelope(memberSession, env);
+            }
+        }
+    } else {
+        // 1:1 채팅: 발신자와 수신자 각각에게 전송
+        for (const auto& pid : {userId, directTargetId}) {
+            if (pid.empty()) continue;
+            if (auto peerSession = _userManager.FindSession(pid)) {
+                Protocol::Envelope env;
+                env.set_version(GProtoVersion);
+                env.set_request_id(pid == userId ? reqId : 0);
+                *env.mutable_s_add_reaction() = pkt_res;
+                PacketDispatcher::SendEnvelope(peerSession, env);
+            }
+        }
+    }
+
+    return true;
+}
+
+
+/*======================
+    HandleCreatePoll
+========================*/
+bool ChatService::HandleCreatePoll(sessionPtr& session, uint64 reqId, const Protocol::C_CreatePoll& pkt)
+{
+    auto serverSession = static_pointer_cast<ServerSession>(session);
+    const string userId = serverSession->GetUserId();
+    if (userId.empty()) {
+        HandleErr(session, reqId, ERR_UNAUTHORIZED);
+        return false;
+    }
+
+    const string& clientConvId = pkt.conv_id();
+    if (clientConvId.find("group:") != 0) {
+        HandleErr(session, reqId, ERR_INVALID_CONV_ID, "투표는 그룹에서만 가능");
+        return false;
+    }
+
+    string groupId = clientConvId.substr(6);
+    string convId = clientConvId;
+
+    // pollId 생성: "poll_" + timestamp + random
+    int64 now = Nowts();
+    std::ostringstream pollIdStream;
+    pollIdStream << "poll_" << now << "_" << (rand() % 100000);
+    string pollId = pollIdStream.str();
+
+    // options -> JSON 배열
+    std::ostringstream optionsOss;
+    optionsOss << "[";
+    for (int i = 0; i < pkt.options_size(); i++) {
+        if (i > 0) optionsOss << ",";
+        optionsOss << "\"";
+        // Escape quotes in option text
+        for (char c : pkt.options(i)) {
+            if (c == '"') optionsOss << "\\\"";
+            else if (c == '\\') optionsOss << "\\\\";
+            else optionsOss << c;
+        }
+        optionsOss << "\"";
+    }
+    optionsOss << "]";
+    string optionsJson = optionsOss.str();
+
+    // msg_type=5 (POLL) 메시지로 저장
+    int64 msgSeq = MessageRepository::GetNextMessageSeq(convId);
+    if (msgSeq < 0) {
+        HandleErr(session, reqId, ERR_SERVER_INTERNAL, "msgSeq 생성 실패");
+        return false;
+    }
+
+    // polls 테이블에 저장
+    if (!PollRepository::CreatePoll(pollId, convId, msgSeq, userId,
+                                     pkt.question(), optionsJson,
+                                     pkt.is_multi_select(), pkt.is_anonymous(),
+                                     pkt.expires_at(), now)) {
+        HandleErr(session, reqId, ERR_SERVER_INTERNAL, "투표 생성 실패");
+        return false;
+    }
+
+    // poll JSON을 message로 저장 (msg_type=5)
+    Protocol::S_Chat sChat;
+    sChat.set_conv_id(convId);
+    sChat.set_sender_id(userId);
+    sChat.set_sender_name(GetUserNameWithId(userId));
+    sChat.set_ts_server(now);
+    sChat.set_msg_seq(msgSeq);
+
+    // poll 정보를 message payload에 JSON으로 저장
+    std::ostringstream pollJsonOss;
+    pollJsonOss << "{\"pollId\":\"" << pollId << "\""
+                << ",\"question\":\"";
+    for (char c : pkt.question()) {
+        if (c == '"') pollJsonOss << "\\\"";
+        else if (c == '\\') pollJsonOss << "\\\\";
+        else pollJsonOss << c;
+    }
+    pollJsonOss << "\",\"options\":" << optionsJson
+                << ",\"isMultiSelect\":" << (pkt.is_multi_select() ? "true" : "false")
+                << ",\"isAnonymous\":" << (pkt.is_anonymous() ? "true" : "false")
+                << ",\"expiresAt\":" << pkt.expires_at()
+                << ",\"creatorId\":\"" << userId << "\""
+                << ",\"status\":\"active\""
+                << ",\"votes\":{}}";
+    string pollJson = pollJsonOss.str();
+    sChat.mutable_payload()->mutable_text()->set_message(pollJson);
+
+    MessageRepository::SaveMessage(convId, userId, sChat, "", 0, "", 5 /* POLL */);
+
+    // S_CreatePoll 브로드캐스트
+    Protocol::S_CreatePoll pkt_res;
+    pkt_res.set_conv_id(clientConvId);
+    pkt_res.set_poll_id(pollId);
+    pkt_res.set_msg_seq(msgSeq);
+    pkt_res.set_creator_id(userId);
+    pkt_res.set_creator_name(GetUserNameWithId(userId));
+    pkt_res.set_question(pkt.question());
+    for (int i = 0; i < pkt.options_size(); i++) {
+        pkt_res.add_options(pkt.options(i));
+    }
+    pkt_res.set_is_multi_select(pkt.is_multi_select());
+    pkt_res.set_is_anonymous(pkt.is_anonymous());
+    pkt_res.set_expires_at(pkt.expires_at());
+    pkt_res.set_ts_server(now);
+
+    auto members = GroupRepository::GetGroupMembers(groupId);
+    for (const auto& member : members) {
+        if (auto memberSession = _userManager.FindSession(member.userId)) {
+            Protocol::Envelope env;
+            env.set_version(GProtoVersion);
+            env.set_request_id(member.userId == userId ? reqId : 0);
+            *env.mutable_s_create_poll() = pkt_res;
+            PacketDispatcher::SendEnvelope(memberSession, env);
+        }
+    }
+
+    cout << "[ChatService] CreatePoll: " << pollId << " in " << convId << endl;
+    return true;
+}
+
+/*======================
+    HandleVote
+========================*/
+bool ChatService::HandleVote(sessionPtr& session, uint64 reqId, const Protocol::C_Vote& pkt)
+{
+    auto serverSession = static_pointer_cast<ServerSession>(session);
+    const string userId = serverSession->GetUserId();
+    if (userId.empty()) {
+        HandleErr(session, reqId, ERR_UNAUTHORIZED);
+        return false;
+    }
+
+    const string& pollId = pkt.poll_id();
+
+    // 투표 존재 + 상태 확인
+    PollInfo pollInfo = PollRepository::GetPollInfo(pollId);
+    if (pollInfo.pollId.empty()) {
+        HandleErr(session, reqId, ERR_POLL_NOT_FOUND, "투표를 찾을 수 없음");
+        return false;
+    }
+    if (pollInfo.status != "active") {
+        HandleErr(session, reqId, ERR_POLL_CLOSED, "이미 종료된 투표");
+        return false;
+    }
+
+    // 자동 만료 체크
+    if (pollInfo.expiresAt > 0 && Nowts() > pollInfo.expiresAt) {
+        PollRepository::ClosePoll(pollId, pollInfo.creatorId);
+        HandleErr(session, reqId, ERR_POLL_CLOSED, "만료된 투표");
+        return false;
+    }
+
+    // 선택지 유효성 검사
+    vector<int> selectedOptions;
+    for (int i = 0; i < pkt.selected_options_size(); i++) {
+        selectedOptions.push_back(pkt.selected_options(i));
+    }
+
+    // 투표 저장
+    if (!PollRepository::Vote(pollId, userId, selectedOptions)) {
+        HandleErr(session, reqId, ERR_SERVER_INTERNAL, "투표 처리 실패");
+        return false;
+    }
+
+    // 최신 투표 현황
+    string votesJson = PollRepository::GetPollVotes(pollId);
+
+    // S_Vote 브로드캐스트
+    Protocol::S_Vote pkt_res;
+    pkt_res.set_conv_id(pkt.conv_id());
+    pkt_res.set_poll_id(pollId);
+    pkt_res.set_msg_seq(pkt.msg_seq());
+    pkt_res.set_voter_id(userId);
+    pkt_res.set_voter_name(GetUserNameWithId(userId));
+    for (int opt : selectedOptions) {
+        pkt_res.add_selected_options(opt);
+    }
+    pkt_res.set_votes_json(votesJson);
+
+    string clientConvId = pkt.conv_id();
+    if (clientConvId.find("group:") == 0) {
+        string groupId = clientConvId.substr(6);
+        auto members = GroupRepository::GetGroupMembers(groupId);
+        for (const auto& member : members) {
+            if (auto memberSession = _userManager.FindSession(member.userId)) {
+                Protocol::Envelope env;
+                env.set_version(GProtoVersion);
+                env.set_request_id(member.userId == userId ? reqId : 0);
+                *env.mutable_s_vote() = pkt_res;
+                PacketDispatcher::SendEnvelope(memberSession, env);
+            }
+        }
+    }
+
+    cout << "[ChatService] Vote: " << pollId << " by " << userId << endl;
+    return true;
+}
+
+/*======================
+    HandleClosePoll
+========================*/
+bool ChatService::HandleClosePoll(sessionPtr& session, uint64 reqId, const Protocol::C_ClosePoll& pkt)
+{
+    auto serverSession = static_pointer_cast<ServerSession>(session);
+    const string userId = serverSession->GetUserId();
+    if (userId.empty()) {
+        HandleErr(session, reqId, ERR_UNAUTHORIZED);
+        return false;
+    }
+
+    const string& pollId = pkt.poll_id();
+
+    if (!PollRepository::ClosePoll(pollId, userId)) {
+        HandleErr(session, reqId, ERR_NO_PERMISSION, "투표 종료 권한 없음 또는 이미 종료됨");
+        return false;
+    }
+
+    // S_ClosePoll 브로드캐스트
+    Protocol::S_ClosePoll pkt_res;
+    pkt_res.set_conv_id(pkt.conv_id());
+    pkt_res.set_poll_id(pollId);
+    pkt_res.set_msg_seq(pkt.msg_seq());
+
+    string clientConvId = pkt.conv_id();
+    if (clientConvId.find("group:") == 0) {
+        string groupId = clientConvId.substr(6);
+        auto members = GroupRepository::GetGroupMembers(groupId);
+        for (const auto& member : members) {
+            if (auto memberSession = _userManager.FindSession(member.userId)) {
+                Protocol::Envelope env;
+                env.set_version(GProtoVersion);
+                env.set_request_id(member.userId == userId ? reqId : 0);
+                *env.mutable_s_close_poll() = pkt_res;
+                PacketDispatcher::SendEnvelope(memberSession, env);
+            }
+        }
+    }
+
+    cout << "[ChatService] ClosePoll: " << pollId << endl;
     return true;
 }
 
