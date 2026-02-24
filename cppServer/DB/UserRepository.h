@@ -62,6 +62,7 @@ public:
         int64 storageCapacity = 0;
         int64 storageUsage = 0;
         int64 maxFileSize = 26214400; // 기본 25MB
+        int64 subGrade = 0;           // 구독 등급 (0=무료, 1=Pro, 2=Premium)
     };
     static bool GetStorageInfo(const string& userId, StorageInfo& OUT info);
     static bool SaveUserAsset(const string& userId, int64 msgSeq, int64 fileSize, const string& fileType);

@@ -108,8 +108,14 @@
     <ClCompile Include="Service\BlockService.cpp">
       <Filter>Service</Filter>
     </ClCompile>
+    <ClCompile Include="Service\ExpirationBatchJob.cpp">
+      <Filter>Service</Filter>
+    </ClCompile>
     <ClCompile Include="Service\PaymentService.cpp">
       <Filter>Service</Filter>
+    </ClCompile>
+    <ClCompile Include="DB\PollRepository.cpp">
+      <Filter>DB</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -197,8 +203,14 @@
     <ClInclude Include="Service\BlockService.h">
       <Filter>Service</Filter>
     </ClInclude>
+    <ClInclude Include="Service\ExpirationBatchJob.h">
+      <Filter>Service</Filter>
+    </ClInclude>
     <ClInclude Include="Service\PaymentService.h">
       <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="DB\PollRepository.h">
+      <Filter>DB</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

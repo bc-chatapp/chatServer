@@ -49,90 +49,51 @@ export function groupRoleToJSON(object: GroupRole): string {
   }
 }
 
-/** 에러 코드 enum (클라이언트-서버 공통) */
 export enum ErrorCode {
-  /** ERR_SUCCESS - 성공 */
   ERR_SUCCESS = 0,
-  /** ERR_UNKNOWN - 1~99: 공용/시스템 에러 */
   ERR_UNKNOWN = 1,
-  /** ERR_SERVER_INTERNAL - 서버 내부 로직 에러 (DB 등) */
   ERR_SERVER_INTERNAL = 2,
-  /** ERR_INVALID_PACKET - 패킷 변조 의심 */
   ERR_INVALID_PACKET = 3,
-  /** ERR_VERSION_MISMATCH - 프로토콜 버전 불일치 */
   ERR_VERSION_MISMATCH = 4,
-  /** ERR_UNAUTHORIZED - 인증 실패 */
   ERR_UNAUTHORIZED = 5,
-  /** ERR_INVALID_TOKEN - 토큰이 유효하지 않음 */
   ERR_INVALID_TOKEN = 6,
-  /** ERR_USER_ID_EMPTY - 100~199: 인증/사용자 관련 */
   ERR_USER_ID_EMPTY = 100,
-  /** ERR_USER_ID_REQUIRED - 사용자 ID가 필요함 */
   ERR_USER_ID_REQUIRED = 101,
-  /** ERR_PASSWORD_REQUIRED - 비밀번호가 필요함 */
   ERR_PASSWORD_REQUIRED = 102,
-  /** ERR_NAME_REQUIRED - 이름이 필요함 */
   ERR_NAME_REQUIRED = 103,
-  /** ERR_EMAIL_REQUIRED - 이메일이 필요함 */
   ERR_EMAIL_REQUIRED = 104,
-  /** ERR_USER_NOT_FOUND - 사용자를 찾을 수 없음 */
   ERR_USER_NOT_FOUND = 105,
-  /** ERR_INVALID_PASSWORD - 비밀번호가 올바르지 않음 */
   ERR_INVALID_PASSWORD = 106,
-  /** ERR_USER_ALREADY_EXISTS - 사용자가 이미 존재함 */
   ERR_USER_ALREADY_EXISTS = 107,
-  /** ERR_EMAIL_ALREADY_EXISTS - 사용자가 이미 존재함 */
   ERR_EMAIL_ALREADY_EXISTS = 108,
-  /** ERR_PAYLOAD_EMPTY - 200~299: 채팅 관련 */
   ERR_PAYLOAD_EMPTY = 200,
-  /** ERR_INVALID_CONV_ID - 대화방 ID가 유효하지 않음 */
   ERR_INVALID_CONV_ID = 201,
-  /** ERR_INVALID_RECEIVER_ID - 수신자 ID가 유효하지 않음 */
   ERR_INVALID_RECEIVER_ID = 202,
-  /** ERR_INVALID_ACK - ACK 정보가 유효하지 않음 */
   ERR_INVALID_ACK = 203,
-  /** ERR_INVALID_FRIEND_USER_ID - 300~399: 친구 요청 관련 */
   ERR_INVALID_FRIEND_USER_ID = 300,
-  /** ERR_CANNOT_ADD_SELF - 자신을 친구로 추가할 수 없음 */
   ERR_CANNOT_ADD_SELF = 301,
-  /** ERR_NOT_A_FRIEND - 친구가 아님 */
   ERR_NOT_A_FRIEND = 302,
-  /** ERR_FRIEND_REQUEST_NOT_FOUND - 친구 요청을 찾을 수 없음 */
   ERR_FRIEND_REQUEST_NOT_FOUND = 303,
-  /** ERR_FILE_SERVICE_NOT_INITIALIZED - 400~499: 파일 업로드 관련 */
   ERR_FILE_SERVICE_NOT_INITIALIZED = 400,
-  /** ERR_CLOUD_STORAGE_NOT_INITIALIZED - 클라우드 스토리지가 초기화되지 않음 */
   ERR_CLOUD_STORAGE_NOT_INITIALIZED = 401,
-  /** ERR_FILENAME_REQUIRED - 파일명이 필요함 */
   ERR_FILENAME_REQUIRED = 402,
-  /** ERR_INVALID_FILE_SIZE - 파일 크기가 유효하지 않음 */
   ERR_INVALID_FILE_SIZE = 403,
-  /** ERR_MIME_TYPE_REQUIRED - MIME 타입이 필요함 */
   ERR_MIME_TYPE_REQUIRED = 404,
-  /** ERR_FAILED_TO_GENERATE_URL - URL 생성 실패 */
   ERR_FAILED_TO_GENERATE_URL = 405,
-  /** ERR_INVALID_FILE_URL - 파일 URL이 유효하지 않음 */
   ERR_INVALID_FILE_URL = 406,
-  /** ERR_INVALID_ARGUMENT - 잘못된 인자 (예: Group ID 누락) */
   ERR_INVALID_ARGUMENT = 407,
-  /** ERR_STORAGE_EXCEEDED - 저장 용량 초과 */
   ERR_STORAGE_EXCEEDED = 408,
-  /** ERR_FILE_TOO_LARGE - 파일 크기 제한 초과 */
   ERR_FILE_TOO_LARGE = 409,
-  /** ERR_PAYMENT_FAILED - 결제 실패 */
   ERR_PAYMENT_FAILED = 410,
-  /** ERR_RECEIPT_INVALID - 영수증 검증 실패 */
   ERR_RECEIPT_INVALID = 411,
-  /** ERR_NO_PERMISSION - 500 그룹관련 */
   ERR_NO_PERMISSION = 500,
-  /** ERR_ALREADY_BLOCKED - 600 차단 관련 */
   ERR_ALREADY_BLOCKED = 600,
-  /** ERR_NOT_BLOCKED - 차단되지 않은 사용자 */
   ERR_NOT_BLOCKED = 601,
-  /** ERR_CANNOT_BLOCK_SELF - 자기 자신을 차단할 수 없음 */
   ERR_CANNOT_BLOCK_SELF = 602,
-  /** ERR_REPORT_DUPLICATE - 이미 신고한 사용자 */
   ERR_REPORT_DUPLICATE = 610,
+  ERR_POLL_NOT_FOUND = 700,
+  ERR_POLL_CLOSED = 701,
+  ERR_POLL_INVALID_OPTION = 702,
   UNRECOGNIZED = -1,
 }
 
@@ -261,6 +222,15 @@ export function errorCodeFromJSON(object: any): ErrorCode {
     case 610:
     case "ERR_REPORT_DUPLICATE":
       return ErrorCode.ERR_REPORT_DUPLICATE;
+    case 700:
+    case "ERR_POLL_NOT_FOUND":
+      return ErrorCode.ERR_POLL_NOT_FOUND;
+    case 701:
+    case "ERR_POLL_CLOSED":
+      return ErrorCode.ERR_POLL_CLOSED;
+    case 702:
+    case "ERR_POLL_INVALID_OPTION":
+      return ErrorCode.ERR_POLL_INVALID_OPTION;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -352,20 +322,28 @@ export function errorCodeToJSON(object: ErrorCode): string {
       return "ERR_CANNOT_BLOCK_SELF";
     case ErrorCode.ERR_REPORT_DUPLICATE:
       return "ERR_REPORT_DUPLICATE";
+    case ErrorCode.ERR_POLL_NOT_FOUND:
+      return "ERR_POLL_NOT_FOUND";
+    case ErrorCode.ERR_POLL_CLOSED:
+      return "ERR_POLL_CLOSED";
+    case ErrorCode.ERR_POLL_INVALID_OPTION:
+      return "ERR_POLL_INVALID_OPTION";
     case ErrorCode.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
   }
 }
 
+/**
+ * =================================================
+ * Envelope
+ * =================================================
+ */
 export interface Envelope {
-  /** 버전 */
   version: number;
-  /** 요청-응답 매칭(0이면 서버푸시) */
   requestId: number;
-  /** JWT 인증 토큰 */
   authToken: string;
-  /** ─── AUTH / LOGIN (10 ~ 29) ─── */
+  /** AUTH / LOGIN (10 ~ 29) */
   cCheckId?: CCheckId | undefined;
   sCheckId?: SCheckId | undefined;
   cCheckEmail?: CCheckEmail | undefined;
@@ -386,7 +364,7 @@ export interface Envelope {
   sRemoveDevice?:
     | SRemoveDevice
     | undefined;
-  /** ─── MY INFO / SETTINGS (30 ~ 39) ─── */
+  /** MY INFO / SETTINGS (30 ~ 39) */
   cFetchMyInfo?: CFetchMyInfo | undefined;
   sFetchMyInfo?: SFetchMyInfo | undefined;
   cEditMyInfo?: CEditMyInfo | undefined;
@@ -399,7 +377,7 @@ export interface Envelope {
   sChangePassword?:
     | SChangePassword
     | undefined;
-  /** ─── CHAT / DATA / FILE (40 ~ 59) ─── */
+  /** CHAT / DATA / FILE (40 ~ 59) */
   cChat?: CChat | undefined;
   sChat?: SChat | undefined;
   cAck?: CAck | undefined;
@@ -418,10 +396,12 @@ export interface Envelope {
   cVerifyPurchase?: CVerifyPurchase | undefined;
   sVerifyPurchase?: SVerifyPurchase | undefined;
   cReadReceipt?: CReadReceipt | undefined;
-  sReadReceipt?:
-    | SReadReceipt
+  sReadReceipt?: SReadReceipt | undefined;
+  cCancelSubscription?: CCancelSubscription | undefined;
+  sCancelSubscription?:
+    | SCancelSubscription
     | undefined;
-  /** ─── FRIENDS (60 ~ 79) ─── */
+  /** FRIENDS (60 ~ 79) */
   cSearchUser?: CSearchUser | undefined;
   sSearchUser?: SSearchUser | undefined;
   cFriendAction?: CFriendAction | undefined;
@@ -431,7 +411,7 @@ export interface Envelope {
   sFriendPush?:
     | SFriendPush
     | undefined;
-  /** ─── BLOCK / REPORT (67 ~ 74) ─── */
+  /** BLOCK / REPORT (67 ~ 74) */
   cBlockUser?: CBlockUser | undefined;
   sBlockUser?: SBlockUser | undefined;
   cUnblockUser?: CUnblockUser | undefined;
@@ -439,10 +419,18 @@ export interface Envelope {
   cGetBlockedList?: CGetBlockedList | undefined;
   sGetBlockedList?: SGetBlockedList | undefined;
   cReportUser?: CReportUser | undefined;
-  sReportUser?:
-    | SReportUser
+  sReportUser?: SReportUser | undefined;
+  cAddReaction?: CAddReaction | undefined;
+  cCreatePoll?: CCreatePoll | undefined;
+  cVote?: CVote | undefined;
+  cClosePoll?: CClosePoll | undefined;
+  sAddReaction?: SAddReaction | undefined;
+  sCreatePoll?: SCreatePoll | undefined;
+  sVote?: SVote | undefined;
+  sClosePoll?:
+    | SClosePoll
     | undefined;
-  /** ─── GROUPS (80 ~ 99) ─── */
+  /** GROUPS (80 ~ 99) */
   cCreateGroup?: CCreateGroup | undefined;
   sCreateGroup?: SCreateGroup | undefined;
   cGroupList?: CGroupList | undefined;
@@ -465,13 +453,13 @@ export interface Envelope {
   sDeleteGroup?:
     | SDeleteGroup
     | undefined;
-  /** ─── SYSTEM (100 ~ ) ─── */
+  /** SYSTEM (100 ~ ) */
   sError?: SError | undefined;
   cHeartbeat?: CHeartbeat | undefined;
   sHeartbeat?: SHeartbeat | undefined;
 }
 
-/** 통합 사용자 정보 (본인, 친구, 그룹원 공통 사용) */
+/** UserInfo */
 export interface UserInfo {
   userId: string;
   name: string;
@@ -480,13 +468,21 @@ export interface UserInfo {
   backgroundImageUrl: string;
   email: string;
   phone: string;
-  /** 구독 등급 (0: 일반, 1: 프로 등) */
   subGrade: number;
   storageCapacityBytes: number;
   storageUsageBytes: number;
   lastSeen: number;
-  /** "online", "offline" */
   status: string;
+}
+
+export interface DeviceInfo {
+  deviceId: string;
+  deviceName: string;
+  platform: string;
+  lastActive: number;
+  registeredAt: number;
+  appVersion: string;
+  isCurrent: boolean;
 }
 
 export interface CCheckId {
@@ -544,19 +540,32 @@ export interface CLogin {
 export interface SLogin {
   success: boolean;
   authToken: string;
-  /** 로그인 시 내 정보를 한꺼번에 동기화 */
   myInfo: UserInfo | undefined;
 }
 
 export interface CLogout {
-  /** 삭제할 FCM 토큰 (현재 기기) */
   fcmToken: string;
-  /** 디바이스 ID (선택) */
   deviceId: string;
 }
 
 export interface SLogout {
   success: boolean;
+}
+
+export interface CGetMyDevices {
+}
+
+export interface SGetMyDevices {
+  devices: DeviceInfo[];
+}
+
+export interface CRemoveDevice {
+  deviceId: string;
+}
+
+export interface SRemoveDevice {
+  success: boolean;
+  message: string;
 }
 
 export interface CFetchMyInfo {
@@ -567,7 +576,6 @@ export interface SFetchMyInfo {
 }
 
 export interface CEditMyInfo {
-  /** 수정하고 싶은 필드만 담아서 전송 (서버에서 Optional 처리) */
   name: string;
   statusMessage: string;
   profileImageUrl: string;
@@ -582,15 +590,10 @@ export interface SEditMyInfo {
 }
 
 export interface CRegisterFcmToken {
-  /** FCM 디바이스 토큰 */
   fcmToken: string;
-  /** "android" 또는 "ios" */
   platform: string;
-  /** 디바이스 고유 ID (선택) */
   deviceId: string;
-  /** 기기 이름 (예: "Galaxy S24", "iPad Pro") */
   deviceName: string;
-  /** 앱 버전 */
   appVersion: string;
 }
 
@@ -599,54 +602,16 @@ export interface SRegisterFcmToken {
   message: string;
 }
 
-export interface DeviceInfo {
-  /** 기기 고유 ID */
-  deviceId: string;
-  /** 기기 이름 */
-  deviceName: string;
-  /** android/ios */
-  platform: string;
-  /** 마지막 활동 시간 (Unix timestamp ms) */
-  lastActive: number;
-  /** 등록 시간 */
-  registeredAt: number;
-  /** 앱 버전 */
-  appVersion: string;
-  /** 현재 요청한 기기인지 */
-  isCurrent: boolean;
-}
-
-export interface CGetMyDevices {
-}
-
-export interface SGetMyDevices {
-  devices: DeviceInfo[];
-}
-
-export interface CRemoveDevice {
-  /** 삭제할 기기의 device_id */
-  deviceId: string;
-}
-
-export interface SRemoveDevice {
-  success: boolean;
-  message: string;
-}
-
-/** 이메일 변경 (인증 완료 후 호출) */
 export interface CChangeEmail {
-  /** 인증 완료된 새 이메일 */
   newEmail: string;
 }
 
 export interface SChangeEmail {
   success: boolean;
   message: string;
-  /** 변경된 사용자 정보 */
   updatedInfo: UserInfo | undefined;
 }
 
-/** 비밀번호 변경 */
 export interface CChangePassword {
   currentPassword: string;
   newPassword: string;
@@ -683,7 +648,6 @@ export interface File {
 
 export interface SystemMsg {
   message: string;
-  /** 0: 일반, 1: 초대장 */
   type: number;
   inviteGroupId: string;
 }
@@ -701,8 +665,9 @@ export interface CChat {
   clientMsgId: number;
   payload: ChatPayload | undefined;
   tsClient: number;
-  /** 답장 대상 seq */
   replyToSeq: number;
+  gcsPath: string;
+  mentionedUserIds: string[];
 }
 
 export interface SChat {
@@ -718,21 +683,20 @@ export interface SChat {
   replyToText: string;
   isDeleted: boolean;
   isEdited: boolean;
-  /** 아직 읽지 않은 멤버 수 */
   unreadCount: number;
+  fileExpiresAt: number;
+  fileStatus: string;
+  mentionedUserIds: string[];
 }
 
 export interface CReadReceipt {
   convId: string;
-  /** 클라이언트가 읽은 마지막 메시지 seq */
   lastReadSeq: number;
 }
 
 export interface SReadReceipt {
   convId: string;
-  /** 읽은 사람 userId */
   readerId: string;
-  /** 그 사람이 읽은 마지막 seq */
   lastReadSeq: number;
 }
 
@@ -763,44 +727,30 @@ export interface SEditMessage {
 
 export interface CReqHistory {
   convId: string;
-  /** 클라가 가지고 있는 가장 오래된 메시지 번호 */
   lastMsgSeq: number;
-  /** 30~50개 */
   limit: number;
 }
 
 export interface SReqHistory {
   convId: string;
   messages: SChat[];
-  /** 더 옛날 게 남아있는지 여부 */
   isEnd: boolean;
 }
 
-/** 파일 업로드 요청 */
 export interface CUploadFile {
-  /** 원본 파일명 */
   filename: string;
-  /** 파일 크기 (bytes) */
   size: number;
-  /** MIME 타입 (image/jpeg, application/pdf 등) */
   mimeType: string;
-  /** 이미지 여부 (썸네일 생성 여부 결정) */
   isImage: boolean;
   uploadType: CUploadFile_UploadType;
-  /** 그룹일 경우 groupId */
   targetId: string;
 }
 
 export enum CUploadFile_UploadType {
-  /** DIRECT_CHAT - 개인 채팅 */
   DIRECT_CHAT = 0,
-  /** GROUP_CHAT - 그룹 채팅 */
   GROUP_CHAT = 1,
-  /** PROFILE_IMG - 프로필 이미지 */
   PROFILE_IMG = 2,
-  /** GROUP_PROFILE_IMG - 그룹 프로필 이미지 */
   GROUP_PROFILE_IMG = 3,
-  /** BACKGROUND_IMG - 배경 이미지 */
   BACKGROUND_IMG = 4,
   UNRECOGNIZED = -1,
 }
@@ -850,20 +800,14 @@ export function cUploadFile_UploadTypeToJSON(object: CUploadFile_UploadType): st
 export interface SUploadFile {
   success: boolean;
   message: string;
-  /** 생성된 파일 ID */
   fileId: string;
-  /** GCS Signed Upload URL (PUT) */
   uploadUrl: string;
-  /** GCS Signed Download URL (GET) */
   downloadUrl: string;
-  /** 썸네일 다운로드 URL (이미지인 경우) */
   thumbUploadUrl: string;
-  /** 썸네일 다운로드용 (GET) 이름 유지 */
   thumbnailUrl: string;
-  /** URL 만료 시간 (Unix timestamp) */
   expiresAt: number;
-  /** GCS 경로 (gs://bucket/path) */
   path: string;
+  fileRetentionExpiresAt: number;
 }
 
 export interface CAck {
@@ -881,22 +825,68 @@ export interface SMessageBatch {
 
 export interface SMessageBatch_ConversationBatch {
   convId: string;
-  /** 최신 50개 */
   messages: SChat[];
-  /** 안 읽은 전체 개수 (배지 표시용) */
   unreadCount: number;
+  lastReadSeq: number;
 }
 
-/**
- * -----------------------------
- * Friends
- * -----------------------------
- */
-export interface FriendRequest {
-  requester: UserInfo | undefined;
-  requestedAt: number;
-  /** true: 받은거, false: 보낸거 */
-  isReceived: boolean;
+export interface CGetSubscription {
+}
+
+export interface SubscriptionPlan {
+  planId: number;
+  planType: string;
+  name: string;
+  grade: number;
+  storageBytes: number;
+  maxFileSize: number;
+  monthlyPrice: number;
+  features: string[];
+}
+
+export interface SGetSubscription {
+  success: boolean;
+  currentGrade: number;
+  currentPlanName: string;
+  storageCapacityBytes: number;
+  storageUsageBytes: number;
+  expiresAt: number;
+  autoRenew: boolean;
+  availablePlans: SubscriptionPlan[];
+}
+
+export interface CVerifyPurchase {
+  platform: string;
+  productId: string;
+  transactionId: string;
+  purchaseToken: string;
+}
+
+export interface SVerifyPurchase {
+  success: boolean;
+  message: string;
+  newGrade: number;
+  expiresAt: number;
+  storageCapacity: number;
+}
+
+export interface CCancelSubscription {
+}
+
+export interface SCancelSubscription {
+  success: boolean;
+  message: string;
+  graceExpiresAt: number;
+}
+
+export interface CWithdraw {
+  password: string;
+  reason: string;
+}
+
+export interface SWithdraw {
+  success: boolean;
+  message: string;
 }
 
 export interface CSearchUser {
@@ -910,7 +900,12 @@ export interface SSearchUser {
   hasSentRequest: boolean;
 }
 
-/** --- 친구 관리 액션 (요청, 수락, 거절, 삭제) --- */
+export interface FriendRequest {
+  requester: UserInfo | undefined;
+  requestedAt: number;
+  isReceived: boolean;
+}
+
 export interface CFriendAction {
   action: CFriendAction_ActionType;
   targetUserId: string;
@@ -983,7 +978,7 @@ export interface SFetchFriendData {
 }
 
 export interface SFriendPush {
-  type: SFriendPush_PushType;
+  pushType: SFriendPush_PushType;
   userInfo: UserInfo | undefined;
 }
 
@@ -1026,19 +1021,12 @@ export function sFriendPush_PushTypeToJSON(object: SFriendPush_PushType): string
   }
 }
 
-/** [그룹 멤버 상세 정보] */
 export interface GroupMemberInfo {
-  /** 유저 기본 정보 포함 */
-  userInfo:
-    | UserInfo
-    | undefined;
-  /** 멤버 권한 */
+  userInfo: UserInfo | undefined;
   role: GroupRole;
-  /** 가입 타임스탬프 */
   joinedAt: number;
 }
 
-/** [그룹 정보] */
 export interface GroupInfo {
   groupId: string;
   groupName: string;
@@ -1046,9 +1034,7 @@ export interface GroupInfo {
   description: string;
   groupImageUrl: string;
   memberCount: number;
-  /** 총 용량 (예: 10GB = 10737418240) */
   storageCapacityBytes: number;
-  /** 현재 사용량 */
   storageUsageBytes: number;
 }
 
@@ -1132,66 +1118,6 @@ export interface SDeleteGroup {
   success: boolean;
 }
 
-/**
- * -----------------------------
- * 회원 탈퇴
- * -----------------------------
- */
-export interface CWithdraw {
-  /** 본인 확인용 */
-  password: string;
-  /** 탈퇴 사유 (선택) */
-  reason: string;
-}
-
-export interface SWithdraw {
-  success: boolean;
-  message: string;
-}
-
-export interface CGetSubscription {
-}
-
-export interface SubscriptionPlan {
-  planId: number;
-  /** "personal" | "group" */
-  planType: string;
-  name: string;
-  grade: number;
-  storageBytes: number;
-  maxFileSize: number;
-  monthlyPrice: number;
-  features: string[];
-}
-
-export interface SGetSubscription {
-  success: boolean;
-  currentGrade: number;
-  currentPlanName: string;
-  storageCapacityBytes: number;
-  storageUsageBytes: number;
-  expiresAt: number;
-  autoRenew: boolean;
-  availablePlans: SubscriptionPlan[];
-}
-
-export interface CVerifyPurchase {
-  /** "android" | "ios" */
-  platform: string;
-  productId: string;
-  transactionId: string;
-  /** Google: purchaseToken / Apple: receipt (base64) */
-  purchaseToken: string;
-}
-
-export interface SVerifyPurchase {
-  success: boolean;
-  message: string;
-  newGrade: number;
-  expiresAt: number;
-  storageCapacity: number;
-}
-
 export interface BlockedUserInfo {
   userId: string;
   name: string;
@@ -1225,9 +1151,7 @@ export interface SGetBlockedList {
 
 export interface CReportUser {
   targetUserId: string;
-  /** "spam" | "abuse" | "other" */
   reason: string;
-  /** 추가 설명 (선택) */
   detail: string;
 }
 
@@ -1235,12 +1159,75 @@ export interface SReportUser {
   success: boolean;
 }
 
+export interface CAddReaction {
+  convId: string;
+  msgSeq: number;
+  emoji: string;
+}
+
+export interface SAddReaction {
+  convId: string;
+  msgSeq: number;
+  userId: string;
+  emoji: string;
+  removed: boolean;
+}
+
+export interface CCreatePoll {
+  convId: string;
+  question: string;
+  options: string[];
+  isMultiSelect: boolean;
+  isAnonymous: boolean;
+  expiresAt: number;
+}
+
+export interface SCreatePoll {
+  convId: string;
+  pollId: string;
+  msgSeq: number;
+  creatorId: string;
+  creatorName: string;
+  question: string;
+  options: string[];
+  isMultiSelect: boolean;
+  isAnonymous: boolean;
+  expiresAt: number;
+  tsServer: number;
+}
+
+export interface CVote {
+  convId: string;
+  pollId: string;
+  msgSeq: number;
+  selectedOptions: number[];
+}
+
+export interface SVote {
+  convId: string;
+  pollId: string;
+  msgSeq: number;
+  voterId: string;
+  voterName: string;
+  selectedOptions: number[];
+  votesJson: string;
+}
+
+export interface CClosePoll {
+  convId: string;
+  pollId: string;
+  msgSeq: number;
+}
+
+export interface SClosePoll {
+  convId: string;
+  pollId: string;
+  msgSeq: number;
+}
+
 export interface SError {
-  /** 에러 코드 (enum) */
   errorCode: ErrorCode;
-  /** HTTP 스타일 코드 (하위 호환성) */
   code: number;
-  /** 에러 메시지 */
   message: string;
 }
 
@@ -1302,6 +1289,8 @@ function createBaseEnvelope(): Envelope {
     sVerifyPurchase: undefined,
     cReadReceipt: undefined,
     sReadReceipt: undefined,
+    cCancelSubscription: undefined,
+    sCancelSubscription: undefined,
     cSearchUser: undefined,
     sSearchUser: undefined,
     cFriendAction: undefined,
@@ -1317,6 +1306,14 @@ function createBaseEnvelope(): Envelope {
     sGetBlockedList: undefined,
     cReportUser: undefined,
     sReportUser: undefined,
+    cAddReaction: undefined,
+    cCreatePoll: undefined,
+    cVote: undefined,
+    cClosePoll: undefined,
+    sAddReaction: undefined,
+    sCreatePoll: undefined,
+    sVote: undefined,
+    sClosePoll: undefined,
     cCreateGroup: undefined,
     sCreateGroup: undefined,
     cGroupList: undefined,
@@ -1349,7 +1346,7 @@ export const Envelope = {
       writer.uint32(8).uint32(message.version);
     }
     if (message.requestId !== 0) {
-      writer.uint32(16).uint64(message.requestId);
+      writer.uint32(16).uint32(message.requestId);
     }
     if (message.authToken !== "") {
       writer.uint32(26).string(message.authToken);
@@ -1495,6 +1492,12 @@ export const Envelope = {
     if (message.sReadReceipt !== undefined) {
       SReadReceipt.encode(message.sReadReceipt, writer.uint32(466).fork()).ldelim();
     }
+    if (message.cCancelSubscription !== undefined) {
+      CCancelSubscription.encode(message.cCancelSubscription, writer.uint32(474).fork()).ldelim();
+    }
+    if (message.sCancelSubscription !== undefined) {
+      SCancelSubscription.encode(message.sCancelSubscription, writer.uint32(826).fork()).ldelim();
+    }
     if (message.cSearchUser !== undefined) {
       CSearchUser.encode(message.cSearchUser, writer.uint32(482).fork()).ldelim();
     }
@@ -1539,6 +1542,30 @@ export const Envelope = {
     }
     if (message.sReportUser !== undefined) {
       SReportUser.encode(message.sReportUser, writer.uint32(594).fork()).ldelim();
+    }
+    if (message.cAddReaction !== undefined) {
+      CAddReaction.encode(message.cAddReaction, writer.uint32(602).fork()).ldelim();
+    }
+    if (message.cCreatePoll !== undefined) {
+      CCreatePoll.encode(message.cCreatePoll, writer.uint32(610).fork()).ldelim();
+    }
+    if (message.cVote !== undefined) {
+      CVote.encode(message.cVote, writer.uint32(618).fork()).ldelim();
+    }
+    if (message.cClosePoll !== undefined) {
+      CClosePoll.encode(message.cClosePoll, writer.uint32(626).fork()).ldelim();
+    }
+    if (message.sAddReaction !== undefined) {
+      SAddReaction.encode(message.sAddReaction, writer.uint32(834).fork()).ldelim();
+    }
+    if (message.sCreatePoll !== undefined) {
+      SCreatePoll.encode(message.sCreatePoll, writer.uint32(842).fork()).ldelim();
+    }
+    if (message.sVote !== undefined) {
+      SVote.encode(message.sVote, writer.uint32(850).fork()).ldelim();
+    }
+    if (message.sClosePoll !== undefined) {
+      SClosePoll.encode(message.sClosePoll, writer.uint32(858).fork()).ldelim();
     }
     if (message.cCreateGroup !== undefined) {
       CCreateGroup.encode(message.cCreateGroup, writer.uint32(642).fork()).ldelim();
@@ -1631,7 +1658,7 @@ export const Envelope = {
             break;
           }
 
-          message.requestId = longToNumber(reader.uint64() as Long);
+          message.requestId = reader.uint32();
           continue;
         case 3:
           if (tag !== 26) {
@@ -1969,6 +1996,20 @@ export const Envelope = {
 
           message.sReadReceipt = SReadReceipt.decode(reader, reader.uint32());
           continue;
+        case 59:
+          if (tag !== 474) {
+            break;
+          }
+
+          message.cCancelSubscription = CCancelSubscription.decode(reader, reader.uint32());
+          continue;
+        case 103:
+          if (tag !== 826) {
+            break;
+          }
+
+          message.sCancelSubscription = SCancelSubscription.decode(reader, reader.uint32());
+          continue;
         case 60:
           if (tag !== 482) {
             break;
@@ -2073,6 +2114,62 @@ export const Envelope = {
           }
 
           message.sReportUser = SReportUser.decode(reader, reader.uint32());
+          continue;
+        case 75:
+          if (tag !== 602) {
+            break;
+          }
+
+          message.cAddReaction = CAddReaction.decode(reader, reader.uint32());
+          continue;
+        case 76:
+          if (tag !== 610) {
+            break;
+          }
+
+          message.cCreatePoll = CCreatePoll.decode(reader, reader.uint32());
+          continue;
+        case 77:
+          if (tag !== 618) {
+            break;
+          }
+
+          message.cVote = CVote.decode(reader, reader.uint32());
+          continue;
+        case 78:
+          if (tag !== 626) {
+            break;
+          }
+
+          message.cClosePoll = CClosePoll.decode(reader, reader.uint32());
+          continue;
+        case 104:
+          if (tag !== 834) {
+            break;
+          }
+
+          message.sAddReaction = SAddReaction.decode(reader, reader.uint32());
+          continue;
+        case 105:
+          if (tag !== 842) {
+            break;
+          }
+
+          message.sCreatePoll = SCreatePoll.decode(reader, reader.uint32());
+          continue;
+        case 106:
+          if (tag !== 850) {
+            break;
+          }
+
+          message.sVote = SVote.decode(reader, reader.uint32());
+          continue;
+        case 107:
+          if (tag !== 858) {
+            break;
+          }
+
+          message.sClosePoll = SClosePoll.decode(reader, reader.uint32());
           continue;
         case 80:
           if (tag !== 642) {
@@ -2304,6 +2401,12 @@ export const Envelope = {
       sVerifyPurchase: isSet(object.sVerifyPurchase) ? SVerifyPurchase.fromJSON(object.sVerifyPurchase) : undefined,
       cReadReceipt: isSet(object.cReadReceipt) ? CReadReceipt.fromJSON(object.cReadReceipt) : undefined,
       sReadReceipt: isSet(object.sReadReceipt) ? SReadReceipt.fromJSON(object.sReadReceipt) : undefined,
+      cCancelSubscription: isSet(object.cCancelSubscription)
+        ? CCancelSubscription.fromJSON(object.cCancelSubscription)
+        : undefined,
+      sCancelSubscription: isSet(object.sCancelSubscription)
+        ? SCancelSubscription.fromJSON(object.sCancelSubscription)
+        : undefined,
       cSearchUser: isSet(object.cSearchUser) ? CSearchUser.fromJSON(object.cSearchUser) : undefined,
       sSearchUser: isSet(object.sSearchUser) ? SSearchUser.fromJSON(object.sSearchUser) : undefined,
       cFriendAction: isSet(object.cFriendAction) ? CFriendAction.fromJSON(object.cFriendAction) : undefined,
@@ -2319,6 +2422,14 @@ export const Envelope = {
       sGetBlockedList: isSet(object.sGetBlockedList) ? SGetBlockedList.fromJSON(object.sGetBlockedList) : undefined,
       cReportUser: isSet(object.cReportUser) ? CReportUser.fromJSON(object.cReportUser) : undefined,
       sReportUser: isSet(object.sReportUser) ? SReportUser.fromJSON(object.sReportUser) : undefined,
+      cAddReaction: isSet(object.cAddReaction) ? CAddReaction.fromJSON(object.cAddReaction) : undefined,
+      cCreatePoll: isSet(object.cCreatePoll) ? CCreatePoll.fromJSON(object.cCreatePoll) : undefined,
+      cVote: isSet(object.cVote) ? CVote.fromJSON(object.cVote) : undefined,
+      cClosePoll: isSet(object.cClosePoll) ? CClosePoll.fromJSON(object.cClosePoll) : undefined,
+      sAddReaction: isSet(object.sAddReaction) ? SAddReaction.fromJSON(object.sAddReaction) : undefined,
+      sCreatePoll: isSet(object.sCreatePoll) ? SCreatePoll.fromJSON(object.sCreatePoll) : undefined,
+      sVote: isSet(object.sVote) ? SVote.fromJSON(object.sVote) : undefined,
+      sClosePoll: isSet(object.sClosePoll) ? SClosePoll.fromJSON(object.sClosePoll) : undefined,
       cCreateGroup: isSet(object.cCreateGroup) ? CCreateGroup.fromJSON(object.cCreateGroup) : undefined,
       sCreateGroup: isSet(object.sCreateGroup) ? SCreateGroup.fromJSON(object.sCreateGroup) : undefined,
       cGroupList: isSet(object.cGroupList) ? CGroupList.fromJSON(object.cGroupList) : undefined,
@@ -2497,6 +2608,12 @@ export const Envelope = {
     if (message.sReadReceipt !== undefined) {
       obj.sReadReceipt = SReadReceipt.toJSON(message.sReadReceipt);
     }
+    if (message.cCancelSubscription !== undefined) {
+      obj.cCancelSubscription = CCancelSubscription.toJSON(message.cCancelSubscription);
+    }
+    if (message.sCancelSubscription !== undefined) {
+      obj.sCancelSubscription = SCancelSubscription.toJSON(message.sCancelSubscription);
+    }
     if (message.cSearchUser !== undefined) {
       obj.cSearchUser = CSearchUser.toJSON(message.cSearchUser);
     }
@@ -2541,6 +2658,30 @@ export const Envelope = {
     }
     if (message.sReportUser !== undefined) {
       obj.sReportUser = SReportUser.toJSON(message.sReportUser);
+    }
+    if (message.cAddReaction !== undefined) {
+      obj.cAddReaction = CAddReaction.toJSON(message.cAddReaction);
+    }
+    if (message.cCreatePoll !== undefined) {
+      obj.cCreatePoll = CCreatePoll.toJSON(message.cCreatePoll);
+    }
+    if (message.cVote !== undefined) {
+      obj.cVote = CVote.toJSON(message.cVote);
+    }
+    if (message.cClosePoll !== undefined) {
+      obj.cClosePoll = CClosePoll.toJSON(message.cClosePoll);
+    }
+    if (message.sAddReaction !== undefined) {
+      obj.sAddReaction = SAddReaction.toJSON(message.sAddReaction);
+    }
+    if (message.sCreatePoll !== undefined) {
+      obj.sCreatePoll = SCreatePoll.toJSON(message.sCreatePoll);
+    }
+    if (message.sVote !== undefined) {
+      obj.sVote = SVote.toJSON(message.sVote);
+    }
+    if (message.sClosePoll !== undefined) {
+      obj.sClosePoll = SClosePoll.toJSON(message.sClosePoll);
     }
     if (message.cCreateGroup !== undefined) {
       obj.cCreateGroup = CCreateGroup.toJSON(message.cCreateGroup);
@@ -2757,6 +2898,12 @@ export const Envelope = {
     message.sReadReceipt = (object.sReadReceipt !== undefined && object.sReadReceipt !== null)
       ? SReadReceipt.fromPartial(object.sReadReceipt)
       : undefined;
+    message.cCancelSubscription = (object.cCancelSubscription !== undefined && object.cCancelSubscription !== null)
+      ? CCancelSubscription.fromPartial(object.cCancelSubscription)
+      : undefined;
+    message.sCancelSubscription = (object.sCancelSubscription !== undefined && object.sCancelSubscription !== null)
+      ? SCancelSubscription.fromPartial(object.sCancelSubscription)
+      : undefined;
     message.cSearchUser = (object.cSearchUser !== undefined && object.cSearchUser !== null)
       ? CSearchUser.fromPartial(object.cSearchUser)
       : undefined;
@@ -2801,6 +2948,26 @@ export const Envelope = {
       : undefined;
     message.sReportUser = (object.sReportUser !== undefined && object.sReportUser !== null)
       ? SReportUser.fromPartial(object.sReportUser)
+      : undefined;
+    message.cAddReaction = (object.cAddReaction !== undefined && object.cAddReaction !== null)
+      ? CAddReaction.fromPartial(object.cAddReaction)
+      : undefined;
+    message.cCreatePoll = (object.cCreatePoll !== undefined && object.cCreatePoll !== null)
+      ? CCreatePoll.fromPartial(object.cCreatePoll)
+      : undefined;
+    message.cVote = (object.cVote !== undefined && object.cVote !== null) ? CVote.fromPartial(object.cVote) : undefined;
+    message.cClosePoll = (object.cClosePoll !== undefined && object.cClosePoll !== null)
+      ? CClosePoll.fromPartial(object.cClosePoll)
+      : undefined;
+    message.sAddReaction = (object.sAddReaction !== undefined && object.sAddReaction !== null)
+      ? SAddReaction.fromPartial(object.sAddReaction)
+      : undefined;
+    message.sCreatePoll = (object.sCreatePoll !== undefined && object.sCreatePoll !== null)
+      ? SCreatePoll.fromPartial(object.sCreatePoll)
+      : undefined;
+    message.sVote = (object.sVote !== undefined && object.sVote !== null) ? SVote.fromPartial(object.sVote) : undefined;
+    message.sClosePoll = (object.sClosePoll !== undefined && object.sClosePoll !== null)
+      ? SClosePoll.fromPartial(object.sClosePoll)
       : undefined;
     message.cCreateGroup = (object.cCreateGroup !== undefined && object.cCreateGroup !== null)
       ? CCreateGroup.fromPartial(object.cCreateGroup)
@@ -2916,7 +3083,7 @@ export const UserInfo = {
       writer.uint32(58).string(message.phone);
     }
     if (message.subGrade !== 0) {
-      writer.uint32(64).int64(message.subGrade);
+      writer.uint32(64).uint32(message.subGrade);
     }
     if (message.storageCapacityBytes !== 0) {
       writer.uint32(72).int64(message.storageCapacityBytes);
@@ -2994,7 +3161,7 @@ export const UserInfo = {
             break;
           }
 
-          message.subGrade = longToNumber(reader.int64() as Long);
+          message.subGrade = reader.uint32();
           continue;
         case 9:
           if (tag !== 72) {
@@ -3108,6 +3275,163 @@ export const UserInfo = {
     message.storageUsageBytes = object.storageUsageBytes ?? 0;
     message.lastSeen = object.lastSeen ?? 0;
     message.status = object.status ?? "";
+    return message;
+  },
+};
+
+function createBaseDeviceInfo(): DeviceInfo {
+  return {
+    deviceId: "",
+    deviceName: "",
+    platform: "",
+    lastActive: 0,
+    registeredAt: 0,
+    appVersion: "",
+    isCurrent: false,
+  };
+}
+
+export const DeviceInfo = {
+  encode(message: DeviceInfo, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.deviceId !== "") {
+      writer.uint32(10).string(message.deviceId);
+    }
+    if (message.deviceName !== "") {
+      writer.uint32(18).string(message.deviceName);
+    }
+    if (message.platform !== "") {
+      writer.uint32(26).string(message.platform);
+    }
+    if (message.lastActive !== 0) {
+      writer.uint32(32).int64(message.lastActive);
+    }
+    if (message.registeredAt !== 0) {
+      writer.uint32(40).int64(message.registeredAt);
+    }
+    if (message.appVersion !== "") {
+      writer.uint32(50).string(message.appVersion);
+    }
+    if (message.isCurrent !== false) {
+      writer.uint32(56).bool(message.isCurrent);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): DeviceInfo {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseDeviceInfo();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.deviceId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.deviceName = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.platform = reader.string();
+          continue;
+        case 4:
+          if (tag !== 32) {
+            break;
+          }
+
+          message.lastActive = longToNumber(reader.int64() as Long);
+          continue;
+        case 5:
+          if (tag !== 40) {
+            break;
+          }
+
+          message.registeredAt = longToNumber(reader.int64() as Long);
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.appVersion = reader.string();
+          continue;
+        case 7:
+          if (tag !== 56) {
+            break;
+          }
+
+          message.isCurrent = reader.bool();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): DeviceInfo {
+    return {
+      deviceId: isSet(object.deviceId) ? globalThis.String(object.deviceId) : "",
+      deviceName: isSet(object.deviceName) ? globalThis.String(object.deviceName) : "",
+      platform: isSet(object.platform) ? globalThis.String(object.platform) : "",
+      lastActive: isSet(object.lastActive) ? globalThis.Number(object.lastActive) : 0,
+      registeredAt: isSet(object.registeredAt) ? globalThis.Number(object.registeredAt) : 0,
+      appVersion: isSet(object.appVersion) ? globalThis.String(object.appVersion) : "",
+      isCurrent: isSet(object.isCurrent) ? globalThis.Boolean(object.isCurrent) : false,
+    };
+  },
+
+  toJSON(message: DeviceInfo): unknown {
+    const obj: any = {};
+    if (message.deviceId !== "") {
+      obj.deviceId = message.deviceId;
+    }
+    if (message.deviceName !== "") {
+      obj.deviceName = message.deviceName;
+    }
+    if (message.platform !== "") {
+      obj.platform = message.platform;
+    }
+    if (message.lastActive !== 0) {
+      obj.lastActive = Math.round(message.lastActive);
+    }
+    if (message.registeredAt !== 0) {
+      obj.registeredAt = Math.round(message.registeredAt);
+    }
+    if (message.appVersion !== "") {
+      obj.appVersion = message.appVersion;
+    }
+    if (message.isCurrent !== false) {
+      obj.isCurrent = message.isCurrent;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<DeviceInfo>, I>>(base?: I): DeviceInfo {
+    return DeviceInfo.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<DeviceInfo>, I>>(object: I): DeviceInfo {
+    const message = createBaseDeviceInfo();
+    message.deviceId = object.deviceId ?? "";
+    message.deviceName = object.deviceName ?? "";
+    message.platform = object.platform ?? "";
+    message.lastActive = object.lastActive ?? 0;
+    message.registeredAt = object.registeredAt ?? 0;
+    message.appVersion = object.appVersion ?? "";
+    message.isCurrent = object.isCurrent ?? false;
     return message;
   },
 };
@@ -4091,6 +4415,239 @@ export const SLogout = {
   },
 };
 
+function createBaseCGetMyDevices(): CGetMyDevices {
+  return {};
+}
+
+export const CGetMyDevices = {
+  encode(_: CGetMyDevices, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CGetMyDevices {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCGetMyDevices();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(_: any): CGetMyDevices {
+    return {};
+  },
+
+  toJSON(_: CGetMyDevices): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CGetMyDevices>, I>>(base?: I): CGetMyDevices {
+    return CGetMyDevices.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CGetMyDevices>, I>>(_: I): CGetMyDevices {
+    const message = createBaseCGetMyDevices();
+    return message;
+  },
+};
+
+function createBaseSGetMyDevices(): SGetMyDevices {
+  return { devices: [] };
+}
+
+export const SGetMyDevices = {
+  encode(message: SGetMyDevices, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.devices) {
+      DeviceInfo.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SGetMyDevices {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSGetMyDevices();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.devices.push(DeviceInfo.decode(reader, reader.uint32()));
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SGetMyDevices {
+    return {
+      devices: globalThis.Array.isArray(object?.devices) ? object.devices.map((e: any) => DeviceInfo.fromJSON(e)) : [],
+    };
+  },
+
+  toJSON(message: SGetMyDevices): unknown {
+    const obj: any = {};
+    if (message.devices?.length) {
+      obj.devices = message.devices.map((e) => DeviceInfo.toJSON(e));
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SGetMyDevices>, I>>(base?: I): SGetMyDevices {
+    return SGetMyDevices.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SGetMyDevices>, I>>(object: I): SGetMyDevices {
+    const message = createBaseSGetMyDevices();
+    message.devices = object.devices?.map((e) => DeviceInfo.fromPartial(e)) || [];
+    return message;
+  },
+};
+
+function createBaseCRemoveDevice(): CRemoveDevice {
+  return { deviceId: "" };
+}
+
+export const CRemoveDevice = {
+  encode(message: CRemoveDevice, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.deviceId !== "") {
+      writer.uint32(10).string(message.deviceId);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CRemoveDevice {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCRemoveDevice();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.deviceId = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CRemoveDevice {
+    return { deviceId: isSet(object.deviceId) ? globalThis.String(object.deviceId) : "" };
+  },
+
+  toJSON(message: CRemoveDevice): unknown {
+    const obj: any = {};
+    if (message.deviceId !== "") {
+      obj.deviceId = message.deviceId;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CRemoveDevice>, I>>(base?: I): CRemoveDevice {
+    return CRemoveDevice.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CRemoveDevice>, I>>(object: I): CRemoveDevice {
+    const message = createBaseCRemoveDevice();
+    message.deviceId = object.deviceId ?? "";
+    return message;
+  },
+};
+
+function createBaseSRemoveDevice(): SRemoveDevice {
+  return { success: false, message: "" };
+}
+
+export const SRemoveDevice = {
+  encode(message: SRemoveDevice, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.success !== false) {
+      writer.uint32(8).bool(message.success);
+    }
+    if (message.message !== "") {
+      writer.uint32(18).string(message.message);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SRemoveDevice {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSRemoveDevice();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.success = reader.bool();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.message = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SRemoveDevice {
+    return {
+      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
+      message: isSet(object.message) ? globalThis.String(object.message) : "",
+    };
+  },
+
+  toJSON(message: SRemoveDevice): unknown {
+    const obj: any = {};
+    if (message.success !== false) {
+      obj.success = message.success;
+    }
+    if (message.message !== "") {
+      obj.message = message.message;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SRemoveDevice>, I>>(base?: I): SRemoveDevice {
+    return SRemoveDevice.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SRemoveDevice>, I>>(object: I): SRemoveDevice {
+    const message = createBaseSRemoveDevice();
+    message.success = object.success ?? false;
+    message.message = object.message ?? "";
+    return message;
+  },
+};
+
 function createBaseCFetchMyInfo(): CFetchMyInfo {
   return {};
 }
@@ -4596,396 +5153,6 @@ export const SRegisterFcmToken = {
   },
 };
 
-function createBaseDeviceInfo(): DeviceInfo {
-  return {
-    deviceId: "",
-    deviceName: "",
-    platform: "",
-    lastActive: 0,
-    registeredAt: 0,
-    appVersion: "",
-    isCurrent: false,
-  };
-}
-
-export const DeviceInfo = {
-  encode(message: DeviceInfo, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.deviceId !== "") {
-      writer.uint32(10).string(message.deviceId);
-    }
-    if (message.deviceName !== "") {
-      writer.uint32(18).string(message.deviceName);
-    }
-    if (message.platform !== "") {
-      writer.uint32(26).string(message.platform);
-    }
-    if (message.lastActive !== 0) {
-      writer.uint32(32).int64(message.lastActive);
-    }
-    if (message.registeredAt !== 0) {
-      writer.uint32(40).int64(message.registeredAt);
-    }
-    if (message.appVersion !== "") {
-      writer.uint32(50).string(message.appVersion);
-    }
-    if (message.isCurrent !== false) {
-      writer.uint32(56).bool(message.isCurrent);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): DeviceInfo {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseDeviceInfo();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.deviceId = reader.string();
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.deviceName = reader.string();
-          continue;
-        case 3:
-          if (tag !== 26) {
-            break;
-          }
-
-          message.platform = reader.string();
-          continue;
-        case 4:
-          if (tag !== 32) {
-            break;
-          }
-
-          message.lastActive = longToNumber(reader.int64() as Long);
-          continue;
-        case 5:
-          if (tag !== 40) {
-            break;
-          }
-
-          message.registeredAt = longToNumber(reader.int64() as Long);
-          continue;
-        case 6:
-          if (tag !== 50) {
-            break;
-          }
-
-          message.appVersion = reader.string();
-          continue;
-        case 7:
-          if (tag !== 56) {
-            break;
-          }
-
-          message.isCurrent = reader.bool();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): DeviceInfo {
-    return {
-      deviceId: isSet(object.deviceId) ? globalThis.String(object.deviceId) : "",
-      deviceName: isSet(object.deviceName) ? globalThis.String(object.deviceName) : "",
-      platform: isSet(object.platform) ? globalThis.String(object.platform) : "",
-      lastActive: isSet(object.lastActive) ? globalThis.Number(object.lastActive) : 0,
-      registeredAt: isSet(object.registeredAt) ? globalThis.Number(object.registeredAt) : 0,
-      appVersion: isSet(object.appVersion) ? globalThis.String(object.appVersion) : "",
-      isCurrent: isSet(object.isCurrent) ? globalThis.Boolean(object.isCurrent) : false,
-    };
-  },
-
-  toJSON(message: DeviceInfo): unknown {
-    const obj: any = {};
-    if (message.deviceId !== "") {
-      obj.deviceId = message.deviceId;
-    }
-    if (message.deviceName !== "") {
-      obj.deviceName = message.deviceName;
-    }
-    if (message.platform !== "") {
-      obj.platform = message.platform;
-    }
-    if (message.lastActive !== 0) {
-      obj.lastActive = Math.round(message.lastActive);
-    }
-    if (message.registeredAt !== 0) {
-      obj.registeredAt = Math.round(message.registeredAt);
-    }
-    if (message.appVersion !== "") {
-      obj.appVersion = message.appVersion;
-    }
-    if (message.isCurrent !== false) {
-      obj.isCurrent = message.isCurrent;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<DeviceInfo>, I>>(base?: I): DeviceInfo {
-    return DeviceInfo.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<DeviceInfo>, I>>(object: I): DeviceInfo {
-    const message = createBaseDeviceInfo();
-    message.deviceId = object.deviceId ?? "";
-    message.deviceName = object.deviceName ?? "";
-    message.platform = object.platform ?? "";
-    message.lastActive = object.lastActive ?? 0;
-    message.registeredAt = object.registeredAt ?? 0;
-    message.appVersion = object.appVersion ?? "";
-    message.isCurrent = object.isCurrent ?? false;
-    return message;
-  },
-};
-
-function createBaseCGetMyDevices(): CGetMyDevices {
-  return {};
-}
-
-export const CGetMyDevices = {
-  encode(_: CGetMyDevices, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): CGetMyDevices {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCGetMyDevices();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(_: any): CGetMyDevices {
-    return {};
-  },
-
-  toJSON(_: CGetMyDevices): unknown {
-    const obj: any = {};
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<CGetMyDevices>, I>>(base?: I): CGetMyDevices {
-    return CGetMyDevices.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<CGetMyDevices>, I>>(_: I): CGetMyDevices {
-    const message = createBaseCGetMyDevices();
-    return message;
-  },
-};
-
-function createBaseSGetMyDevices(): SGetMyDevices {
-  return { devices: [] };
-}
-
-export const SGetMyDevices = {
-  encode(message: SGetMyDevices, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.devices) {
-      DeviceInfo.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): SGetMyDevices {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseSGetMyDevices();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.devices.push(DeviceInfo.decode(reader, reader.uint32()));
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): SGetMyDevices {
-    return {
-      devices: globalThis.Array.isArray(object?.devices) ? object.devices.map((e: any) => DeviceInfo.fromJSON(e)) : [],
-    };
-  },
-
-  toJSON(message: SGetMyDevices): unknown {
-    const obj: any = {};
-    if (message.devices?.length) {
-      obj.devices = message.devices.map((e) => DeviceInfo.toJSON(e));
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<SGetMyDevices>, I>>(base?: I): SGetMyDevices {
-    return SGetMyDevices.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<SGetMyDevices>, I>>(object: I): SGetMyDevices {
-    const message = createBaseSGetMyDevices();
-    message.devices = object.devices?.map((e) => DeviceInfo.fromPartial(e)) || [];
-    return message;
-  },
-};
-
-function createBaseCRemoveDevice(): CRemoveDevice {
-  return { deviceId: "" };
-}
-
-export const CRemoveDevice = {
-  encode(message: CRemoveDevice, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.deviceId !== "") {
-      writer.uint32(10).string(message.deviceId);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): CRemoveDevice {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCRemoveDevice();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.deviceId = reader.string();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): CRemoveDevice {
-    return { deviceId: isSet(object.deviceId) ? globalThis.String(object.deviceId) : "" };
-  },
-
-  toJSON(message: CRemoveDevice): unknown {
-    const obj: any = {};
-    if (message.deviceId !== "") {
-      obj.deviceId = message.deviceId;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<CRemoveDevice>, I>>(base?: I): CRemoveDevice {
-    return CRemoveDevice.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<CRemoveDevice>, I>>(object: I): CRemoveDevice {
-    const message = createBaseCRemoveDevice();
-    message.deviceId = object.deviceId ?? "";
-    return message;
-  },
-};
-
-function createBaseSRemoveDevice(): SRemoveDevice {
-  return { success: false, message: "" };
-}
-
-export const SRemoveDevice = {
-  encode(message: SRemoveDevice, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.success !== false) {
-      writer.uint32(8).bool(message.success);
-    }
-    if (message.message !== "") {
-      writer.uint32(18).string(message.message);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): SRemoveDevice {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseSRemoveDevice();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 8) {
-            break;
-          }
-
-          message.success = reader.bool();
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.message = reader.string();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): SRemoveDevice {
-    return {
-      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
-      message: isSet(object.message) ? globalThis.String(object.message) : "",
-    };
-  },
-
-  toJSON(message: SRemoveDevice): unknown {
-    const obj: any = {};
-    if (message.success !== false) {
-      obj.success = message.success;
-    }
-    if (message.message !== "") {
-      obj.message = message.message;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<SRemoveDevice>, I>>(base?: I): SRemoveDevice {
-    return SRemoveDevice.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<SRemoveDevice>, I>>(object: I): SRemoveDevice {
-    const message = createBaseSRemoveDevice();
-    message.success = object.success ?? false;
-    message.message = object.message ?? "";
-    return message;
-  },
-};
-
 function createBaseCChangeEmail(): CChangeEmail {
   return { newEmail: "" };
 }
@@ -5441,7 +5608,7 @@ export const Video = {
       writer.uint32(18).string(message.thumbnail);
     }
     if (message.durationSec !== 0) {
-      writer.uint32(24).int64(message.durationSec);
+      writer.uint32(24).int32(message.durationSec);
     }
     if (message.size !== 0) {
       writer.uint32(32).int64(message.size);
@@ -5475,7 +5642,7 @@ export const Video = {
             break;
           }
 
-          message.durationSec = longToNumber(reader.int64() as Long);
+          message.durationSec = reader.int32();
           continue;
         case 4:
           if (tag !== 32) {
@@ -5646,7 +5813,7 @@ export const SystemMsg = {
       writer.uint32(10).string(message.message);
     }
     if (message.type !== 0) {
-      writer.uint32(16).int64(message.type);
+      writer.uint32(16).int32(message.type);
     }
     if (message.inviteGroupId !== "") {
       writer.uint32(26).string(message.inviteGroupId);
@@ -5673,7 +5840,7 @@ export const SystemMsg = {
             break;
           }
 
-          message.type = longToNumber(reader.int64() as Long);
+          message.type = reader.int32();
           continue;
         case 3:
           if (tag !== 26) {
@@ -5847,7 +6014,15 @@ export const ChatPayload = {
 };
 
 function createBaseCChat(): CChat {
-  return { convId: "", clientMsgId: 0, payload: undefined, tsClient: 0, replyToSeq: 0 };
+  return {
+    convId: "",
+    clientMsgId: 0,
+    payload: undefined,
+    tsClient: 0,
+    replyToSeq: 0,
+    gcsPath: "",
+    mentionedUserIds: [],
+  };
 }
 
 export const CChat = {
@@ -5856,7 +6031,7 @@ export const CChat = {
       writer.uint32(10).string(message.convId);
     }
     if (message.clientMsgId !== 0) {
-      writer.uint32(16).int64(message.clientMsgId);
+      writer.uint32(16).int32(message.clientMsgId);
     }
     if (message.payload !== undefined) {
       ChatPayload.encode(message.payload, writer.uint32(26).fork()).ldelim();
@@ -5866,6 +6041,12 @@ export const CChat = {
     }
     if (message.replyToSeq !== 0) {
       writer.uint32(40).int64(message.replyToSeq);
+    }
+    if (message.gcsPath !== "") {
+      writer.uint32(50).string(message.gcsPath);
+    }
+    for (const v of message.mentionedUserIds) {
+      writer.uint32(58).string(v!);
     }
     return writer;
   },
@@ -5889,7 +6070,7 @@ export const CChat = {
             break;
           }
 
-          message.clientMsgId = longToNumber(reader.int64() as Long);
+          message.clientMsgId = reader.int32();
           continue;
         case 3:
           if (tag !== 26) {
@@ -5912,6 +6093,20 @@ export const CChat = {
 
           message.replyToSeq = longToNumber(reader.int64() as Long);
           continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.gcsPath = reader.string();
+          continue;
+        case 7:
+          if (tag !== 58) {
+            break;
+          }
+
+          message.mentionedUserIds.push(reader.string());
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -5928,6 +6123,10 @@ export const CChat = {
       payload: isSet(object.payload) ? ChatPayload.fromJSON(object.payload) : undefined,
       tsClient: isSet(object.tsClient) ? globalThis.Number(object.tsClient) : 0,
       replyToSeq: isSet(object.replyToSeq) ? globalThis.Number(object.replyToSeq) : 0,
+      gcsPath: isSet(object.gcsPath) ? globalThis.String(object.gcsPath) : "",
+      mentionedUserIds: globalThis.Array.isArray(object?.mentionedUserIds)
+        ? object.mentionedUserIds.map((e: any) => globalThis.String(e))
+        : [],
     };
   },
 
@@ -5948,6 +6147,12 @@ export const CChat = {
     if (message.replyToSeq !== 0) {
       obj.replyToSeq = Math.round(message.replyToSeq);
     }
+    if (message.gcsPath !== "") {
+      obj.gcsPath = message.gcsPath;
+    }
+    if (message.mentionedUserIds?.length) {
+      obj.mentionedUserIds = message.mentionedUserIds;
+    }
     return obj;
   },
 
@@ -5963,6 +6168,8 @@ export const CChat = {
       : undefined;
     message.tsClient = object.tsClient ?? 0;
     message.replyToSeq = object.replyToSeq ?? 0;
+    message.gcsPath = object.gcsPath ?? "";
+    message.mentionedUserIds = object.mentionedUserIds?.map((e) => e) || [];
     return message;
   },
 };
@@ -5982,6 +6189,9 @@ function createBaseSChat(): SChat {
     isDeleted: false,
     isEdited: false,
     unreadCount: 0,
+    fileExpiresAt: 0,
+    fileStatus: "",
+    mentionedUserIds: [],
   };
 }
 
@@ -5991,7 +6201,7 @@ export const SChat = {
       writer.uint32(10).string(message.convId);
     }
     if (message.clientMsgId !== 0) {
-      writer.uint32(16).int64(message.clientMsgId);
+      writer.uint32(16).int32(message.clientMsgId);
     }
     if (message.msgSeq !== 0) {
       writer.uint32(24).int64(message.msgSeq);
@@ -6026,6 +6236,15 @@ export const SChat = {
     if (message.unreadCount !== 0) {
       writer.uint32(104).int32(message.unreadCount);
     }
+    if (message.fileExpiresAt !== 0) {
+      writer.uint32(112).int64(message.fileExpiresAt);
+    }
+    if (message.fileStatus !== "") {
+      writer.uint32(122).string(message.fileStatus);
+    }
+    for (const v of message.mentionedUserIds) {
+      writer.uint32(130).string(v!);
+    }
     return writer;
   },
 
@@ -6048,7 +6267,7 @@ export const SChat = {
             break;
           }
 
-          message.clientMsgId = longToNumber(reader.int64() as Long);
+          message.clientMsgId = reader.int32();
           continue;
         case 3:
           if (tag !== 24) {
@@ -6127,6 +6346,27 @@ export const SChat = {
 
           message.unreadCount = reader.int32();
           continue;
+        case 14:
+          if (tag !== 112) {
+            break;
+          }
+
+          message.fileExpiresAt = longToNumber(reader.int64() as Long);
+          continue;
+        case 15:
+          if (tag !== 122) {
+            break;
+          }
+
+          message.fileStatus = reader.string();
+          continue;
+        case 16:
+          if (tag !== 130) {
+            break;
+          }
+
+          message.mentionedUserIds.push(reader.string());
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -6151,6 +6391,11 @@ export const SChat = {
       isDeleted: isSet(object.isDeleted) ? globalThis.Boolean(object.isDeleted) : false,
       isEdited: isSet(object.isEdited) ? globalThis.Boolean(object.isEdited) : false,
       unreadCount: isSet(object.unreadCount) ? globalThis.Number(object.unreadCount) : 0,
+      fileExpiresAt: isSet(object.fileExpiresAt) ? globalThis.Number(object.fileExpiresAt) : 0,
+      fileStatus: isSet(object.fileStatus) ? globalThis.String(object.fileStatus) : "",
+      mentionedUserIds: globalThis.Array.isArray(object?.mentionedUserIds)
+        ? object.mentionedUserIds.map((e: any) => globalThis.String(e))
+        : [],
     };
   },
 
@@ -6195,6 +6440,15 @@ export const SChat = {
     if (message.unreadCount !== 0) {
       obj.unreadCount = Math.round(message.unreadCount);
     }
+    if (message.fileExpiresAt !== 0) {
+      obj.fileExpiresAt = Math.round(message.fileExpiresAt);
+    }
+    if (message.fileStatus !== "") {
+      obj.fileStatus = message.fileStatus;
+    }
+    if (message.mentionedUserIds?.length) {
+      obj.mentionedUserIds = message.mentionedUserIds;
+    }
     return obj;
   },
 
@@ -6218,6 +6472,9 @@ export const SChat = {
     message.isDeleted = object.isDeleted ?? false;
     message.isEdited = object.isEdited ?? false;
     message.unreadCount = object.unreadCount ?? 0;
+    message.fileExpiresAt = object.fileExpiresAt ?? 0;
+    message.fileStatus = object.fileStatus ?? "";
+    message.mentionedUserIds = object.mentionedUserIds?.map((e) => e) || [];
     return message;
   },
 };
@@ -6769,7 +7026,7 @@ export const CReqHistory = {
       writer.uint32(16).int64(message.lastMsgSeq);
     }
     if (message.limit !== 0) {
-      writer.uint32(24).int64(message.limit);
+      writer.uint32(24).int32(message.limit);
     }
     return writer;
   },
@@ -6800,7 +7057,7 @@ export const CReqHistory = {
             break;
           }
 
-          message.limit = longToNumber(reader.int64() as Long);
+          message.limit = reader.int32();
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -7079,6 +7336,7 @@ function createBaseSUploadFile(): SUploadFile {
     thumbnailUrl: "",
     expiresAt: 0,
     path: "",
+    fileRetentionExpiresAt: 0,
   };
 }
 
@@ -7110,6 +7368,9 @@ export const SUploadFile = {
     }
     if (message.path !== "") {
       writer.uint32(74).string(message.path);
+    }
+    if (message.fileRetentionExpiresAt !== 0) {
+      writer.uint32(80).int64(message.fileRetentionExpiresAt);
     }
     return writer;
   },
@@ -7184,6 +7445,13 @@ export const SUploadFile = {
 
           message.path = reader.string();
           continue;
+        case 10:
+          if (tag !== 80) {
+            break;
+          }
+
+          message.fileRetentionExpiresAt = longToNumber(reader.int64() as Long);
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -7204,6 +7472,9 @@ export const SUploadFile = {
       thumbnailUrl: isSet(object.thumbnailUrl) ? globalThis.String(object.thumbnailUrl) : "",
       expiresAt: isSet(object.expiresAt) ? globalThis.Number(object.expiresAt) : 0,
       path: isSet(object.path) ? globalThis.String(object.path) : "",
+      fileRetentionExpiresAt: isSet(object.fileRetentionExpiresAt)
+        ? globalThis.Number(object.fileRetentionExpiresAt)
+        : 0,
     };
   },
 
@@ -7236,6 +7507,9 @@ export const SUploadFile = {
     if (message.path !== "") {
       obj.path = message.path;
     }
+    if (message.fileRetentionExpiresAt !== 0) {
+      obj.fileRetentionExpiresAt = Math.round(message.fileRetentionExpiresAt);
+    }
     return obj;
   },
 
@@ -7253,6 +7527,7 @@ export const SUploadFile = {
     message.thumbnailUrl = object.thumbnailUrl ?? "";
     message.expiresAt = object.expiresAt ?? 0;
     message.path = object.path ?? "";
+    message.fileRetentionExpiresAt = object.fileRetentionExpiresAt ?? 0;
     return message;
   },
 };
@@ -7450,7 +7725,7 @@ export const SMessageBatch = {
 };
 
 function createBaseSMessageBatch_ConversationBatch(): SMessageBatch_ConversationBatch {
-  return { convId: "", messages: [], unreadCount: 0 };
+  return { convId: "", messages: [], unreadCount: 0, lastReadSeq: 0 };
 }
 
 export const SMessageBatch_ConversationBatch = {
@@ -7462,7 +7737,10 @@ export const SMessageBatch_ConversationBatch = {
       SChat.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     if (message.unreadCount !== 0) {
-      writer.uint32(24).int64(message.unreadCount);
+      writer.uint32(24).int32(message.unreadCount);
+    }
+    if (message.lastReadSeq !== 0) {
+      writer.uint32(32).int64(message.lastReadSeq);
     }
     return writer;
   },
@@ -7493,7 +7771,14 @@ export const SMessageBatch_ConversationBatch = {
             break;
           }
 
-          message.unreadCount = longToNumber(reader.int64() as Long);
+          message.unreadCount = reader.int32();
+          continue;
+        case 4:
+          if (tag !== 32) {
+            break;
+          }
+
+          message.lastReadSeq = longToNumber(reader.int64() as Long);
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -7509,6 +7794,7 @@ export const SMessageBatch_ConversationBatch = {
       convId: isSet(object.convId) ? globalThis.String(object.convId) : "",
       messages: globalThis.Array.isArray(object?.messages) ? object.messages.map((e: any) => SChat.fromJSON(e)) : [],
       unreadCount: isSet(object.unreadCount) ? globalThis.Number(object.unreadCount) : 0,
+      lastReadSeq: isSet(object.lastReadSeq) ? globalThis.Number(object.lastReadSeq) : 0,
     };
   },
 
@@ -7523,6 +7809,9 @@ export const SMessageBatch_ConversationBatch = {
     if (message.unreadCount !== 0) {
       obj.unreadCount = Math.round(message.unreadCount);
     }
+    if (message.lastReadSeq !== 0) {
+      obj.lastReadSeq = Math.round(message.lastReadSeq);
+    }
     return obj;
   },
 
@@ -7536,55 +7825,158 @@ export const SMessageBatch_ConversationBatch = {
     message.convId = object.convId ?? "";
     message.messages = object.messages?.map((e) => SChat.fromPartial(e)) || [];
     message.unreadCount = object.unreadCount ?? 0;
+    message.lastReadSeq = object.lastReadSeq ?? 0;
     return message;
   },
 };
 
-function createBaseFriendRequest(): FriendRequest {
-  return { requester: undefined, requestedAt: 0, isReceived: false };
+function createBaseCGetSubscription(): CGetSubscription {
+  return {};
 }
 
-export const FriendRequest = {
-  encode(message: FriendRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.requester !== undefined) {
-      UserInfo.encode(message.requester, writer.uint32(10).fork()).ldelim();
+export const CGetSubscription = {
+  encode(_: CGetSubscription, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CGetSubscription {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCGetSubscription();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
-    if (message.requestedAt !== 0) {
-      writer.uint32(16).int64(message.requestedAt);
+    return message;
+  },
+
+  fromJSON(_: any): CGetSubscription {
+    return {};
+  },
+
+  toJSON(_: CGetSubscription): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CGetSubscription>, I>>(base?: I): CGetSubscription {
+    return CGetSubscription.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CGetSubscription>, I>>(_: I): CGetSubscription {
+    const message = createBaseCGetSubscription();
+    return message;
+  },
+};
+
+function createBaseSubscriptionPlan(): SubscriptionPlan {
+  return {
+    planId: 0,
+    planType: "",
+    name: "",
+    grade: 0,
+    storageBytes: 0,
+    maxFileSize: 0,
+    monthlyPrice: 0,
+    features: [],
+  };
+}
+
+export const SubscriptionPlan = {
+  encode(message: SubscriptionPlan, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.planId !== 0) {
+      writer.uint32(8).int32(message.planId);
     }
-    if (message.isReceived !== false) {
-      writer.uint32(24).bool(message.isReceived);
+    if (message.planType !== "") {
+      writer.uint32(18).string(message.planType);
+    }
+    if (message.name !== "") {
+      writer.uint32(26).string(message.name);
+    }
+    if (message.grade !== 0) {
+      writer.uint32(32).int32(message.grade);
+    }
+    if (message.storageBytes !== 0) {
+      writer.uint32(40).int64(message.storageBytes);
+    }
+    if (message.maxFileSize !== 0) {
+      writer.uint32(48).int64(message.maxFileSize);
+    }
+    if (message.monthlyPrice !== 0) {
+      writer.uint32(56).int64(message.monthlyPrice);
+    }
+    for (const v of message.features) {
+      writer.uint32(66).string(v!);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): FriendRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): SubscriptionPlan {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseFriendRequest();
+    const message = createBaseSubscriptionPlan();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
+          if (tag !== 8) {
             break;
           }
 
-          message.requester = UserInfo.decode(reader, reader.uint32());
+          message.planId = reader.int32();
           continue;
         case 2:
-          if (tag !== 16) {
+          if (tag !== 18) {
             break;
           }
 
-          message.requestedAt = longToNumber(reader.int64() as Long);
+          message.planType = reader.string();
           continue;
         case 3:
-          if (tag !== 24) {
+          if (tag !== 26) {
             break;
           }
 
-          message.isReceived = reader.bool();
+          message.name = reader.string();
+          continue;
+        case 4:
+          if (tag !== 32) {
+            break;
+          }
+
+          message.grade = reader.int32();
+          continue;
+        case 5:
+          if (tag !== 40) {
+            break;
+          }
+
+          message.storageBytes = longToNumber(reader.int64() as Long);
+          continue;
+        case 6:
+          if (tag !== 48) {
+            break;
+          }
+
+          message.maxFileSize = longToNumber(reader.int64() as Long);
+          continue;
+        case 7:
+          if (tag !== 56) {
+            break;
+          }
+
+          message.monthlyPrice = longToNumber(reader.int64() as Long);
+          continue;
+        case 8:
+          if (tag !== 66) {
+            break;
+          }
+
+          message.features.push(reader.string());
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -7595,38 +7987,739 @@ export const FriendRequest = {
     return message;
   },
 
-  fromJSON(object: any): FriendRequest {
+  fromJSON(object: any): SubscriptionPlan {
     return {
-      requester: isSet(object.requester) ? UserInfo.fromJSON(object.requester) : undefined,
-      requestedAt: isSet(object.requestedAt) ? globalThis.Number(object.requestedAt) : 0,
-      isReceived: isSet(object.isReceived) ? globalThis.Boolean(object.isReceived) : false,
+      planId: isSet(object.planId) ? globalThis.Number(object.planId) : 0,
+      planType: isSet(object.planType) ? globalThis.String(object.planType) : "",
+      name: isSet(object.name) ? globalThis.String(object.name) : "",
+      grade: isSet(object.grade) ? globalThis.Number(object.grade) : 0,
+      storageBytes: isSet(object.storageBytes) ? globalThis.Number(object.storageBytes) : 0,
+      maxFileSize: isSet(object.maxFileSize) ? globalThis.Number(object.maxFileSize) : 0,
+      monthlyPrice: isSet(object.monthlyPrice) ? globalThis.Number(object.monthlyPrice) : 0,
+      features: globalThis.Array.isArray(object?.features) ? object.features.map((e: any) => globalThis.String(e)) : [],
     };
   },
 
-  toJSON(message: FriendRequest): unknown {
+  toJSON(message: SubscriptionPlan): unknown {
     const obj: any = {};
-    if (message.requester !== undefined) {
-      obj.requester = UserInfo.toJSON(message.requester);
+    if (message.planId !== 0) {
+      obj.planId = Math.round(message.planId);
     }
-    if (message.requestedAt !== 0) {
-      obj.requestedAt = Math.round(message.requestedAt);
+    if (message.planType !== "") {
+      obj.planType = message.planType;
     }
-    if (message.isReceived !== false) {
-      obj.isReceived = message.isReceived;
+    if (message.name !== "") {
+      obj.name = message.name;
+    }
+    if (message.grade !== 0) {
+      obj.grade = Math.round(message.grade);
+    }
+    if (message.storageBytes !== 0) {
+      obj.storageBytes = Math.round(message.storageBytes);
+    }
+    if (message.maxFileSize !== 0) {
+      obj.maxFileSize = Math.round(message.maxFileSize);
+    }
+    if (message.monthlyPrice !== 0) {
+      obj.monthlyPrice = Math.round(message.monthlyPrice);
+    }
+    if (message.features?.length) {
+      obj.features = message.features;
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<FriendRequest>, I>>(base?: I): FriendRequest {
-    return FriendRequest.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<SubscriptionPlan>, I>>(base?: I): SubscriptionPlan {
+    return SubscriptionPlan.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<FriendRequest>, I>>(object: I): FriendRequest {
-    const message = createBaseFriendRequest();
-    message.requester = (object.requester !== undefined && object.requester !== null)
-      ? UserInfo.fromPartial(object.requester)
-      : undefined;
-    message.requestedAt = object.requestedAt ?? 0;
-    message.isReceived = object.isReceived ?? false;
+  fromPartial<I extends Exact<DeepPartial<SubscriptionPlan>, I>>(object: I): SubscriptionPlan {
+    const message = createBaseSubscriptionPlan();
+    message.planId = object.planId ?? 0;
+    message.planType = object.planType ?? "";
+    message.name = object.name ?? "";
+    message.grade = object.grade ?? 0;
+    message.storageBytes = object.storageBytes ?? 0;
+    message.maxFileSize = object.maxFileSize ?? 0;
+    message.monthlyPrice = object.monthlyPrice ?? 0;
+    message.features = object.features?.map((e) => e) || [];
+    return message;
+  },
+};
+
+function createBaseSGetSubscription(): SGetSubscription {
+  return {
+    success: false,
+    currentGrade: 0,
+    currentPlanName: "",
+    storageCapacityBytes: 0,
+    storageUsageBytes: 0,
+    expiresAt: 0,
+    autoRenew: false,
+    availablePlans: [],
+  };
+}
+
+export const SGetSubscription = {
+  encode(message: SGetSubscription, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.success !== false) {
+      writer.uint32(8).bool(message.success);
+    }
+    if (message.currentGrade !== 0) {
+      writer.uint32(16).int32(message.currentGrade);
+    }
+    if (message.currentPlanName !== "") {
+      writer.uint32(26).string(message.currentPlanName);
+    }
+    if (message.storageCapacityBytes !== 0) {
+      writer.uint32(32).int64(message.storageCapacityBytes);
+    }
+    if (message.storageUsageBytes !== 0) {
+      writer.uint32(40).int64(message.storageUsageBytes);
+    }
+    if (message.expiresAt !== 0) {
+      writer.uint32(48).int64(message.expiresAt);
+    }
+    if (message.autoRenew !== false) {
+      writer.uint32(56).bool(message.autoRenew);
+    }
+    for (const v of message.availablePlans) {
+      SubscriptionPlan.encode(v!, writer.uint32(66).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SGetSubscription {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSGetSubscription();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.success = reader.bool();
+          continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.currentGrade = reader.int32();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.currentPlanName = reader.string();
+          continue;
+        case 4:
+          if (tag !== 32) {
+            break;
+          }
+
+          message.storageCapacityBytes = longToNumber(reader.int64() as Long);
+          continue;
+        case 5:
+          if (tag !== 40) {
+            break;
+          }
+
+          message.storageUsageBytes = longToNumber(reader.int64() as Long);
+          continue;
+        case 6:
+          if (tag !== 48) {
+            break;
+          }
+
+          message.expiresAt = longToNumber(reader.int64() as Long);
+          continue;
+        case 7:
+          if (tag !== 56) {
+            break;
+          }
+
+          message.autoRenew = reader.bool();
+          continue;
+        case 8:
+          if (tag !== 66) {
+            break;
+          }
+
+          message.availablePlans.push(SubscriptionPlan.decode(reader, reader.uint32()));
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SGetSubscription {
+    return {
+      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
+      currentGrade: isSet(object.currentGrade) ? globalThis.Number(object.currentGrade) : 0,
+      currentPlanName: isSet(object.currentPlanName) ? globalThis.String(object.currentPlanName) : "",
+      storageCapacityBytes: isSet(object.storageCapacityBytes) ? globalThis.Number(object.storageCapacityBytes) : 0,
+      storageUsageBytes: isSet(object.storageUsageBytes) ? globalThis.Number(object.storageUsageBytes) : 0,
+      expiresAt: isSet(object.expiresAt) ? globalThis.Number(object.expiresAt) : 0,
+      autoRenew: isSet(object.autoRenew) ? globalThis.Boolean(object.autoRenew) : false,
+      availablePlans: globalThis.Array.isArray(object?.availablePlans)
+        ? object.availablePlans.map((e: any) => SubscriptionPlan.fromJSON(e))
+        : [],
+    };
+  },
+
+  toJSON(message: SGetSubscription): unknown {
+    const obj: any = {};
+    if (message.success !== false) {
+      obj.success = message.success;
+    }
+    if (message.currentGrade !== 0) {
+      obj.currentGrade = Math.round(message.currentGrade);
+    }
+    if (message.currentPlanName !== "") {
+      obj.currentPlanName = message.currentPlanName;
+    }
+    if (message.storageCapacityBytes !== 0) {
+      obj.storageCapacityBytes = Math.round(message.storageCapacityBytes);
+    }
+    if (message.storageUsageBytes !== 0) {
+      obj.storageUsageBytes = Math.round(message.storageUsageBytes);
+    }
+    if (message.expiresAt !== 0) {
+      obj.expiresAt = Math.round(message.expiresAt);
+    }
+    if (message.autoRenew !== false) {
+      obj.autoRenew = message.autoRenew;
+    }
+    if (message.availablePlans?.length) {
+      obj.availablePlans = message.availablePlans.map((e) => SubscriptionPlan.toJSON(e));
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SGetSubscription>, I>>(base?: I): SGetSubscription {
+    return SGetSubscription.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SGetSubscription>, I>>(object: I): SGetSubscription {
+    const message = createBaseSGetSubscription();
+    message.success = object.success ?? false;
+    message.currentGrade = object.currentGrade ?? 0;
+    message.currentPlanName = object.currentPlanName ?? "";
+    message.storageCapacityBytes = object.storageCapacityBytes ?? 0;
+    message.storageUsageBytes = object.storageUsageBytes ?? 0;
+    message.expiresAt = object.expiresAt ?? 0;
+    message.autoRenew = object.autoRenew ?? false;
+    message.availablePlans = object.availablePlans?.map((e) => SubscriptionPlan.fromPartial(e)) || [];
+    return message;
+  },
+};
+
+function createBaseCVerifyPurchase(): CVerifyPurchase {
+  return { platform: "", productId: "", transactionId: "", purchaseToken: "" };
+}
+
+export const CVerifyPurchase = {
+  encode(message: CVerifyPurchase, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.platform !== "") {
+      writer.uint32(10).string(message.platform);
+    }
+    if (message.productId !== "") {
+      writer.uint32(18).string(message.productId);
+    }
+    if (message.transactionId !== "") {
+      writer.uint32(26).string(message.transactionId);
+    }
+    if (message.purchaseToken !== "") {
+      writer.uint32(34).string(message.purchaseToken);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CVerifyPurchase {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCVerifyPurchase();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.platform = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.productId = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.transactionId = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.purchaseToken = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CVerifyPurchase {
+    return {
+      platform: isSet(object.platform) ? globalThis.String(object.platform) : "",
+      productId: isSet(object.productId) ? globalThis.String(object.productId) : "",
+      transactionId: isSet(object.transactionId) ? globalThis.String(object.transactionId) : "",
+      purchaseToken: isSet(object.purchaseToken) ? globalThis.String(object.purchaseToken) : "",
+    };
+  },
+
+  toJSON(message: CVerifyPurchase): unknown {
+    const obj: any = {};
+    if (message.platform !== "") {
+      obj.platform = message.platform;
+    }
+    if (message.productId !== "") {
+      obj.productId = message.productId;
+    }
+    if (message.transactionId !== "") {
+      obj.transactionId = message.transactionId;
+    }
+    if (message.purchaseToken !== "") {
+      obj.purchaseToken = message.purchaseToken;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CVerifyPurchase>, I>>(base?: I): CVerifyPurchase {
+    return CVerifyPurchase.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CVerifyPurchase>, I>>(object: I): CVerifyPurchase {
+    const message = createBaseCVerifyPurchase();
+    message.platform = object.platform ?? "";
+    message.productId = object.productId ?? "";
+    message.transactionId = object.transactionId ?? "";
+    message.purchaseToken = object.purchaseToken ?? "";
+    return message;
+  },
+};
+
+function createBaseSVerifyPurchase(): SVerifyPurchase {
+  return { success: false, message: "", newGrade: 0, expiresAt: 0, storageCapacity: 0 };
+}
+
+export const SVerifyPurchase = {
+  encode(message: SVerifyPurchase, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.success !== false) {
+      writer.uint32(8).bool(message.success);
+    }
+    if (message.message !== "") {
+      writer.uint32(18).string(message.message);
+    }
+    if (message.newGrade !== 0) {
+      writer.uint32(24).int32(message.newGrade);
+    }
+    if (message.expiresAt !== 0) {
+      writer.uint32(32).int64(message.expiresAt);
+    }
+    if (message.storageCapacity !== 0) {
+      writer.uint32(40).int64(message.storageCapacity);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SVerifyPurchase {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSVerifyPurchase();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.success = reader.bool();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.message = reader.string();
+          continue;
+        case 3:
+          if (tag !== 24) {
+            break;
+          }
+
+          message.newGrade = reader.int32();
+          continue;
+        case 4:
+          if (tag !== 32) {
+            break;
+          }
+
+          message.expiresAt = longToNumber(reader.int64() as Long);
+          continue;
+        case 5:
+          if (tag !== 40) {
+            break;
+          }
+
+          message.storageCapacity = longToNumber(reader.int64() as Long);
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SVerifyPurchase {
+    return {
+      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
+      message: isSet(object.message) ? globalThis.String(object.message) : "",
+      newGrade: isSet(object.newGrade) ? globalThis.Number(object.newGrade) : 0,
+      expiresAt: isSet(object.expiresAt) ? globalThis.Number(object.expiresAt) : 0,
+      storageCapacity: isSet(object.storageCapacity) ? globalThis.Number(object.storageCapacity) : 0,
+    };
+  },
+
+  toJSON(message: SVerifyPurchase): unknown {
+    const obj: any = {};
+    if (message.success !== false) {
+      obj.success = message.success;
+    }
+    if (message.message !== "") {
+      obj.message = message.message;
+    }
+    if (message.newGrade !== 0) {
+      obj.newGrade = Math.round(message.newGrade);
+    }
+    if (message.expiresAt !== 0) {
+      obj.expiresAt = Math.round(message.expiresAt);
+    }
+    if (message.storageCapacity !== 0) {
+      obj.storageCapacity = Math.round(message.storageCapacity);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SVerifyPurchase>, I>>(base?: I): SVerifyPurchase {
+    return SVerifyPurchase.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SVerifyPurchase>, I>>(object: I): SVerifyPurchase {
+    const message = createBaseSVerifyPurchase();
+    message.success = object.success ?? false;
+    message.message = object.message ?? "";
+    message.newGrade = object.newGrade ?? 0;
+    message.expiresAt = object.expiresAt ?? 0;
+    message.storageCapacity = object.storageCapacity ?? 0;
+    return message;
+  },
+};
+
+function createBaseCCancelSubscription(): CCancelSubscription {
+  return {};
+}
+
+export const CCancelSubscription = {
+  encode(_: CCancelSubscription, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CCancelSubscription {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCCancelSubscription();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(_: any): CCancelSubscription {
+    return {};
+  },
+
+  toJSON(_: CCancelSubscription): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CCancelSubscription>, I>>(base?: I): CCancelSubscription {
+    return CCancelSubscription.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CCancelSubscription>, I>>(_: I): CCancelSubscription {
+    const message = createBaseCCancelSubscription();
+    return message;
+  },
+};
+
+function createBaseSCancelSubscription(): SCancelSubscription {
+  return { success: false, message: "", graceExpiresAt: 0 };
+}
+
+export const SCancelSubscription = {
+  encode(message: SCancelSubscription, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.success !== false) {
+      writer.uint32(8).bool(message.success);
+    }
+    if (message.message !== "") {
+      writer.uint32(18).string(message.message);
+    }
+    if (message.graceExpiresAt !== 0) {
+      writer.uint32(24).int64(message.graceExpiresAt);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SCancelSubscription {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSCancelSubscription();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.success = reader.bool();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.message = reader.string();
+          continue;
+        case 3:
+          if (tag !== 24) {
+            break;
+          }
+
+          message.graceExpiresAt = longToNumber(reader.int64() as Long);
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SCancelSubscription {
+    return {
+      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
+      message: isSet(object.message) ? globalThis.String(object.message) : "",
+      graceExpiresAt: isSet(object.graceExpiresAt) ? globalThis.Number(object.graceExpiresAt) : 0,
+    };
+  },
+
+  toJSON(message: SCancelSubscription): unknown {
+    const obj: any = {};
+    if (message.success !== false) {
+      obj.success = message.success;
+    }
+    if (message.message !== "") {
+      obj.message = message.message;
+    }
+    if (message.graceExpiresAt !== 0) {
+      obj.graceExpiresAt = Math.round(message.graceExpiresAt);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SCancelSubscription>, I>>(base?: I): SCancelSubscription {
+    return SCancelSubscription.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SCancelSubscription>, I>>(object: I): SCancelSubscription {
+    const message = createBaseSCancelSubscription();
+    message.success = object.success ?? false;
+    message.message = object.message ?? "";
+    message.graceExpiresAt = object.graceExpiresAt ?? 0;
+    return message;
+  },
+};
+
+function createBaseCWithdraw(): CWithdraw {
+  return { password: "", reason: "" };
+}
+
+export const CWithdraw = {
+  encode(message: CWithdraw, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.password !== "") {
+      writer.uint32(10).string(message.password);
+    }
+    if (message.reason !== "") {
+      writer.uint32(18).string(message.reason);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CWithdraw {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCWithdraw();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.password = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.reason = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CWithdraw {
+    return {
+      password: isSet(object.password) ? globalThis.String(object.password) : "",
+      reason: isSet(object.reason) ? globalThis.String(object.reason) : "",
+    };
+  },
+
+  toJSON(message: CWithdraw): unknown {
+    const obj: any = {};
+    if (message.password !== "") {
+      obj.password = message.password;
+    }
+    if (message.reason !== "") {
+      obj.reason = message.reason;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CWithdraw>, I>>(base?: I): CWithdraw {
+    return CWithdraw.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CWithdraw>, I>>(object: I): CWithdraw {
+    const message = createBaseCWithdraw();
+    message.password = object.password ?? "";
+    message.reason = object.reason ?? "";
+    return message;
+  },
+};
+
+function createBaseSWithdraw(): SWithdraw {
+  return { success: false, message: "" };
+}
+
+export const SWithdraw = {
+  encode(message: SWithdraw, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.success !== false) {
+      writer.uint32(8).bool(message.success);
+    }
+    if (message.message !== "") {
+      writer.uint32(18).string(message.message);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SWithdraw {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSWithdraw();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.success = reader.bool();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.message = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SWithdraw {
+    return {
+      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
+      message: isSet(object.message) ? globalThis.String(object.message) : "",
+    };
+  },
+
+  toJSON(message: SWithdraw): unknown {
+    const obj: any = {};
+    if (message.success !== false) {
+      obj.success = message.success;
+    }
+    if (message.message !== "") {
+      obj.message = message.message;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SWithdraw>, I>>(base?: I): SWithdraw {
+    return SWithdraw.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SWithdraw>, I>>(object: I): SWithdraw {
+    const message = createBaseSWithdraw();
+    message.success = object.success ?? false;
+    message.message = object.message ?? "";
     return message;
   },
 };
@@ -7790,6 +8883,97 @@ export const SSearchUser = {
       : undefined;
     message.isFriend = object.isFriend ?? false;
     message.hasSentRequest = object.hasSentRequest ?? false;
+    return message;
+  },
+};
+
+function createBaseFriendRequest(): FriendRequest {
+  return { requester: undefined, requestedAt: 0, isReceived: false };
+}
+
+export const FriendRequest = {
+  encode(message: FriendRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.requester !== undefined) {
+      UserInfo.encode(message.requester, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.requestedAt !== 0) {
+      writer.uint32(16).int64(message.requestedAt);
+    }
+    if (message.isReceived !== false) {
+      writer.uint32(24).bool(message.isReceived);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): FriendRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseFriendRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.requester = UserInfo.decode(reader, reader.uint32());
+          continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.requestedAt = longToNumber(reader.int64() as Long);
+          continue;
+        case 3:
+          if (tag !== 24) {
+            break;
+          }
+
+          message.isReceived = reader.bool();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): FriendRequest {
+    return {
+      requester: isSet(object.requester) ? UserInfo.fromJSON(object.requester) : undefined,
+      requestedAt: isSet(object.requestedAt) ? globalThis.Number(object.requestedAt) : 0,
+      isReceived: isSet(object.isReceived) ? globalThis.Boolean(object.isReceived) : false,
+    };
+  },
+
+  toJSON(message: FriendRequest): unknown {
+    const obj: any = {};
+    if (message.requester !== undefined) {
+      obj.requester = UserInfo.toJSON(message.requester);
+    }
+    if (message.requestedAt !== 0) {
+      obj.requestedAt = Math.round(message.requestedAt);
+    }
+    if (message.isReceived !== false) {
+      obj.isReceived = message.isReceived;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<FriendRequest>, I>>(base?: I): FriendRequest {
+    return FriendRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<FriendRequest>, I>>(object: I): FriendRequest {
+    const message = createBaseFriendRequest();
+    message.requester = (object.requester !== undefined && object.requester !== null)
+      ? UserInfo.fromPartial(object.requester)
+      : undefined;
+    message.requestedAt = object.requestedAt ?? 0;
+    message.isReceived = object.isReceived ?? false;
     return message;
   },
 };
@@ -8096,13 +9280,13 @@ export const SFetchFriendData = {
 };
 
 function createBaseSFriendPush(): SFriendPush {
-  return { type: 0, userInfo: undefined };
+  return { pushType: 0, userInfo: undefined };
 }
 
 export const SFriendPush = {
   encode(message: SFriendPush, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.type !== 0) {
-      writer.uint32(8).int32(message.type);
+    if (message.pushType !== 0) {
+      writer.uint32(8).int32(message.pushType);
     }
     if (message.userInfo !== undefined) {
       UserInfo.encode(message.userInfo, writer.uint32(18).fork()).ldelim();
@@ -8122,7 +9306,7 @@ export const SFriendPush = {
             break;
           }
 
-          message.type = reader.int32() as any;
+          message.pushType = reader.int32() as any;
           continue;
         case 2:
           if (tag !== 18) {
@@ -8142,15 +9326,15 @@ export const SFriendPush = {
 
   fromJSON(object: any): SFriendPush {
     return {
-      type: isSet(object.type) ? sFriendPush_PushTypeFromJSON(object.type) : 0,
+      pushType: isSet(object.pushType) ? sFriendPush_PushTypeFromJSON(object.pushType) : 0,
       userInfo: isSet(object.userInfo) ? UserInfo.fromJSON(object.userInfo) : undefined,
     };
   },
 
   toJSON(message: SFriendPush): unknown {
     const obj: any = {};
-    if (message.type !== 0) {
-      obj.type = sFriendPush_PushTypeToJSON(message.type);
+    if (message.pushType !== 0) {
+      obj.pushType = sFriendPush_PushTypeToJSON(message.pushType);
     }
     if (message.userInfo !== undefined) {
       obj.userInfo = UserInfo.toJSON(message.userInfo);
@@ -8163,7 +9347,7 @@ export const SFriendPush = {
   },
   fromPartial<I extends Exact<DeepPartial<SFriendPush>, I>>(object: I): SFriendPush {
     const message = createBaseSFriendPush();
-    message.type = object.type ?? 0;
+    message.pushType = object.pushType ?? 0;
     message.userInfo = (object.userInfo !== undefined && object.userInfo !== null)
       ? UserInfo.fromPartial(object.userInfo)
       : undefined;
@@ -9610,768 +10794,6 @@ export const SDeleteGroup = {
   },
 };
 
-function createBaseCWithdraw(): CWithdraw {
-  return { password: "", reason: "" };
-}
-
-export const CWithdraw = {
-  encode(message: CWithdraw, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.password !== "") {
-      writer.uint32(10).string(message.password);
-    }
-    if (message.reason !== "") {
-      writer.uint32(18).string(message.reason);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): CWithdraw {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCWithdraw();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.password = reader.string();
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.reason = reader.string();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): CWithdraw {
-    return {
-      password: isSet(object.password) ? globalThis.String(object.password) : "",
-      reason: isSet(object.reason) ? globalThis.String(object.reason) : "",
-    };
-  },
-
-  toJSON(message: CWithdraw): unknown {
-    const obj: any = {};
-    if (message.password !== "") {
-      obj.password = message.password;
-    }
-    if (message.reason !== "") {
-      obj.reason = message.reason;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<CWithdraw>, I>>(base?: I): CWithdraw {
-    return CWithdraw.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<CWithdraw>, I>>(object: I): CWithdraw {
-    const message = createBaseCWithdraw();
-    message.password = object.password ?? "";
-    message.reason = object.reason ?? "";
-    return message;
-  },
-};
-
-function createBaseSWithdraw(): SWithdraw {
-  return { success: false, message: "" };
-}
-
-export const SWithdraw = {
-  encode(message: SWithdraw, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.success !== false) {
-      writer.uint32(8).bool(message.success);
-    }
-    if (message.message !== "") {
-      writer.uint32(18).string(message.message);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): SWithdraw {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseSWithdraw();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 8) {
-            break;
-          }
-
-          message.success = reader.bool();
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.message = reader.string();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): SWithdraw {
-    return {
-      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
-      message: isSet(object.message) ? globalThis.String(object.message) : "",
-    };
-  },
-
-  toJSON(message: SWithdraw): unknown {
-    const obj: any = {};
-    if (message.success !== false) {
-      obj.success = message.success;
-    }
-    if (message.message !== "") {
-      obj.message = message.message;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<SWithdraw>, I>>(base?: I): SWithdraw {
-    return SWithdraw.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<SWithdraw>, I>>(object: I): SWithdraw {
-    const message = createBaseSWithdraw();
-    message.success = object.success ?? false;
-    message.message = object.message ?? "";
-    return message;
-  },
-};
-
-function createBaseCGetSubscription(): CGetSubscription {
-  return {};
-}
-
-export const CGetSubscription = {
-  encode(_: CGetSubscription, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): CGetSubscription {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCGetSubscription();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(_: any): CGetSubscription {
-    return {};
-  },
-
-  toJSON(_: CGetSubscription): unknown {
-    const obj: any = {};
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<CGetSubscription>, I>>(base?: I): CGetSubscription {
-    return CGetSubscription.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<CGetSubscription>, I>>(_: I): CGetSubscription {
-    const message = createBaseCGetSubscription();
-    return message;
-  },
-};
-
-function createBaseSubscriptionPlan(): SubscriptionPlan {
-  return {
-    planId: 0,
-    planType: "",
-    name: "",
-    grade: 0,
-    storageBytes: 0,
-    maxFileSize: 0,
-    monthlyPrice: 0,
-    features: [],
-  };
-}
-
-export const SubscriptionPlan = {
-  encode(message: SubscriptionPlan, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.planId !== 0) {
-      writer.uint32(8).int32(message.planId);
-    }
-    if (message.planType !== "") {
-      writer.uint32(18).string(message.planType);
-    }
-    if (message.name !== "") {
-      writer.uint32(26).string(message.name);
-    }
-    if (message.grade !== 0) {
-      writer.uint32(32).int32(message.grade);
-    }
-    if (message.storageBytes !== 0) {
-      writer.uint32(40).int64(message.storageBytes);
-    }
-    if (message.maxFileSize !== 0) {
-      writer.uint32(48).int64(message.maxFileSize);
-    }
-    if (message.monthlyPrice !== 0) {
-      writer.uint32(57).double(message.monthlyPrice);
-    }
-    for (const v of message.features) {
-      writer.uint32(66).string(v!);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): SubscriptionPlan {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseSubscriptionPlan();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 8) {
-            break;
-          }
-
-          message.planId = reader.int32();
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.planType = reader.string();
-          continue;
-        case 3:
-          if (tag !== 26) {
-            break;
-          }
-
-          message.name = reader.string();
-          continue;
-        case 4:
-          if (tag !== 32) {
-            break;
-          }
-
-          message.grade = reader.int32();
-          continue;
-        case 5:
-          if (tag !== 40) {
-            break;
-          }
-
-          message.storageBytes = longToNumber(reader.int64() as Long);
-          continue;
-        case 6:
-          if (tag !== 48) {
-            break;
-          }
-
-          message.maxFileSize = longToNumber(reader.int64() as Long);
-          continue;
-        case 7:
-          if (tag !== 57) {
-            break;
-          }
-
-          message.monthlyPrice = reader.double();
-          continue;
-        case 8:
-          if (tag !== 66) {
-            break;
-          }
-
-          message.features.push(reader.string());
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): SubscriptionPlan {
-    return {
-      planId: isSet(object.planId) ? globalThis.Number(object.planId) : 0,
-      planType: isSet(object.planType) ? globalThis.String(object.planType) : "",
-      name: isSet(object.name) ? globalThis.String(object.name) : "",
-      grade: isSet(object.grade) ? globalThis.Number(object.grade) : 0,
-      storageBytes: isSet(object.storageBytes) ? globalThis.Number(object.storageBytes) : 0,
-      maxFileSize: isSet(object.maxFileSize) ? globalThis.Number(object.maxFileSize) : 0,
-      monthlyPrice: isSet(object.monthlyPrice) ? globalThis.Number(object.monthlyPrice) : 0,
-      features: globalThis.Array.isArray(object?.features) ? object.features.map((e: any) => globalThis.String(e)) : [],
-    };
-  },
-
-  toJSON(message: SubscriptionPlan): unknown {
-    const obj: any = {};
-    if (message.planId !== 0) {
-      obj.planId = Math.round(message.planId);
-    }
-    if (message.planType !== "") {
-      obj.planType = message.planType;
-    }
-    if (message.name !== "") {
-      obj.name = message.name;
-    }
-    if (message.grade !== 0) {
-      obj.grade = Math.round(message.grade);
-    }
-    if (message.storageBytes !== 0) {
-      obj.storageBytes = Math.round(message.storageBytes);
-    }
-    if (message.maxFileSize !== 0) {
-      obj.maxFileSize = Math.round(message.maxFileSize);
-    }
-    if (message.monthlyPrice !== 0) {
-      obj.monthlyPrice = message.monthlyPrice;
-    }
-    if (message.features?.length) {
-      obj.features = message.features;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<SubscriptionPlan>, I>>(base?: I): SubscriptionPlan {
-    return SubscriptionPlan.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<SubscriptionPlan>, I>>(object: I): SubscriptionPlan {
-    const message = createBaseSubscriptionPlan();
-    message.planId = object.planId ?? 0;
-    message.planType = object.planType ?? "";
-    message.name = object.name ?? "";
-    message.grade = object.grade ?? 0;
-    message.storageBytes = object.storageBytes ?? 0;
-    message.maxFileSize = object.maxFileSize ?? 0;
-    message.monthlyPrice = object.monthlyPrice ?? 0;
-    message.features = object.features?.map((e) => e) || [];
-    return message;
-  },
-};
-
-function createBaseSGetSubscription(): SGetSubscription {
-  return {
-    success: false,
-    currentGrade: 0,
-    currentPlanName: "",
-    storageCapacityBytes: 0,
-    storageUsageBytes: 0,
-    expiresAt: 0,
-    autoRenew: false,
-    availablePlans: [],
-  };
-}
-
-export const SGetSubscription = {
-  encode(message: SGetSubscription, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.success !== false) {
-      writer.uint32(8).bool(message.success);
-    }
-    if (message.currentGrade !== 0) {
-      writer.uint32(16).int32(message.currentGrade);
-    }
-    if (message.currentPlanName !== "") {
-      writer.uint32(26).string(message.currentPlanName);
-    }
-    if (message.storageCapacityBytes !== 0) {
-      writer.uint32(32).int64(message.storageCapacityBytes);
-    }
-    if (message.storageUsageBytes !== 0) {
-      writer.uint32(40).int64(message.storageUsageBytes);
-    }
-    if (message.expiresAt !== 0) {
-      writer.uint32(48).int64(message.expiresAt);
-    }
-    if (message.autoRenew !== false) {
-      writer.uint32(56).bool(message.autoRenew);
-    }
-    for (const v of message.availablePlans) {
-      SubscriptionPlan.encode(v!, writer.uint32(66).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): SGetSubscription {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseSGetSubscription();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 8) {
-            break;
-          }
-
-          message.success = reader.bool();
-          continue;
-        case 2:
-          if (tag !== 16) {
-            break;
-          }
-
-          message.currentGrade = reader.int32();
-          continue;
-        case 3:
-          if (tag !== 26) {
-            break;
-          }
-
-          message.currentPlanName = reader.string();
-          continue;
-        case 4:
-          if (tag !== 32) {
-            break;
-          }
-
-          message.storageCapacityBytes = longToNumber(reader.int64() as Long);
-          continue;
-        case 5:
-          if (tag !== 40) {
-            break;
-          }
-
-          message.storageUsageBytes = longToNumber(reader.int64() as Long);
-          continue;
-        case 6:
-          if (tag !== 48) {
-            break;
-          }
-
-          message.expiresAt = longToNumber(reader.int64() as Long);
-          continue;
-        case 7:
-          if (tag !== 56) {
-            break;
-          }
-
-          message.autoRenew = reader.bool();
-          continue;
-        case 8:
-          if (tag !== 66) {
-            break;
-          }
-
-          message.availablePlans.push(SubscriptionPlan.decode(reader, reader.uint32()));
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): SGetSubscription {
-    return {
-      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
-      currentGrade: isSet(object.currentGrade) ? globalThis.Number(object.currentGrade) : 0,
-      currentPlanName: isSet(object.currentPlanName) ? globalThis.String(object.currentPlanName) : "",
-      storageCapacityBytes: isSet(object.storageCapacityBytes) ? globalThis.Number(object.storageCapacityBytes) : 0,
-      storageUsageBytes: isSet(object.storageUsageBytes) ? globalThis.Number(object.storageUsageBytes) : 0,
-      expiresAt: isSet(object.expiresAt) ? globalThis.Number(object.expiresAt) : 0,
-      autoRenew: isSet(object.autoRenew) ? globalThis.Boolean(object.autoRenew) : false,
-      availablePlans: globalThis.Array.isArray(object?.availablePlans)
-        ? object.availablePlans.map((e: any) => SubscriptionPlan.fromJSON(e))
-        : [],
-    };
-  },
-
-  toJSON(message: SGetSubscription): unknown {
-    const obj: any = {};
-    if (message.success !== false) {
-      obj.success = message.success;
-    }
-    if (message.currentGrade !== 0) {
-      obj.currentGrade = Math.round(message.currentGrade);
-    }
-    if (message.currentPlanName !== "") {
-      obj.currentPlanName = message.currentPlanName;
-    }
-    if (message.storageCapacityBytes !== 0) {
-      obj.storageCapacityBytes = Math.round(message.storageCapacityBytes);
-    }
-    if (message.storageUsageBytes !== 0) {
-      obj.storageUsageBytes = Math.round(message.storageUsageBytes);
-    }
-    if (message.expiresAt !== 0) {
-      obj.expiresAt = Math.round(message.expiresAt);
-    }
-    if (message.autoRenew !== false) {
-      obj.autoRenew = message.autoRenew;
-    }
-    if (message.availablePlans?.length) {
-      obj.availablePlans = message.availablePlans.map((e) => SubscriptionPlan.toJSON(e));
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<SGetSubscription>, I>>(base?: I): SGetSubscription {
-    return SGetSubscription.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<SGetSubscription>, I>>(object: I): SGetSubscription {
-    const message = createBaseSGetSubscription();
-    message.success = object.success ?? false;
-    message.currentGrade = object.currentGrade ?? 0;
-    message.currentPlanName = object.currentPlanName ?? "";
-    message.storageCapacityBytes = object.storageCapacityBytes ?? 0;
-    message.storageUsageBytes = object.storageUsageBytes ?? 0;
-    message.expiresAt = object.expiresAt ?? 0;
-    message.autoRenew = object.autoRenew ?? false;
-    message.availablePlans = object.availablePlans?.map((e) => SubscriptionPlan.fromPartial(e)) || [];
-    return message;
-  },
-};
-
-function createBaseCVerifyPurchase(): CVerifyPurchase {
-  return { platform: "", productId: "", transactionId: "", purchaseToken: "" };
-}
-
-export const CVerifyPurchase = {
-  encode(message: CVerifyPurchase, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.platform !== "") {
-      writer.uint32(10).string(message.platform);
-    }
-    if (message.productId !== "") {
-      writer.uint32(18).string(message.productId);
-    }
-    if (message.transactionId !== "") {
-      writer.uint32(26).string(message.transactionId);
-    }
-    if (message.purchaseToken !== "") {
-      writer.uint32(34).string(message.purchaseToken);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): CVerifyPurchase {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCVerifyPurchase();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.platform = reader.string();
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.productId = reader.string();
-          continue;
-        case 3:
-          if (tag !== 26) {
-            break;
-          }
-
-          message.transactionId = reader.string();
-          continue;
-        case 4:
-          if (tag !== 34) {
-            break;
-          }
-
-          message.purchaseToken = reader.string();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): CVerifyPurchase {
-    return {
-      platform: isSet(object.platform) ? globalThis.String(object.platform) : "",
-      productId: isSet(object.productId) ? globalThis.String(object.productId) : "",
-      transactionId: isSet(object.transactionId) ? globalThis.String(object.transactionId) : "",
-      purchaseToken: isSet(object.purchaseToken) ? globalThis.String(object.purchaseToken) : "",
-    };
-  },
-
-  toJSON(message: CVerifyPurchase): unknown {
-    const obj: any = {};
-    if (message.platform !== "") {
-      obj.platform = message.platform;
-    }
-    if (message.productId !== "") {
-      obj.productId = message.productId;
-    }
-    if (message.transactionId !== "") {
-      obj.transactionId = message.transactionId;
-    }
-    if (message.purchaseToken !== "") {
-      obj.purchaseToken = message.purchaseToken;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<CVerifyPurchase>, I>>(base?: I): CVerifyPurchase {
-    return CVerifyPurchase.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<CVerifyPurchase>, I>>(object: I): CVerifyPurchase {
-    const message = createBaseCVerifyPurchase();
-    message.platform = object.platform ?? "";
-    message.productId = object.productId ?? "";
-    message.transactionId = object.transactionId ?? "";
-    message.purchaseToken = object.purchaseToken ?? "";
-    return message;
-  },
-};
-
-function createBaseSVerifyPurchase(): SVerifyPurchase {
-  return { success: false, message: "", newGrade: 0, expiresAt: 0, storageCapacity: 0 };
-}
-
-export const SVerifyPurchase = {
-  encode(message: SVerifyPurchase, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.success !== false) {
-      writer.uint32(8).bool(message.success);
-    }
-    if (message.message !== "") {
-      writer.uint32(18).string(message.message);
-    }
-    if (message.newGrade !== 0) {
-      writer.uint32(24).int32(message.newGrade);
-    }
-    if (message.expiresAt !== 0) {
-      writer.uint32(32).int64(message.expiresAt);
-    }
-    if (message.storageCapacity !== 0) {
-      writer.uint32(40).int64(message.storageCapacity);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): SVerifyPurchase {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseSVerifyPurchase();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 8) {
-            break;
-          }
-
-          message.success = reader.bool();
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.message = reader.string();
-          continue;
-        case 3:
-          if (tag !== 24) {
-            break;
-          }
-
-          message.newGrade = reader.int32();
-          continue;
-        case 4:
-          if (tag !== 32) {
-            break;
-          }
-
-          message.expiresAt = longToNumber(reader.int64() as Long);
-          continue;
-        case 5:
-          if (tag !== 40) {
-            break;
-          }
-
-          message.storageCapacity = longToNumber(reader.int64() as Long);
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): SVerifyPurchase {
-    return {
-      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
-      message: isSet(object.message) ? globalThis.String(object.message) : "",
-      newGrade: isSet(object.newGrade) ? globalThis.Number(object.newGrade) : 0,
-      expiresAt: isSet(object.expiresAt) ? globalThis.Number(object.expiresAt) : 0,
-      storageCapacity: isSet(object.storageCapacity) ? globalThis.Number(object.storageCapacity) : 0,
-    };
-  },
-
-  toJSON(message: SVerifyPurchase): unknown {
-    const obj: any = {};
-    if (message.success !== false) {
-      obj.success = message.success;
-    }
-    if (message.message !== "") {
-      obj.message = message.message;
-    }
-    if (message.newGrade !== 0) {
-      obj.newGrade = Math.round(message.newGrade);
-    }
-    if (message.expiresAt !== 0) {
-      obj.expiresAt = Math.round(message.expiresAt);
-    }
-    if (message.storageCapacity !== 0) {
-      obj.storageCapacity = Math.round(message.storageCapacity);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<SVerifyPurchase>, I>>(base?: I): SVerifyPurchase {
-    return SVerifyPurchase.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<SVerifyPurchase>, I>>(object: I): SVerifyPurchase {
-    const message = createBaseSVerifyPurchase();
-    message.success = object.success ?? false;
-    message.message = object.message ?? "";
-    message.newGrade = object.newGrade ?? 0;
-    message.expiresAt = object.expiresAt ?? 0;
-    message.storageCapacity = object.storageCapacity ?? 0;
-    return message;
-  },
-};
-
 function createBaseBlockedUserInfo(): BlockedUserInfo {
   return { userId: "", name: "", profileImg: "", blockedAt: 0 };
 }
@@ -10967,6 +11389,1028 @@ export const SReportUser = {
   fromPartial<I extends Exact<DeepPartial<SReportUser>, I>>(object: I): SReportUser {
     const message = createBaseSReportUser();
     message.success = object.success ?? false;
+    return message;
+  },
+};
+
+function createBaseCAddReaction(): CAddReaction {
+  return { convId: "", msgSeq: 0, emoji: "" };
+}
+
+export const CAddReaction = {
+  encode(message: CAddReaction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.convId !== "") {
+      writer.uint32(10).string(message.convId);
+    }
+    if (message.msgSeq !== 0) {
+      writer.uint32(16).int64(message.msgSeq);
+    }
+    if (message.emoji !== "") {
+      writer.uint32(26).string(message.emoji);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CAddReaction {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCAddReaction();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.convId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.msgSeq = longToNumber(reader.int64() as Long);
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.emoji = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CAddReaction {
+    return {
+      convId: isSet(object.convId) ? globalThis.String(object.convId) : "",
+      msgSeq: isSet(object.msgSeq) ? globalThis.Number(object.msgSeq) : 0,
+      emoji: isSet(object.emoji) ? globalThis.String(object.emoji) : "",
+    };
+  },
+
+  toJSON(message: CAddReaction): unknown {
+    const obj: any = {};
+    if (message.convId !== "") {
+      obj.convId = message.convId;
+    }
+    if (message.msgSeq !== 0) {
+      obj.msgSeq = Math.round(message.msgSeq);
+    }
+    if (message.emoji !== "") {
+      obj.emoji = message.emoji;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CAddReaction>, I>>(base?: I): CAddReaction {
+    return CAddReaction.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CAddReaction>, I>>(object: I): CAddReaction {
+    const message = createBaseCAddReaction();
+    message.convId = object.convId ?? "";
+    message.msgSeq = object.msgSeq ?? 0;
+    message.emoji = object.emoji ?? "";
+    return message;
+  },
+};
+
+function createBaseSAddReaction(): SAddReaction {
+  return { convId: "", msgSeq: 0, userId: "", emoji: "", removed: false };
+}
+
+export const SAddReaction = {
+  encode(message: SAddReaction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.convId !== "") {
+      writer.uint32(10).string(message.convId);
+    }
+    if (message.msgSeq !== 0) {
+      writer.uint32(16).int64(message.msgSeq);
+    }
+    if (message.userId !== "") {
+      writer.uint32(26).string(message.userId);
+    }
+    if (message.emoji !== "") {
+      writer.uint32(34).string(message.emoji);
+    }
+    if (message.removed !== false) {
+      writer.uint32(40).bool(message.removed);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SAddReaction {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSAddReaction();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.convId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.msgSeq = longToNumber(reader.int64() as Long);
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.userId = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.emoji = reader.string();
+          continue;
+        case 5:
+          if (tag !== 40) {
+            break;
+          }
+
+          message.removed = reader.bool();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SAddReaction {
+    return {
+      convId: isSet(object.convId) ? globalThis.String(object.convId) : "",
+      msgSeq: isSet(object.msgSeq) ? globalThis.Number(object.msgSeq) : 0,
+      userId: isSet(object.userId) ? globalThis.String(object.userId) : "",
+      emoji: isSet(object.emoji) ? globalThis.String(object.emoji) : "",
+      removed: isSet(object.removed) ? globalThis.Boolean(object.removed) : false,
+    };
+  },
+
+  toJSON(message: SAddReaction): unknown {
+    const obj: any = {};
+    if (message.convId !== "") {
+      obj.convId = message.convId;
+    }
+    if (message.msgSeq !== 0) {
+      obj.msgSeq = Math.round(message.msgSeq);
+    }
+    if (message.userId !== "") {
+      obj.userId = message.userId;
+    }
+    if (message.emoji !== "") {
+      obj.emoji = message.emoji;
+    }
+    if (message.removed !== false) {
+      obj.removed = message.removed;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SAddReaction>, I>>(base?: I): SAddReaction {
+    return SAddReaction.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SAddReaction>, I>>(object: I): SAddReaction {
+    const message = createBaseSAddReaction();
+    message.convId = object.convId ?? "";
+    message.msgSeq = object.msgSeq ?? 0;
+    message.userId = object.userId ?? "";
+    message.emoji = object.emoji ?? "";
+    message.removed = object.removed ?? false;
+    return message;
+  },
+};
+
+function createBaseCCreatePoll(): CCreatePoll {
+  return { convId: "", question: "", options: [], isMultiSelect: false, isAnonymous: false, expiresAt: 0 };
+}
+
+export const CCreatePoll = {
+  encode(message: CCreatePoll, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.convId !== "") {
+      writer.uint32(10).string(message.convId);
+    }
+    if (message.question !== "") {
+      writer.uint32(18).string(message.question);
+    }
+    for (const v of message.options) {
+      writer.uint32(26).string(v!);
+    }
+    if (message.isMultiSelect !== false) {
+      writer.uint32(32).bool(message.isMultiSelect);
+    }
+    if (message.isAnonymous !== false) {
+      writer.uint32(40).bool(message.isAnonymous);
+    }
+    if (message.expiresAt !== 0) {
+      writer.uint32(48).int64(message.expiresAt);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CCreatePoll {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCCreatePoll();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.convId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.question = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.options.push(reader.string());
+          continue;
+        case 4:
+          if (tag !== 32) {
+            break;
+          }
+
+          message.isMultiSelect = reader.bool();
+          continue;
+        case 5:
+          if (tag !== 40) {
+            break;
+          }
+
+          message.isAnonymous = reader.bool();
+          continue;
+        case 6:
+          if (tag !== 48) {
+            break;
+          }
+
+          message.expiresAt = longToNumber(reader.int64() as Long);
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CCreatePoll {
+    return {
+      convId: isSet(object.convId) ? globalThis.String(object.convId) : "",
+      question: isSet(object.question) ? globalThis.String(object.question) : "",
+      options: globalThis.Array.isArray(object?.options) ? object.options.map((e: any) => globalThis.String(e)) : [],
+      isMultiSelect: isSet(object.isMultiSelect) ? globalThis.Boolean(object.isMultiSelect) : false,
+      isAnonymous: isSet(object.isAnonymous) ? globalThis.Boolean(object.isAnonymous) : false,
+      expiresAt: isSet(object.expiresAt) ? globalThis.Number(object.expiresAt) : 0,
+    };
+  },
+
+  toJSON(message: CCreatePoll): unknown {
+    const obj: any = {};
+    if (message.convId !== "") {
+      obj.convId = message.convId;
+    }
+    if (message.question !== "") {
+      obj.question = message.question;
+    }
+    if (message.options?.length) {
+      obj.options = message.options;
+    }
+    if (message.isMultiSelect !== false) {
+      obj.isMultiSelect = message.isMultiSelect;
+    }
+    if (message.isAnonymous !== false) {
+      obj.isAnonymous = message.isAnonymous;
+    }
+    if (message.expiresAt !== 0) {
+      obj.expiresAt = Math.round(message.expiresAt);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CCreatePoll>, I>>(base?: I): CCreatePoll {
+    return CCreatePoll.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CCreatePoll>, I>>(object: I): CCreatePoll {
+    const message = createBaseCCreatePoll();
+    message.convId = object.convId ?? "";
+    message.question = object.question ?? "";
+    message.options = object.options?.map((e) => e) || [];
+    message.isMultiSelect = object.isMultiSelect ?? false;
+    message.isAnonymous = object.isAnonymous ?? false;
+    message.expiresAt = object.expiresAt ?? 0;
+    return message;
+  },
+};
+
+function createBaseSCreatePoll(): SCreatePoll {
+  return {
+    convId: "",
+    pollId: "",
+    msgSeq: 0,
+    creatorId: "",
+    creatorName: "",
+    question: "",
+    options: [],
+    isMultiSelect: false,
+    isAnonymous: false,
+    expiresAt: 0,
+    tsServer: 0,
+  };
+}
+
+export const SCreatePoll = {
+  encode(message: SCreatePoll, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.convId !== "") {
+      writer.uint32(10).string(message.convId);
+    }
+    if (message.pollId !== "") {
+      writer.uint32(18).string(message.pollId);
+    }
+    if (message.msgSeq !== 0) {
+      writer.uint32(24).int64(message.msgSeq);
+    }
+    if (message.creatorId !== "") {
+      writer.uint32(34).string(message.creatorId);
+    }
+    if (message.creatorName !== "") {
+      writer.uint32(42).string(message.creatorName);
+    }
+    if (message.question !== "") {
+      writer.uint32(50).string(message.question);
+    }
+    for (const v of message.options) {
+      writer.uint32(58).string(v!);
+    }
+    if (message.isMultiSelect !== false) {
+      writer.uint32(64).bool(message.isMultiSelect);
+    }
+    if (message.isAnonymous !== false) {
+      writer.uint32(72).bool(message.isAnonymous);
+    }
+    if (message.expiresAt !== 0) {
+      writer.uint32(80).int64(message.expiresAt);
+    }
+    if (message.tsServer !== 0) {
+      writer.uint32(88).int64(message.tsServer);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SCreatePoll {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSCreatePoll();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.convId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.pollId = reader.string();
+          continue;
+        case 3:
+          if (tag !== 24) {
+            break;
+          }
+
+          message.msgSeq = longToNumber(reader.int64() as Long);
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.creatorId = reader.string();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.creatorName = reader.string();
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.question = reader.string();
+          continue;
+        case 7:
+          if (tag !== 58) {
+            break;
+          }
+
+          message.options.push(reader.string());
+          continue;
+        case 8:
+          if (tag !== 64) {
+            break;
+          }
+
+          message.isMultiSelect = reader.bool();
+          continue;
+        case 9:
+          if (tag !== 72) {
+            break;
+          }
+
+          message.isAnonymous = reader.bool();
+          continue;
+        case 10:
+          if (tag !== 80) {
+            break;
+          }
+
+          message.expiresAt = longToNumber(reader.int64() as Long);
+          continue;
+        case 11:
+          if (tag !== 88) {
+            break;
+          }
+
+          message.tsServer = longToNumber(reader.int64() as Long);
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SCreatePoll {
+    return {
+      convId: isSet(object.convId) ? globalThis.String(object.convId) : "",
+      pollId: isSet(object.pollId) ? globalThis.String(object.pollId) : "",
+      msgSeq: isSet(object.msgSeq) ? globalThis.Number(object.msgSeq) : 0,
+      creatorId: isSet(object.creatorId) ? globalThis.String(object.creatorId) : "",
+      creatorName: isSet(object.creatorName) ? globalThis.String(object.creatorName) : "",
+      question: isSet(object.question) ? globalThis.String(object.question) : "",
+      options: globalThis.Array.isArray(object?.options) ? object.options.map((e: any) => globalThis.String(e)) : [],
+      isMultiSelect: isSet(object.isMultiSelect) ? globalThis.Boolean(object.isMultiSelect) : false,
+      isAnonymous: isSet(object.isAnonymous) ? globalThis.Boolean(object.isAnonymous) : false,
+      expiresAt: isSet(object.expiresAt) ? globalThis.Number(object.expiresAt) : 0,
+      tsServer: isSet(object.tsServer) ? globalThis.Number(object.tsServer) : 0,
+    };
+  },
+
+  toJSON(message: SCreatePoll): unknown {
+    const obj: any = {};
+    if (message.convId !== "") {
+      obj.convId = message.convId;
+    }
+    if (message.pollId !== "") {
+      obj.pollId = message.pollId;
+    }
+    if (message.msgSeq !== 0) {
+      obj.msgSeq = Math.round(message.msgSeq);
+    }
+    if (message.creatorId !== "") {
+      obj.creatorId = message.creatorId;
+    }
+    if (message.creatorName !== "") {
+      obj.creatorName = message.creatorName;
+    }
+    if (message.question !== "") {
+      obj.question = message.question;
+    }
+    if (message.options?.length) {
+      obj.options = message.options;
+    }
+    if (message.isMultiSelect !== false) {
+      obj.isMultiSelect = message.isMultiSelect;
+    }
+    if (message.isAnonymous !== false) {
+      obj.isAnonymous = message.isAnonymous;
+    }
+    if (message.expiresAt !== 0) {
+      obj.expiresAt = Math.round(message.expiresAt);
+    }
+    if (message.tsServer !== 0) {
+      obj.tsServer = Math.round(message.tsServer);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SCreatePoll>, I>>(base?: I): SCreatePoll {
+    return SCreatePoll.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SCreatePoll>, I>>(object: I): SCreatePoll {
+    const message = createBaseSCreatePoll();
+    message.convId = object.convId ?? "";
+    message.pollId = object.pollId ?? "";
+    message.msgSeq = object.msgSeq ?? 0;
+    message.creatorId = object.creatorId ?? "";
+    message.creatorName = object.creatorName ?? "";
+    message.question = object.question ?? "";
+    message.options = object.options?.map((e) => e) || [];
+    message.isMultiSelect = object.isMultiSelect ?? false;
+    message.isAnonymous = object.isAnonymous ?? false;
+    message.expiresAt = object.expiresAt ?? 0;
+    message.tsServer = object.tsServer ?? 0;
+    return message;
+  },
+};
+
+function createBaseCVote(): CVote {
+  return { convId: "", pollId: "", msgSeq: 0, selectedOptions: [] };
+}
+
+export const CVote = {
+  encode(message: CVote, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.convId !== "") {
+      writer.uint32(10).string(message.convId);
+    }
+    if (message.pollId !== "") {
+      writer.uint32(18).string(message.pollId);
+    }
+    if (message.msgSeq !== 0) {
+      writer.uint32(24).int64(message.msgSeq);
+    }
+    writer.uint32(34).fork();
+    for (const v of message.selectedOptions) {
+      writer.int32(v);
+    }
+    writer.ldelim();
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CVote {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCVote();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.convId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.pollId = reader.string();
+          continue;
+        case 3:
+          if (tag !== 24) {
+            break;
+          }
+
+          message.msgSeq = longToNumber(reader.int64() as Long);
+          continue;
+        case 4:
+          if (tag === 32) {
+            message.selectedOptions.push(reader.int32());
+
+            continue;
+          }
+
+          if (tag === 34) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.selectedOptions.push(reader.int32());
+            }
+
+            continue;
+          }
+
+          break;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CVote {
+    return {
+      convId: isSet(object.convId) ? globalThis.String(object.convId) : "",
+      pollId: isSet(object.pollId) ? globalThis.String(object.pollId) : "",
+      msgSeq: isSet(object.msgSeq) ? globalThis.Number(object.msgSeq) : 0,
+      selectedOptions: globalThis.Array.isArray(object?.selectedOptions)
+        ? object.selectedOptions.map((e: any) => globalThis.Number(e))
+        : [],
+    };
+  },
+
+  toJSON(message: CVote): unknown {
+    const obj: any = {};
+    if (message.convId !== "") {
+      obj.convId = message.convId;
+    }
+    if (message.pollId !== "") {
+      obj.pollId = message.pollId;
+    }
+    if (message.msgSeq !== 0) {
+      obj.msgSeq = Math.round(message.msgSeq);
+    }
+    if (message.selectedOptions?.length) {
+      obj.selectedOptions = message.selectedOptions.map((e) => Math.round(e));
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CVote>, I>>(base?: I): CVote {
+    return CVote.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CVote>, I>>(object: I): CVote {
+    const message = createBaseCVote();
+    message.convId = object.convId ?? "";
+    message.pollId = object.pollId ?? "";
+    message.msgSeq = object.msgSeq ?? 0;
+    message.selectedOptions = object.selectedOptions?.map((e) => e) || [];
+    return message;
+  },
+};
+
+function createBaseSVote(): SVote {
+  return { convId: "", pollId: "", msgSeq: 0, voterId: "", voterName: "", selectedOptions: [], votesJson: "" };
+}
+
+export const SVote = {
+  encode(message: SVote, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.convId !== "") {
+      writer.uint32(10).string(message.convId);
+    }
+    if (message.pollId !== "") {
+      writer.uint32(18).string(message.pollId);
+    }
+    if (message.msgSeq !== 0) {
+      writer.uint32(24).int64(message.msgSeq);
+    }
+    if (message.voterId !== "") {
+      writer.uint32(34).string(message.voterId);
+    }
+    if (message.voterName !== "") {
+      writer.uint32(42).string(message.voterName);
+    }
+    writer.uint32(50).fork();
+    for (const v of message.selectedOptions) {
+      writer.int32(v);
+    }
+    writer.ldelim();
+    if (message.votesJson !== "") {
+      writer.uint32(58).string(message.votesJson);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SVote {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSVote();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.convId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.pollId = reader.string();
+          continue;
+        case 3:
+          if (tag !== 24) {
+            break;
+          }
+
+          message.msgSeq = longToNumber(reader.int64() as Long);
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.voterId = reader.string();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.voterName = reader.string();
+          continue;
+        case 6:
+          if (tag === 48) {
+            message.selectedOptions.push(reader.int32());
+
+            continue;
+          }
+
+          if (tag === 50) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.selectedOptions.push(reader.int32());
+            }
+
+            continue;
+          }
+
+          break;
+        case 7:
+          if (tag !== 58) {
+            break;
+          }
+
+          message.votesJson = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SVote {
+    return {
+      convId: isSet(object.convId) ? globalThis.String(object.convId) : "",
+      pollId: isSet(object.pollId) ? globalThis.String(object.pollId) : "",
+      msgSeq: isSet(object.msgSeq) ? globalThis.Number(object.msgSeq) : 0,
+      voterId: isSet(object.voterId) ? globalThis.String(object.voterId) : "",
+      voterName: isSet(object.voterName) ? globalThis.String(object.voterName) : "",
+      selectedOptions: globalThis.Array.isArray(object?.selectedOptions)
+        ? object.selectedOptions.map((e: any) => globalThis.Number(e))
+        : [],
+      votesJson: isSet(object.votesJson) ? globalThis.String(object.votesJson) : "",
+    };
+  },
+
+  toJSON(message: SVote): unknown {
+    const obj: any = {};
+    if (message.convId !== "") {
+      obj.convId = message.convId;
+    }
+    if (message.pollId !== "") {
+      obj.pollId = message.pollId;
+    }
+    if (message.msgSeq !== 0) {
+      obj.msgSeq = Math.round(message.msgSeq);
+    }
+    if (message.voterId !== "") {
+      obj.voterId = message.voterId;
+    }
+    if (message.voterName !== "") {
+      obj.voterName = message.voterName;
+    }
+    if (message.selectedOptions?.length) {
+      obj.selectedOptions = message.selectedOptions.map((e) => Math.round(e));
+    }
+    if (message.votesJson !== "") {
+      obj.votesJson = message.votesJson;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SVote>, I>>(base?: I): SVote {
+    return SVote.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SVote>, I>>(object: I): SVote {
+    const message = createBaseSVote();
+    message.convId = object.convId ?? "";
+    message.pollId = object.pollId ?? "";
+    message.msgSeq = object.msgSeq ?? 0;
+    message.voterId = object.voterId ?? "";
+    message.voterName = object.voterName ?? "";
+    message.selectedOptions = object.selectedOptions?.map((e) => e) || [];
+    message.votesJson = object.votesJson ?? "";
+    return message;
+  },
+};
+
+function createBaseCClosePoll(): CClosePoll {
+  return { convId: "", pollId: "", msgSeq: 0 };
+}
+
+export const CClosePoll = {
+  encode(message: CClosePoll, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.convId !== "") {
+      writer.uint32(10).string(message.convId);
+    }
+    if (message.pollId !== "") {
+      writer.uint32(18).string(message.pollId);
+    }
+    if (message.msgSeq !== 0) {
+      writer.uint32(24).int64(message.msgSeq);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CClosePoll {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCClosePoll();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.convId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.pollId = reader.string();
+          continue;
+        case 3:
+          if (tag !== 24) {
+            break;
+          }
+
+          message.msgSeq = longToNumber(reader.int64() as Long);
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CClosePoll {
+    return {
+      convId: isSet(object.convId) ? globalThis.String(object.convId) : "",
+      pollId: isSet(object.pollId) ? globalThis.String(object.pollId) : "",
+      msgSeq: isSet(object.msgSeq) ? globalThis.Number(object.msgSeq) : 0,
+    };
+  },
+
+  toJSON(message: CClosePoll): unknown {
+    const obj: any = {};
+    if (message.convId !== "") {
+      obj.convId = message.convId;
+    }
+    if (message.pollId !== "") {
+      obj.pollId = message.pollId;
+    }
+    if (message.msgSeq !== 0) {
+      obj.msgSeq = Math.round(message.msgSeq);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CClosePoll>, I>>(base?: I): CClosePoll {
+    return CClosePoll.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CClosePoll>, I>>(object: I): CClosePoll {
+    const message = createBaseCClosePoll();
+    message.convId = object.convId ?? "";
+    message.pollId = object.pollId ?? "";
+    message.msgSeq = object.msgSeq ?? 0;
+    return message;
+  },
+};
+
+function createBaseSClosePoll(): SClosePoll {
+  return { convId: "", pollId: "", msgSeq: 0 };
+}
+
+export const SClosePoll = {
+  encode(message: SClosePoll, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.convId !== "") {
+      writer.uint32(10).string(message.convId);
+    }
+    if (message.pollId !== "") {
+      writer.uint32(18).string(message.pollId);
+    }
+    if (message.msgSeq !== 0) {
+      writer.uint32(24).int64(message.msgSeq);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SClosePoll {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSClosePoll();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.convId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.pollId = reader.string();
+          continue;
+        case 3:
+          if (tag !== 24) {
+            break;
+          }
+
+          message.msgSeq = longToNumber(reader.int64() as Long);
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SClosePoll {
+    return {
+      convId: isSet(object.convId) ? globalThis.String(object.convId) : "",
+      pollId: isSet(object.pollId) ? globalThis.String(object.pollId) : "",
+      msgSeq: isSet(object.msgSeq) ? globalThis.Number(object.msgSeq) : 0,
+    };
+  },
+
+  toJSON(message: SClosePoll): unknown {
+    const obj: any = {};
+    if (message.convId !== "") {
+      obj.convId = message.convId;
+    }
+    if (message.pollId !== "") {
+      obj.pollId = message.pollId;
+    }
+    if (message.msgSeq !== 0) {
+      obj.msgSeq = Math.round(message.msgSeq);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SClosePoll>, I>>(base?: I): SClosePoll {
+    return SClosePoll.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SClosePoll>, I>>(object: I): SClosePoll {
+    const message = createBaseSClosePoll();
+    message.convId = object.convId ?? "";
+    message.pollId = object.pollId ?? "";
+    message.msgSeq = object.msgSeq ?? 0;
     return message;
   },
 };

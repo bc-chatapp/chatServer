@@ -206,7 +206,7 @@ void FriendService::PushFriendEvent(const string& targetUserId, Protocol::S_Frie
 
 
 	Protocol::S_FriendPush pkt;
-	pkt.set_type(type);
+	pkt.set_push_type(type);
 	if (info) {
 		*pkt.mutable_user_info() = *info;
 	}

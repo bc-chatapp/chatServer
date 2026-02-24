@@ -15,6 +15,7 @@
 #include "Cloud/FcmClient.h"
 #include "Service/PaymentService.h"
 #include "Service/BlockService.h"
+#include "Service/ExpirationBatchJob.h"
 
 #include <chrono>
 #include <fstream>
@@ -35,8 +36,10 @@ VerificationManager* GVerificationManager = nullptr;
 
 AuthService* GAuthService = nullptr;
 FileService* GFileService = nullptr;
+CloudStorage* GCloudStorage = nullptr;
 NotificationService* GNotificationService = nullptr;
 BlockService* GBlockService = nullptr;
+ExpirationBatchJob* GExpirationBatchJob = nullptr;
 
 CoreGlobal GCoreGlobal;
 
@@ -148,6 +151,10 @@ CoreGlobal::CoreGlobal()
             cerr << "[CoreGlobal] PaymentService Initialize Failed" << endl;
             _paymentService = nullptr;
         }
+
+        // 파일 만료 배치 잡 초기화
+        _expirationBatchJob = make_unique<ExpirationBatchJob>(_cloudStorage.get());
+        _expirationBatchJob->Start();
     }
 
     GUserManager = _userManager.get();
@@ -158,18 +165,22 @@ CoreGlobal::CoreGlobal()
 
     GAuthService = _authService.get();
     GFileService = _fileService.get();
+    GCloudStorage = _cloudStorage.get();
     GNotificationService = _notificationService.get();
     GPaymentService = _paymentService.get();
     GBlockService = _blockService.get();
     GFcmClient = _fcmClient.get();
+    GExpirationBatchJob = _expirationBatchJob.get();
 }
 
 CoreGlobal::~CoreGlobal()
 {
+    GExpirationBatchJob = nullptr;
     GFcmClient = nullptr;
     GPaymentService = nullptr;
     GBlockService = nullptr;
     GNotificationService = nullptr;
+    GCloudStorage = nullptr;
     GFileService = nullptr;
     GAuthService = nullptr;
 
@@ -197,6 +208,8 @@ CoreGlobal::~CoreGlobal()
 
 void CoreGlobal::Reset()
 {
+    if (_expirationBatchJob) _expirationBatchJob->Stop();
+    _expirationBatchJob.reset();
     _fcmClient.reset();
     _paymentService.reset();
     _blockService.reset();
@@ -211,10 +224,12 @@ void CoreGlobal::Reset()
     _chatService.reset();
     _userManager.reset();
 
+    GExpirationBatchJob = nullptr;
     GFcmClient = nullptr;
     GPaymentService = nullptr;
     GBlockService = nullptr;
     GNotificationService = nullptr;
+    GCloudStorage = nullptr;
     GFileService = nullptr;
     GAuthService = nullptr;
     GFriendService = nullptr;
@@ -263,6 +278,10 @@ void CoreGlobal::Reset()
             cerr << "[CoreGlobal] PaymentService Initialize Failed" << endl;
             _paymentService = nullptr;
         }
+
+        // 파일 만료 배치 잡 재초기화
+        _expirationBatchJob = make_unique<ExpirationBatchJob>(_cloudStorage.get());
+        _expirationBatchJob->Start();
     }
 
     GUserManager = _userManager.get();
@@ -273,10 +292,12 @@ void CoreGlobal::Reset()
 
     GAuthService = _authService.get();
     GFileService = _fileService.get();
+    GCloudStorage = _cloudStorage.get();
     GNotificationService = _notificationService.get();
     GPaymentService = _paymentService.get();
     GBlockService = _blockService.get();
     GFcmClient = _fcmClient.get();
+    GExpirationBatchJob = _expirationBatchJob.get();
 }
 
 

@@ -20,6 +20,7 @@ public:
     bool Initialize(const string& credentialsPath);
 
     bool HandleVerifyPurchase(sessionPtr& session, uint64 reqId, const Protocol::C_VerifyPurchase& pkt);
+    bool HandleCancelSubscription(sessionPtr& session, uint64 reqId);
 
 private:
     bool VerifyGooglePurchase(const string& userId, const string& productId,

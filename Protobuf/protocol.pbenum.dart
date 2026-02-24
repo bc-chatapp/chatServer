@@ -34,12 +34,9 @@ class GroupRole extends $pb.ProtobufEnum {
   const GroupRole._(super.value, super.name);
 }
 
-/// 에러 코드 enum (클라이언트-서버 공통)
 class ErrorCode extends $pb.ProtobufEnum {
   static const ErrorCode ERR_SUCCESS =
       ErrorCode._(0, _omitEnumNames ? '' : 'ERR_SUCCESS');
-
-  /// 1~99: 공용/시스템 에러
   static const ErrorCode ERR_UNKNOWN =
       ErrorCode._(1, _omitEnumNames ? '' : 'ERR_UNKNOWN');
   static const ErrorCode ERR_SERVER_INTERNAL =
@@ -52,8 +49,6 @@ class ErrorCode extends $pb.ProtobufEnum {
       ErrorCode._(5, _omitEnumNames ? '' : 'ERR_UNAUTHORIZED');
   static const ErrorCode ERR_INVALID_TOKEN =
       ErrorCode._(6, _omitEnumNames ? '' : 'ERR_INVALID_TOKEN');
-
-  /// 100~199: 인증/사용자 관련
   static const ErrorCode ERR_USER_ID_EMPTY =
       ErrorCode._(100, _omitEnumNames ? '' : 'ERR_USER_ID_EMPTY');
   static const ErrorCode ERR_USER_ID_REQUIRED =
@@ -72,8 +67,6 @@ class ErrorCode extends $pb.ProtobufEnum {
       ErrorCode._(107, _omitEnumNames ? '' : 'ERR_USER_ALREADY_EXISTS');
   static const ErrorCode ERR_EMAIL_ALREADY_EXISTS =
       ErrorCode._(108, _omitEnumNames ? '' : 'ERR_EMAIL_ALREADY_EXISTS');
-
-  /// 200~299: 채팅 관련
   static const ErrorCode ERR_PAYLOAD_EMPTY =
       ErrorCode._(200, _omitEnumNames ? '' : 'ERR_PAYLOAD_EMPTY');
   static const ErrorCode ERR_INVALID_CONV_ID =
@@ -82,8 +75,6 @@ class ErrorCode extends $pb.ProtobufEnum {
       ErrorCode._(202, _omitEnumNames ? '' : 'ERR_INVALID_RECEIVER_ID');
   static const ErrorCode ERR_INVALID_ACK =
       ErrorCode._(203, _omitEnumNames ? '' : 'ERR_INVALID_ACK');
-
-  /// 300~399: 친구 요청 관련
   static const ErrorCode ERR_INVALID_FRIEND_USER_ID =
       ErrorCode._(300, _omitEnumNames ? '' : 'ERR_INVALID_FRIEND_USER_ID');
   static const ErrorCode ERR_CANNOT_ADD_SELF =
@@ -92,8 +83,6 @@ class ErrorCode extends $pb.ProtobufEnum {
       ErrorCode._(302, _omitEnumNames ? '' : 'ERR_NOT_A_FRIEND');
   static const ErrorCode ERR_FRIEND_REQUEST_NOT_FOUND =
       ErrorCode._(303, _omitEnumNames ? '' : 'ERR_FRIEND_REQUEST_NOT_FOUND');
-
-  /// 400~499: 파일 업로드 관련
   static const ErrorCode ERR_FILE_SERVICE_NOT_INITIALIZED = ErrorCode._(
       400, _omitEnumNames ? '' : 'ERR_FILE_SERVICE_NOT_INITIALIZED');
   static const ErrorCode ERR_CLOUD_STORAGE_NOT_INITIALIZED = ErrorCode._(
@@ -118,12 +107,8 @@ class ErrorCode extends $pb.ProtobufEnum {
       ErrorCode._(410, _omitEnumNames ? '' : 'ERR_PAYMENT_FAILED');
   static const ErrorCode ERR_RECEIPT_INVALID =
       ErrorCode._(411, _omitEnumNames ? '' : 'ERR_RECEIPT_INVALID');
-
-  /// 500 그룹관련
   static const ErrorCode ERR_NO_PERMISSION =
       ErrorCode._(500, _omitEnumNames ? '' : 'ERR_NO_PERMISSION');
-
-  /// 600 차단 관련
   static const ErrorCode ERR_ALREADY_BLOCKED =
       ErrorCode._(600, _omitEnumNames ? '' : 'ERR_ALREADY_BLOCKED');
   static const ErrorCode ERR_NOT_BLOCKED =
@@ -132,6 +117,12 @@ class ErrorCode extends $pb.ProtobufEnum {
       ErrorCode._(602, _omitEnumNames ? '' : 'ERR_CANNOT_BLOCK_SELF');
   static const ErrorCode ERR_REPORT_DUPLICATE =
       ErrorCode._(610, _omitEnumNames ? '' : 'ERR_REPORT_DUPLICATE');
+  static const ErrorCode ERR_POLL_NOT_FOUND =
+      ErrorCode._(700, _omitEnumNames ? '' : 'ERR_POLL_NOT_FOUND');
+  static const ErrorCode ERR_POLL_CLOSED =
+      ErrorCode._(701, _omitEnumNames ? '' : 'ERR_POLL_CLOSED');
+  static const ErrorCode ERR_POLL_INVALID_OPTION =
+      ErrorCode._(702, _omitEnumNames ? '' : 'ERR_POLL_INVALID_OPTION');
 
   static const $core.List<ErrorCode> values = <ErrorCode>[
     ERR_SUCCESS,
@@ -175,6 +166,9 @@ class ErrorCode extends $pb.ProtobufEnum {
     ERR_NOT_BLOCKED,
     ERR_CANNOT_BLOCK_SELF,
     ERR_REPORT_DUPLICATE,
+    ERR_POLL_NOT_FOUND,
+    ERR_POLL_CLOSED,
+    ERR_POLL_INVALID_OPTION,
   ];
 
   static final $core.Map<$core.int, ErrorCode> _byValue =

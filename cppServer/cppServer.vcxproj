@@ -211,6 +211,7 @@ copy /Y "$(SolutionDir)Libraries\mysql-connector-c++-9.5.0\lib64\libcrypto-3-x64
     <ClCompile Include="Cloud\FcmClient.cpp" />
     <ClCompile Include="DB\BlockRepository.cpp" />
     <ClCompile Include="DB\FcmTokenRepository.cpp" />
+    <ClCompile Include="DB\PollRepository.cpp" />
     <ClCompile Include="DB\SubscriptionRepository.cpp" />
     <ClCompile Include="Service\BlockService.cpp" />
     <ClCompile Include="Service\AuthService.cpp" />
@@ -228,6 +229,7 @@ copy /Y "$(SolutionDir)Libraries\mysql-connector-c++-9.5.0\lib64\libcrypto-3-x64
     <ClCompile Include="DB\UserRepository.cpp" />
     <ClCompile Include="Service\GroupService.cpp" />
     <ClCompile Include="Service\NotificationService.cpp" />
+    <ClCompile Include="Service\ExpirationBatchJob.cpp" />
     <ClCompile Include="Service\PaymentService.cpp" />
     <ClCompile Include="Service\TokenManager.cpp" />
     <ClCompile Include="Service\UserManager.cpp" />
@@ -252,6 +254,7 @@ copy /Y "$(SolutionDir)Libraries\mysql-connector-c++-9.5.0\lib64\libcrypto-3-x64
     <ClInclude Include="Cloud\FcmClient.h" />
     <ClInclude Include="DB\BlockRepository.h" />
     <ClInclude Include="DB\FcmTokenRepository.h" />
+    <ClInclude Include="DB\PollRepository.h" />
     <ClInclude Include="DB\SubscriptionRepository.h" />
     <ClInclude Include="Service\BlockService.h" />
     <ClInclude Include="Service\AuthService.h" />
@@ -268,6 +271,7 @@ copy /Y "$(SolutionDir)Libraries\mysql-connector-c++-9.5.0\lib64\libcrypto-3-x64
     <ClInclude Include="DB\MessageRepository.h" />
     <ClInclude Include="Service\GroupService.h" />
     <ClInclude Include="Service\NotificationService.h" />
+    <ClInclude Include="Service\ExpirationBatchJob.h" />
     <ClInclude Include="Service\PaymentService.h" />
     <ClInclude Include="Service\TokenManager.h" />
     <ClInclude Include="Service\UserManager.h" />

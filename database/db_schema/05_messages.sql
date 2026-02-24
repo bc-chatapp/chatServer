@@ -47,3 +47,6 @@ CREATE TABLE IF NOT EXISTS read_status (
 
     PRIMARY KEY (user_id, conv_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+    SELECT * FROM messages;

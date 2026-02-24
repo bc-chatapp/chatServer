@@ -486,6 +486,7 @@ bool UserRepository::GetStorageInfo(const string& userId, StorageInfo& OUT info)
         info.storageCapacity = row[0].get<int64>();
         info.storageUsage = row[1].get<int64>();
         int grade = static_cast<int>(row[2].get<int64>());
+        info.subGrade = grade;
 
         // 2) subscription_plans에서 max_file_size 조회
         auto plans = schema.getTable("subscription_plans");

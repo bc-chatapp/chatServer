@@ -5,6 +5,8 @@
 #include "../ServerSession.h"
 #include "../DB/DBManager.h"
 #include "../DB/UserRepository.h"
+#include "../DB/FileRepository.h"
+#include "../DB/MessageRepository.h"
 
 #include <fstream>
 #include <sstream>
@@ -382,10 +384,120 @@ bool PaymentService::UpdateSubscription(const string& userId, int planId,
 
         cout << "[PaymentService] DB 업데이트 완료: user=" << userId
              << " grade=" << grade << " storage=" << storageBytes << endl;
+
+        // 5) 파일 보관 정책 전환: 구독 시작 → 모든 파일 영구 보관으로 전환
+        if (grade > 0) {
+            // expires_at = NULL (영구)
+            FileRepository::UpdateUserFilesRetentionExpiry(userId, 0);
+
+            // messages 테이블도 동기화
+            auto& sess2 = db.GetSession();
+            sess2.sql(
+                "UPDATE messages SET file_retention_expires_at = NULL, file_status = 'active' "
+                "WHERE sender_id = ? AND file_status != 'expired' AND file_status != '' "
+                "AND (file_retention_expires_at IS NOT NULL OR file_status = 'expiring_soon')")
+                .bind(userId).execute();
+
+            cout << "[PaymentService] 파일 보관 정책 전환: 영구 보관 적용 userId=" << userId << endl;
+        }
+
         return true;
     }
     catch (const exception& e) {
         HandleErr("UpdateSubscription", e.what());
+        return false;
+    }
+}
+
+
+bool PaymentService::HandleCancelSubscription(sessionPtr& session, uint64 reqId)
+{
+    auto serverSession = static_pointer_cast<ServerSession>(session);
+    string userId = serverSession->GetUserId();
+    if (userId.empty()) {
+        PacketDispatcher::DispatchError(session, reqId, Protocol::ERR_INVALID_TOKEN);
+        return false;
+    }
+
+    try {
+        auto& db = DBManager::GetInstance();
+        auto schema = db.GetSchema();
+
+        // 현재 구독 등급 확인
+        auto usersTable = schema.getTable("users");
+        auto res = usersTable.select("sub_grade")
+            .where("user_id = :uid").bind("uid", userId).execute();
+        auto row = res.fetchOne();
+        if (!row) {
+            PacketDispatcher::DispatchError(session, reqId, Protocol::ERR_USER_NOT_FOUND);
+            return false;
+        }
+        int grade = static_cast<int>(row[0].get<int64>());
+
+        if (grade <= 0) {
+            // 이미 무료 플랜
+            Protocol::S_CancelSubscription resp;
+            resp.set_success(false);
+            resp.set_message("구독 중인 플랜이 없습니다.");
+            resp.set_grace_expires_at(0);
+            Protocol::Envelope env;
+            env.set_version(GProtoVersion);
+            env.set_request_id(reqId);
+            *env.mutable_s_cancel_subscription() = resp;
+            PacketDispatcher::SendEnvelope(session, env);
+            return true;
+        }
+
+        // 14일 유예 기간 설정
+        const int64 GRACE_PERIOD_MS = 14LL * 24 * 3600 * 1000;
+        int64 graceExpiresAt = Nowts() + GRACE_PERIOD_MS;
+
+        // subscriptions: status = 'cancelled', auto_renew = 0
+        auto subsTable = schema.getTable("subscriptions");
+        subsTable.update()
+            .set("status", "cancelled")
+            .set("auto_renew", 0)
+            .where("user_id = :uid AND status = 'active'")
+            .bind("uid", userId)
+            .execute();
+
+        // users: sub_grade = 0 (무료로 다운그레이드)
+        usersTable.update()
+            .set("sub_grade", 0)
+            .where("user_id = :uid")
+            .bind("uid", userId)
+            .execute();
+
+        // file_uploads: 활성 파일에 14일 유예 만료 설정
+        FileRepository::UpdateUserFilesRetentionExpiry(userId, graceExpiresAt);
+
+        // messages: 유예 만료로 전환
+        auto& sess = db.GetSession();
+        sess.sql(
+            "UPDATE messages SET file_retention_expires_at = ?, file_status = 'expiring_soon' "
+            "WHERE sender_id = ? AND (file_retention_expires_at IS NULL OR file_retention_expires_at > ?) "
+            "AND file_status = 'active'")
+            .bind(graceExpiresAt, userId, graceExpiresAt).execute();
+
+        cout << "[PaymentService] 구독 해지: userId=" << userId
+             << ", 유예기간 만료=" << graceExpiresAt << endl;
+
+        Protocol::S_CancelSubscription resp;
+        resp.set_success(true);
+        resp.set_message("구독이 해지되었습니다. 14일간 기존 파일에 접근 가능합니다.");
+        resp.set_grace_expires_at(graceExpiresAt);
+
+        Protocol::Envelope env;
+        env.set_version(GProtoVersion);
+        env.set_request_id(reqId);
+        *env.mutable_s_cancel_subscription() = resp;
+        PacketDispatcher::SendEnvelope(session, env);
+
+        return true;
+    }
+    catch (const exception& e) {
+        HandleErr("HandleCancelSubscription", e.what());
+        PacketDispatcher::DispatchError(session, reqId, Protocol::ERR_SERVER_INTERNAL, e.what());
         return false;
     }
 }
