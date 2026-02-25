@@ -424,11 +424,13 @@ export interface Envelope {
   cCreatePoll?: CCreatePoll | undefined;
   cVote?: CVote | undefined;
   cClosePoll?: CClosePoll | undefined;
+  cSetAnnouncement?: CSetAnnouncement | undefined;
   sAddReaction?: SAddReaction | undefined;
   sCreatePoll?: SCreatePoll | undefined;
   sVote?: SVote | undefined;
-  sClosePoll?:
-    | SClosePoll
+  sClosePoll?: SClosePoll | undefined;
+  sSetAnnouncement?:
+    | SSetAnnouncement
     | undefined;
   /** GROUPS (80 ~ 99) */
   cCreateGroup?: CCreateGroup | undefined;
@@ -1225,6 +1227,30 @@ export interface SClosePoll {
   msgSeq: number;
 }
 
+/**
+ * -------------
+ * ANNOUNCEMENT (공지)
+ * ---------------
+ */
+export interface CSetAnnouncement {
+  /** "group:xxx" 또는 "direct:targetId" */
+  convId: string;
+  /** 0이면 공지 삭제 */
+  msgSeq: number;
+  text: string;
+  senderName: string;
+}
+
+export interface SSetAnnouncement {
+  convId: string;
+  /** 0이면 공지 삭제됨 */
+  msgSeq: number;
+  text: string;
+  senderName: string;
+  /** 공지 설정한 사람 */
+  setterId: string;
+}
+
 export interface SError {
   errorCode: ErrorCode;
   code: number;
@@ -1310,10 +1336,12 @@ function createBaseEnvelope(): Envelope {
     cCreatePoll: undefined,
     cVote: undefined,
     cClosePoll: undefined,
+    cSetAnnouncement: undefined,
     sAddReaction: undefined,
     sCreatePoll: undefined,
     sVote: undefined,
     sClosePoll: undefined,
+    sSetAnnouncement: undefined,
     cCreateGroup: undefined,
     sCreateGroup: undefined,
     cGroupList: undefined,
@@ -1555,6 +1583,9 @@ export const Envelope = {
     if (message.cClosePoll !== undefined) {
       CClosePoll.encode(message.cClosePoll, writer.uint32(626).fork()).ldelim();
     }
+    if (message.cSetAnnouncement !== undefined) {
+      CSetAnnouncement.encode(message.cSetAnnouncement, writer.uint32(634).fork()).ldelim();
+    }
     if (message.sAddReaction !== undefined) {
       SAddReaction.encode(message.sAddReaction, writer.uint32(834).fork()).ldelim();
     }
@@ -1566,6 +1597,9 @@ export const Envelope = {
     }
     if (message.sClosePoll !== undefined) {
       SClosePoll.encode(message.sClosePoll, writer.uint32(858).fork()).ldelim();
+    }
+    if (message.sSetAnnouncement !== undefined) {
+      SSetAnnouncement.encode(message.sSetAnnouncement, writer.uint32(866).fork()).ldelim();
     }
     if (message.cCreateGroup !== undefined) {
       CCreateGroup.encode(message.cCreateGroup, writer.uint32(642).fork()).ldelim();
@@ -2143,6 +2177,13 @@ export const Envelope = {
 
           message.cClosePoll = CClosePoll.decode(reader, reader.uint32());
           continue;
+        case 79:
+          if (tag !== 634) {
+            break;
+          }
+
+          message.cSetAnnouncement = CSetAnnouncement.decode(reader, reader.uint32());
+          continue;
         case 104:
           if (tag !== 834) {
             break;
@@ -2170,6 +2211,13 @@ export const Envelope = {
           }
 
           message.sClosePoll = SClosePoll.decode(reader, reader.uint32());
+          continue;
+        case 108:
+          if (tag !== 866) {
+            break;
+          }
+
+          message.sSetAnnouncement = SSetAnnouncement.decode(reader, reader.uint32());
           continue;
         case 80:
           if (tag !== 642) {
@@ -2426,10 +2474,12 @@ export const Envelope = {
       cCreatePoll: isSet(object.cCreatePoll) ? CCreatePoll.fromJSON(object.cCreatePoll) : undefined,
       cVote: isSet(object.cVote) ? CVote.fromJSON(object.cVote) : undefined,
       cClosePoll: isSet(object.cClosePoll) ? CClosePoll.fromJSON(object.cClosePoll) : undefined,
+      cSetAnnouncement: isSet(object.cSetAnnouncement) ? CSetAnnouncement.fromJSON(object.cSetAnnouncement) : undefined,
       sAddReaction: isSet(object.sAddReaction) ? SAddReaction.fromJSON(object.sAddReaction) : undefined,
       sCreatePoll: isSet(object.sCreatePoll) ? SCreatePoll.fromJSON(object.sCreatePoll) : undefined,
       sVote: isSet(object.sVote) ? SVote.fromJSON(object.sVote) : undefined,
       sClosePoll: isSet(object.sClosePoll) ? SClosePoll.fromJSON(object.sClosePoll) : undefined,
+      sSetAnnouncement: isSet(object.sSetAnnouncement) ? SSetAnnouncement.fromJSON(object.sSetAnnouncement) : undefined,
       cCreateGroup: isSet(object.cCreateGroup) ? CCreateGroup.fromJSON(object.cCreateGroup) : undefined,
       sCreateGroup: isSet(object.sCreateGroup) ? SCreateGroup.fromJSON(object.sCreateGroup) : undefined,
       cGroupList: isSet(object.cGroupList) ? CGroupList.fromJSON(object.cGroupList) : undefined,
@@ -2671,6 +2721,9 @@ export const Envelope = {
     if (message.cClosePoll !== undefined) {
       obj.cClosePoll = CClosePoll.toJSON(message.cClosePoll);
     }
+    if (message.cSetAnnouncement !== undefined) {
+      obj.cSetAnnouncement = CSetAnnouncement.toJSON(message.cSetAnnouncement);
+    }
     if (message.sAddReaction !== undefined) {
       obj.sAddReaction = SAddReaction.toJSON(message.sAddReaction);
     }
@@ -2682,6 +2735,9 @@ export const Envelope = {
     }
     if (message.sClosePoll !== undefined) {
       obj.sClosePoll = SClosePoll.toJSON(message.sClosePoll);
+    }
+    if (message.sSetAnnouncement !== undefined) {
+      obj.sSetAnnouncement = SSetAnnouncement.toJSON(message.sSetAnnouncement);
     }
     if (message.cCreateGroup !== undefined) {
       obj.cCreateGroup = CCreateGroup.toJSON(message.cCreateGroup);
@@ -2959,6 +3015,9 @@ export const Envelope = {
     message.cClosePoll = (object.cClosePoll !== undefined && object.cClosePoll !== null)
       ? CClosePoll.fromPartial(object.cClosePoll)
       : undefined;
+    message.cSetAnnouncement = (object.cSetAnnouncement !== undefined && object.cSetAnnouncement !== null)
+      ? CSetAnnouncement.fromPartial(object.cSetAnnouncement)
+      : undefined;
     message.sAddReaction = (object.sAddReaction !== undefined && object.sAddReaction !== null)
       ? SAddReaction.fromPartial(object.sAddReaction)
       : undefined;
@@ -2968,6 +3027,9 @@ export const Envelope = {
     message.sVote = (object.sVote !== undefined && object.sVote !== null) ? SVote.fromPartial(object.sVote) : undefined;
     message.sClosePoll = (object.sClosePoll !== undefined && object.sClosePoll !== null)
       ? SClosePoll.fromPartial(object.sClosePoll)
+      : undefined;
+    message.sSetAnnouncement = (object.sSetAnnouncement !== undefined && object.sSetAnnouncement !== null)
+      ? SSetAnnouncement.fromPartial(object.sSetAnnouncement)
       : undefined;
     message.cCreateGroup = (object.cCreateGroup !== undefined && object.cCreateGroup !== null)
       ? CCreateGroup.fromPartial(object.cCreateGroup)
@@ -12411,6 +12473,229 @@ export const SClosePoll = {
     message.convId = object.convId ?? "";
     message.pollId = object.pollId ?? "";
     message.msgSeq = object.msgSeq ?? 0;
+    return message;
+  },
+};
+
+function createBaseCSetAnnouncement(): CSetAnnouncement {
+  return { convId: "", msgSeq: 0, text: "", senderName: "" };
+}
+
+export const CSetAnnouncement = {
+  encode(message: CSetAnnouncement, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.convId !== "") {
+      writer.uint32(10).string(message.convId);
+    }
+    if (message.msgSeq !== 0) {
+      writer.uint32(16).int64(message.msgSeq);
+    }
+    if (message.text !== "") {
+      writer.uint32(26).string(message.text);
+    }
+    if (message.senderName !== "") {
+      writer.uint32(34).string(message.senderName);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CSetAnnouncement {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCSetAnnouncement();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.convId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.msgSeq = longToNumber(reader.int64() as Long);
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.text = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.senderName = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CSetAnnouncement {
+    return {
+      convId: isSet(object.convId) ? globalThis.String(object.convId) : "",
+      msgSeq: isSet(object.msgSeq) ? globalThis.Number(object.msgSeq) : 0,
+      text: isSet(object.text) ? globalThis.String(object.text) : "",
+      senderName: isSet(object.senderName) ? globalThis.String(object.senderName) : "",
+    };
+  },
+
+  toJSON(message: CSetAnnouncement): unknown {
+    const obj: any = {};
+    if (message.convId !== "") {
+      obj.convId = message.convId;
+    }
+    if (message.msgSeq !== 0) {
+      obj.msgSeq = Math.round(message.msgSeq);
+    }
+    if (message.text !== "") {
+      obj.text = message.text;
+    }
+    if (message.senderName !== "") {
+      obj.senderName = message.senderName;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CSetAnnouncement>, I>>(base?: I): CSetAnnouncement {
+    return CSetAnnouncement.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CSetAnnouncement>, I>>(object: I): CSetAnnouncement {
+    const message = createBaseCSetAnnouncement();
+    message.convId = object.convId ?? "";
+    message.msgSeq = object.msgSeq ?? 0;
+    message.text = object.text ?? "";
+    message.senderName = object.senderName ?? "";
+    return message;
+  },
+};
+
+function createBaseSSetAnnouncement(): SSetAnnouncement {
+  return { convId: "", msgSeq: 0, text: "", senderName: "", setterId: "" };
+}
+
+export const SSetAnnouncement = {
+  encode(message: SSetAnnouncement, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.convId !== "") {
+      writer.uint32(10).string(message.convId);
+    }
+    if (message.msgSeq !== 0) {
+      writer.uint32(16).int64(message.msgSeq);
+    }
+    if (message.text !== "") {
+      writer.uint32(26).string(message.text);
+    }
+    if (message.senderName !== "") {
+      writer.uint32(34).string(message.senderName);
+    }
+    if (message.setterId !== "") {
+      writer.uint32(42).string(message.setterId);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SSetAnnouncement {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSSetAnnouncement();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.convId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.msgSeq = longToNumber(reader.int64() as Long);
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.text = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.senderName = reader.string();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.setterId = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SSetAnnouncement {
+    return {
+      convId: isSet(object.convId) ? globalThis.String(object.convId) : "",
+      msgSeq: isSet(object.msgSeq) ? globalThis.Number(object.msgSeq) : 0,
+      text: isSet(object.text) ? globalThis.String(object.text) : "",
+      senderName: isSet(object.senderName) ? globalThis.String(object.senderName) : "",
+      setterId: isSet(object.setterId) ? globalThis.String(object.setterId) : "",
+    };
+  },
+
+  toJSON(message: SSetAnnouncement): unknown {
+    const obj: any = {};
+    if (message.convId !== "") {
+      obj.convId = message.convId;
+    }
+    if (message.msgSeq !== 0) {
+      obj.msgSeq = Math.round(message.msgSeq);
+    }
+    if (message.text !== "") {
+      obj.text = message.text;
+    }
+    if (message.senderName !== "") {
+      obj.senderName = message.senderName;
+    }
+    if (message.setterId !== "") {
+      obj.setterId = message.setterId;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SSetAnnouncement>, I>>(base?: I): SSetAnnouncement {
+    return SSetAnnouncement.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SSetAnnouncement>, I>>(object: I): SSetAnnouncement {
+    const message = createBaseSSetAnnouncement();
+    message.convId = object.convId ?? "";
+    message.msgSeq = object.msgSeq ?? 0;
+    message.text = object.text ?? "";
+    message.senderName = object.senderName ?? "";
+    message.setterId = object.setterId ?? "";
     return message;
   },
 };

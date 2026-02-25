@@ -400,6 +400,9 @@ void MessageRepository::ParseChatPacket(Protocol::S_Chat& sChat, const mysqlx::R
     case 4: // SYSTEM
         payload->mutable_system()->set_message(row[4].get<string>());
         break;
+    case 5: // POLL — message 컬럼에 poll JSON 저장, text payload로 전달
+        payload->mutable_text()->set_message(row[4].get<string>());
+        break;
     }
 }
 
@@ -1035,6 +1038,106 @@ vector<MessageRepository::ReactionInfo> MessageRepository::GetAllReactionsForUse
         }
     } catch (const std::exception& e) {
         cerr << "[MessageRepository] GetAllReactionsForUser 실패: " << e.what() << endl;
+    }
+    return result;
+}
+
+
+/*======================
+    공지 (Announcement)
+========================*/
+
+bool MessageRepository::SetAnnouncement(const string& convId, int64 msgSeq, const string& text, const string& senderName, const string& setterId)
+{
+    try {
+        auto& db = DBManager::GetInstance();
+        auto& session = db.GetSession();
+        int64 now = std::chrono::duration_cast<std::chrono::milliseconds>(
+            std::chrono::system_clock::now().time_since_epoch()).count();
+
+        session.sql(
+            "INSERT INTO announcements (conv_id, msg_seq, text, sender_name, setter_id, set_at) "
+            "VALUES (?, ?, ?, ?, ?, ?) "
+            "ON DUPLICATE KEY UPDATE msg_seq = ?, text = ?, sender_name = ?, setter_id = ?, set_at = ?"
+        ).bind(convId).bind(msgSeq).bind(text).bind(senderName).bind(setterId).bind(now)
+         .bind(msgSeq).bind(text).bind(senderName).bind(setterId).bind(now)
+         .execute();
+
+        return true;
+    } catch (const std::exception& e) {
+        cerr << "[MessageRepository] SetAnnouncement 실패: " << e.what() << endl;
+        return false;
+    }
+}
+
+bool MessageRepository::ClearAnnouncement(const string& convId)
+{
+    try {
+        auto& db = DBManager::GetInstance();
+        auto& session = db.GetSession();
+        session.sql("DELETE FROM announcements WHERE conv_id = ?").bind(convId).execute();
+        return true;
+    } catch (const std::exception& e) {
+        cerr << "[MessageRepository] ClearAnnouncement 실패: " << e.what() << endl;
+        return false;
+    }
+}
+
+MessageRepository::AnnouncementInfo MessageRepository::GetAnnouncement(const string& convId)
+{
+    AnnouncementInfo info;
+    try {
+        auto& db = DBManager::GetInstance();
+        auto& session = db.GetSession();
+        auto rows = session.sql(
+            "SELECT conv_id, msg_seq, text, sender_name, setter_id, set_at "
+            "FROM announcements WHERE conv_id = ?"
+        ).bind(convId).execute();
+
+        if (auto row = rows.fetchOne()) {
+            info.convId     = row[0].get<string>();
+            info.msgSeq     = row[1].get<int64_t>();
+            info.text       = row[2].get<string>();
+            info.senderName = row[3].get<string>();
+            info.setterId   = row[4].get<string>();
+            info.setAt      = row[5].get<int64_t>();
+            info.found      = true;
+        }
+    } catch (const std::exception& e) {
+        cerr << "[MessageRepository] GetAnnouncement 실패: " << e.what() << endl;
+    }
+    return info;
+}
+
+vector<MessageRepository::AnnouncementInfo> MessageRepository::GetAnnouncementsForUser(const string& userId)
+{
+    vector<AnnouncementInfo> result;
+    try {
+        auto& db = DBManager::GetInstance();
+        auto& session = db.GetSession();
+        auto rows = session.sql(
+            "SELECT a.conv_id, a.msg_seq, a.text, a.sender_name, a.setter_id, a.set_at "
+            "FROM announcements a "
+            "WHERE a.conv_id IN ("
+            "  SELECT conv_id FROM conversation_participants WHERE user_id = ? "
+            "  UNION "
+            "  SELECT CONCAT('group:', group_id) FROM group_members WHERE user_id = ? "
+            ")"
+        ).bind(userId).bind(userId).execute();
+
+        for (auto row : rows) {
+            AnnouncementInfo info;
+            info.convId     = row[0].get<string>();
+            info.msgSeq     = row[1].get<int64_t>();
+            info.text       = row[2].get<string>();
+            info.senderName = row[3].get<string>();
+            info.setterId   = row[4].get<string>();
+            info.setAt      = row[5].get<int64_t>();
+            info.found      = true;
+            result.push_back(info);
+        }
+    } catch (const std::exception& e) {
+        cerr << "[MessageRepository] GetAnnouncementsForUser 실패: " << e.what() << endl;
     }
     return result;
 }

@@ -98,6 +98,21 @@ public:
     // 특정 메시지의 읽지 않은 참여자 수 (참여자 수 - 읽은 사람 수)
     static int GetMsgUnreadCount(const string& convId, int64 msgSeq);
 
+    /* 공지 */
+    struct AnnouncementInfo {
+        string convId;
+        int64  msgSeq;
+        string text;
+        string senderName;
+        string setterId;
+        int64  setAt;
+        bool   found = false;
+    };
+    static bool SetAnnouncement(const string& convId, int64 msgSeq, const string& text, const string& senderName, const string& setterId);
+    static bool ClearAnnouncement(const string& convId);
+    static AnnouncementInfo GetAnnouncement(const string& convId);
+    static vector<AnnouncementInfo> GetAnnouncementsForUser(const string& userId);
+
 protected:
     // 메시지를 메모장에 즉시 추가
     static bool AppendMessageToLog(const string& convId, const string& senderId,

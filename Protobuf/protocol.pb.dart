@@ -89,6 +89,7 @@ enum Envelope_Payload {
   cCreatePoll,
   cVote,
   cClosePoll,
+  cSetAnnouncement,
   cCreateGroup,
   sCreateGroup,
   cGroupList,
@@ -117,6 +118,7 @@ enum Envelope_Payload {
   sCreatePoll,
   sVote,
   sClosePoll,
+  sSetAnnouncement,
   notSet
 }
 
@@ -195,6 +197,7 @@ class Envelope extends $pb.GeneratedMessage {
     C_CreatePoll? cCreatePoll,
     C_Vote? cVote,
     C_ClosePoll? cClosePoll,
+    C_SetAnnouncement? cSetAnnouncement,
     C_CreateGroup? cCreateGroup,
     S_CreateGroup? sCreateGroup,
     C_GroupList? cGroupList,
@@ -223,6 +226,7 @@ class Envelope extends $pb.GeneratedMessage {
     S_CreatePoll? sCreatePoll,
     S_Vote? sVote,
     S_ClosePoll? sClosePoll,
+    S_SetAnnouncement? sSetAnnouncement,
   }) {
     final result = create();
     if (version != null) result.version = version;
@@ -298,6 +302,7 @@ class Envelope extends $pb.GeneratedMessage {
     if (cCreatePoll != null) result.cCreatePoll = cCreatePoll;
     if (cVote != null) result.cVote = cVote;
     if (cClosePoll != null) result.cClosePoll = cClosePoll;
+    if (cSetAnnouncement != null) result.cSetAnnouncement = cSetAnnouncement;
     if (cCreateGroup != null) result.cCreateGroup = cCreateGroup;
     if (sCreateGroup != null) result.sCreateGroup = sCreateGroup;
     if (cGroupList != null) result.cGroupList = cGroupList;
@@ -327,6 +332,7 @@ class Envelope extends $pb.GeneratedMessage {
     if (sCreatePoll != null) result.sCreatePoll = sCreatePoll;
     if (sVote != null) result.sVote = sVote;
     if (sClosePoll != null) result.sClosePoll = sClosePoll;
+    if (sSetAnnouncement != null) result.sSetAnnouncement = sSetAnnouncement;
     return result;
   }
 
@@ -407,6 +413,7 @@ class Envelope extends $pb.GeneratedMessage {
     76: Envelope_Payload.cCreatePoll,
     77: Envelope_Payload.cVote,
     78: Envelope_Payload.cClosePoll,
+    79: Envelope_Payload.cSetAnnouncement,
     80: Envelope_Payload.cCreateGroup,
     81: Envelope_Payload.sCreateGroup,
     82: Envelope_Payload.cGroupList,
@@ -435,6 +442,7 @@ class Envelope extends $pb.GeneratedMessage {
     105: Envelope_Payload.sCreatePoll,
     106: Envelope_Payload.sVote,
     107: Envelope_Payload.sClosePoll,
+    108: Envelope_Payload.sSetAnnouncement,
     0: Envelope_Payload.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
@@ -509,6 +517,7 @@ class Envelope extends $pb.GeneratedMessage {
       76,
       77,
       78,
+      79,
       80,
       81,
       82,
@@ -536,7 +545,8 @@ class Envelope extends $pb.GeneratedMessage {
       104,
       105,
       106,
-      107
+      107,
+      108
     ])
     ..aI(1, _omitFieldNames ? '' : 'version', fieldType: $pb.PbFieldType.OU3)
     ..aI(2, _omitFieldNames ? '' : 'requestId', fieldType: $pb.PbFieldType.OU3)
@@ -674,6 +684,8 @@ class Envelope extends $pb.GeneratedMessage {
     ..aOM<C_Vote>(77, _omitFieldNames ? '' : 'cVote', subBuilder: C_Vote.create)
     ..aOM<C_ClosePoll>(78, _omitFieldNames ? '' : 'cClosePoll',
         subBuilder: C_ClosePoll.create)
+    ..aOM<C_SetAnnouncement>(79, _omitFieldNames ? '' : 'cSetAnnouncement',
+        subBuilder: C_SetAnnouncement.create)
     ..aOM<C_CreateGroup>(80, _omitFieldNames ? '' : 'cCreateGroup',
         subBuilder: C_CreateGroup.create)
     ..aOM<S_CreateGroup>(81, _omitFieldNames ? '' : 'sCreateGroup',
@@ -731,6 +743,8 @@ class Envelope extends $pb.GeneratedMessage {
         subBuilder: S_Vote.create)
     ..aOM<S_ClosePoll>(107, _omitFieldNames ? '' : 'sClosePoll',
         subBuilder: S_ClosePoll.create)
+    ..aOM<S_SetAnnouncement>(108, _omitFieldNames ? '' : 'sSetAnnouncement',
+        subBuilder: S_SetAnnouncement.create)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -818,6 +832,7 @@ class Envelope extends $pb.GeneratedMessage {
   @$pb.TagNumber(76)
   @$pb.TagNumber(77)
   @$pb.TagNumber(78)
+  @$pb.TagNumber(79)
   @$pb.TagNumber(80)
   @$pb.TagNumber(81)
   @$pb.TagNumber(82)
@@ -846,6 +861,7 @@ class Envelope extends $pb.GeneratedMessage {
   @$pb.TagNumber(105)
   @$pb.TagNumber(106)
   @$pb.TagNumber(107)
+  @$pb.TagNumber(108)
   Envelope_Payload whichPayload() => _Envelope_PayloadByTag[$_whichOneof(0)]!;
   @$pb.TagNumber(10)
   @$pb.TagNumber(11)
@@ -914,6 +930,7 @@ class Envelope extends $pb.GeneratedMessage {
   @$pb.TagNumber(76)
   @$pb.TagNumber(77)
   @$pb.TagNumber(78)
+  @$pb.TagNumber(79)
   @$pb.TagNumber(80)
   @$pb.TagNumber(81)
   @$pb.TagNumber(82)
@@ -942,6 +959,7 @@ class Envelope extends $pb.GeneratedMessage {
   @$pb.TagNumber(105)
   @$pb.TagNumber(106)
   @$pb.TagNumber(107)
+  @$pb.TagNumber(108)
   void clearPayload() => $_clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
@@ -1713,315 +1731,337 @@ class Envelope extends $pb.GeneratedMessage {
   @$pb.TagNumber(78)
   C_ClosePoll ensureCClosePoll() => $_ensure(69);
 
+  @$pb.TagNumber(79)
+  C_SetAnnouncement get cSetAnnouncement => $_getN(70);
+  @$pb.TagNumber(79)
+  set cSetAnnouncement(C_SetAnnouncement value) => $_setField(79, value);
+  @$pb.TagNumber(79)
+  $core.bool hasCSetAnnouncement() => $_has(70);
+  @$pb.TagNumber(79)
+  void clearCSetAnnouncement() => $_clearField(79);
+  @$pb.TagNumber(79)
+  C_SetAnnouncement ensureCSetAnnouncement() => $_ensure(70);
+
   /// GROUPS (80 ~ 99)
   @$pb.TagNumber(80)
-  C_CreateGroup get cCreateGroup => $_getN(70);
+  C_CreateGroup get cCreateGroup => $_getN(71);
   @$pb.TagNumber(80)
   set cCreateGroup(C_CreateGroup value) => $_setField(80, value);
   @$pb.TagNumber(80)
-  $core.bool hasCCreateGroup() => $_has(70);
+  $core.bool hasCCreateGroup() => $_has(71);
   @$pb.TagNumber(80)
   void clearCCreateGroup() => $_clearField(80);
   @$pb.TagNumber(80)
-  C_CreateGroup ensureCCreateGroup() => $_ensure(70);
+  C_CreateGroup ensureCCreateGroup() => $_ensure(71);
 
   @$pb.TagNumber(81)
-  S_CreateGroup get sCreateGroup => $_getN(71);
+  S_CreateGroup get sCreateGroup => $_getN(72);
   @$pb.TagNumber(81)
   set sCreateGroup(S_CreateGroup value) => $_setField(81, value);
   @$pb.TagNumber(81)
-  $core.bool hasSCreateGroup() => $_has(71);
+  $core.bool hasSCreateGroup() => $_has(72);
   @$pb.TagNumber(81)
   void clearSCreateGroup() => $_clearField(81);
   @$pb.TagNumber(81)
-  S_CreateGroup ensureSCreateGroup() => $_ensure(71);
+  S_CreateGroup ensureSCreateGroup() => $_ensure(72);
 
   @$pb.TagNumber(82)
-  C_GroupList get cGroupList => $_getN(72);
+  C_GroupList get cGroupList => $_getN(73);
   @$pb.TagNumber(82)
   set cGroupList(C_GroupList value) => $_setField(82, value);
   @$pb.TagNumber(82)
-  $core.bool hasCGroupList() => $_has(72);
+  $core.bool hasCGroupList() => $_has(73);
   @$pb.TagNumber(82)
   void clearCGroupList() => $_clearField(82);
   @$pb.TagNumber(82)
-  C_GroupList ensureCGroupList() => $_ensure(72);
+  C_GroupList ensureCGroupList() => $_ensure(73);
 
   @$pb.TagNumber(83)
-  S_GroupList get sGroupList => $_getN(73);
+  S_GroupList get sGroupList => $_getN(74);
   @$pb.TagNumber(83)
   set sGroupList(S_GroupList value) => $_setField(83, value);
   @$pb.TagNumber(83)
-  $core.bool hasSGroupList() => $_has(73);
+  $core.bool hasSGroupList() => $_has(74);
   @$pb.TagNumber(83)
   void clearSGroupList() => $_clearField(83);
   @$pb.TagNumber(83)
-  S_GroupList ensureSGroupList() => $_ensure(73);
+  S_GroupList ensureSGroupList() => $_ensure(74);
 
   @$pb.TagNumber(84)
-  C_JoinGroup get cJoinGroup => $_getN(74);
+  C_JoinGroup get cJoinGroup => $_getN(75);
   @$pb.TagNumber(84)
   set cJoinGroup(C_JoinGroup value) => $_setField(84, value);
   @$pb.TagNumber(84)
-  $core.bool hasCJoinGroup() => $_has(74);
+  $core.bool hasCJoinGroup() => $_has(75);
   @$pb.TagNumber(84)
   void clearCJoinGroup() => $_clearField(84);
   @$pb.TagNumber(84)
-  C_JoinGroup ensureCJoinGroup() => $_ensure(74);
+  C_JoinGroup ensureCJoinGroup() => $_ensure(75);
 
   @$pb.TagNumber(85)
-  S_JoinGroup get sJoinGroup => $_getN(75);
+  S_JoinGroup get sJoinGroup => $_getN(76);
   @$pb.TagNumber(85)
   set sJoinGroup(S_JoinGroup value) => $_setField(85, value);
   @$pb.TagNumber(85)
-  $core.bool hasSJoinGroup() => $_has(75);
+  $core.bool hasSJoinGroup() => $_has(76);
   @$pb.TagNumber(85)
   void clearSJoinGroup() => $_clearField(85);
   @$pb.TagNumber(85)
-  S_JoinGroup ensureSJoinGroup() => $_ensure(75);
+  S_JoinGroup ensureSJoinGroup() => $_ensure(76);
 
   @$pb.TagNumber(86)
-  C_InviteFriend get cInviteFriend => $_getN(76);
+  C_InviteFriend get cInviteFriend => $_getN(77);
   @$pb.TagNumber(86)
   set cInviteFriend(C_InviteFriend value) => $_setField(86, value);
   @$pb.TagNumber(86)
-  $core.bool hasCInviteFriend() => $_has(76);
+  $core.bool hasCInviteFriend() => $_has(77);
   @$pb.TagNumber(86)
   void clearCInviteFriend() => $_clearField(86);
   @$pb.TagNumber(86)
-  C_InviteFriend ensureCInviteFriend() => $_ensure(76);
+  C_InviteFriend ensureCInviteFriend() => $_ensure(77);
 
   @$pb.TagNumber(87)
-  S_InviteFriend get sInviteFriend => $_getN(77);
+  S_InviteFriend get sInviteFriend => $_getN(78);
   @$pb.TagNumber(87)
   set sInviteFriend(S_InviteFriend value) => $_setField(87, value);
   @$pb.TagNumber(87)
-  $core.bool hasSInviteFriend() => $_has(77);
+  $core.bool hasSInviteFriend() => $_has(78);
   @$pb.TagNumber(87)
   void clearSInviteFriend() => $_clearField(87);
   @$pb.TagNumber(87)
-  S_InviteFriend ensureSInviteFriend() => $_ensure(77);
+  S_InviteFriend ensureSInviteFriend() => $_ensure(78);
 
   @$pb.TagNumber(88)
-  C_LeaveGroup get cLeaveGroup => $_getN(78);
+  C_LeaveGroup get cLeaveGroup => $_getN(79);
   @$pb.TagNumber(88)
   set cLeaveGroup(C_LeaveGroup value) => $_setField(88, value);
   @$pb.TagNumber(88)
-  $core.bool hasCLeaveGroup() => $_has(78);
+  $core.bool hasCLeaveGroup() => $_has(79);
   @$pb.TagNumber(88)
   void clearCLeaveGroup() => $_clearField(88);
   @$pb.TagNumber(88)
-  C_LeaveGroup ensureCLeaveGroup() => $_ensure(78);
+  C_LeaveGroup ensureCLeaveGroup() => $_ensure(79);
 
   @$pb.TagNumber(89)
-  S_LeaveGroup get sLeaveGroup => $_getN(79);
+  S_LeaveGroup get sLeaveGroup => $_getN(80);
   @$pb.TagNumber(89)
   set sLeaveGroup(S_LeaveGroup value) => $_setField(89, value);
   @$pb.TagNumber(89)
-  $core.bool hasSLeaveGroup() => $_has(79);
+  $core.bool hasSLeaveGroup() => $_has(80);
   @$pb.TagNumber(89)
   void clearSLeaveGroup() => $_clearField(89);
   @$pb.TagNumber(89)
-  S_LeaveGroup ensureSLeaveGroup() => $_ensure(79);
+  S_LeaveGroup ensureSLeaveGroup() => $_ensure(80);
 
   @$pb.TagNumber(90)
-  C_GroupMemberList get cGroupMemberList => $_getN(80);
+  C_GroupMemberList get cGroupMemberList => $_getN(81);
   @$pb.TagNumber(90)
   set cGroupMemberList(C_GroupMemberList value) => $_setField(90, value);
   @$pb.TagNumber(90)
-  $core.bool hasCGroupMemberList() => $_has(80);
+  $core.bool hasCGroupMemberList() => $_has(81);
   @$pb.TagNumber(90)
   void clearCGroupMemberList() => $_clearField(90);
   @$pb.TagNumber(90)
-  C_GroupMemberList ensureCGroupMemberList() => $_ensure(80);
+  C_GroupMemberList ensureCGroupMemberList() => $_ensure(81);
 
   @$pb.TagNumber(91)
-  S_GroupMemberList get sGroupMemberList => $_getN(81);
+  S_GroupMemberList get sGroupMemberList => $_getN(82);
   @$pb.TagNumber(91)
   set sGroupMemberList(S_GroupMemberList value) => $_setField(91, value);
   @$pb.TagNumber(91)
-  $core.bool hasSGroupMemberList() => $_has(81);
+  $core.bool hasSGroupMemberList() => $_has(82);
   @$pb.TagNumber(91)
   void clearSGroupMemberList() => $_clearField(91);
   @$pb.TagNumber(91)
-  S_GroupMemberList ensureSGroupMemberList() => $_ensure(81);
+  S_GroupMemberList ensureSGroupMemberList() => $_ensure(82);
 
   @$pb.TagNumber(92)
-  C_GroupInfo get cGroupInfo => $_getN(82);
+  C_GroupInfo get cGroupInfo => $_getN(83);
   @$pb.TagNumber(92)
   set cGroupInfo(C_GroupInfo value) => $_setField(92, value);
   @$pb.TagNumber(92)
-  $core.bool hasCGroupInfo() => $_has(82);
+  $core.bool hasCGroupInfo() => $_has(83);
   @$pb.TagNumber(92)
   void clearCGroupInfo() => $_clearField(92);
   @$pb.TagNumber(92)
-  C_GroupInfo ensureCGroupInfo() => $_ensure(82);
+  C_GroupInfo ensureCGroupInfo() => $_ensure(83);
 
   @$pb.TagNumber(93)
-  S_GroupInfo get sGroupInfo => $_getN(83);
+  S_GroupInfo get sGroupInfo => $_getN(84);
   @$pb.TagNumber(93)
   set sGroupInfo(S_GroupInfo value) => $_setField(93, value);
   @$pb.TagNumber(93)
-  $core.bool hasSGroupInfo() => $_has(83);
+  $core.bool hasSGroupInfo() => $_has(84);
   @$pb.TagNumber(93)
   void clearSGroupInfo() => $_clearField(93);
   @$pb.TagNumber(93)
-  S_GroupInfo ensureSGroupInfo() => $_ensure(83);
+  S_GroupInfo ensureSGroupInfo() => $_ensure(84);
 
   @$pb.TagNumber(94)
-  C_EditGroup get cEditGroup => $_getN(84);
+  C_EditGroup get cEditGroup => $_getN(85);
   @$pb.TagNumber(94)
   set cEditGroup(C_EditGroup value) => $_setField(94, value);
   @$pb.TagNumber(94)
-  $core.bool hasCEditGroup() => $_has(84);
+  $core.bool hasCEditGroup() => $_has(85);
   @$pb.TagNumber(94)
   void clearCEditGroup() => $_clearField(94);
   @$pb.TagNumber(94)
-  C_EditGroup ensureCEditGroup() => $_ensure(84);
+  C_EditGroup ensureCEditGroup() => $_ensure(85);
 
   @$pb.TagNumber(95)
-  S_EditGroup get sEditGroup => $_getN(85);
+  S_EditGroup get sEditGroup => $_getN(86);
   @$pb.TagNumber(95)
   set sEditGroup(S_EditGroup value) => $_setField(95, value);
   @$pb.TagNumber(95)
-  $core.bool hasSEditGroup() => $_has(85);
+  $core.bool hasSEditGroup() => $_has(86);
   @$pb.TagNumber(95)
   void clearSEditGroup() => $_clearField(95);
   @$pb.TagNumber(95)
-  S_EditGroup ensureSEditGroup() => $_ensure(85);
+  S_EditGroup ensureSEditGroup() => $_ensure(86);
 
   @$pb.TagNumber(96)
-  C_Withdraw get cWithdraw => $_getN(86);
+  C_Withdraw get cWithdraw => $_getN(87);
   @$pb.TagNumber(96)
   set cWithdraw(C_Withdraw value) => $_setField(96, value);
   @$pb.TagNumber(96)
-  $core.bool hasCWithdraw() => $_has(86);
+  $core.bool hasCWithdraw() => $_has(87);
   @$pb.TagNumber(96)
   void clearCWithdraw() => $_clearField(96);
   @$pb.TagNumber(96)
-  C_Withdraw ensureCWithdraw() => $_ensure(86);
+  C_Withdraw ensureCWithdraw() => $_ensure(87);
 
   @$pb.TagNumber(97)
-  S_Withdraw get sWithdraw => $_getN(87);
+  S_Withdraw get sWithdraw => $_getN(88);
   @$pb.TagNumber(97)
   set sWithdraw(S_Withdraw value) => $_setField(97, value);
   @$pb.TagNumber(97)
-  $core.bool hasSWithdraw() => $_has(87);
+  $core.bool hasSWithdraw() => $_has(88);
   @$pb.TagNumber(97)
   void clearSWithdraw() => $_clearField(97);
   @$pb.TagNumber(97)
-  S_Withdraw ensureSWithdraw() => $_ensure(87);
+  S_Withdraw ensureSWithdraw() => $_ensure(88);
 
   @$pb.TagNumber(98)
-  C_DeleteGroup get cDeleteGroup => $_getN(88);
+  C_DeleteGroup get cDeleteGroup => $_getN(89);
   @$pb.TagNumber(98)
   set cDeleteGroup(C_DeleteGroup value) => $_setField(98, value);
   @$pb.TagNumber(98)
-  $core.bool hasCDeleteGroup() => $_has(88);
+  $core.bool hasCDeleteGroup() => $_has(89);
   @$pb.TagNumber(98)
   void clearCDeleteGroup() => $_clearField(98);
   @$pb.TagNumber(98)
-  C_DeleteGroup ensureCDeleteGroup() => $_ensure(88);
+  C_DeleteGroup ensureCDeleteGroup() => $_ensure(89);
 
   @$pb.TagNumber(99)
-  S_DeleteGroup get sDeleteGroup => $_getN(89);
+  S_DeleteGroup get sDeleteGroup => $_getN(90);
   @$pb.TagNumber(99)
   set sDeleteGroup(S_DeleteGroup value) => $_setField(99, value);
   @$pb.TagNumber(99)
-  $core.bool hasSDeleteGroup() => $_has(89);
+  $core.bool hasSDeleteGroup() => $_has(90);
   @$pb.TagNumber(99)
   void clearSDeleteGroup() => $_clearField(99);
   @$pb.TagNumber(99)
-  S_DeleteGroup ensureSDeleteGroup() => $_ensure(89);
+  S_DeleteGroup ensureSDeleteGroup() => $_ensure(90);
 
   /// SYSTEM (100 ~ )
   @$pb.TagNumber(100)
-  S_Error get sError => $_getN(90);
+  S_Error get sError => $_getN(91);
   @$pb.TagNumber(100)
   set sError(S_Error value) => $_setField(100, value);
   @$pb.TagNumber(100)
-  $core.bool hasSError() => $_has(90);
+  $core.bool hasSError() => $_has(91);
   @$pb.TagNumber(100)
   void clearSError() => $_clearField(100);
   @$pb.TagNumber(100)
-  S_Error ensureSError() => $_ensure(90);
+  S_Error ensureSError() => $_ensure(91);
 
   @$pb.TagNumber(101)
-  C_Heartbeat get cHeartbeat => $_getN(91);
+  C_Heartbeat get cHeartbeat => $_getN(92);
   @$pb.TagNumber(101)
   set cHeartbeat(C_Heartbeat value) => $_setField(101, value);
   @$pb.TagNumber(101)
-  $core.bool hasCHeartbeat() => $_has(91);
+  $core.bool hasCHeartbeat() => $_has(92);
   @$pb.TagNumber(101)
   void clearCHeartbeat() => $_clearField(101);
   @$pb.TagNumber(101)
-  C_Heartbeat ensureCHeartbeat() => $_ensure(91);
+  C_Heartbeat ensureCHeartbeat() => $_ensure(92);
 
   @$pb.TagNumber(102)
-  S_Heartbeat get sHeartbeat => $_getN(92);
+  S_Heartbeat get sHeartbeat => $_getN(93);
   @$pb.TagNumber(102)
   set sHeartbeat(S_Heartbeat value) => $_setField(102, value);
   @$pb.TagNumber(102)
-  $core.bool hasSHeartbeat() => $_has(92);
+  $core.bool hasSHeartbeat() => $_has(93);
   @$pb.TagNumber(102)
   void clearSHeartbeat() => $_clearField(102);
   @$pb.TagNumber(102)
-  S_Heartbeat ensureSHeartbeat() => $_ensure(92);
+  S_Heartbeat ensureSHeartbeat() => $_ensure(93);
 
   @$pb.TagNumber(103)
-  S_CancelSubscription get sCancelSubscription => $_getN(93);
+  S_CancelSubscription get sCancelSubscription => $_getN(94);
   @$pb.TagNumber(103)
   set sCancelSubscription(S_CancelSubscription value) => $_setField(103, value);
   @$pb.TagNumber(103)
-  $core.bool hasSCancelSubscription() => $_has(93);
+  $core.bool hasSCancelSubscription() => $_has(94);
   @$pb.TagNumber(103)
   void clearSCancelSubscription() => $_clearField(103);
   @$pb.TagNumber(103)
-  S_CancelSubscription ensureSCancelSubscription() => $_ensure(93);
+  S_CancelSubscription ensureSCancelSubscription() => $_ensure(94);
 
   @$pb.TagNumber(104)
-  S_AddReaction get sAddReaction => $_getN(94);
+  S_AddReaction get sAddReaction => $_getN(95);
   @$pb.TagNumber(104)
   set sAddReaction(S_AddReaction value) => $_setField(104, value);
   @$pb.TagNumber(104)
-  $core.bool hasSAddReaction() => $_has(94);
+  $core.bool hasSAddReaction() => $_has(95);
   @$pb.TagNumber(104)
   void clearSAddReaction() => $_clearField(104);
   @$pb.TagNumber(104)
-  S_AddReaction ensureSAddReaction() => $_ensure(94);
+  S_AddReaction ensureSAddReaction() => $_ensure(95);
 
   @$pb.TagNumber(105)
-  S_CreatePoll get sCreatePoll => $_getN(95);
+  S_CreatePoll get sCreatePoll => $_getN(96);
   @$pb.TagNumber(105)
   set sCreatePoll(S_CreatePoll value) => $_setField(105, value);
   @$pb.TagNumber(105)
-  $core.bool hasSCreatePoll() => $_has(95);
+  $core.bool hasSCreatePoll() => $_has(96);
   @$pb.TagNumber(105)
   void clearSCreatePoll() => $_clearField(105);
   @$pb.TagNumber(105)
-  S_CreatePoll ensureSCreatePoll() => $_ensure(95);
+  S_CreatePoll ensureSCreatePoll() => $_ensure(96);
 
   @$pb.TagNumber(106)
-  S_Vote get sVote => $_getN(96);
+  S_Vote get sVote => $_getN(97);
   @$pb.TagNumber(106)
   set sVote(S_Vote value) => $_setField(106, value);
   @$pb.TagNumber(106)
-  $core.bool hasSVote() => $_has(96);
+  $core.bool hasSVote() => $_has(97);
   @$pb.TagNumber(106)
   void clearSVote() => $_clearField(106);
   @$pb.TagNumber(106)
-  S_Vote ensureSVote() => $_ensure(96);
+  S_Vote ensureSVote() => $_ensure(97);
 
   @$pb.TagNumber(107)
-  S_ClosePoll get sClosePoll => $_getN(97);
+  S_ClosePoll get sClosePoll => $_getN(98);
   @$pb.TagNumber(107)
   set sClosePoll(S_ClosePoll value) => $_setField(107, value);
   @$pb.TagNumber(107)
-  $core.bool hasSClosePoll() => $_has(97);
+  $core.bool hasSClosePoll() => $_has(98);
   @$pb.TagNumber(107)
   void clearSClosePoll() => $_clearField(107);
   @$pb.TagNumber(107)
-  S_ClosePoll ensureSClosePoll() => $_ensure(97);
+  S_ClosePoll ensureSClosePoll() => $_ensure(98);
+
+  @$pb.TagNumber(108)
+  S_SetAnnouncement get sSetAnnouncement => $_getN(99);
+  @$pb.TagNumber(108)
+  set sSetAnnouncement(S_SetAnnouncement value) => $_setField(108, value);
+  @$pb.TagNumber(108)
+  $core.bool hasSSetAnnouncement() => $_has(99);
+  @$pb.TagNumber(108)
+  void clearSSetAnnouncement() => $_clearField(108);
+  @$pb.TagNumber(108)
+  S_SetAnnouncement ensureSSetAnnouncement() => $_ensure(99);
 }
 
 /// UserInfo
@@ -10096,6 +10136,201 @@ class S_ClosePoll extends $pb.GeneratedMessage {
   $core.bool hasMsgSeq() => $_has(2);
   @$pb.TagNumber(3)
   void clearMsgSeq() => $_clearField(3);
+}
+
+/// -------------
+/// ANNOUNCEMENT (공지)
+/// ---------------
+class C_SetAnnouncement extends $pb.GeneratedMessage {
+  factory C_SetAnnouncement({
+    $core.String? convId,
+    $fixnum.Int64? msgSeq,
+    $core.String? text,
+    $core.String? senderName,
+  }) {
+    final result = create();
+    if (convId != null) result.convId = convId;
+    if (msgSeq != null) result.msgSeq = msgSeq;
+    if (text != null) result.text = text;
+    if (senderName != null) result.senderName = senderName;
+    return result;
+  }
+
+  C_SetAnnouncement._();
+
+  factory C_SetAnnouncement.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory C_SetAnnouncement.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'C_SetAnnouncement',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'convId')
+    ..aInt64(2, _omitFieldNames ? '' : 'msgSeq')
+    ..aOS(3, _omitFieldNames ? '' : 'text')
+    ..aOS(4, _omitFieldNames ? '' : 'senderName')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_SetAnnouncement clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_SetAnnouncement copyWith(void Function(C_SetAnnouncement) updates) =>
+      super.copyWith((message) => updates(message as C_SetAnnouncement))
+          as C_SetAnnouncement;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static C_SetAnnouncement create() => C_SetAnnouncement._();
+  @$core.override
+  C_SetAnnouncement createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static C_SetAnnouncement getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<C_SetAnnouncement>(create);
+  static C_SetAnnouncement? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get convId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set convId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasConvId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearConvId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $fixnum.Int64 get msgSeq => $_getI64(1);
+  @$pb.TagNumber(2)
+  set msgSeq($fixnum.Int64 value) => $_setInt64(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasMsgSeq() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearMsgSeq() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get text => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set text($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasText() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearText() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get senderName => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set senderName($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasSenderName() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearSenderName() => $_clearField(4);
+}
+
+class S_SetAnnouncement extends $pb.GeneratedMessage {
+  factory S_SetAnnouncement({
+    $core.String? convId,
+    $fixnum.Int64? msgSeq,
+    $core.String? text,
+    $core.String? senderName,
+    $core.String? setterId,
+  }) {
+    final result = create();
+    if (convId != null) result.convId = convId;
+    if (msgSeq != null) result.msgSeq = msgSeq;
+    if (text != null) result.text = text;
+    if (senderName != null) result.senderName = senderName;
+    if (setterId != null) result.setterId = setterId;
+    return result;
+  }
+
+  S_SetAnnouncement._();
+
+  factory S_SetAnnouncement.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory S_SetAnnouncement.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'S_SetAnnouncement',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'convId')
+    ..aInt64(2, _omitFieldNames ? '' : 'msgSeq')
+    ..aOS(3, _omitFieldNames ? '' : 'text')
+    ..aOS(4, _omitFieldNames ? '' : 'senderName')
+    ..aOS(5, _omitFieldNames ? '' : 'setterId')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_SetAnnouncement clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_SetAnnouncement copyWith(void Function(S_SetAnnouncement) updates) =>
+      super.copyWith((message) => updates(message as S_SetAnnouncement))
+          as S_SetAnnouncement;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static S_SetAnnouncement create() => S_SetAnnouncement._();
+  @$core.override
+  S_SetAnnouncement createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static S_SetAnnouncement getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<S_SetAnnouncement>(create);
+  static S_SetAnnouncement? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get convId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set convId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasConvId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearConvId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $fixnum.Int64 get msgSeq => $_getI64(1);
+  @$pb.TagNumber(2)
+  set msgSeq($fixnum.Int64 value) => $_setInt64(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasMsgSeq() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearMsgSeq() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get text => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set text($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasText() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearText() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get senderName => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set senderName($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasSenderName() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearSenderName() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get setterId => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set setterId($core.String value) => $_setString(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasSetterId() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearSetterId() => $_clearField(5);
 }
 
 class S_Error extends $pb.GeneratedMessage {

@@ -985,6 +985,79 @@ bool ChatService::HandleClosePoll(sessionPtr& session, uint64 reqId, const Proto
 }
 
 
+bool ChatService::HandleSetAnnouncement(sessionPtr& session, uint64 reqId, const Protocol::C_SetAnnouncement& pkt)
+{
+    auto serverSession = static_pointer_cast<ServerSession>(session);
+    const string userId = serverSession->GetUserId();
+    if (userId.empty()) {
+        HandleErr(session, reqId, ERR_UNAUTHORIZED);
+        return false;
+    }
+
+    const string& clientConvId = pkt.conv_id();
+    int64 msgSeq = pkt.msg_seq();
+    const string& text = pkt.text();
+    const string& senderName = pkt.sender_name();
+
+    // convId 변환 (direct:targetId → direct:userA_userB)
+    string convId = clientConvId;
+    if (convId.find("direct:") == 0) {
+        string targetId = convId.substr(7);
+        convId = "direct:" + MessageRepository::CreateConversationId(userId, targetId);
+    }
+
+    // DB 저장/삭제
+    if (msgSeq == 0) {
+        MessageRepository::ClearAnnouncement(convId);
+    } else {
+        MessageRepository::SetAnnouncement(convId, msgSeq, text, senderName, userId);
+    }
+
+    // S_SetAnnouncement 빌드
+    Protocol::S_SetAnnouncement res;
+    res.set_conv_id(clientConvId); // 클라이언트 원본 conv_id 유지
+    res.set_msg_seq(msgSeq);
+    res.set_text(text);
+    res.set_sender_name(senderName);
+    res.set_setter_id(userId);
+
+    // 그룹이면 전체 브로드캐스트, 1:1이면 양쪽에 전송
+    if (clientConvId.find("group:") == 0) {
+        string groupId = clientConvId.substr(6);
+        auto members = GroupRepository::GetGroupMembers(groupId);
+        for (const auto& member : members) {
+            if (auto memberSession = _userManager.FindSession(member.userId)) {
+                Protocol::Envelope env;
+                env.set_version(GProtoVersion);
+                env.set_request_id(member.userId == userId ? reqId : 0);
+                *env.mutable_s_set_announcement() = res;
+                PacketDispatcher::SendEnvelope(memberSession, env);
+            }
+        }
+    } else if (clientConvId.find("direct:") == 0) {
+        // 요청자에게 응답
+        Protocol::Envelope env;
+        env.set_version(GProtoVersion);
+        env.set_request_id(reqId);
+        *env.mutable_s_set_announcement() = res;
+        PacketDispatcher::SendEnvelope(session, env);
+
+        // 상대방에게 전달
+        string targetId = clientConvId.substr(7);
+        if (auto targetSession = _userManager.FindSession(targetId)) {
+            Protocol::Envelope env2;
+            env2.set_version(GProtoVersion);
+            env2.set_request_id(0);
+            *env2.mutable_s_set_announcement() = res;
+            PacketDispatcher::SendEnvelope(targetSession, env2);
+        }
+    }
+
+    cout << "[ChatService] SetAnnouncement: convId=" << convId << ", msgSeq=" << msgSeq << endl;
+    return true;
+}
+
+
 void ChatService::HandleErr(sessionPtr& session, uint64 reqId, ErrorCode errorCode, const string& errMessage)
 {
     cerr << "[ChatService] Error: " << errMessage << " (code: " << static_cast<int>(errorCode) << ")" << endl;

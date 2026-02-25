@@ -130,6 +130,9 @@ protected:
     static bool Dispatch_C_Vote(sessionPtr& session, uint64 reqId, const Protocol::C_Vote& pkt);
     static bool Dispatch_C_ClosePoll(sessionPtr& session, uint64 reqId, const Protocol::C_ClosePoll& pkt);
 
+    // Announcement Handler (공지)
+    static bool Dispatch_C_SetAnnouncement(sessionPtr& session, uint64 reqId, const Protocol::C_SetAnnouncement& pkt);
+
 private:
 
     enum class ConvType { Error = 0, Direct = 1, Group = 2 };

@@ -209,6 +209,9 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 	case Protocol::Envelope::kCClosePoll:
 		Dispatch_C_ClosePoll(session, envelope.request_id(), envelope.c_close_poll());
 		break;
+	case Protocol::Envelope::kCSetAnnouncement:
+		Dispatch_C_SetAnnouncement(session, envelope.request_id(), envelope.c_set_announcement());
+		break;
 
 		/* 친구 관련 */
 	case Protocol::Envelope::kCFriendAction:
@@ -464,6 +467,26 @@ void PacketDispatcher::PushOfflineData(sessionPtr& session, uint64 reqId, const 
 	}
 	if (!reactions.empty()) {
 		cout << "[PacketDispatcher] 이모지 반응 동기화: " << reactions.size() << "개" << endl;
+	}
+
+	// 공지 동기화 — 유저가 참여하는 모든 대화의 공지
+	auto announcements = MessageRepository::GetAnnouncementsForUser(userId);
+	for (const auto& ann : announcements) {
+		Protocol::S_SetAnnouncement pkt_ann;
+		pkt_ann.set_conv_id(ann.convId);
+		pkt_ann.set_msg_seq(ann.msgSeq);
+		pkt_ann.set_text(ann.text);
+		pkt_ann.set_sender_name(ann.senderName);
+		pkt_ann.set_setter_id(ann.setterId);
+
+		Protocol::Envelope env_a;
+		env_a.set_version(GProtoVersion);
+		env_a.set_request_id(0);
+		*env_a.mutable_s_set_announcement() = pkt_ann;
+		SendEnvelope(session, env_a);
+	}
+	if (!announcements.empty()) {
+		cout << "[PacketDispatcher] 공지 동기화: " << announcements.size() << "개" << endl;
 	}
 
 }
@@ -1017,6 +1040,8 @@ bool PacketDispatcher::Dispatch_C_ReadReceipt(sessionPtr& session, uint64 reqId,
 }
 
 
+
+
 /*---------------------------------
 	Subscription Handler (구독 관리)
 -----------------------------------*/
@@ -1197,5 +1222,17 @@ bool PacketDispatcher::Dispatch_C_ClosePoll(sessionPtr& session, uint64 reqId, c
     }
 
     return GChatService->HandleClosePoll(session, reqId, pkt);
+}
+
+bool PacketDispatcher::Dispatch_C_SetAnnouncement(sessionPtr& session, uint64 reqId, const Protocol::C_SetAnnouncement& pkt)
+{
+    auto serverSession = static_pointer_cast<ServerSession>(session);
+    const string userId = serverSession->GetUserId();
+    if (userId.empty()) {
+        DispatchError(session, reqId, ERR_UNAUTHORIZED);
+        return false;
+    }
+
+    return GChatService->HandleSetAnnouncement(session, reqId, pkt);
 }
 

@@ -30,6 +30,8 @@ public:
 	bool HandleVote(sessionPtr& session, uint64 reqId, const Protocol::C_Vote& pkt);
 	bool HandleClosePoll(sessionPtr& session, uint64 reqId, const Protocol::C_ClosePoll& pkt);
 
+	bool HandleSetAnnouncement(sessionPtr& session, uint64 reqId, const Protocol::C_SetAnnouncement& pkt);
+
 
 protected:
 	/* Helpers */
