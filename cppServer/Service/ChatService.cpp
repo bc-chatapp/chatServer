@@ -98,6 +98,9 @@ bool ChatService::SendDirect(sessionPtr& senderSession, uint64 reqId, const stri
                 else if (pkt_s_chat.has_payload() && pkt_s_chat.payload().has_file()) {
                     msgPreview = "[파일]";
                 }
+                else if (pkt_s_chat.has_payload() && pkt_s_chat.payload().has_audio()) {
+                    msgPreview = "[음성 메시지]";
+                }
 
                 map<string, string> data = {
                     {"type", "chat"},
@@ -191,6 +194,9 @@ bool ChatService::SendGroup(sessionPtr& senderSession, uint64 reqId, const strin
     }
     else if (pkt_s_chat.has_payload() && pkt_s_chat.payload().has_file()) {
         msgPreview = "[파일]";
+    }
+    else if (pkt_s_chat.has_payload() && pkt_s_chat.payload().has_audio()) {
+        msgPreview = "[음성 메시지]";
     }
 
     for (const auto& member : members) {
@@ -401,6 +407,13 @@ Protocol::S_Chat ChatService::Build_S_Chat(const string& convId, const string& s
             payload->mutable_file()->set_size(pkt.payload().file().size());
             fileSize = pkt.payload().file().size();
             fileType = "file";
+        }
+        else if (pkt.payload().has_audio()) {
+            payload->mutable_audio()->set_url(pkt.payload().audio().url());
+            payload->mutable_audio()->set_duration_sec(pkt.payload().audio().duration_sec());
+            payload->mutable_audio()->set_size(pkt.payload().audio().size());
+            fileSize = pkt.payload().audio().size();
+            fileType = "audio";
         }
     }
 

@@ -1675,6 +1675,21 @@ final $typed_data.Uint8List systemMsgDescriptor = $convert.base64Decode(
     'CglTeXN0ZW1Nc2cSGAoHbWVzc2FnZRgBIAEoCVIHbWVzc2FnZRISCgR0eXBlGAIgASgFUgR0eX'
     'BlEiYKD2ludml0ZV9ncm91cF9pZBgDIAEoCVINaW52aXRlR3JvdXBJZA==');
 
+@$core.Deprecated('Use audioDescriptor instead')
+const Audio$json = {
+  '1': 'Audio',
+  '2': [
+    {'1': 'url', '3': 1, '4': 1, '5': 9, '10': 'url'},
+    {'1': 'duration_sec', '3': 2, '4': 1, '5': 5, '10': 'durationSec'},
+    {'1': 'size', '3': 3, '4': 1, '5': 3, '10': 'size'},
+  ],
+};
+
+/// Descriptor for `Audio`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List audioDescriptor = $convert.base64Decode(
+    'CgVBdWRpbxIQCgN1cmwYASABKAlSA3VybBIhCgxkdXJhdGlvbl9zZWMYAiABKAVSC2R1cmF0aW'
+    '9uU2VjEhIKBHNpemUYAyABKANSBHNpemU=');
+
 @$core.Deprecated('Use chatPayloadDescriptor instead')
 const ChatPayload$json = {
   '1': 'ChatPayload',
@@ -1724,6 +1739,15 @@ const ChatPayload$json = {
       '9': 0,
       '10': 'system'
     },
+    {
+      '1': 'audio',
+      '3': 6,
+      '4': 1,
+      '5': 11,
+      '6': '.Protocol.Audio',
+      '9': 0,
+      '10': 'audio'
+    },
   ],
   '8': [
     {'1': 'content'},
@@ -1735,8 +1759,8 @@ final $typed_data.Uint8List chatPayloadDescriptor = $convert.base64Decode(
     'CgtDaGF0UGF5bG9hZBIkCgR0ZXh0GAEgASgLMg4uUHJvdG9jb2wuVGV4dEgAUgR0ZXh0EicKBW'
     'ltYWdlGAIgASgLMg8uUHJvdG9jb2wuSW1hZ2VIAFIFaW1hZ2USJwoFdmlkZW8YAyABKAsyDy5Q'
     'cm90b2NvbC5WaWRlb0gAUgV2aWRlbxIkCgRmaWxlGAQgASgLMg4uUHJvdG9jb2wuRmlsZUgAUg'
-    'RmaWxlEi0KBnN5c3RlbRgFIAEoCzITLlByb3RvY29sLlN5c3RlbU1zZ0gAUgZzeXN0ZW1CCQoH'
-    'Y29udGVudA==');
+    'RmaWxlEi0KBnN5c3RlbRgFIAEoCzITLlByb3RvY29sLlN5c3RlbU1zZ0gAUgZzeXN0ZW0SJwoF'
+    'YXVkaW8YBiABKAsyDy5Qcm90b2NvbC5BdWRpb0gAUgVhdWRpb0IJCgdjb250ZW50');
 
 @$core.Deprecated('Use c_ChatDescriptor instead')
 const C_Chat$json = {

@@ -47,7 +47,7 @@ struct TableStruct_protocol_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[112]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[113]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -55,6 +55,9 @@ struct TableStruct_protocol_2eproto {
 };
 extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_protocol_2eproto;
 namespace Protocol {
+class Audio;
+struct AudioDefaultTypeInternal;
+extern AudioDefaultTypeInternal _Audio_default_instance_;
 class BlockedUserInfo;
 struct BlockedUserInfoDefaultTypeInternal;
 extern BlockedUserInfoDefaultTypeInternal _BlockedUserInfo_default_instance_;
@@ -393,6 +396,7 @@ struct VideoDefaultTypeInternal;
 extern VideoDefaultTypeInternal _Video_default_instance_;
 }  // namespace Protocol
 PROTOBUF_NAMESPACE_OPEN
+template<> ::Protocol::Audio* Arena::CreateMaybeMessage<::Protocol::Audio>(Arena*);
 template<> ::Protocol::BlockedUserInfo* Arena::CreateMaybeMessage<::Protocol::BlockedUserInfo>(Arena*);
 template<> ::Protocol::C_Ack* Arena::CreateMaybeMessage<::Protocol::C_Ack>(Arena*);
 template<> ::Protocol::C_AddReaction* Arena::CreateMaybeMessage<::Protocol::C_AddReaction>(Arena*);
@@ -8516,6 +8520,165 @@ class SystemMsg final :
 };
 // -------------------------------------------------------------------
 
+class Audio final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.Audio) */ {
+ public:
+  inline Audio() : Audio(nullptr) {}
+  ~Audio() override;
+  explicit constexpr Audio(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  Audio(const Audio& from);
+  Audio(Audio&& from) noexcept
+    : Audio() {
+    *this = ::std::move(from);
+  }
+
+  inline Audio& operator=(const Audio& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline Audio& operator=(Audio&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const Audio& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const Audio* internal_default_instance() {
+    return reinterpret_cast<const Audio*>(
+               &_Audio_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    36;
+
+  friend void swap(Audio& a, Audio& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(Audio* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(Audio* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline Audio* New() const final {
+    return new Audio();
+  }
+
+  Audio* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<Audio>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const Audio& from);
+  void MergeFrom(const Audio& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(Audio* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Protocol.Audio";
+  }
+  protected:
+  explicit Audio(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kUrlFieldNumber = 1,
+    kSizeFieldNumber = 3,
+    kDurationSecFieldNumber = 2,
+  };
+  // string url = 1;
+  void clear_url();
+  const std::string& url() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_url(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_url();
+  PROTOBUF_FUTURE_MUST_USE_RESULT std::string* release_url();
+  void set_allocated_url(std::string* url);
+  private:
+  const std::string& _internal_url() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_url(const std::string& value);
+  std::string* _internal_mutable_url();
+  public:
+
+  // int64 size = 3;
+  void clear_size();
+  ::PROTOBUF_NAMESPACE_ID::int64 size() const;
+  void set_size(::PROTOBUF_NAMESPACE_ID::int64 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int64 _internal_size() const;
+  void _internal_set_size(::PROTOBUF_NAMESPACE_ID::int64 value);
+  public:
+
+  // int32 duration_sec = 2;
+  void clear_duration_sec();
+  ::PROTOBUF_NAMESPACE_ID::int32 duration_sec() const;
+  void set_duration_sec(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_duration_sec() const;
+  void _internal_set_duration_sec(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Protocol.Audio)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr url_;
+  ::PROTOBUF_NAMESPACE_ID::int64 size_;
+  ::PROTOBUF_NAMESPACE_ID::int32 duration_sec_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
 class ChatPayload final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.ChatPayload) */ {
  public:
@@ -8561,6 +8724,7 @@ class ChatPayload final :
     kVideo = 3,
     kFile = 4,
     kSystem = 5,
+    kAudio = 6,
     CONTENT_NOT_SET = 0,
   };
 
@@ -8569,7 +8733,7 @@ class ChatPayload final :
                &_ChatPayload_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    36;
+    37;
 
   friend void swap(ChatPayload& a, ChatPayload& b) {
     a.Swap(&b);
@@ -8638,6 +8802,7 @@ class ChatPayload final :
     kVideoFieldNumber = 3,
     kFileFieldNumber = 4,
     kSystemFieldNumber = 5,
+    kAudioFieldNumber = 6,
   };
   // .Protocol.Text text = 1;
   bool has_text() const;
@@ -8729,6 +8894,24 @@ class ChatPayload final :
       ::Protocol::SystemMsg* system);
   ::Protocol::SystemMsg* unsafe_arena_release_system();
 
+  // .Protocol.Audio audio = 6;
+  bool has_audio() const;
+  private:
+  bool _internal_has_audio() const;
+  public:
+  void clear_audio();
+  const ::Protocol::Audio& audio() const;
+  PROTOBUF_FUTURE_MUST_USE_RESULT ::Protocol::Audio* release_audio();
+  ::Protocol::Audio* mutable_audio();
+  void set_allocated_audio(::Protocol::Audio* audio);
+  private:
+  const ::Protocol::Audio& _internal_audio() const;
+  ::Protocol::Audio* _internal_mutable_audio();
+  public:
+  void unsafe_arena_set_allocated_audio(
+      ::Protocol::Audio* audio);
+  ::Protocol::Audio* unsafe_arena_release_audio();
+
   void clear_content();
   ContentCase content_case() const;
   // @@protoc_insertion_point(class_scope:Protocol.ChatPayload)
@@ -8739,6 +8922,7 @@ class ChatPayload final :
   void set_has_video();
   void set_has_file();
   void set_has_system();
+  void set_has_audio();
 
   inline bool has_content() const;
   inline void clear_has_content();
@@ -8754,6 +8938,7 @@ class ChatPayload final :
     ::Protocol::Video* video_;
     ::Protocol::File* file_;
     ::Protocol::SystemMsg* system_;
+    ::Protocol::Audio* audio_;
   } content_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::uint32 _oneof_case_[1];
@@ -8806,7 +8991,7 @@ class C_Chat final :
                &_C_Chat_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    37;
+    38;
 
   friend void swap(C_Chat& a, C_Chat& b) {
     a.Swap(&b);
@@ -9038,7 +9223,7 @@ class S_Chat final :
                &_S_Chat_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    38;
+    39;
 
   friend void swap(S_Chat& a, S_Chat& b) {
     a.Swap(&b);
@@ -9389,7 +9574,7 @@ class C_ReadReceipt final :
                &_C_ReadReceipt_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    39;
+    40;
 
   friend void swap(C_ReadReceipt& a, C_ReadReceipt& b) {
     a.Swap(&b);
@@ -9537,7 +9722,7 @@ class S_ReadReceipt final :
                &_S_ReadReceipt_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    40;
+    41;
 
   friend void swap(S_ReadReceipt& a, S_ReadReceipt& b) {
     a.Swap(&b);
@@ -9701,7 +9886,7 @@ class C_DeleteMessage final :
                &_C_DeleteMessage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    41;
+    42;
 
   friend void swap(C_DeleteMessage& a, C_DeleteMessage& b) {
     a.Swap(&b);
@@ -9849,7 +10034,7 @@ class S_DeleteMessage final :
                &_S_DeleteMessage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    42;
+    43;
 
   friend void swap(S_DeleteMessage& a, S_DeleteMessage& b) {
     a.Swap(&b);
@@ -10008,7 +10193,7 @@ class C_EditMessage final :
                &_C_EditMessage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    43;
+    44;
 
   friend void swap(C_EditMessage& a, C_EditMessage& b) {
     a.Swap(&b);
@@ -10172,7 +10357,7 @@ class S_EditMessage final :
                &_S_EditMessage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    44;
+    45;
 
   friend void swap(S_EditMessage& a, S_EditMessage& b) {
     a.Swap(&b);
@@ -10358,7 +10543,7 @@ class C_ReqHistory final :
                &_C_ReqHistory_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    45;
+    46;
 
   friend void swap(C_ReqHistory& a, C_ReqHistory& b) {
     a.Swap(&b);
@@ -10517,7 +10702,7 @@ class S_ReqHistory final :
                &_S_ReqHistory_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    46;
+    47;
 
   friend void swap(S_ReqHistory& a, S_ReqHistory& b) {
     a.Swap(&b);
@@ -10685,7 +10870,7 @@ class C_UploadFile final :
                &_C_UploadFile_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    47;
+    48;
 
   friend void swap(C_UploadFile& a, C_UploadFile& b) {
     a.Swap(&b);
@@ -10923,7 +11108,7 @@ class S_UploadFile final :
                &_S_UploadFile_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    48;
+    49;
 
   friend void swap(S_UploadFile& a, S_UploadFile& b) {
     a.Swap(&b);
@@ -11189,7 +11374,7 @@ class C_Ack final :
                &_C_Ack_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    49;
+    50;
 
   friend void swap(C_Ack& a, C_Ack& b) {
     a.Swap(&b);
@@ -11337,7 +11522,7 @@ class C_FetchOffline final :
                &_C_FetchOffline_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    50;
+    51;
 
   friend void swap(C_FetchOffline& a, C_FetchOffline& b) {
     a.Swap(&b);
@@ -11469,7 +11654,7 @@ class S_MessageBatch_ConversationBatch final :
                &_S_MessageBatch_ConversationBatch_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    51;
+    52;
 
   friend void swap(S_MessageBatch_ConversationBatch& a, S_MessageBatch_ConversationBatch& b) {
     a.Swap(&b);
@@ -11648,7 +11833,7 @@ class S_MessageBatch final :
                &_S_MessageBatch_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    52;
+    53;
 
   friend void swap(S_MessageBatch& a, S_MessageBatch& b) {
     a.Swap(&b);
@@ -11791,7 +11976,7 @@ class C_GetSubscription final :
                &_C_GetSubscription_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    53;
+    54;
 
   friend void swap(C_GetSubscription& a, C_GetSubscription& b) {
     a.Swap(&b);
@@ -11910,7 +12095,7 @@ class SubscriptionPlan final :
                &_SubscriptionPlan_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    54;
+    55;
 
   friend void swap(SubscriptionPlan& a, SubscriptionPlan& b) {
     a.Swap(&b);
@@ -12144,7 +12329,7 @@ class S_GetSubscription final :
                &_S_GetSubscription_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    55;
+    56;
 
   friend void swap(S_GetSubscription& a, S_GetSubscription& b) {
     a.Swap(&b);
@@ -12367,7 +12552,7 @@ class C_VerifyPurchase final :
                &_C_VerifyPurchase_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    56;
+    57;
 
   friend void swap(C_VerifyPurchase& a, C_VerifyPurchase& b) {
     a.Swap(&b);
@@ -12552,7 +12737,7 @@ class S_VerifyPurchase final :
                &_S_VerifyPurchase_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    57;
+    58;
 
   friend void swap(S_VerifyPurchase& a, S_VerifyPurchase& b) {
     a.Swap(&b);
@@ -12733,7 +12918,7 @@ class C_CancelSubscription final :
                &_C_CancelSubscription_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    58;
+    59;
 
   friend void swap(C_CancelSubscription& a, C_CancelSubscription& b) {
     a.Swap(&b);
@@ -12852,7 +13037,7 @@ class S_CancelSubscription final :
                &_S_CancelSubscription_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    59;
+    60;
 
   friend void swap(S_CancelSubscription& a, S_CancelSubscription& b) {
     a.Swap(&b);
@@ -13011,7 +13196,7 @@ class C_Withdraw final :
                &_C_Withdraw_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    60;
+    61;
 
   friend void swap(C_Withdraw& a, C_Withdraw& b) {
     a.Swap(&b);
@@ -13164,7 +13349,7 @@ class S_Withdraw final :
                &_S_Withdraw_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    61;
+    62;
 
   friend void swap(S_Withdraw& a, S_Withdraw& b) {
     a.Swap(&b);
@@ -13312,7 +13497,7 @@ class C_SearchUser final :
                &_C_SearchUser_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    62;
+    63;
 
   friend void swap(C_SearchUser& a, C_SearchUser& b) {
     a.Swap(&b);
@@ -13449,7 +13634,7 @@ class S_SearchUser final :
                &_S_SearchUser_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    63;
+    64;
 
   friend void swap(S_SearchUser& a, S_SearchUser& b) {
     a.Swap(&b);
@@ -13623,7 +13808,7 @@ class FriendRequest final :
                &_FriendRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    64;
+    65;
 
   friend void swap(FriendRequest& a, FriendRequest& b) {
     a.Swap(&b);
@@ -13786,7 +13971,7 @@ class C_FriendAction final :
                &_C_FriendAction_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    65;
+    66;
 
   friend void swap(C_FriendAction& a, C_FriendAction& b) {
     a.Swap(&b);
@@ -13970,7 +14155,7 @@ class S_FriendAction final :
                &_S_FriendAction_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    66;
+    67;
 
   friend void swap(S_FriendAction& a, S_FriendAction& b) {
     a.Swap(&b);
@@ -14138,7 +14323,7 @@ class C_FetchFriendData final :
                &_C_FetchFriendData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    67;
+    68;
 
   friend void swap(C_FetchFriendData& a, C_FetchFriendData& b) {
     a.Swap(&b);
@@ -14257,7 +14442,7 @@ class S_FetchFriendData final :
                &_S_FetchFriendData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    68;
+    69;
 
   friend void swap(S_FetchFriendData& a, S_FetchFriendData& b) {
     a.Swap(&b);
@@ -14438,7 +14623,7 @@ class S_FriendPush final :
                &_S_FriendPush_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    69;
+    70;
 
   friend void swap(S_FriendPush& a, S_FriendPush& b) {
     a.Swap(&b);
@@ -14622,7 +14807,7 @@ class GroupMemberInfo final :
                &_GroupMemberInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    70;
+    71;
 
   friend void swap(GroupMemberInfo& a, GroupMemberInfo& b) {
     a.Swap(&b);
@@ -14785,7 +14970,7 @@ class GroupInfo final :
                &_GroupInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    71;
+    72;
 
   friend void swap(GroupInfo& a, GroupInfo& b) {
     a.Swap(&b);
@@ -15019,7 +15204,7 @@ class C_CreateGroup final :
                &_C_CreateGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    72;
+    73;
 
   friend void swap(C_CreateGroup& a, C_CreateGroup& b) {
     a.Swap(&b);
@@ -15156,7 +15341,7 @@ class S_CreateGroup final :
                &_S_CreateGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    73;
+    74;
 
   friend void swap(S_CreateGroup& a, S_CreateGroup& b) {
     a.Swap(&b);
@@ -15308,7 +15493,7 @@ class C_GroupList final :
                &_C_GroupList_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    74;
+    75;
 
   friend void swap(C_GroupList& a, C_GroupList& b) {
     a.Swap(&b);
@@ -15427,7 +15612,7 @@ class S_GroupList final :
                &_S_GroupList_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    75;
+    76;
 
   friend void swap(S_GroupList& a, S_GroupList& b) {
     a.Swap(&b);
@@ -15568,7 +15753,7 @@ class C_GroupInfo final :
                &_C_GroupInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    76;
+    77;
 
   friend void swap(C_GroupInfo& a, C_GroupInfo& b) {
     a.Swap(&b);
@@ -15705,7 +15890,7 @@ class S_GroupInfo final :
                &_S_GroupInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    77;
+    78;
 
   friend void swap(S_GroupInfo& a, S_GroupInfo& b) {
     a.Swap(&b);
@@ -15857,7 +16042,7 @@ class C_InviteFriend final :
                &_C_InviteFriend_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    78;
+    79;
 
   friend void swap(C_InviteFriend& a, C_InviteFriend& b) {
     a.Swap(&b);
@@ -16020,7 +16205,7 @@ class S_InviteFriend final :
                &_S_InviteFriend_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    79;
+    80;
 
   friend void swap(S_InviteFriend& a, S_InviteFriend& b) {
     a.Swap(&b);
@@ -16152,7 +16337,7 @@ class C_JoinGroup final :
                &_C_JoinGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    80;
+    81;
 
   friend void swap(C_JoinGroup& a, C_JoinGroup& b) {
     a.Swap(&b);
@@ -16289,7 +16474,7 @@ class S_JoinGroup final :
                &_S_JoinGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    81;
+    82;
 
   friend void swap(S_JoinGroup& a, S_JoinGroup& b) {
     a.Swap(&b);
@@ -16441,7 +16626,7 @@ class C_GroupMemberList final :
                &_C_GroupMemberList_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    82;
+    83;
 
   friend void swap(C_GroupMemberList& a, C_GroupMemberList& b) {
     a.Swap(&b);
@@ -16578,7 +16763,7 @@ class S_GroupMemberList final :
                &_S_GroupMemberList_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    83;
+    84;
 
   friend void swap(S_GroupMemberList& a, S_GroupMemberList& b) {
     a.Swap(&b);
@@ -16735,7 +16920,7 @@ class C_LeaveGroup final :
                &_C_LeaveGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    84;
+    85;
 
   friend void swap(C_LeaveGroup& a, C_LeaveGroup& b) {
     a.Swap(&b);
@@ -16872,7 +17057,7 @@ class S_LeaveGroup final :
                &_S_LeaveGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    85;
+    86;
 
   friend void swap(S_LeaveGroup& a, S_LeaveGroup& b) {
     a.Swap(&b);
@@ -17004,7 +17189,7 @@ class C_EditGroup final :
                &_C_EditGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    86;
+    87;
 
   friend void swap(C_EditGroup& a, C_EditGroup& b) {
     a.Swap(&b);
@@ -17189,7 +17374,7 @@ class S_EditGroup final :
                &_S_EditGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    87;
+    88;
 
   friend void swap(S_EditGroup& a, S_EditGroup& b) {
     a.Swap(&b);
@@ -17341,7 +17526,7 @@ class C_DeleteGroup final :
                &_C_DeleteGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    88;
+    89;
 
   friend void swap(C_DeleteGroup& a, C_DeleteGroup& b) {
     a.Swap(&b);
@@ -17478,7 +17663,7 @@ class S_DeleteGroup final :
                &_S_DeleteGroup_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    89;
+    90;
 
   friend void swap(S_DeleteGroup& a, S_DeleteGroup& b) {
     a.Swap(&b);
@@ -17610,7 +17795,7 @@ class BlockedUserInfo final :
                &_BlockedUserInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    90;
+    91;
 
   friend void swap(BlockedUserInfo& a, BlockedUserInfo& b) {
     a.Swap(&b);
@@ -17790,7 +17975,7 @@ class C_BlockUser final :
                &_C_BlockUser_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    91;
+    92;
 
   friend void swap(C_BlockUser& a, C_BlockUser& b) {
     a.Swap(&b);
@@ -17927,7 +18112,7 @@ class S_BlockUser final :
                &_S_BlockUser_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    92;
+    93;
 
   friend void swap(S_BlockUser& a, S_BlockUser& b) {
     a.Swap(&b);
@@ -18075,7 +18260,7 @@ class C_UnblockUser final :
                &_C_UnblockUser_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    93;
+    94;
 
   friend void swap(C_UnblockUser& a, C_UnblockUser& b) {
     a.Swap(&b);
@@ -18212,7 +18397,7 @@ class S_UnblockUser final :
                &_S_UnblockUser_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    94;
+    95;
 
   friend void swap(S_UnblockUser& a, S_UnblockUser& b) {
     a.Swap(&b);
@@ -18344,7 +18529,7 @@ class C_GetBlockedList final :
                &_C_GetBlockedList_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    95;
+    96;
 
   friend void swap(C_GetBlockedList& a, C_GetBlockedList& b) {
     a.Swap(&b);
@@ -18463,7 +18648,7 @@ class S_GetBlockedList final :
                &_S_GetBlockedList_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    96;
+    97;
 
   friend void swap(S_GetBlockedList& a, S_GetBlockedList& b) {
     a.Swap(&b);
@@ -18604,7 +18789,7 @@ class C_ReportUser final :
                &_C_ReportUser_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    97;
+    98;
 
   friend void swap(C_ReportUser& a, C_ReportUser& b) {
     a.Swap(&b);
@@ -18773,7 +18958,7 @@ class S_ReportUser final :
                &_S_ReportUser_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    98;
+    99;
 
   friend void swap(S_ReportUser& a, S_ReportUser& b) {
     a.Swap(&b);
@@ -18905,7 +19090,7 @@ class C_AddReaction final :
                &_C_AddReaction_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    99;
+    100;
 
   friend void swap(C_AddReaction& a, C_AddReaction& b) {
     a.Swap(&b);
@@ -19069,7 +19254,7 @@ class S_AddReaction final :
                &_S_AddReaction_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    100;
+    101;
 
   friend void swap(S_AddReaction& a, S_AddReaction& b) {
     a.Swap(&b);
@@ -19260,7 +19445,7 @@ class C_CreatePoll final :
                &_C_CreatePoll_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    101;
+    102;
 
   friend void swap(C_CreatePoll& a, C_CreatePoll& b) {
     a.Swap(&b);
@@ -19472,7 +19657,7 @@ class S_CreatePoll final :
                &_S_CreatePoll_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    102;
+    103;
 
   friend void swap(S_CreatePoll& a, S_CreatePoll& b) {
     a.Swap(&b);
@@ -19754,7 +19939,7 @@ class C_Vote final :
                &_C_Vote_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    103;
+    104;
 
   friend void swap(C_Vote& a, C_Vote& b) {
     a.Swap(&b);
@@ -19943,7 +20128,7 @@ class S_Vote final :
                &_S_Vote_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    104;
+    105;
 
   friend void swap(S_Vote& a, S_Vote& b) {
     a.Swap(&b);
@@ -20180,7 +20365,7 @@ class C_ClosePoll final :
                &_C_ClosePoll_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    105;
+    106;
 
   friend void swap(C_ClosePoll& a, C_ClosePoll& b) {
     a.Swap(&b);
@@ -20344,7 +20529,7 @@ class S_ClosePoll final :
                &_S_ClosePoll_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    106;
+    107;
 
   friend void swap(S_ClosePoll& a, S_ClosePoll& b) {
     a.Swap(&b);
@@ -20508,7 +20693,7 @@ class C_SetAnnouncement final :
                &_C_SetAnnouncement_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    107;
+    108;
 
   friend void swap(C_SetAnnouncement& a, C_SetAnnouncement& b) {
     a.Swap(&b);
@@ -20688,7 +20873,7 @@ class S_SetAnnouncement final :
                &_S_SetAnnouncement_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    108;
+    109;
 
   friend void swap(S_SetAnnouncement& a, S_SetAnnouncement& b) {
     a.Swap(&b);
@@ -20884,7 +21069,7 @@ class S_Error final :
                &_S_Error_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    109;
+    110;
 
   friend void swap(S_Error& a, S_Error& b) {
     a.Swap(&b);
@@ -21043,7 +21228,7 @@ class C_Heartbeat final :
                &_C_Heartbeat_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    110;
+    111;
 
   friend void swap(C_Heartbeat& a, C_Heartbeat& b) {
     a.Swap(&b);
@@ -21162,7 +21347,7 @@ class S_Heartbeat final :
                &_S_Heartbeat_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    111;
+    112;
 
   friend void swap(S_Heartbeat& a, S_Heartbeat& b) {
     a.Swap(&b);
@@ -32024,6 +32209,95 @@ inline void SystemMsg::set_allocated_invite_group_id(std::string* invite_group_i
 
 // -------------------------------------------------------------------
 
+// Audio
+
+// string url = 1;
+inline void Audio::clear_url() {
+  url_.ClearToEmpty();
+}
+inline const std::string& Audio::url() const {
+  // @@protoc_insertion_point(field_get:Protocol.Audio.url)
+  return _internal_url();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void Audio::set_url(ArgT0&& arg0, ArgT... args) {
+ 
+ url_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.Audio.url)
+}
+inline std::string* Audio::mutable_url() {
+  // @@protoc_insertion_point(field_mutable:Protocol.Audio.url)
+  return _internal_mutable_url();
+}
+inline const std::string& Audio::_internal_url() const {
+  return url_.Get();
+}
+inline void Audio::_internal_set_url(const std::string& value) {
+  
+  url_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* Audio::_internal_mutable_url() {
+  
+  return url_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* Audio::release_url() {
+  // @@protoc_insertion_point(field_release:Protocol.Audio.url)
+  return url_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void Audio::set_allocated_url(std::string* url) {
+  if (url != nullptr) {
+    
+  } else {
+    
+  }
+  url_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), url,
+      GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set_allocated:Protocol.Audio.url)
+}
+
+// int32 duration_sec = 2;
+inline void Audio::clear_duration_sec() {
+  duration_sec_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 Audio::_internal_duration_sec() const {
+  return duration_sec_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 Audio::duration_sec() const {
+  // @@protoc_insertion_point(field_get:Protocol.Audio.duration_sec)
+  return _internal_duration_sec();
+}
+inline void Audio::_internal_set_duration_sec(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  duration_sec_ = value;
+}
+inline void Audio::set_duration_sec(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_duration_sec(value);
+  // @@protoc_insertion_point(field_set:Protocol.Audio.duration_sec)
+}
+
+// int64 size = 3;
+inline void Audio::clear_size() {
+  size_ = int64_t{0};
+}
+inline ::PROTOBUF_NAMESPACE_ID::int64 Audio::_internal_size() const {
+  return size_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int64 Audio::size() const {
+  // @@protoc_insertion_point(field_get:Protocol.Audio.size)
+  return _internal_size();
+}
+inline void Audio::_internal_set_size(::PROTOBUF_NAMESPACE_ID::int64 value) {
+  
+  size_ = value;
+}
+inline void Audio::set_size(::PROTOBUF_NAMESPACE_ID::int64 value) {
+  _internal_set_size(value);
+  // @@protoc_insertion_point(field_set:Protocol.Audio.size)
+}
+
+// -------------------------------------------------------------------
+
 // ChatPayload
 
 // .Protocol.Text text = 1;
@@ -32389,6 +32663,79 @@ inline ::Protocol::SystemMsg* ChatPayload::_internal_mutable_system() {
 inline ::Protocol::SystemMsg* ChatPayload::mutable_system() {
   // @@protoc_insertion_point(field_mutable:Protocol.ChatPayload.system)
   return _internal_mutable_system();
+}
+
+// .Protocol.Audio audio = 6;
+inline bool ChatPayload::_internal_has_audio() const {
+  return content_case() == kAudio;
+}
+inline bool ChatPayload::has_audio() const {
+  return _internal_has_audio();
+}
+inline void ChatPayload::set_has_audio() {
+  _oneof_case_[0] = kAudio;
+}
+inline void ChatPayload::clear_audio() {
+  if (_internal_has_audio()) {
+    if (GetArenaForAllocation() == nullptr) {
+      delete content_.audio_;
+    }
+    clear_has_content();
+  }
+}
+inline ::Protocol::Audio* ChatPayload::release_audio() {
+  // @@protoc_insertion_point(field_release:Protocol.ChatPayload.audio)
+  if (_internal_has_audio()) {
+    clear_has_content();
+      ::Protocol::Audio* temp = content_.audio_;
+    if (GetArenaForAllocation() != nullptr) {
+      temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+    }
+    content_.audio_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::Protocol::Audio& ChatPayload::_internal_audio() const {
+  return _internal_has_audio()
+      ? *content_.audio_
+      : reinterpret_cast< ::Protocol::Audio&>(::Protocol::_Audio_default_instance_);
+}
+inline const ::Protocol::Audio& ChatPayload::audio() const {
+  // @@protoc_insertion_point(field_get:Protocol.ChatPayload.audio)
+  return _internal_audio();
+}
+inline ::Protocol::Audio* ChatPayload::unsafe_arena_release_audio() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:Protocol.ChatPayload.audio)
+  if (_internal_has_audio()) {
+    clear_has_content();
+    ::Protocol::Audio* temp = content_.audio_;
+    content_.audio_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline void ChatPayload::unsafe_arena_set_allocated_audio(::Protocol::Audio* audio) {
+  clear_content();
+  if (audio) {
+    set_has_audio();
+    content_.audio_ = audio;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.ChatPayload.audio)
+}
+inline ::Protocol::Audio* ChatPayload::_internal_mutable_audio() {
+  if (!_internal_has_audio()) {
+    clear_content();
+    set_has_audio();
+    content_.audio_ = CreateMaybeMessage< ::Protocol::Audio >(GetArenaForAllocation());
+  }
+  return content_.audio_;
+}
+inline ::Protocol::Audio* ChatPayload::mutable_audio() {
+  // @@protoc_insertion_point(field_mutable:Protocol.ChatPayload.audio)
+  return _internal_mutable_audio();
 }
 
 inline bool ChatPayload::has_content() const {
@@ -41059,6 +41406,8 @@ inline void S_Error::set_allocated_message(std::string* message) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

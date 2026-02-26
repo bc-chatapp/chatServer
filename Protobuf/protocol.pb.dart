@@ -4566,7 +4566,84 @@ class SystemMsg extends $pb.GeneratedMessage {
   void clearInviteGroupId() => $_clearField(3);
 }
 
-enum ChatPayload_Content { text, image, video, file, system, notSet }
+class Audio extends $pb.GeneratedMessage {
+  factory Audio({
+    $core.String? url,
+    $core.int? durationSec,
+    $fixnum.Int64? size,
+  }) {
+    final result = create();
+    if (url != null) result.url = url;
+    if (durationSec != null) result.durationSec = durationSec;
+    if (size != null) result.size = size;
+    return result;
+  }
+
+  Audio._();
+
+  factory Audio.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory Audio.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'Audio',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'url')
+    ..aI(2, _omitFieldNames ? '' : 'durationSec')
+    ..aInt64(3, _omitFieldNames ? '' : 'size')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Audio clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Audio copyWith(void Function(Audio) updates) =>
+      super.copyWith((message) => updates(message as Audio)) as Audio;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static Audio create() => Audio._();
+  @$core.override
+  Audio createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static Audio getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Audio>(create);
+  static Audio? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get url => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set url($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasUrl() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearUrl() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.int get durationSec => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set durationSec($core.int value) => $_setSignedInt32(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasDurationSec() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearDurationSec() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $fixnum.Int64 get size => $_getI64(2);
+  @$pb.TagNumber(3)
+  set size($fixnum.Int64 value) => $_setInt64(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasSize() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearSize() => $_clearField(3);
+}
+
+enum ChatPayload_Content { text, image, video, file, system, audio, notSet }
 
 class ChatPayload extends $pb.GeneratedMessage {
   factory ChatPayload({
@@ -4575,6 +4652,7 @@ class ChatPayload extends $pb.GeneratedMessage {
     Video? video,
     File? file,
     SystemMsg? system,
+    Audio? audio,
   }) {
     final result = create();
     if (text != null) result.text = text;
@@ -4582,6 +4660,7 @@ class ChatPayload extends $pb.GeneratedMessage {
     if (video != null) result.video = video;
     if (file != null) result.file = file;
     if (system != null) result.system = system;
+    if (audio != null) result.audio = audio;
     return result;
   }
 
@@ -4601,19 +4680,21 @@ class ChatPayload extends $pb.GeneratedMessage {
     3: ChatPayload_Content.video,
     4: ChatPayload_Content.file,
     5: ChatPayload_Content.system,
+    6: ChatPayload_Content.audio,
     0: ChatPayload_Content.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ChatPayload',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
       createEmptyInstance: create)
-    ..oo(0, [1, 2, 3, 4, 5])
+    ..oo(0, [1, 2, 3, 4, 5, 6])
     ..aOM<Text>(1, _omitFieldNames ? '' : 'text', subBuilder: Text.create)
     ..aOM<Image>(2, _omitFieldNames ? '' : 'image', subBuilder: Image.create)
     ..aOM<Video>(3, _omitFieldNames ? '' : 'video', subBuilder: Video.create)
     ..aOM<File>(4, _omitFieldNames ? '' : 'file', subBuilder: File.create)
     ..aOM<SystemMsg>(5, _omitFieldNames ? '' : 'system',
         subBuilder: SystemMsg.create)
+    ..aOM<Audio>(6, _omitFieldNames ? '' : 'audio', subBuilder: Audio.create)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -4640,6 +4721,7 @@ class ChatPayload extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   @$pb.TagNumber(4)
   @$pb.TagNumber(5)
+  @$pb.TagNumber(6)
   ChatPayload_Content whichContent() =>
       _ChatPayload_ContentByTag[$_whichOneof(0)]!;
   @$pb.TagNumber(1)
@@ -4647,6 +4729,7 @@ class ChatPayload extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   @$pb.TagNumber(4)
   @$pb.TagNumber(5)
+  @$pb.TagNumber(6)
   void clearContent() => $_clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
@@ -4703,6 +4786,17 @@ class ChatPayload extends $pb.GeneratedMessage {
   void clearSystem() => $_clearField(5);
   @$pb.TagNumber(5)
   SystemMsg ensureSystem() => $_ensure(4);
+
+  @$pb.TagNumber(6)
+  Audio get audio => $_getN(5);
+  @$pb.TagNumber(6)
+  set audio(Audio value) => $_setField(6, value);
+  @$pb.TagNumber(6)
+  $core.bool hasAudio() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearAudio() => $_clearField(6);
+  @$pb.TagNumber(6)
+  Audio ensureAudio() => $_ensure(5);
 }
 
 class C_Chat extends $pb.GeneratedMessage {

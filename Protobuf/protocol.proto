@@ -290,6 +290,11 @@ message SystemMsg {
     int32  type            = 2;
     string invite_group_id = 3;
 }
+message Audio {
+    string url          = 1;
+    int32  duration_sec = 2;
+    int64  size         = 3;
+}
 
 message ChatPayload {
     oneof content {
@@ -298,6 +303,7 @@ message ChatPayload {
         Video     video  = 3;
         File      file   = 4;
         SystemMsg system = 5;
+        Audio     audio  = 6;
     }
 }
 

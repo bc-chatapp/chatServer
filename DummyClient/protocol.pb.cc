@@ -504,6 +504,20 @@ struct SystemMsgDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT SystemMsgDefaultTypeInternal _SystemMsg_default_instance_;
+constexpr Audio::Audio(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : url_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , size_(int64_t{0})
+  , duration_sec_(0){}
+struct AudioDefaultTypeInternal {
+  constexpr AudioDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~AudioDefaultTypeInternal() {}
+  union {
+    Audio _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AudioDefaultTypeInternal _Audio_default_instance_;
 constexpr ChatPayload::ChatPayload(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : _oneof_case_{}{}
@@ -1576,7 +1590,7 @@ struct S_HeartbeatDefaultTypeInternal {
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT S_HeartbeatDefaultTypeInternal _S_Heartbeat_default_instance_;
 }  // namespace Protocol
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_protocol_2eproto[112];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_protocol_2eproto[113];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_protocol_2eproto[5];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_protocol_2eproto = nullptr;
 
@@ -1950,10 +1964,19 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_protocol_2eproto::offsets[] PR
   PROTOBUF_FIELD_OFFSET(::Protocol::SystemMsg, type_),
   PROTOBUF_FIELD_OFFSET(::Protocol::SystemMsg, invite_group_id_),
   ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::Audio, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::Protocol::Audio, url_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::Audio, duration_sec_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::Audio, size_),
+  ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::ChatPayload, _internal_metadata_),
   ~0u,  // no _extensions_
   PROTOBUF_FIELD_OFFSET(::Protocol::ChatPayload, _oneof_case_[0]),
   ~0u,  // no _weak_field_map_
+  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
   ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
   ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
   ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
@@ -2599,82 +2622,83 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 342, -1, sizeof(::Protocol::Video)},
   { 351, -1, sizeof(::Protocol::File)},
   { 360, -1, sizeof(::Protocol::SystemMsg)},
-  { 368, -1, sizeof(::Protocol::ChatPayload)},
-  { 379, -1, sizeof(::Protocol::C_Chat)},
-  { 391, -1, sizeof(::Protocol::S_Chat)},
-  { 412, -1, sizeof(::Protocol::C_ReadReceipt)},
-  { 419, -1, sizeof(::Protocol::S_ReadReceipt)},
-  { 427, -1, sizeof(::Protocol::C_DeleteMessage)},
-  { 434, -1, sizeof(::Protocol::S_DeleteMessage)},
-  { 442, -1, sizeof(::Protocol::C_EditMessage)},
-  { 450, -1, sizeof(::Protocol::S_EditMessage)},
-  { 460, -1, sizeof(::Protocol::C_ReqHistory)},
-  { 468, -1, sizeof(::Protocol::S_ReqHistory)},
-  { 476, -1, sizeof(::Protocol::C_UploadFile)},
-  { 487, -1, sizeof(::Protocol::S_UploadFile)},
-  { 502, -1, sizeof(::Protocol::C_Ack)},
-  { 509, -1, sizeof(::Protocol::C_FetchOffline)},
-  { 515, -1, sizeof(::Protocol::S_MessageBatch_ConversationBatch)},
-  { 524, -1, sizeof(::Protocol::S_MessageBatch)},
-  { 530, -1, sizeof(::Protocol::C_GetSubscription)},
-  { 535, -1, sizeof(::Protocol::SubscriptionPlan)},
-  { 548, -1, sizeof(::Protocol::S_GetSubscription)},
-  { 561, -1, sizeof(::Protocol::C_VerifyPurchase)},
-  { 570, -1, sizeof(::Protocol::S_VerifyPurchase)},
-  { 580, -1, sizeof(::Protocol::C_CancelSubscription)},
-  { 585, -1, sizeof(::Protocol::S_CancelSubscription)},
-  { 593, -1, sizeof(::Protocol::C_Withdraw)},
-  { 600, -1, sizeof(::Protocol::S_Withdraw)},
-  { 607, -1, sizeof(::Protocol::C_SearchUser)},
-  { 613, -1, sizeof(::Protocol::S_SearchUser)},
-  { 622, -1, sizeof(::Protocol::FriendRequest)},
-  { 630, -1, sizeof(::Protocol::C_FriendAction)},
-  { 637, -1, sizeof(::Protocol::S_FriendAction)},
-  { 645, -1, sizeof(::Protocol::C_FetchFriendData)},
-  { 650, -1, sizeof(::Protocol::S_FetchFriendData)},
-  { 658, -1, sizeof(::Protocol::S_FriendPush)},
-  { 665, -1, sizeof(::Protocol::GroupMemberInfo)},
-  { 673, -1, sizeof(::Protocol::GroupInfo)},
-  { 686, -1, sizeof(::Protocol::C_CreateGroup)},
-  { 692, -1, sizeof(::Protocol::S_CreateGroup)},
-  { 699, -1, sizeof(::Protocol::C_GroupList)},
-  { 704, -1, sizeof(::Protocol::S_GroupList)},
-  { 710, -1, sizeof(::Protocol::C_GroupInfo)},
-  { 716, -1, sizeof(::Protocol::S_GroupInfo)},
-  { 723, -1, sizeof(::Protocol::C_InviteFriend)},
-  { 730, -1, sizeof(::Protocol::S_InviteFriend)},
-  { 736, -1, sizeof(::Protocol::C_JoinGroup)},
-  { 742, -1, sizeof(::Protocol::S_JoinGroup)},
-  { 749, -1, sizeof(::Protocol::C_GroupMemberList)},
-  { 755, -1, sizeof(::Protocol::S_GroupMemberList)},
-  { 762, -1, sizeof(::Protocol::C_LeaveGroup)},
-  { 768, -1, sizeof(::Protocol::S_LeaveGroup)},
-  { 774, -1, sizeof(::Protocol::C_EditGroup)},
-  { 783, -1, sizeof(::Protocol::S_EditGroup)},
-  { 790, -1, sizeof(::Protocol::C_DeleteGroup)},
-  { 796, -1, sizeof(::Protocol::S_DeleteGroup)},
-  { 802, -1, sizeof(::Protocol::BlockedUserInfo)},
-  { 811, -1, sizeof(::Protocol::C_BlockUser)},
-  { 817, -1, sizeof(::Protocol::S_BlockUser)},
-  { 824, -1, sizeof(::Protocol::C_UnblockUser)},
-  { 830, -1, sizeof(::Protocol::S_UnblockUser)},
-  { 836, -1, sizeof(::Protocol::C_GetBlockedList)},
-  { 841, -1, sizeof(::Protocol::S_GetBlockedList)},
-  { 847, -1, sizeof(::Protocol::C_ReportUser)},
-  { 855, -1, sizeof(::Protocol::S_ReportUser)},
-  { 861, -1, sizeof(::Protocol::C_AddReaction)},
-  { 869, -1, sizeof(::Protocol::S_AddReaction)},
-  { 879, -1, sizeof(::Protocol::C_CreatePoll)},
-  { 890, -1, sizeof(::Protocol::S_CreatePoll)},
-  { 906, -1, sizeof(::Protocol::C_Vote)},
-  { 915, -1, sizeof(::Protocol::S_Vote)},
-  { 927, -1, sizeof(::Protocol::C_ClosePoll)},
-  { 935, -1, sizeof(::Protocol::S_ClosePoll)},
-  { 943, -1, sizeof(::Protocol::C_SetAnnouncement)},
-  { 952, -1, sizeof(::Protocol::S_SetAnnouncement)},
-  { 962, -1, sizeof(::Protocol::S_Error)},
-  { 970, -1, sizeof(::Protocol::C_Heartbeat)},
-  { 975, -1, sizeof(::Protocol::S_Heartbeat)},
+  { 368, -1, sizeof(::Protocol::Audio)},
+  { 376, -1, sizeof(::Protocol::ChatPayload)},
+  { 388, -1, sizeof(::Protocol::C_Chat)},
+  { 400, -1, sizeof(::Protocol::S_Chat)},
+  { 421, -1, sizeof(::Protocol::C_ReadReceipt)},
+  { 428, -1, sizeof(::Protocol::S_ReadReceipt)},
+  { 436, -1, sizeof(::Protocol::C_DeleteMessage)},
+  { 443, -1, sizeof(::Protocol::S_DeleteMessage)},
+  { 451, -1, sizeof(::Protocol::C_EditMessage)},
+  { 459, -1, sizeof(::Protocol::S_EditMessage)},
+  { 469, -1, sizeof(::Protocol::C_ReqHistory)},
+  { 477, -1, sizeof(::Protocol::S_ReqHistory)},
+  { 485, -1, sizeof(::Protocol::C_UploadFile)},
+  { 496, -1, sizeof(::Protocol::S_UploadFile)},
+  { 511, -1, sizeof(::Protocol::C_Ack)},
+  { 518, -1, sizeof(::Protocol::C_FetchOffline)},
+  { 524, -1, sizeof(::Protocol::S_MessageBatch_ConversationBatch)},
+  { 533, -1, sizeof(::Protocol::S_MessageBatch)},
+  { 539, -1, sizeof(::Protocol::C_GetSubscription)},
+  { 544, -1, sizeof(::Protocol::SubscriptionPlan)},
+  { 557, -1, sizeof(::Protocol::S_GetSubscription)},
+  { 570, -1, sizeof(::Protocol::C_VerifyPurchase)},
+  { 579, -1, sizeof(::Protocol::S_VerifyPurchase)},
+  { 589, -1, sizeof(::Protocol::C_CancelSubscription)},
+  { 594, -1, sizeof(::Protocol::S_CancelSubscription)},
+  { 602, -1, sizeof(::Protocol::C_Withdraw)},
+  { 609, -1, sizeof(::Protocol::S_Withdraw)},
+  { 616, -1, sizeof(::Protocol::C_SearchUser)},
+  { 622, -1, sizeof(::Protocol::S_SearchUser)},
+  { 631, -1, sizeof(::Protocol::FriendRequest)},
+  { 639, -1, sizeof(::Protocol::C_FriendAction)},
+  { 646, -1, sizeof(::Protocol::S_FriendAction)},
+  { 654, -1, sizeof(::Protocol::C_FetchFriendData)},
+  { 659, -1, sizeof(::Protocol::S_FetchFriendData)},
+  { 667, -1, sizeof(::Protocol::S_FriendPush)},
+  { 674, -1, sizeof(::Protocol::GroupMemberInfo)},
+  { 682, -1, sizeof(::Protocol::GroupInfo)},
+  { 695, -1, sizeof(::Protocol::C_CreateGroup)},
+  { 701, -1, sizeof(::Protocol::S_CreateGroup)},
+  { 708, -1, sizeof(::Protocol::C_GroupList)},
+  { 713, -1, sizeof(::Protocol::S_GroupList)},
+  { 719, -1, sizeof(::Protocol::C_GroupInfo)},
+  { 725, -1, sizeof(::Protocol::S_GroupInfo)},
+  { 732, -1, sizeof(::Protocol::C_InviteFriend)},
+  { 739, -1, sizeof(::Protocol::S_InviteFriend)},
+  { 745, -1, sizeof(::Protocol::C_JoinGroup)},
+  { 751, -1, sizeof(::Protocol::S_JoinGroup)},
+  { 758, -1, sizeof(::Protocol::C_GroupMemberList)},
+  { 764, -1, sizeof(::Protocol::S_GroupMemberList)},
+  { 771, -1, sizeof(::Protocol::C_LeaveGroup)},
+  { 777, -1, sizeof(::Protocol::S_LeaveGroup)},
+  { 783, -1, sizeof(::Protocol::C_EditGroup)},
+  { 792, -1, sizeof(::Protocol::S_EditGroup)},
+  { 799, -1, sizeof(::Protocol::C_DeleteGroup)},
+  { 805, -1, sizeof(::Protocol::S_DeleteGroup)},
+  { 811, -1, sizeof(::Protocol::BlockedUserInfo)},
+  { 820, -1, sizeof(::Protocol::C_BlockUser)},
+  { 826, -1, sizeof(::Protocol::S_BlockUser)},
+  { 833, -1, sizeof(::Protocol::C_UnblockUser)},
+  { 839, -1, sizeof(::Protocol::S_UnblockUser)},
+  { 845, -1, sizeof(::Protocol::C_GetBlockedList)},
+  { 850, -1, sizeof(::Protocol::S_GetBlockedList)},
+  { 856, -1, sizeof(::Protocol::C_ReportUser)},
+  { 864, -1, sizeof(::Protocol::S_ReportUser)},
+  { 870, -1, sizeof(::Protocol::C_AddReaction)},
+  { 878, -1, sizeof(::Protocol::S_AddReaction)},
+  { 888, -1, sizeof(::Protocol::C_CreatePoll)},
+  { 899, -1, sizeof(::Protocol::S_CreatePoll)},
+  { 915, -1, sizeof(::Protocol::C_Vote)},
+  { 924, -1, sizeof(::Protocol::S_Vote)},
+  { 936, -1, sizeof(::Protocol::C_ClosePoll)},
+  { 944, -1, sizeof(::Protocol::S_ClosePoll)},
+  { 952, -1, sizeof(::Protocol::C_SetAnnouncement)},
+  { 961, -1, sizeof(::Protocol::S_SetAnnouncement)},
+  { 971, -1, sizeof(::Protocol::S_Error)},
+  { 979, -1, sizeof(::Protocol::C_Heartbeat)},
+  { 984, -1, sizeof(::Protocol::S_Heartbeat)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -2714,6 +2738,7 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_Video_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_File_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_SystemMsg_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_Audio_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_ChatPayload_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_C_Chat_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S_Chat_default_instance_),
@@ -2975,212 +3000,214 @@ const char descriptor_table_protodef_protocol_2eproto[] PROTOBUF_SECTION_VARIABL
   "e\022\013\n\003url\030\001 \001(\t\022\020\n\010filename\030\002 \001(\t\022\014\n\004size"
   "\030\003 \001(\003\022\021\n\tmime_type\030\004 \001(\t\"C\n\tSystemMsg\022\017"
   "\n\007message\030\001 \001(\t\022\014\n\004type\030\002 \001(\005\022\027\n\017invite_"
-  "group_id\030\003 \001(\t\"\303\001\n\013ChatPayload\022\036\n\004text\030\001"
-  " \001(\0132\016.Protocol.TextH\000\022 \n\005image\030\002 \001(\0132\017."
-  "Protocol.ImageH\000\022 \n\005video\030\003 \001(\0132\017.Protoc"
-  "ol.VideoH\000\022\036\n\004file\030\004 \001(\0132\016.Protocol.File"
-  "H\000\022%\n\006system\030\005 \001(\0132\023.Protocol.SystemMsgH"
-  "\000B\t\n\007content\"\257\001\n\006C_Chat\022\017\n\007conv_id\030\001 \001(\t"
-  "\022\025\n\rclient_msg_id\030\002 \001(\005\022&\n\007payload\030\003 \001(\013"
-  "2\025.Protocol.ChatPayload\022\021\n\tts_client\030\004 \001"
-  "(\003\022\024\n\014reply_to_seq\030\005 \001(\003\022\020\n\010gcs_path\030\006 \001"
-  "(\t\022\032\n\022mentioned_user_ids\030\007 \003(\t\"\366\002\n\006S_Cha"
-  "t\022\017\n\007conv_id\030\001 \001(\t\022\025\n\rclient_msg_id\030\002 \001("
-  "\005\022\017\n\007msg_seq\030\003 \001(\003\022\021\n\tsender_id\030\004 \001(\t\022\023\n"
-  "\013sender_name\030\005 \001(\t\022&\n\007payload\030\006 \001(\0132\025.Pr"
-  "otocol.ChatPayload\022\021\n\tts_server\030\007 \001(\003\022\024\n"
-  "\014reply_to_seq\030\010 \001(\003\022\034\n\024reply_to_sender_n"
-  "ame\030\t \001(\t\022\025\n\rreply_to_text\030\n \001(\t\022\022\n\nis_d"
-  "eleted\030\013 \001(\010\022\021\n\tis_edited\030\014 \001(\010\022\024\n\014unrea"
-  "d_count\030\r \001(\005\022\027\n\017file_expires_at\030\016 \001(\003\022\023"
-  "\n\013file_status\030\017 \001(\t\022\032\n\022mentioned_user_id"
-  "s\030\020 \003(\t\"7\n\rC_ReadReceipt\022\017\n\007conv_id\030\001 \001("
-  "\t\022\025\n\rlast_read_seq\030\002 \001(\003\"J\n\rS_ReadReceip"
-  "t\022\017\n\007conv_id\030\001 \001(\t\022\021\n\treader_id\030\002 \001(\t\022\025\n"
-  "\rlast_read_seq\030\003 \001(\003\"3\n\017C_DeleteMessage\022"
-  "\017\n\007conv_id\030\001 \001(\t\022\017\n\007msg_seq\030\002 \001(\003\"D\n\017S_D"
-  "eleteMessage\022\017\n\007success\030\001 \001(\010\022\017\n\007conv_id"
-  "\030\002 \001(\t\022\017\n\007msg_seq\030\003 \001(\003\"C\n\rC_EditMessage"
-  "\022\017\n\007conv_id\030\001 \001(\t\022\017\n\007msg_seq\030\002 \001(\003\022\020\n\010ne"
-  "w_text\030\003 \001(\t\"g\n\rS_EditMessage\022\017\n\007success"
-  "\030\001 \001(\010\022\017\n\007conv_id\030\002 \001(\t\022\017\n\007msg_seq\030\003 \001(\003"
-  "\022\020\n\010new_text\030\004 \001(\t\022\021\n\tedited_at\030\005 \001(\003\"D\n"
-  "\014C_ReqHistory\022\017\n\007conv_id\030\001 \001(\t\022\024\n\014last_m"
-  "sg_seq\030\002 \001(\003\022\r\n\005limit\030\003 \001(\005\"S\n\014S_ReqHist"
-  "ory\022\017\n\007conv_id\030\001 \001(\t\022\"\n\010messages\030\002 \003(\0132\020"
-  ".Protocol.S_Chat\022\016\n\006is_end\030\003 \001(\010\"\211\002\n\014C_U"
-  "ploadFile\022\020\n\010filename\030\001 \001(\t\022\014\n\004size\030\002 \001("
-  "\003\022\021\n\tmime_type\030\003 \001(\t\022\020\n\010is_image\030\004 \001(\010\0226"
-  "\n\013upload_type\030\005 \001(\0162!.Protocol.C_UploadF"
-  "ile.UploadType\022\021\n\ttarget_id\030\006 \001(\t\"i\n\nUpl"
-  "oadType\022\017\n\013DIRECT_CHAT\020\000\022\016\n\nGROUP_CHAT\020\001"
-  "\022\017\n\013PROFILE_IMG\020\002\022\025\n\021GROUP_PROFILE_IMG\020\003"
-  "\022\022\n\016BACKGROUND_IMG\020\004\"\341\001\n\014S_UploadFile\022\017\n"
-  "\007success\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\022\017\n\007file_"
-  "id\030\003 \001(\t\022\022\n\nupload_url\030\004 \001(\t\022\024\n\014download"
-  "_url\030\005 \001(\t\022\030\n\020thumb_upload_url\030\006 \001(\t\022\025\n\r"
-  "thumbnail_url\030\007 \001(\t\022\022\n\nexpires_at\030\010 \001(\003\022"
-  "\014\n\004path\030\t \001(\t\022!\n\031file_retention_expires_"
-  "at\030\n \001(\003\")\n\005C_Ack\022\017\n\007conv_id\030\001 \001(\t\022\017\n\007ms"
-  "g_seq\030\002 \001(\003\"\"\n\016C_FetchOffline\022\020\n\010since_t"
-  "s\030\001 \001(\003\"\304\001\n\016S_MessageBatch\022;\n\007batches\030\001 "
-  "\003(\0132*.Protocol.S_MessageBatch.Conversati"
-  "onBatch\032u\n\021ConversationBatch\022\017\n\007conv_id\030"
-  "\001 \001(\t\022\"\n\010messages\030\002 \003(\0132\020.Protocol.S_Cha"
-  "t\022\024\n\014unread_count\030\003 \001(\005\022\025\n\rlast_read_seq"
-  "\030\004 \001(\003\"\023\n\021C_GetSubscription\"\252\001\n\020Subscrip"
-  "tionPlan\022\017\n\007plan_id\030\001 \001(\005\022\021\n\tplan_type\030\002"
-  " \001(\t\022\014\n\004name\030\003 \001(\t\022\r\n\005grade\030\004 \001(\005\022\025\n\rsto"
-  "rage_bytes\030\005 \001(\003\022\025\n\rmax_file_size\030\006 \001(\003\022"
-  "\025\n\rmonthly_price\030\007 \001(\003\022\020\n\010features\030\010 \003(\t"
-  "\"\360\001\n\021S_GetSubscription\022\017\n\007success\030\001 \001(\010\022"
-  "\025\n\rcurrent_grade\030\002 \001(\005\022\031\n\021current_plan_n"
-  "ame\030\003 \001(\t\022\036\n\026storage_capacity_bytes\030\004 \001("
-  "\003\022\033\n\023storage_usage_bytes\030\005 \001(\003\022\022\n\nexpire"
-  "s_at\030\006 \001(\003\022\022\n\nauto_renew\030\007 \001(\010\0223\n\017availa"
-  "ble_plans\030\010 \003(\0132\032.Protocol.SubscriptionP"
-  "lan\"h\n\020C_VerifyPurchase\022\020\n\010platform\030\001 \001("
-  "\t\022\022\n\nproduct_id\030\002 \001(\t\022\026\n\016transaction_id\030"
-  "\003 \001(\t\022\026\n\016purchase_token\030\004 \001(\t\"u\n\020S_Verif"
-  "yPurchase\022\017\n\007success\030\001 \001(\010\022\017\n\007message\030\002 "
-  "\001(\t\022\021\n\tnew_grade\030\003 \001(\005\022\022\n\nexpires_at\030\004 \001"
-  "(\003\022\030\n\020storage_capacity\030\005 \001(\003\"\026\n\024C_Cancel"
-  "Subscription\"R\n\024S_CancelSubscription\022\017\n\007"
-  "success\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\022\030\n\020grace_"
-  "expires_at\030\003 \001(\003\".\n\nC_Withdraw\022\020\n\010passwo"
-  "rd\030\001 \001(\t\022\016\n\006reason\030\002 \001(\t\".\n\nS_Withdraw\022\017"
-  "\n\007success\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\"\037\n\014C_Se"
-  "archUser\022\017\n\007user_id\030\001 \001(\t\"s\n\014S_SearchUse"
-  "r\022\017\n\007success\030\001 \001(\010\022%\n\tuser_info\030\002 \001(\0132\022."
-  "Protocol.UserInfo\022\021\n\tis_friend\030\003 \001(\010\022\030\n\020"
-  "has_sent_request\030\004 \001(\010\"a\n\rFriendRequest\022"
-  "%\n\trequester\030\001 \001(\0132\022.Protocol.UserInfo\022\024"
-  "\n\014requested_at\030\002 \001(\003\022\023\n\013is_received\030\003 \001("
-  "\010\"\314\001\n\016C_FriendAction\0223\n\006action\030\001 \001(\0162#.P"
-  "rotocol.C_FriendAction.ActionType\022\026\n\016tar"
-  "get_user_id\030\002 \001(\t\"m\n\nActionType\022\020\n\014SEND_"
-  "REQUEST\020\000\022\022\n\016CANCEL_REQUEST\020\001\022\022\n\016ACCEPT_"
-  "REQUEST\020\002\022\022\n\016REJECT_REQUEST\020\003\022\021\n\rDELETE_"
-  "FRIEND\020\004\"^\n\016S_FriendAction\022\017\n\007success\030\001 "
-  "\001(\010\022\017\n\007message\030\002 \001(\t\022*\n\016updated_friend\030\003"
-  " \001(\0132\022.Protocol.UserInfo\"\023\n\021C_FetchFrien"
-  "dData\"\234\001\n\021S_FetchFriendData\022#\n\007friends\030\001"
-  " \003(\0132\022.Protocol.UserInfo\0222\n\021received_req"
-  "uests\030\002 \003(\0132\027.Protocol.FriendRequest\022.\n\r"
-  "sent_requests\030\003 \003(\0132\027.Protocol.FriendReq"
-  "uest\"\241\001\n\014S_FriendPush\0222\n\tpush_type\030\001 \001(\016"
-  "2\037.Protocol.S_FriendPush.PushType\022%\n\tuse"
-  "r_info\030\002 \001(\0132\022.Protocol.UserInfo\"6\n\010Push"
-  "Type\022\017\n\013NEW_REQUEST\020\000\022\014\n\010ACCEPTED\020\001\022\013\n\007D"
-  "ELETED\020\002\"n\n\017GroupMemberInfo\022%\n\tuser_info"
-  "\030\001 \001(\0132\022.Protocol.UserInfo\022!\n\004role\030\002 \001(\016"
-  "2\023.Protocol.GroupRole\022\021\n\tjoined_at\030\003 \001(\003"
-  "\"\306\001\n\tGroupInfo\022\020\n\010group_id\030\001 \001(\t\022\022\n\ngrou"
-  "p_name\030\002 \001(\t\022\022\n\ngroup_code\030\003 \001(\t\022\023\n\013desc"
-  "ription\030\004 \001(\t\022\027\n\017group_image_url\030\005 \001(\t\022\024"
-  "\n\014member_count\030\006 \001(\005\022\036\n\026storage_capacity"
-  "_bytes\030\007 \001(\003\022\033\n\023storage_usage_bytes\030\010 \001("
-  "\003\"#\n\rC_CreateGroup\022\022\n\ngroup_name\030\001 \001(\t\"D"
-  "\n\rS_CreateGroup\022\017\n\007success\030\001 \001(\010\022\"\n\005grou"
-  "p\030\002 \001(\0132\023.Protocol.GroupInfo\"\r\n\013C_GroupL"
-  "ist\"2\n\013S_GroupList\022#\n\006groups\030\001 \003(\0132\023.Pro"
-  "tocol.GroupInfo\"\037\n\013C_GroupInfo\022\020\n\010group_"
-  "id\030\001 \001(\t\"W\n\013S_GroupInfo\022\"\n\005group\030\001 \001(\0132\023"
-  ".Protocol.GroupInfo\022$\n\007my_role\030\002 \001(\0162\023.P"
-  "rotocol.GroupRole\";\n\016C_InviteFriend\022\020\n\010g"
-  "roup_id\030\001 \001(\t\022\027\n\017friend_user_ids\030\002 \003(\t\"!"
-  "\n\016S_InviteFriend\022\017\n\007success\030\001 \001(\010\"!\n\013C_J"
-  "oinGroup\022\022\n\ngroup_code\030\001 \001(\t\"B\n\013S_JoinGr"
-  "oup\022\017\n\007success\030\001 \001(\010\022\"\n\005group\030\002 \001(\0132\023.Pr"
-  "otocol.GroupInfo\"%\n\021C_GroupMemberList\022\020\n"
-  "\010group_id\030\001 \001(\t\"Q\n\021S_GroupMemberList\022\020\n\010"
-  "group_id\030\001 \001(\t\022*\n\007members\030\002 \003(\0132\031.Protoc"
-  "ol.GroupMemberInfo\" \n\014C_LeaveGroup\022\020\n\010gr"
-  "oup_id\030\001 \001(\t\"\037\n\014S_LeaveGroup\022\017\n\007success\030"
-  "\001 \001(\010\"a\n\013C_EditGroup\022\020\n\010group_id\030\001 \001(\t\022\020"
-  "\n\010new_name\030\002 \001(\t\022\027\n\017new_description\030\003 \001("
-  "\t\022\025\n\rnew_image_url\030\004 \001(\t\"B\n\013S_EditGroup\022"
-  "\017\n\007success\030\001 \001(\010\022\"\n\005group\030\002 \001(\0132\023.Protoc"
-  "ol.GroupInfo\"!\n\rC_DeleteGroup\022\020\n\010group_i"
-  "d\030\001 \001(\t\" \n\rS_DeleteGroup\022\017\n\007success\030\001 \001("
-  "\010\"Y\n\017BlockedUserInfo\022\017\n\007user_id\030\001 \001(\t\022\014\n"
-  "\004name\030\002 \001(\t\022\023\n\013profile_img\030\003 \001(\t\022\022\n\nbloc"
-  "ked_at\030\004 \001(\003\"%\n\013C_BlockUser\022\026\n\016target_us"
-  "er_id\030\001 \001(\t\"/\n\013S_BlockUser\022\017\n\007success\030\001 "
-  "\001(\010\022\017\n\007message\030\002 \001(\t\"\'\n\rC_UnblockUser\022\026\n"
-  "\016target_user_id\030\001 \001(\t\" \n\rS_UnblockUser\022\017"
-  "\n\007success\030\001 \001(\010\"\022\n\020C_GetBlockedList\"D\n\020S"
-  "_GetBlockedList\0220\n\rblocked_users\030\001 \003(\0132\031"
-  ".Protocol.BlockedUserInfo\"F\n\014C_ReportUse"
-  "r\022\026\n\016target_user_id\030\001 \001(\t\022\016\n\006reason\030\002 \001("
-  "\t\022\016\n\006detail\030\003 \001(\t\"\037\n\014S_ReportUser\022\017\n\007suc"
-  "cess\030\001 \001(\010\"@\n\rC_AddReaction\022\017\n\007conv_id\030\001"
-  " \001(\t\022\017\n\007msg_seq\030\002 \001(\003\022\r\n\005emoji\030\003 \001(\t\"b\n\r"
-  "S_AddReaction\022\017\n\007conv_id\030\001 \001(\t\022\017\n\007msg_se"
-  "q\030\002 \001(\003\022\017\n\007user_id\030\003 \001(\t\022\r\n\005emoji\030\004 \001(\t\022"
-  "\017\n\007removed\030\005 \001(\010\"\205\001\n\014C_CreatePoll\022\017\n\007con"
-  "v_id\030\001 \001(\t\022\020\n\010question\030\002 \001(\t\022\017\n\007options\030"
-  "\003 \003(\t\022\027\n\017is_multi_select\030\004 \001(\010\022\024\n\014is_ano"
-  "nymous\030\005 \001(\010\022\022\n\nexpires_at\030\006 \001(\003\"\344\001\n\014S_C"
-  "reatePoll\022\017\n\007conv_id\030\001 \001(\t\022\017\n\007poll_id\030\002 "
-  "\001(\t\022\017\n\007msg_seq\030\003 \001(\003\022\022\n\ncreator_id\030\004 \001(\t"
-  "\022\024\n\014creator_name\030\005 \001(\t\022\020\n\010question\030\006 \001(\t"
-  "\022\017\n\007options\030\007 \003(\t\022\027\n\017is_multi_select\030\010 \001"
-  "(\010\022\024\n\014is_anonymous\030\t \001(\010\022\022\n\nexpires_at\030\n"
-  " \001(\003\022\021\n\tts_server\030\013 \001(\003\"U\n\006C_Vote\022\017\n\007con"
-  "v_id\030\001 \001(\t\022\017\n\007poll_id\030\002 \001(\t\022\017\n\007msg_seq\030\003"
-  " \001(\003\022\030\n\020selected_options\030\004 \003(\005\"\217\001\n\006S_Vot"
-  "e\022\017\n\007conv_id\030\001 \001(\t\022\017\n\007poll_id\030\002 \001(\t\022\017\n\007m"
-  "sg_seq\030\003 \001(\003\022\020\n\010voter_id\030\004 \001(\t\022\022\n\nvoter_"
-  "name\030\005 \001(\t\022\030\n\020selected_options\030\006 \003(\005\022\022\n\n"
-  "votes_json\030\007 \001(\t\"@\n\013C_ClosePoll\022\017\n\007conv_"
-  "id\030\001 \001(\t\022\017\n\007poll_id\030\002 \001(\t\022\017\n\007msg_seq\030\003 \001"
-  "(\003\"@\n\013S_ClosePoll\022\017\n\007conv_id\030\001 \001(\t\022\017\n\007po"
-  "ll_id\030\002 \001(\t\022\017\n\007msg_seq\030\003 \001(\003\"X\n\021C_SetAnn"
-  "ouncement\022\017\n\007conv_id\030\001 \001(\t\022\017\n\007msg_seq\030\002 "
-  "\001(\003\022\014\n\004text\030\003 \001(\t\022\023\n\013sender_name\030\004 \001(\t\"k"
-  "\n\021S_SetAnnouncement\022\017\n\007conv_id\030\001 \001(\t\022\017\n\007"
-  "msg_seq\030\002 \001(\003\022\014\n\004text\030\003 \001(\t\022\023\n\013sender_na"
-  "me\030\004 \001(\t\022\021\n\tsetter_id\030\005 \001(\t\"Q\n\007S_Error\022\'"
-  "\n\nerror_code\030\001 \001(\0162\023.Protocol.ErrorCode\022"
-  "\014\n\004code\030\002 \001(\r\022\017\n\007message\030\003 \001(\t\"\r\n\013C_Hear"
-  "tbeat\"\r\n\013S_Heartbeat*-\n\tGroupRole\022\n\n\006MEM"
-  "BER\020\000\022\t\n\005ADMIN\020\001\022\t\n\005OWNER\020\002*\226\t\n\tErrorCod"
-  "e\022\017\n\013ERR_SUCCESS\020\000\022\017\n\013ERR_UNKNOWN\020\001\022\027\n\023E"
-  "RR_SERVER_INTERNAL\020\002\022\026\n\022ERR_INVALID_PACK"
-  "ET\020\003\022\030\n\024ERR_VERSION_MISMATCH\020\004\022\024\n\020ERR_UN"
-  "AUTHORIZED\020\005\022\025\n\021ERR_INVALID_TOKEN\020\006\022\025\n\021E"
-  "RR_USER_ID_EMPTY\020d\022\030\n\024ERR_USER_ID_REQUIR"
-  "ED\020e\022\031\n\025ERR_PASSWORD_REQUIRED\020f\022\025\n\021ERR_N"
-  "AME_REQUIRED\020g\022\026\n\022ERR_EMAIL_REQUIRED\020h\022\026"
-  "\n\022ERR_USER_NOT_FOUND\020i\022\030\n\024ERR_INVALID_PA"
-  "SSWORD\020j\022\033\n\027ERR_USER_ALREADY_EXISTS\020k\022\034\n"
-  "\030ERR_EMAIL_ALREADY_EXISTS\020l\022\026\n\021ERR_PAYLO"
-  "AD_EMPTY\020\310\001\022\030\n\023ERR_INVALID_CONV_ID\020\311\001\022\034\n"
-  "\027ERR_INVALID_RECEIVER_ID\020\312\001\022\024\n\017ERR_INVAL"
-  "ID_ACK\020\313\001\022\037\n\032ERR_INVALID_FRIEND_USER_ID\020"
-  "\254\002\022\030\n\023ERR_CANNOT_ADD_SELF\020\255\002\022\025\n\020ERR_NOT_"
-  "A_FRIEND\020\256\002\022!\n\034ERR_FRIEND_REQUEST_NOT_FO"
-  "UND\020\257\002\022%\n ERR_FILE_SERVICE_NOT_INITIALIZ"
-  "ED\020\220\003\022&\n!ERR_CLOUD_STORAGE_NOT_INITIALIZ"
-  "ED\020\221\003\022\032\n\025ERR_FILENAME_REQUIRED\020\222\003\022\032\n\025ERR"
-  "_INVALID_FILE_SIZE\020\223\003\022\033\n\026ERR_MIME_TYPE_R"
-  "EQUIRED\020\224\003\022\037\n\032ERR_FAILED_TO_GENERATE_URL"
-  "\020\225\003\022\031\n\024ERR_INVALID_FILE_URL\020\226\003\022\031\n\024ERR_IN"
-  "VALID_ARGUMENT\020\227\003\022\031\n\024ERR_STORAGE_EXCEEDE"
-  "D\020\230\003\022\027\n\022ERR_FILE_TOO_LARGE\020\231\003\022\027\n\022ERR_PAY"
-  "MENT_FAILED\020\232\003\022\030\n\023ERR_RECEIPT_INVALID\020\233\003"
-  "\022\026\n\021ERR_NO_PERMISSION\020\364\003\022\030\n\023ERR_ALREADY_"
-  "BLOCKED\020\330\004\022\024\n\017ERR_NOT_BLOCKED\020\331\004\022\032\n\025ERR_"
-  "CANNOT_BLOCK_SELF\020\332\004\022\031\n\024ERR_REPORT_DUPLI"
-  "CATE\020\342\004\022\027\n\022ERR_POLL_NOT_FOUND\020\274\005\022\024\n\017ERR_"
-  "POLL_CLOSED\020\275\005\022\034\n\027ERR_POLL_INVALID_OPTIO"
-  "N\020\276\005b\006proto3"
+  "group_id\030\003 \001(\t\"8\n\005Audio\022\013\n\003url\030\001 \001(\t\022\024\n\014"
+  "duration_sec\030\002 \001(\005\022\014\n\004size\030\003 \001(\003\"\345\001\n\013Cha"
+  "tPayload\022\036\n\004text\030\001 \001(\0132\016.Protocol.TextH\000"
+  "\022 \n\005image\030\002 \001(\0132\017.Protocol.ImageH\000\022 \n\005vi"
+  "deo\030\003 \001(\0132\017.Protocol.VideoH\000\022\036\n\004file\030\004 \001"
+  "(\0132\016.Protocol.FileH\000\022%\n\006system\030\005 \001(\0132\023.P"
+  "rotocol.SystemMsgH\000\022 \n\005audio\030\006 \001(\0132\017.Pro"
+  "tocol.AudioH\000B\t\n\007content\"\257\001\n\006C_Chat\022\017\n\007c"
+  "onv_id\030\001 \001(\t\022\025\n\rclient_msg_id\030\002 \001(\005\022&\n\007p"
+  "ayload\030\003 \001(\0132\025.Protocol.ChatPayload\022\021\n\tt"
+  "s_client\030\004 \001(\003\022\024\n\014reply_to_seq\030\005 \001(\003\022\020\n\010"
+  "gcs_path\030\006 \001(\t\022\032\n\022mentioned_user_ids\030\007 \003"
+  "(\t\"\366\002\n\006S_Chat\022\017\n\007conv_id\030\001 \001(\t\022\025\n\rclient"
+  "_msg_id\030\002 \001(\005\022\017\n\007msg_seq\030\003 \001(\003\022\021\n\tsender"
+  "_id\030\004 \001(\t\022\023\n\013sender_name\030\005 \001(\t\022&\n\007payloa"
+  "d\030\006 \001(\0132\025.Protocol.ChatPayload\022\021\n\tts_ser"
+  "ver\030\007 \001(\003\022\024\n\014reply_to_seq\030\010 \001(\003\022\034\n\024reply"
+  "_to_sender_name\030\t \001(\t\022\025\n\rreply_to_text\030\n"
+  " \001(\t\022\022\n\nis_deleted\030\013 \001(\010\022\021\n\tis_edited\030\014 "
+  "\001(\010\022\024\n\014unread_count\030\r \001(\005\022\027\n\017file_expire"
+  "s_at\030\016 \001(\003\022\023\n\013file_status\030\017 \001(\t\022\032\n\022menti"
+  "oned_user_ids\030\020 \003(\t\"7\n\rC_ReadReceipt\022\017\n\007"
+  "conv_id\030\001 \001(\t\022\025\n\rlast_read_seq\030\002 \001(\003\"J\n\r"
+  "S_ReadReceipt\022\017\n\007conv_id\030\001 \001(\t\022\021\n\treader"
+  "_id\030\002 \001(\t\022\025\n\rlast_read_seq\030\003 \001(\003\"3\n\017C_De"
+  "leteMessage\022\017\n\007conv_id\030\001 \001(\t\022\017\n\007msg_seq\030"
+  "\002 \001(\003\"D\n\017S_DeleteMessage\022\017\n\007success\030\001 \001("
+  "\010\022\017\n\007conv_id\030\002 \001(\t\022\017\n\007msg_seq\030\003 \001(\003\"C\n\rC"
+  "_EditMessage\022\017\n\007conv_id\030\001 \001(\t\022\017\n\007msg_seq"
+  "\030\002 \001(\003\022\020\n\010new_text\030\003 \001(\t\"g\n\rS_EditMessag"
+  "e\022\017\n\007success\030\001 \001(\010\022\017\n\007conv_id\030\002 \001(\t\022\017\n\007m"
+  "sg_seq\030\003 \001(\003\022\020\n\010new_text\030\004 \001(\t\022\021\n\tedited"
+  "_at\030\005 \001(\003\"D\n\014C_ReqHistory\022\017\n\007conv_id\030\001 \001"
+  "(\t\022\024\n\014last_msg_seq\030\002 \001(\003\022\r\n\005limit\030\003 \001(\005\""
+  "S\n\014S_ReqHistory\022\017\n\007conv_id\030\001 \001(\t\022\"\n\010mess"
+  "ages\030\002 \003(\0132\020.Protocol.S_Chat\022\016\n\006is_end\030\003"
+  " \001(\010\"\211\002\n\014C_UploadFile\022\020\n\010filename\030\001 \001(\t\022"
+  "\014\n\004size\030\002 \001(\003\022\021\n\tmime_type\030\003 \001(\t\022\020\n\010is_i"
+  "mage\030\004 \001(\010\0226\n\013upload_type\030\005 \001(\0162!.Protoc"
+  "ol.C_UploadFile.UploadType\022\021\n\ttarget_id\030"
+  "\006 \001(\t\"i\n\nUploadType\022\017\n\013DIRECT_CHAT\020\000\022\016\n\n"
+  "GROUP_CHAT\020\001\022\017\n\013PROFILE_IMG\020\002\022\025\n\021GROUP_P"
+  "ROFILE_IMG\020\003\022\022\n\016BACKGROUND_IMG\020\004\"\341\001\n\014S_U"
+  "ploadFile\022\017\n\007success\030\001 \001(\010\022\017\n\007message\030\002 "
+  "\001(\t\022\017\n\007file_id\030\003 \001(\t\022\022\n\nupload_url\030\004 \001(\t"
+  "\022\024\n\014download_url\030\005 \001(\t\022\030\n\020thumb_upload_u"
+  "rl\030\006 \001(\t\022\025\n\rthumbnail_url\030\007 \001(\t\022\022\n\nexpir"
+  "es_at\030\010 \001(\003\022\014\n\004path\030\t \001(\t\022!\n\031file_retent"
+  "ion_expires_at\030\n \001(\003\")\n\005C_Ack\022\017\n\007conv_id"
+  "\030\001 \001(\t\022\017\n\007msg_seq\030\002 \001(\003\"\"\n\016C_FetchOfflin"
+  "e\022\020\n\010since_ts\030\001 \001(\003\"\304\001\n\016S_MessageBatch\022;"
+  "\n\007batches\030\001 \003(\0132*.Protocol.S_MessageBatc"
+  "h.ConversationBatch\032u\n\021ConversationBatch"
+  "\022\017\n\007conv_id\030\001 \001(\t\022\"\n\010messages\030\002 \003(\0132\020.Pr"
+  "otocol.S_Chat\022\024\n\014unread_count\030\003 \001(\005\022\025\n\rl"
+  "ast_read_seq\030\004 \001(\003\"\023\n\021C_GetSubscription\""
+  "\252\001\n\020SubscriptionPlan\022\017\n\007plan_id\030\001 \001(\005\022\021\n"
+  "\tplan_type\030\002 \001(\t\022\014\n\004name\030\003 \001(\t\022\r\n\005grade\030"
+  "\004 \001(\005\022\025\n\rstorage_bytes\030\005 \001(\003\022\025\n\rmax_file"
+  "_size\030\006 \001(\003\022\025\n\rmonthly_price\030\007 \001(\003\022\020\n\010fe"
+  "atures\030\010 \003(\t\"\360\001\n\021S_GetSubscription\022\017\n\007su"
+  "ccess\030\001 \001(\010\022\025\n\rcurrent_grade\030\002 \001(\005\022\031\n\021cu"
+  "rrent_plan_name\030\003 \001(\t\022\036\n\026storage_capacit"
+  "y_bytes\030\004 \001(\003\022\033\n\023storage_usage_bytes\030\005 \001"
+  "(\003\022\022\n\nexpires_at\030\006 \001(\003\022\022\n\nauto_renew\030\007 \001"
+  "(\010\0223\n\017available_plans\030\010 \003(\0132\032.Protocol.S"
+  "ubscriptionPlan\"h\n\020C_VerifyPurchase\022\020\n\010p"
+  "latform\030\001 \001(\t\022\022\n\nproduct_id\030\002 \001(\t\022\026\n\016tra"
+  "nsaction_id\030\003 \001(\t\022\026\n\016purchase_token\030\004 \001("
+  "\t\"u\n\020S_VerifyPurchase\022\017\n\007success\030\001 \001(\010\022\017"
+  "\n\007message\030\002 \001(\t\022\021\n\tnew_grade\030\003 \001(\005\022\022\n\nex"
+  "pires_at\030\004 \001(\003\022\030\n\020storage_capacity\030\005 \001(\003"
+  "\"\026\n\024C_CancelSubscription\"R\n\024S_CancelSubs"
+  "cription\022\017\n\007success\030\001 \001(\010\022\017\n\007message\030\002 \001"
+  "(\t\022\030\n\020grace_expires_at\030\003 \001(\003\".\n\nC_Withdr"
+  "aw\022\020\n\010password\030\001 \001(\t\022\016\n\006reason\030\002 \001(\t\".\n\n"
+  "S_Withdraw\022\017\n\007success\030\001 \001(\010\022\017\n\007message\030\002"
+  " \001(\t\"\037\n\014C_SearchUser\022\017\n\007user_id\030\001 \001(\t\"s\n"
+  "\014S_SearchUser\022\017\n\007success\030\001 \001(\010\022%\n\tuser_i"
+  "nfo\030\002 \001(\0132\022.Protocol.UserInfo\022\021\n\tis_frie"
+  "nd\030\003 \001(\010\022\030\n\020has_sent_request\030\004 \001(\010\"a\n\rFr"
+  "iendRequest\022%\n\trequester\030\001 \001(\0132\022.Protoco"
+  "l.UserInfo\022\024\n\014requested_at\030\002 \001(\003\022\023\n\013is_r"
+  "eceived\030\003 \001(\010\"\314\001\n\016C_FriendAction\0223\n\006acti"
+  "on\030\001 \001(\0162#.Protocol.C_FriendAction.Actio"
+  "nType\022\026\n\016target_user_id\030\002 \001(\t\"m\n\nActionT"
+  "ype\022\020\n\014SEND_REQUEST\020\000\022\022\n\016CANCEL_REQUEST\020"
+  "\001\022\022\n\016ACCEPT_REQUEST\020\002\022\022\n\016REJECT_REQUEST\020"
+  "\003\022\021\n\rDELETE_FRIEND\020\004\"^\n\016S_FriendAction\022\017"
+  "\n\007success\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\022*\n\016upda"
+  "ted_friend\030\003 \001(\0132\022.Protocol.UserInfo\"\023\n\021"
+  "C_FetchFriendData\"\234\001\n\021S_FetchFriendData\022"
+  "#\n\007friends\030\001 \003(\0132\022.Protocol.UserInfo\0222\n\021"
+  "received_requests\030\002 \003(\0132\027.Protocol.Frien"
+  "dRequest\022.\n\rsent_requests\030\003 \003(\0132\027.Protoc"
+  "ol.FriendRequest\"\241\001\n\014S_FriendPush\0222\n\tpus"
+  "h_type\030\001 \001(\0162\037.Protocol.S_FriendPush.Pus"
+  "hType\022%\n\tuser_info\030\002 \001(\0132\022.Protocol.User"
+  "Info\"6\n\010PushType\022\017\n\013NEW_REQUEST\020\000\022\014\n\010ACC"
+  "EPTED\020\001\022\013\n\007DELETED\020\002\"n\n\017GroupMemberInfo\022"
+  "%\n\tuser_info\030\001 \001(\0132\022.Protocol.UserInfo\022!"
+  "\n\004role\030\002 \001(\0162\023.Protocol.GroupRole\022\021\n\tjoi"
+  "ned_at\030\003 \001(\003\"\306\001\n\tGroupInfo\022\020\n\010group_id\030\001"
+  " \001(\t\022\022\n\ngroup_name\030\002 \001(\t\022\022\n\ngroup_code\030\003"
+  " \001(\t\022\023\n\013description\030\004 \001(\t\022\027\n\017group_image"
+  "_url\030\005 \001(\t\022\024\n\014member_count\030\006 \001(\005\022\036\n\026stor"
+  "age_capacity_bytes\030\007 \001(\003\022\033\n\023storage_usag"
+  "e_bytes\030\010 \001(\003\"#\n\rC_CreateGroup\022\022\n\ngroup_"
+  "name\030\001 \001(\t\"D\n\rS_CreateGroup\022\017\n\007success\030\001"
+  " \001(\010\022\"\n\005group\030\002 \001(\0132\023.Protocol.GroupInfo"
+  "\"\r\n\013C_GroupList\"2\n\013S_GroupList\022#\n\006groups"
+  "\030\001 \003(\0132\023.Protocol.GroupInfo\"\037\n\013C_GroupIn"
+  "fo\022\020\n\010group_id\030\001 \001(\t\"W\n\013S_GroupInfo\022\"\n\005g"
+  "roup\030\001 \001(\0132\023.Protocol.GroupInfo\022$\n\007my_ro"
+  "le\030\002 \001(\0162\023.Protocol.GroupRole\";\n\016C_Invit"
+  "eFriend\022\020\n\010group_id\030\001 \001(\t\022\027\n\017friend_user"
+  "_ids\030\002 \003(\t\"!\n\016S_InviteFriend\022\017\n\007success\030"
+  "\001 \001(\010\"!\n\013C_JoinGroup\022\022\n\ngroup_code\030\001 \001(\t"
+  "\"B\n\013S_JoinGroup\022\017\n\007success\030\001 \001(\010\022\"\n\005grou"
+  "p\030\002 \001(\0132\023.Protocol.GroupInfo\"%\n\021C_GroupM"
+  "emberList\022\020\n\010group_id\030\001 \001(\t\"Q\n\021S_GroupMe"
+  "mberList\022\020\n\010group_id\030\001 \001(\t\022*\n\007members\030\002 "
+  "\003(\0132\031.Protocol.GroupMemberInfo\" \n\014C_Leav"
+  "eGroup\022\020\n\010group_id\030\001 \001(\t\"\037\n\014S_LeaveGroup"
+  "\022\017\n\007success\030\001 \001(\010\"a\n\013C_EditGroup\022\020\n\010grou"
+  "p_id\030\001 \001(\t\022\020\n\010new_name\030\002 \001(\t\022\027\n\017new_desc"
+  "ription\030\003 \001(\t\022\025\n\rnew_image_url\030\004 \001(\t\"B\n\013"
+  "S_EditGroup\022\017\n\007success\030\001 \001(\010\022\"\n\005group\030\002 "
+  "\001(\0132\023.Protocol.GroupInfo\"!\n\rC_DeleteGrou"
+  "p\022\020\n\010group_id\030\001 \001(\t\" \n\rS_DeleteGroup\022\017\n\007"
+  "success\030\001 \001(\010\"Y\n\017BlockedUserInfo\022\017\n\007user"
+  "_id\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\023\n\013profile_img\030\003"
+  " \001(\t\022\022\n\nblocked_at\030\004 \001(\003\"%\n\013C_BlockUser\022"
+  "\026\n\016target_user_id\030\001 \001(\t\"/\n\013S_BlockUser\022\017"
+  "\n\007success\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\"\'\n\rC_Un"
+  "blockUser\022\026\n\016target_user_id\030\001 \001(\t\" \n\rS_U"
+  "nblockUser\022\017\n\007success\030\001 \001(\010\"\022\n\020C_GetBloc"
+  "kedList\"D\n\020S_GetBlockedList\0220\n\rblocked_u"
+  "sers\030\001 \003(\0132\031.Protocol.BlockedUserInfo\"F\n"
+  "\014C_ReportUser\022\026\n\016target_user_id\030\001 \001(\t\022\016\n"
+  "\006reason\030\002 \001(\t\022\016\n\006detail\030\003 \001(\t\"\037\n\014S_Repor"
+  "tUser\022\017\n\007success\030\001 \001(\010\"@\n\rC_AddReaction\022"
+  "\017\n\007conv_id\030\001 \001(\t\022\017\n\007msg_seq\030\002 \001(\003\022\r\n\005emo"
+  "ji\030\003 \001(\t\"b\n\rS_AddReaction\022\017\n\007conv_id\030\001 \001"
+  "(\t\022\017\n\007msg_seq\030\002 \001(\003\022\017\n\007user_id\030\003 \001(\t\022\r\n\005"
+  "emoji\030\004 \001(\t\022\017\n\007removed\030\005 \001(\010\"\205\001\n\014C_Creat"
+  "ePoll\022\017\n\007conv_id\030\001 \001(\t\022\020\n\010question\030\002 \001(\t"
+  "\022\017\n\007options\030\003 \003(\t\022\027\n\017is_multi_select\030\004 \001"
+  "(\010\022\024\n\014is_anonymous\030\005 \001(\010\022\022\n\nexpires_at\030\006"
+  " \001(\003\"\344\001\n\014S_CreatePoll\022\017\n\007conv_id\030\001 \001(\t\022\017"
+  "\n\007poll_id\030\002 \001(\t\022\017\n\007msg_seq\030\003 \001(\003\022\022\n\ncrea"
+  "tor_id\030\004 \001(\t\022\024\n\014creator_name\030\005 \001(\t\022\020\n\010qu"
+  "estion\030\006 \001(\t\022\017\n\007options\030\007 \003(\t\022\027\n\017is_mult"
+  "i_select\030\010 \001(\010\022\024\n\014is_anonymous\030\t \001(\010\022\022\n\n"
+  "expires_at\030\n \001(\003\022\021\n\tts_server\030\013 \001(\003\"U\n\006C"
+  "_Vote\022\017\n\007conv_id\030\001 \001(\t\022\017\n\007poll_id\030\002 \001(\t\022"
+  "\017\n\007msg_seq\030\003 \001(\003\022\030\n\020selected_options\030\004 \003"
+  "(\005\"\217\001\n\006S_Vote\022\017\n\007conv_id\030\001 \001(\t\022\017\n\007poll_i"
+  "d\030\002 \001(\t\022\017\n\007msg_seq\030\003 \001(\003\022\020\n\010voter_id\030\004 \001"
+  "(\t\022\022\n\nvoter_name\030\005 \001(\t\022\030\n\020selected_optio"
+  "ns\030\006 \003(\005\022\022\n\nvotes_json\030\007 \001(\t\"@\n\013C_CloseP"
+  "oll\022\017\n\007conv_id\030\001 \001(\t\022\017\n\007poll_id\030\002 \001(\t\022\017\n"
+  "\007msg_seq\030\003 \001(\003\"@\n\013S_ClosePoll\022\017\n\007conv_id"
+  "\030\001 \001(\t\022\017\n\007poll_id\030\002 \001(\t\022\017\n\007msg_seq\030\003 \001(\003"
+  "\"X\n\021C_SetAnnouncement\022\017\n\007conv_id\030\001 \001(\t\022\017"
+  "\n\007msg_seq\030\002 \001(\003\022\014\n\004text\030\003 \001(\t\022\023\n\013sender_"
+  "name\030\004 \001(\t\"k\n\021S_SetAnnouncement\022\017\n\007conv_"
+  "id\030\001 \001(\t\022\017\n\007msg_seq\030\002 \001(\003\022\014\n\004text\030\003 \001(\t\022"
+  "\023\n\013sender_name\030\004 \001(\t\022\021\n\tsetter_id\030\005 \001(\t\""
+  "Q\n\007S_Error\022\'\n\nerror_code\030\001 \001(\0162\023.Protoco"
+  "l.ErrorCode\022\014\n\004code\030\002 \001(\r\022\017\n\007message\030\003 \001"
+  "(\t\"\r\n\013C_Heartbeat\"\r\n\013S_Heartbeat*-\n\tGrou"
+  "pRole\022\n\n\006MEMBER\020\000\022\t\n\005ADMIN\020\001\022\t\n\005OWNER\020\002*"
+  "\226\t\n\tErrorCode\022\017\n\013ERR_SUCCESS\020\000\022\017\n\013ERR_UN"
+  "KNOWN\020\001\022\027\n\023ERR_SERVER_INTERNAL\020\002\022\026\n\022ERR_"
+  "INVALID_PACKET\020\003\022\030\n\024ERR_VERSION_MISMATCH"
+  "\020\004\022\024\n\020ERR_UNAUTHORIZED\020\005\022\025\n\021ERR_INVALID_"
+  "TOKEN\020\006\022\025\n\021ERR_USER_ID_EMPTY\020d\022\030\n\024ERR_US"
+  "ER_ID_REQUIRED\020e\022\031\n\025ERR_PASSWORD_REQUIRE"
+  "D\020f\022\025\n\021ERR_NAME_REQUIRED\020g\022\026\n\022ERR_EMAIL_"
+  "REQUIRED\020h\022\026\n\022ERR_USER_NOT_FOUND\020i\022\030\n\024ER"
+  "R_INVALID_PASSWORD\020j\022\033\n\027ERR_USER_ALREADY"
+  "_EXISTS\020k\022\034\n\030ERR_EMAIL_ALREADY_EXISTS\020l\022"
+  "\026\n\021ERR_PAYLOAD_EMPTY\020\310\001\022\030\n\023ERR_INVALID_C"
+  "ONV_ID\020\311\001\022\034\n\027ERR_INVALID_RECEIVER_ID\020\312\001\022"
+  "\024\n\017ERR_INVALID_ACK\020\313\001\022\037\n\032ERR_INVALID_FRI"
+  "END_USER_ID\020\254\002\022\030\n\023ERR_CANNOT_ADD_SELF\020\255\002"
+  "\022\025\n\020ERR_NOT_A_FRIEND\020\256\002\022!\n\034ERR_FRIEND_RE"
+  "QUEST_NOT_FOUND\020\257\002\022%\n ERR_FILE_SERVICE_N"
+  "OT_INITIALIZED\020\220\003\022&\n!ERR_CLOUD_STORAGE_N"
+  "OT_INITIALIZED\020\221\003\022\032\n\025ERR_FILENAME_REQUIR"
+  "ED\020\222\003\022\032\n\025ERR_INVALID_FILE_SIZE\020\223\003\022\033\n\026ERR"
+  "_MIME_TYPE_REQUIRED\020\224\003\022\037\n\032ERR_FAILED_TO_"
+  "GENERATE_URL\020\225\003\022\031\n\024ERR_INVALID_FILE_URL\020"
+  "\226\003\022\031\n\024ERR_INVALID_ARGUMENT\020\227\003\022\031\n\024ERR_STO"
+  "RAGE_EXCEEDED\020\230\003\022\027\n\022ERR_FILE_TOO_LARGE\020\231"
+  "\003\022\027\n\022ERR_PAYMENT_FAILED\020\232\003\022\030\n\023ERR_RECEIP"
+  "T_INVALID\020\233\003\022\026\n\021ERR_NO_PERMISSION\020\364\003\022\030\n\023"
+  "ERR_ALREADY_BLOCKED\020\330\004\022\024\n\017ERR_NOT_BLOCKE"
+  "D\020\331\004\022\032\n\025ERR_CANNOT_BLOCK_SELF\020\332\004\022\031\n\024ERR_"
+  "REPORT_DUPLICATE\020\342\004\022\027\n\022ERR_POLL_NOT_FOUN"
+  "D\020\274\005\022\024\n\017ERR_POLL_CLOSED\020\275\005\022\034\n\027ERR_POLL_I"
+  "NVALID_OPTION\020\276\005b\006proto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_protocol_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_protocol_2eproto = {
-  false, false, 15292, descriptor_table_protodef_protocol_2eproto, "protocol.proto", 
-  &descriptor_table_protocol_2eproto_once, nullptr, 0, 112,
+  false, false, 15384, descriptor_table_protodef_protocol_2eproto, "protocol.proto", 
+  &descriptor_table_protocol_2eproto_once, nullptr, 0, 113,
   schemas, file_default_instances, TableStruct_protocol_2eproto::offsets,
   file_level_metadata_protocol_2eproto, file_level_enum_descriptors_protocol_2eproto, file_level_service_descriptors_protocol_2eproto,
 };
@@ -18058,6 +18085,273 @@ void SystemMsg::InternalSwap(SystemMsg* other) {
 
 // ===================================================================
 
+class Audio::_Internal {
+ public:
+};
+
+Audio::Audio(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+  SharedCtor();
+  RegisterArenaDtor(arena);
+  // @@protoc_insertion_point(arena_constructor:Protocol.Audio)
+}
+Audio::Audio(const Audio& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  url_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_url().empty()) {
+    url_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_url(), 
+      GetArenaForAllocation());
+  }
+  ::memcpy(&size_, &from.size_,
+    static_cast<size_t>(reinterpret_cast<char*>(&duration_sec_) -
+    reinterpret_cast<char*>(&size_)) + sizeof(duration_sec_));
+  // @@protoc_insertion_point(copy_constructor:Protocol.Audio)
+}
+
+void Audio::SharedCtor() {
+url_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&size_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&duration_sec_) -
+    reinterpret_cast<char*>(&size_)) + sizeof(duration_sec_));
+}
+
+Audio::~Audio() {
+  // @@protoc_insertion_point(destructor:Protocol.Audio)
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+void Audio::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  url_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void Audio::ArenaDtor(void* object) {
+  Audio* _this = reinterpret_cast< Audio* >(object);
+  (void)_this;
+}
+void Audio::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void Audio::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void Audio::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.Audio)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  url_.ClearToEmpty();
+  ::memset(&size_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&duration_sec_) -
+      reinterpret_cast<char*>(&size_)) + sizeof(duration_sec_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* Audio::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string url = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          auto str = _internal_mutable_url();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.Audio.url"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int32 duration_sec = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
+          duration_sec_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int64 size = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
+          size_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* Audio::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.Audio)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string url = 1;
+  if (!this->url().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_url().data(), static_cast<int>(this->_internal_url().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.Audio.url");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_url(), target);
+  }
+
+  // int32 duration_sec = 2;
+  if (this->duration_sec() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_duration_sec(), target);
+  }
+
+  // int64 size = 3;
+  if (this->size() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64ToArray(3, this->_internal_size(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.Audio)
+  return target;
+}
+
+size_t Audio::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.Audio)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string url = 1;
+  if (!this->url().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_url());
+  }
+
+  // int64 size = 3;
+  if (this->size() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int64Size(
+        this->_internal_size());
+  }
+
+  // int32 duration_sec = 2;
+  if (this->duration_sec() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_duration_sec());
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void Audio::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:Protocol.Audio)
+  GOOGLE_DCHECK_NE(&from, this);
+  const Audio* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<Audio>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:Protocol.Audio)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:Protocol.Audio)
+    MergeFrom(*source);
+  }
+}
+
+void Audio::MergeFrom(const Audio& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:Protocol.Audio)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from.url().empty()) {
+    _internal_set_url(from._internal_url());
+  }
+  if (from.size() != 0) {
+    _internal_set_size(from._internal_size());
+  }
+  if (from.duration_sec() != 0) {
+    _internal_set_duration_sec(from._internal_duration_sec());
+  }
+}
+
+void Audio::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:Protocol.Audio)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void Audio::CopyFrom(const Audio& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.Audio)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Audio::IsInitialized() const {
+  return true;
+}
+
+void Audio::InternalSwap(Audio* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &url_, GetArenaForAllocation(),
+      &other->url_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(Audio, duration_sec_)
+      + sizeof(Audio::duration_sec_)
+      - PROTOBUF_FIELD_OFFSET(Audio, size_)>(
+          reinterpret_cast<char*>(&size_),
+          reinterpret_cast<char*>(&other->size_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata Audio::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
+      file_level_metadata_protocol_2eproto[36]);
+}
+
+// ===================================================================
+
 class ChatPayload::_Internal {
  public:
   static const ::Protocol::Text& text(const ChatPayload* msg);
@@ -18065,6 +18359,7 @@ class ChatPayload::_Internal {
   static const ::Protocol::Video& video(const ChatPayload* msg);
   static const ::Protocol::File& file(const ChatPayload* msg);
   static const ::Protocol::SystemMsg& system(const ChatPayload* msg);
+  static const ::Protocol::Audio& audio(const ChatPayload* msg);
 };
 
 const ::Protocol::Text&
@@ -18086,6 +18381,10 @@ ChatPayload::_Internal::file(const ChatPayload* msg) {
 const ::Protocol::SystemMsg&
 ChatPayload::_Internal::system(const ChatPayload* msg) {
   return *msg->content_.system_;
+}
+const ::Protocol::Audio&
+ChatPayload::_Internal::audio(const ChatPayload* msg) {
+  return *msg->content_.audio_;
 }
 void ChatPayload::set_allocated_text(::Protocol::Text* text) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
@@ -18162,6 +18461,21 @@ void ChatPayload::set_allocated_system(::Protocol::SystemMsg* system) {
   }
   // @@protoc_insertion_point(field_set_allocated:Protocol.ChatPayload.system)
 }
+void ChatPayload::set_allocated_audio(::Protocol::Audio* audio) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_content();
+  if (audio) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::Protocol::Audio>::GetOwningArena(audio);
+    if (message_arena != submessage_arena) {
+      audio = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, audio, submessage_arena);
+    }
+    set_has_audio();
+    content_.audio_ = audio;
+  }
+  // @@protoc_insertion_point(field_set_allocated:Protocol.ChatPayload.audio)
+}
 ChatPayload::ChatPayload(::PROTOBUF_NAMESPACE_ID::Arena* arena)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
   SharedCtor();
@@ -18191,6 +18505,10 @@ ChatPayload::ChatPayload(const ChatPayload& from)
     }
     case kSystem: {
       _internal_mutable_system()->::Protocol::SystemMsg::MergeFrom(from._internal_system());
+      break;
+    }
+    case kAudio: {
+      _internal_mutable_audio()->::Protocol::Audio::MergeFrom(from._internal_audio());
       break;
     }
     case CONTENT_NOT_SET: {
@@ -18260,6 +18578,12 @@ void ChatPayload::clear_content() {
       }
       break;
     }
+    case kAudio: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete content_.audio_;
+      }
+      break;
+    }
     case CONTENT_NOT_SET: {
       break;
     }
@@ -18316,6 +18640,13 @@ const char* ChatPayload::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID
       case 5:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 42)) {
           ptr = ctx->ParseMessage(_internal_mutable_system(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .Protocol.Audio audio = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 50)) {
+          ptr = ctx->ParseMessage(_internal_mutable_audio(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -18388,6 +18719,14 @@ failure:
         5, _Internal::system(this), target, stream);
   }
 
+  // .Protocol.Audio audio = 6;
+  if (_internal_has_audio()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        6, _Internal::audio(this), target, stream);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -18438,6 +18777,13 @@ size_t ChatPayload::ByteSizeLong() const {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
           *content_.system_);
+      break;
+    }
+    // .Protocol.Audio audio = 6;
+    case kAudio: {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *content_.audio_);
       break;
     }
     case CONTENT_NOT_SET: {
@@ -18496,6 +18842,10 @@ void ChatPayload::MergeFrom(const ChatPayload& from) {
       _internal_mutable_system()->::Protocol::SystemMsg::MergeFrom(from._internal_system());
       break;
     }
+    case kAudio: {
+      _internal_mutable_audio()->::Protocol::Audio::MergeFrom(from._internal_audio());
+      break;
+    }
     case CONTENT_NOT_SET: {
       break;
     }
@@ -18530,7 +18880,7 @@ void ChatPayload::InternalSwap(ChatPayload* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata ChatPayload::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[36]);
+      file_level_metadata_protocol_2eproto[37]);
 }
 
 // ===================================================================
@@ -18939,7 +19289,7 @@ void C_Chat::InternalSwap(C_Chat* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_Chat::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[37]);
+      file_level_metadata_protocol_2eproto[38]);
 }
 
 // ===================================================================
@@ -19627,7 +19977,7 @@ void S_Chat::InternalSwap(S_Chat* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_Chat::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[38]);
+      file_level_metadata_protocol_2eproto[39]);
 }
 
 // ===================================================================
@@ -19859,7 +20209,7 @@ void C_ReadReceipt::InternalSwap(C_ReadReceipt* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_ReadReceipt::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[39]);
+      file_level_metadata_protocol_2eproto[40]);
 }
 
 // ===================================================================
@@ -20133,7 +20483,7 @@ void S_ReadReceipt::InternalSwap(S_ReadReceipt* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_ReadReceipt::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[40]);
+      file_level_metadata_protocol_2eproto[41]);
 }
 
 // ===================================================================
@@ -20365,7 +20715,7 @@ void C_DeleteMessage::InternalSwap(C_DeleteMessage* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_DeleteMessage::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[41]);
+      file_level_metadata_protocol_2eproto[42]);
 }
 
 // ===================================================================
@@ -20630,7 +20980,7 @@ void S_DeleteMessage::InternalSwap(S_DeleteMessage* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_DeleteMessage::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[42]);
+      file_level_metadata_protocol_2eproto[43]);
 }
 
 // ===================================================================
@@ -20904,7 +21254,7 @@ void C_EditMessage::InternalSwap(C_EditMessage* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_EditMessage::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[43]);
+      file_level_metadata_protocol_2eproto[44]);
 }
 
 // ===================================================================
@@ -21234,7 +21584,7 @@ void S_EditMessage::InternalSwap(S_EditMessage* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_EditMessage::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[44]);
+      file_level_metadata_protocol_2eproto[45]);
 }
 
 // ===================================================================
@@ -21501,7 +21851,7 @@ void C_ReqHistory::InternalSwap(C_ReqHistory* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_ReqHistory::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[45]);
+      file_level_metadata_protocol_2eproto[46]);
 }
 
 // ===================================================================
@@ -21763,7 +22113,7 @@ void S_ReqHistory::InternalSwap(S_ReqHistory* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_ReqHistory::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[46]);
+      file_level_metadata_protocol_2eproto[47]);
 }
 
 // ===================================================================
@@ -22136,7 +22486,7 @@ void C_UploadFile::InternalSwap(C_UploadFile* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_UploadFile::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[47]);
+      file_level_metadata_protocol_2eproto[48]);
 }
 
 // ===================================================================
@@ -22676,7 +23026,7 @@ void S_UploadFile::InternalSwap(S_UploadFile* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_UploadFile::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[48]);
+      file_level_metadata_protocol_2eproto[49]);
 }
 
 // ===================================================================
@@ -22908,7 +23258,7 @@ void C_Ack::InternalSwap(C_Ack* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_Ack::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[49]);
+      file_level_metadata_protocol_2eproto[50]);
 }
 
 // ===================================================================
@@ -23098,7 +23448,7 @@ void C_FetchOffline::InternalSwap(C_FetchOffline* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_FetchOffline::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[50]);
+      file_level_metadata_protocol_2eproto[51]);
 }
 
 // ===================================================================
@@ -23397,7 +23747,7 @@ void S_MessageBatch_ConversationBatch::InternalSwap(S_MessageBatch_ConversationB
 ::PROTOBUF_NAMESPACE_ID::Metadata S_MessageBatch_ConversationBatch::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[51]);
+      file_level_metadata_protocol_2eproto[52]);
 }
 
 // ===================================================================
@@ -23592,7 +23942,7 @@ void S_MessageBatch::InternalSwap(S_MessageBatch* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_MessageBatch::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[52]);
+      file_level_metadata_protocol_2eproto[53]);
 }
 
 // ===================================================================
@@ -23750,7 +24100,7 @@ void C_GetSubscription::InternalSwap(C_GetSubscription* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_GetSubscription::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[53]);
+      file_level_metadata_protocol_2eproto[54]);
 }
 
 // ===================================================================
@@ -24165,7 +24515,7 @@ void SubscriptionPlan::InternalSwap(SubscriptionPlan* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SubscriptionPlan::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[54]);
+      file_level_metadata_protocol_2eproto[55]);
 }
 
 // ===================================================================
@@ -24552,7 +24902,7 @@ void S_GetSubscription::InternalSwap(S_GetSubscription* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_GetSubscription::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[55]);
+      file_level_metadata_protocol_2eproto[56]);
 }
 
 // ===================================================================
@@ -24883,7 +25233,7 @@ void C_VerifyPurchase::InternalSwap(C_VerifyPurchase* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_VerifyPurchase::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[56]);
+      file_level_metadata_protocol_2eproto[57]);
 }
 
 // ===================================================================
@@ -25194,7 +25544,7 @@ void S_VerifyPurchase::InternalSwap(S_VerifyPurchase* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_VerifyPurchase::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[57]);
+      file_level_metadata_protocol_2eproto[58]);
 }
 
 // ===================================================================
@@ -25352,7 +25702,7 @@ void C_CancelSubscription::InternalSwap(C_CancelSubscription* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_CancelSubscription::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[58]);
+      file_level_metadata_protocol_2eproto[59]);
 }
 
 // ===================================================================
@@ -25617,7 +25967,7 @@ void S_CancelSubscription::InternalSwap(S_CancelSubscription* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_CancelSubscription::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[59]);
+      file_level_metadata_protocol_2eproto[60]);
 }
 
 // ===================================================================
@@ -25864,7 +26214,7 @@ void C_Withdraw::InternalSwap(C_Withdraw* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_Withdraw::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[60]);
+      file_level_metadata_protocol_2eproto[61]);
 }
 
 // ===================================================================
@@ -26094,7 +26444,7 @@ void S_Withdraw::InternalSwap(S_Withdraw* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_Withdraw::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[61]);
+      file_level_metadata_protocol_2eproto[62]);
 }
 
 // ===================================================================
@@ -26299,7 +26649,7 @@ void C_SearchUser::InternalSwap(C_SearchUser* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_SearchUser::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[62]);
+      file_level_metadata_protocol_2eproto[63]);
 }
 
 // ===================================================================
@@ -26581,7 +26931,7 @@ void S_SearchUser::InternalSwap(S_SearchUser* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_SearchUser::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[63]);
+      file_level_metadata_protocol_2eproto[64]);
 }
 
 // ===================================================================
@@ -26844,7 +27194,7 @@ void FriendRequest::InternalSwap(FriendRequest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata FriendRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[64]);
+      file_level_metadata_protocol_2eproto[65]);
 }
 
 // ===================================================================
@@ -27077,7 +27427,7 @@ void C_FriendAction::InternalSwap(C_FriendAction* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_FriendAction::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[65]);
+      file_level_metadata_protocol_2eproto[66]);
 }
 
 // ===================================================================
@@ -27355,7 +27705,7 @@ void S_FriendAction::InternalSwap(S_FriendAction* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_FriendAction::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[66]);
+      file_level_metadata_protocol_2eproto[67]);
 }
 
 // ===================================================================
@@ -27513,7 +27863,7 @@ void C_FetchFriendData::InternalSwap(C_FetchFriendData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_FetchFriendData::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[67]);
+      file_level_metadata_protocol_2eproto[68]);
 }
 
 // ===================================================================
@@ -27772,7 +28122,7 @@ void S_FetchFriendData::InternalSwap(S_FetchFriendData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_FetchFriendData::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[68]);
+      file_level_metadata_protocol_2eproto[69]);
 }
 
 // ===================================================================
@@ -28011,7 +28361,7 @@ void S_FriendPush::InternalSwap(S_FriendPush* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_FriendPush::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[69]);
+      file_level_metadata_protocol_2eproto[70]);
 }
 
 // ===================================================================
@@ -28277,7 +28627,7 @@ void GroupMemberInfo::InternalSwap(GroupMemberInfo* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata GroupMemberInfo::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[70]);
+      file_level_metadata_protocol_2eproto[71]);
 }
 
 // ===================================================================
@@ -28735,7 +29085,7 @@ void GroupInfo::InternalSwap(GroupInfo* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata GroupInfo::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[71]);
+      file_level_metadata_protocol_2eproto[72]);
 }
 
 // ===================================================================
@@ -28940,7 +29290,7 @@ void C_CreateGroup::InternalSwap(C_CreateGroup* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_CreateGroup::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[72]);
+      file_level_metadata_protocol_2eproto[73]);
 }
 
 // ===================================================================
@@ -29176,7 +29526,7 @@ void S_CreateGroup::InternalSwap(S_CreateGroup* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_CreateGroup::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[73]);
+      file_level_metadata_protocol_2eproto[74]);
 }
 
 // ===================================================================
@@ -29334,7 +29684,7 @@ void C_GroupList::InternalSwap(C_GroupList* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_GroupList::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[74]);
+      file_level_metadata_protocol_2eproto[75]);
 }
 
 // ===================================================================
@@ -29529,7 +29879,7 @@ void S_GroupList::InternalSwap(S_GroupList* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_GroupList::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[75]);
+      file_level_metadata_protocol_2eproto[76]);
 }
 
 // ===================================================================
@@ -29734,7 +30084,7 @@ void C_GroupInfo::InternalSwap(C_GroupInfo* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_GroupInfo::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[76]);
+      file_level_metadata_protocol_2eproto[77]);
 }
 
 // ===================================================================
@@ -29973,7 +30323,7 @@ void S_GroupInfo::InternalSwap(S_GroupInfo* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_GroupInfo::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[77]);
+      file_level_metadata_protocol_2eproto[78]);
 }
 
 // ===================================================================
@@ -30215,7 +30565,7 @@ void C_InviteFriend::InternalSwap(C_InviteFriend* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_InviteFriend::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[78]);
+      file_level_metadata_protocol_2eproto[79]);
 }
 
 // ===================================================================
@@ -30403,7 +30753,7 @@ void S_InviteFriend::InternalSwap(S_InviteFriend* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_InviteFriend::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[79]);
+      file_level_metadata_protocol_2eproto[80]);
 }
 
 // ===================================================================
@@ -30608,7 +30958,7 @@ void C_JoinGroup::InternalSwap(C_JoinGroup* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_JoinGroup::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[80]);
+      file_level_metadata_protocol_2eproto[81]);
 }
 
 // ===================================================================
@@ -30844,7 +31194,7 @@ void S_JoinGroup::InternalSwap(S_JoinGroup* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_JoinGroup::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[81]);
+      file_level_metadata_protocol_2eproto[82]);
 }
 
 // ===================================================================
@@ -31049,7 +31399,7 @@ void C_GroupMemberList::InternalSwap(C_GroupMemberList* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_GroupMemberList::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[82]);
+      file_level_metadata_protocol_2eproto[83]);
 }
 
 // ===================================================================
@@ -31286,7 +31636,7 @@ void S_GroupMemberList::InternalSwap(S_GroupMemberList* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_GroupMemberList::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[83]);
+      file_level_metadata_protocol_2eproto[84]);
 }
 
 // ===================================================================
@@ -31491,7 +31841,7 @@ void C_LeaveGroup::InternalSwap(C_LeaveGroup* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_LeaveGroup::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[84]);
+      file_level_metadata_protocol_2eproto[85]);
 }
 
 // ===================================================================
@@ -31679,7 +32029,7 @@ void S_LeaveGroup::InternalSwap(S_LeaveGroup* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_LeaveGroup::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[85]);
+      file_level_metadata_protocol_2eproto[86]);
 }
 
 // ===================================================================
@@ -32010,7 +32360,7 @@ void C_EditGroup::InternalSwap(C_EditGroup* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_EditGroup::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[86]);
+      file_level_metadata_protocol_2eproto[87]);
 }
 
 // ===================================================================
@@ -32246,7 +32596,7 @@ void S_EditGroup::InternalSwap(S_EditGroup* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_EditGroup::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[87]);
+      file_level_metadata_protocol_2eproto[88]);
 }
 
 // ===================================================================
@@ -32451,7 +32801,7 @@ void C_DeleteGroup::InternalSwap(C_DeleteGroup* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_DeleteGroup::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[88]);
+      file_level_metadata_protocol_2eproto[89]);
 }
 
 // ===================================================================
@@ -32639,7 +32989,7 @@ void S_DeleteGroup::InternalSwap(S_DeleteGroup* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_DeleteGroup::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[89]);
+      file_level_metadata_protocol_2eproto[90]);
 }
 
 // ===================================================================
@@ -32955,7 +33305,7 @@ void BlockedUserInfo::InternalSwap(BlockedUserInfo* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata BlockedUserInfo::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[90]);
+      file_level_metadata_protocol_2eproto[91]);
 }
 
 // ===================================================================
@@ -33160,7 +33510,7 @@ void C_BlockUser::InternalSwap(C_BlockUser* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_BlockUser::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[91]);
+      file_level_metadata_protocol_2eproto[92]);
 }
 
 // ===================================================================
@@ -33390,7 +33740,7 @@ void S_BlockUser::InternalSwap(S_BlockUser* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_BlockUser::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[92]);
+      file_level_metadata_protocol_2eproto[93]);
 }
 
 // ===================================================================
@@ -33595,7 +33945,7 @@ void C_UnblockUser::InternalSwap(C_UnblockUser* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_UnblockUser::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[93]);
+      file_level_metadata_protocol_2eproto[94]);
 }
 
 // ===================================================================
@@ -33783,7 +34133,7 @@ void S_UnblockUser::InternalSwap(S_UnblockUser* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_UnblockUser::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[94]);
+      file_level_metadata_protocol_2eproto[95]);
 }
 
 // ===================================================================
@@ -33941,7 +34291,7 @@ void C_GetBlockedList::InternalSwap(C_GetBlockedList* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_GetBlockedList::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[95]);
+      file_level_metadata_protocol_2eproto[96]);
 }
 
 // ===================================================================
@@ -34136,7 +34486,7 @@ void S_GetBlockedList::InternalSwap(S_GetBlockedList* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_GetBlockedList::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[96]);
+      file_level_metadata_protocol_2eproto[97]);
 }
 
 // ===================================================================
@@ -34425,7 +34775,7 @@ void C_ReportUser::InternalSwap(C_ReportUser* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_ReportUser::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[97]);
+      file_level_metadata_protocol_2eproto[98]);
 }
 
 // ===================================================================
@@ -34613,7 +34963,7 @@ void S_ReportUser::InternalSwap(S_ReportUser* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_ReportUser::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[98]);
+      file_level_metadata_protocol_2eproto[99]);
 }
 
 // ===================================================================
@@ -34887,7 +35237,7 @@ void C_AddReaction::InternalSwap(C_AddReaction* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_AddReaction::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[99]);
+      file_level_metadata_protocol_2eproto[100]);
 }
 
 // ===================================================================
@@ -35236,7 +35586,7 @@ void S_AddReaction::InternalSwap(S_AddReaction* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_AddReaction::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[100]);
+      file_level_metadata_protocol_2eproto[101]);
 }
 
 // ===================================================================
@@ -35601,7 +35951,7 @@ void C_CreatePoll::InternalSwap(C_CreatePoll* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_CreatePoll::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[101]);
+      file_level_metadata_protocol_2eproto[102]);
 }
 
 // ===================================================================
@@ -36138,7 +36488,7 @@ void S_CreatePoll::InternalSwap(S_CreatePoll* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_CreatePoll::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[102]);
+      file_level_metadata_protocol_2eproto[103]);
 }
 
 // ===================================================================
@@ -36451,7 +36801,7 @@ void C_Vote::InternalSwap(C_Vote* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_Vote::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[103]);
+      file_level_metadata_protocol_2eproto[104]);
 }
 
 // ===================================================================
@@ -36890,7 +37240,7 @@ void S_Vote::InternalSwap(S_Vote* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_Vote::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[104]);
+      file_level_metadata_protocol_2eproto[105]);
 }
 
 // ===================================================================
@@ -37164,7 +37514,7 @@ void C_ClosePoll::InternalSwap(C_ClosePoll* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_ClosePoll::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[105]);
+      file_level_metadata_protocol_2eproto[106]);
 }
 
 // ===================================================================
@@ -37438,7 +37788,7 @@ void S_ClosePoll::InternalSwap(S_ClosePoll* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_ClosePoll::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[106]);
+      file_level_metadata_protocol_2eproto[107]);
 }
 
 // ===================================================================
@@ -37754,7 +38104,7 @@ void C_SetAnnouncement::InternalSwap(C_SetAnnouncement* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_SetAnnouncement::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[107]);
+      file_level_metadata_protocol_2eproto[108]);
 }
 
 // ===================================================================
@@ -38112,7 +38462,7 @@ void S_SetAnnouncement::InternalSwap(S_SetAnnouncement* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_SetAnnouncement::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[108]);
+      file_level_metadata_protocol_2eproto[109]);
 }
 
 // ===================================================================
@@ -38380,7 +38730,7 @@ void S_Error::InternalSwap(S_Error* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_Error::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[109]);
+      file_level_metadata_protocol_2eproto[110]);
 }
 
 // ===================================================================
@@ -38538,7 +38888,7 @@ void C_Heartbeat::InternalSwap(C_Heartbeat* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_Heartbeat::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[110]);
+      file_level_metadata_protocol_2eproto[111]);
 }
 
 // ===================================================================
@@ -38696,7 +39046,7 @@ void S_Heartbeat::InternalSwap(S_Heartbeat* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_Heartbeat::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[111]);
+      file_level_metadata_protocol_2eproto[112]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -38809,6 +39159,9 @@ template<> PROTOBUF_NOINLINE ::Protocol::File* Arena::CreateMaybeMessage< ::Prot
 }
 template<> PROTOBUF_NOINLINE ::Protocol::SystemMsg* Arena::CreateMaybeMessage< ::Protocol::SystemMsg >(Arena* arena) {
   return Arena::CreateMessageInternal< ::Protocol::SystemMsg >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::Audio* Arena::CreateMaybeMessage< ::Protocol::Audio >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::Audio >(arena);
 }
 template<> PROTOBUF_NOINLINE ::Protocol::ChatPayload* Arena::CreateMaybeMessage< ::Protocol::ChatPayload >(Arena* arena) {
   return Arena::CreateMessageInternal< ::Protocol::ChatPayload >(arena);

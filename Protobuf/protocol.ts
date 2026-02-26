@@ -654,12 +654,19 @@ export interface SystemMsg {
   inviteGroupId: string;
 }
 
+export interface Audio {
+  url: string;
+  durationSec: number;
+  size: number;
+}
+
 export interface ChatPayload {
   text?: Text | undefined;
   image?: Image | undefined;
   video?: Video | undefined;
   file?: File | undefined;
   system?: SystemMsg | undefined;
+  audio?: Audio | undefined;
 }
 
 export interface CChat {
@@ -5954,8 +5961,97 @@ export const SystemMsg = {
   },
 };
 
+function createBaseAudio(): Audio {
+  return { url: "", durationSec: 0, size: 0 };
+}
+
+export const Audio = {
+  encode(message: Audio, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.url !== "") {
+      writer.uint32(10).string(message.url);
+    }
+    if (message.durationSec !== 0) {
+      writer.uint32(16).int32(message.durationSec);
+    }
+    if (message.size !== 0) {
+      writer.uint32(24).int64(message.size);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): Audio {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAudio();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.url = reader.string();
+          continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.durationSec = reader.int32();
+          continue;
+        case 3:
+          if (tag !== 24) {
+            break;
+          }
+
+          message.size = longToNumber(reader.int64() as Long);
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Audio {
+    return {
+      url: isSet(object.url) ? globalThis.String(object.url) : "",
+      durationSec: isSet(object.durationSec) ? globalThis.Number(object.durationSec) : 0,
+      size: isSet(object.size) ? globalThis.Number(object.size) : 0,
+    };
+  },
+
+  toJSON(message: Audio): unknown {
+    const obj: any = {};
+    if (message.url !== "") {
+      obj.url = message.url;
+    }
+    if (message.durationSec !== 0) {
+      obj.durationSec = Math.round(message.durationSec);
+    }
+    if (message.size !== 0) {
+      obj.size = Math.round(message.size);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<Audio>, I>>(base?: I): Audio {
+    return Audio.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<Audio>, I>>(object: I): Audio {
+    const message = createBaseAudio();
+    message.url = object.url ?? "";
+    message.durationSec = object.durationSec ?? 0;
+    message.size = object.size ?? 0;
+    return message;
+  },
+};
+
 function createBaseChatPayload(): ChatPayload {
-  return { text: undefined, image: undefined, video: undefined, file: undefined, system: undefined };
+  return { text: undefined, image: undefined, video: undefined, file: undefined, system: undefined, audio: undefined };
 }
 
 export const ChatPayload = {
@@ -5974,6 +6070,9 @@ export const ChatPayload = {
     }
     if (message.system !== undefined) {
       SystemMsg.encode(message.system, writer.uint32(42).fork()).ldelim();
+    }
+    if (message.audio !== undefined) {
+      Audio.encode(message.audio, writer.uint32(50).fork()).ldelim();
     }
     return writer;
   },
@@ -6020,6 +6119,13 @@ export const ChatPayload = {
 
           message.system = SystemMsg.decode(reader, reader.uint32());
           continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.audio = Audio.decode(reader, reader.uint32());
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -6036,6 +6142,7 @@ export const ChatPayload = {
       video: isSet(object.video) ? Video.fromJSON(object.video) : undefined,
       file: isSet(object.file) ? File.fromJSON(object.file) : undefined,
       system: isSet(object.system) ? SystemMsg.fromJSON(object.system) : undefined,
+      audio: isSet(object.audio) ? Audio.fromJSON(object.audio) : undefined,
     };
   },
 
@@ -6056,6 +6163,9 @@ export const ChatPayload = {
     if (message.system !== undefined) {
       obj.system = SystemMsg.toJSON(message.system);
     }
+    if (message.audio !== undefined) {
+      obj.audio = Audio.toJSON(message.audio);
+    }
     return obj;
   },
 
@@ -6071,6 +6181,7 @@ export const ChatPayload = {
     message.system = (object.system !== undefined && object.system !== null)
       ? SystemMsg.fromPartial(object.system)
       : undefined;
+    message.audio = (object.audio !== undefined && object.audio !== null) ? Audio.fromPartial(object.audio) : undefined;
     return message;
   },
 };

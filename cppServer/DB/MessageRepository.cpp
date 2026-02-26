@@ -157,6 +157,11 @@ int64 MessageRepository::SaveMessage(const string& convId, const string& senderI
             media_url = payload.file().url();
             file_name = payload.file().filename();
         }
+        else if (payload.has_audio()) {
+            msg_type = 6;
+            content = "[음성 메시지]";
+            media_url = payload.audio().url();
+        }
         else if (payload.has_system()) {
             msg_type = 4;
             content = payload.system().message();
@@ -402,6 +407,9 @@ void MessageRepository::ParseChatPacket(Protocol::S_Chat& sChat, const mysqlx::R
         break;
     case 5: // POLL — message 컬럼에 poll JSON 저장, text payload로 전달
         payload->mutable_text()->set_message(row[4].get<string>());
+        break;
+    case 6: // AUDIO
+        payload->mutable_audio()->set_url(row[5].isNull() ? "" : row[5].get<string>());
         break;
     }
 }
