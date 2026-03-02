@@ -169,7 +169,7 @@ private:
 
 	void HandleEnvelope(const Protocol::Envelope& env)
 	{
-		switch (env.body_case())
+		/*switch (env.body_case())
 		{
 		case Protocol::Envelope::kSLogin:
 			std::cout << "[Recv] S_Login: user=" << env.s_login().user_id()
@@ -194,7 +194,7 @@ private:
 		default:
 			std::cout << "[Recv] Unknown envelope body\n";
 			break;
-		}
+		}*/
 	}
 
 private:

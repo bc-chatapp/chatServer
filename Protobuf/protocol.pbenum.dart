@@ -67,6 +67,8 @@ class ErrorCode extends $pb.ProtobufEnum {
       ErrorCode._(107, _omitEnumNames ? '' : 'ERR_USER_ALREADY_EXISTS');
   static const ErrorCode ERR_EMAIL_ALREADY_EXISTS =
       ErrorCode._(108, _omitEnumNames ? '' : 'ERR_EMAIL_ALREADY_EXISTS');
+  static const ErrorCode ERR_EMAIL_NOT_VERIFIED =
+      ErrorCode._(109, _omitEnumNames ? '' : 'ERR_EMAIL_NOT_VERIFIED');
   static const ErrorCode ERR_PAYLOAD_EMPTY =
       ErrorCode._(200, _omitEnumNames ? '' : 'ERR_PAYLOAD_EMPTY');
   static const ErrorCode ERR_INVALID_CONV_ID =
@@ -123,6 +125,12 @@ class ErrorCode extends $pb.ProtobufEnum {
       ErrorCode._(701, _omitEnumNames ? '' : 'ERR_POLL_CLOSED');
   static const ErrorCode ERR_POLL_INVALID_OPTION =
       ErrorCode._(702, _omitEnumNames ? '' : 'ERR_POLL_INVALID_OPTION');
+  static const ErrorCode ERR_INVITE_EXPIRED =
+      ErrorCode._(800, _omitEnumNames ? '' : 'ERR_INVITE_EXPIRED');
+  static const ErrorCode ERR_OAUTH_VERIFICATION_FAILED =
+      ErrorCode._(120, _omitEnumNames ? '' : 'ERR_OAUTH_VERIFICATION_FAILED');
+  static const ErrorCode ERR_OAUTH_PROVIDER_INVALID =
+      ErrorCode._(121, _omitEnumNames ? '' : 'ERR_OAUTH_PROVIDER_INVALID');
 
   static const $core.List<ErrorCode> values = <ErrorCode>[
     ERR_SUCCESS,
@@ -141,6 +149,7 @@ class ErrorCode extends $pb.ProtobufEnum {
     ERR_INVALID_PASSWORD,
     ERR_USER_ALREADY_EXISTS,
     ERR_EMAIL_ALREADY_EXISTS,
+    ERR_EMAIL_NOT_VERIFIED,
     ERR_PAYLOAD_EMPTY,
     ERR_INVALID_CONV_ID,
     ERR_INVALID_RECEIVER_ID,
@@ -169,6 +178,9 @@ class ErrorCode extends $pb.ProtobufEnum {
     ERR_POLL_NOT_FOUND,
     ERR_POLL_CLOSED,
     ERR_POLL_INVALID_OPTION,
+    ERR_INVITE_EXPIRED,
+    ERR_OAUTH_VERIFICATION_FAILED,
+    ERR_OAUTH_PROVIDER_INVALID,
   ];
 
   static final $core.Map<$core.int, ErrorCode> _byValue =

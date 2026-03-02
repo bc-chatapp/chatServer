@@ -95,6 +95,15 @@ message Envelope {
     S_Vote                  s_vote                    = 106;
     S_ClosePoll             s_close_poll              = 107;
     S_SetAnnouncement       s_set_announcement        = 108;
+    C_CreateBallDrop        c_create_ball_drop        = 109;
+    S_CreateBallDrop        s_create_ball_drop        = 110;
+    C_CreatePhotoSlide      c_create_photo_slide      = 111;
+    S_CreatePhotoSlide      s_create_photo_slide      = 112;
+    C_RefreshInviteCode     c_refresh_invite_code     = 113;
+    S_RefreshInviteCode     s_refresh_invite_code     = 114;
+    C_SocialLogin           c_social_login            = 115;
+    S_SocialLogin           s_social_login            = 116;
+    C_CompleteSocialSignup  c_complete_social_signup   = 117;
 
     // GROUPS (80 ~ 99)
     C_CreateGroup           c_create_group            = 80;
@@ -140,6 +149,8 @@ message UserInfo {
     int64  storage_usage_bytes  = 10;
     int64  last_seen            = 11;
     string status               = 12;
+    bool   is_email_verified    = 13;
+    string oauth_provider       = 14;
 }
 
 message DeviceInfo {
@@ -565,6 +576,7 @@ message GroupInfo {
     int32  member_count           = 6;
     int64  storage_capacity_bytes = 7;
     int64  storage_usage_bytes    = 8;
+    int64  invite_code_expires_at = 9;
 }
 
 message C_CreateGroup    { string group_name = 1; }
@@ -584,6 +596,9 @@ message S_InviteFriend { bool success = 1; }
 
 message C_JoinGroup   { string group_code = 1; }
 message S_JoinGroup   { bool success = 1; GroupInfo group = 2; }
+
+message C_RefreshInviteCode { string group_id = 1; }
+message S_RefreshInviteCode { bool success = 1; string group_code = 2; int64 expires_at = 3; }
 
 message C_GroupMemberList { string group_id = 1; }
 message S_GroupMemberList {
@@ -726,6 +741,68 @@ message S_SetAnnouncement {
 
 
 /*-------------
+    BALL DROP (숫자 뽑기)
+---------------*/
+
+message C_CreateBallDrop {
+    string conv_id                  = 1;
+    repeated string participant_ids = 2;  // 비워두면 그룹 전체
+    repeated int32  ball_counts     = 3;  // participant_ids와 병렬 배열
+}
+
+message S_CreateBallDrop {
+    string conv_id     = 1;
+    int64  msg_seq     = 2;
+    string game_json   = 3;   // 전체 게임 데이터 JSON
+}
+
+/*-------------
+    PHOTO SLIDE (포토 슬라이드)
+---------------*/
+
+message C_CreatePhotoSlide {
+    string conv_id                  = 1;
+    repeated string image_urls      = 2;  // GCS URLs (사전 업로드)
+    repeated string thumbnail_urls  = 3;  // 썸네일 URLs
+    string message                  = 4;  // 슬라이드 메시지 (사진 위 누적 표시)
+    string font_style               = 5;  // handwriting | elegant | casual
+    string text_position            = 6;  // (deprecated) 하위호환용
+    string bg_theme                 = 7;  // dark | light | gradient
+    string ending_message           = 8;  // 마무리 메시지 (엔딩 화면)
+    int32  font_size                = 9;  // 글꼴 크기 (18~40, 기본 26)
+}
+
+message S_CreatePhotoSlide {
+    string conv_id     = 1;
+    int64  msg_seq     = 2;
+    string slide_json  = 3;   // PhotoSlideData JSON 전체
+}
+
+
+/*-------------
+    SOCIAL LOGIN (OAuth)
+---------------*/
+
+message C_SocialLogin {
+    string provider = 1;   // "google" | "apple"
+    string id_token = 2;
+}
+
+message S_SocialLogin {
+    bool   needs_registration  = 1;
+    string email               = 2;
+    string name                = 3;
+    string profile_image_url   = 4;
+}
+
+message C_CompleteSocialSignup {
+    string provider = 1;
+    string id_token = 2;
+    string user_id  = 3;
+    string name     = 4;
+}
+
+/*-------------
     SYSTEM
 ---------------*/
 
@@ -748,6 +825,7 @@ enum ErrorCode {
     ERR_INVALID_PASSWORD = 106;
     ERR_USER_ALREADY_EXISTS = 107;
     ERR_EMAIL_ALREADY_EXISTS = 108;
+    ERR_EMAIL_NOT_VERIFIED = 109;
 
     ERR_PAYLOAD_EMPTY = 200;
     ERR_INVALID_CONV_ID = 201;
@@ -782,6 +860,11 @@ enum ErrorCode {
     ERR_POLL_NOT_FOUND = 700;
     ERR_POLL_CLOSED = 701;
     ERR_POLL_INVALID_OPTION = 702;
+
+    ERR_INVITE_EXPIRED = 800;
+
+    ERR_OAUTH_VERIFICATION_FAILED = 120;
+    ERR_OAUTH_PROVIDER_INVALID    = 121;
 }
 
 message S_Error {

@@ -42,10 +42,12 @@ constexpr UserInfo::UserInfo(
   , email_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
   , phone_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
   , status_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , oauth_provider_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
   , storage_capacity_bytes_(int64_t{0})
   , storage_usage_bytes_(int64_t{0})
-  , last_seen_(int64_t{0})
-  , sub_grade_(0u){}
+  , sub_grade_(0u)
+  , is_email_verified_(false)
+  , last_seen_(int64_t{0}){}
 struct UserInfoDefaultTypeInternal {
   constexpr UserInfoDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -1041,6 +1043,7 @@ constexpr GroupInfo::GroupInfo(
   , group_image_url_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
   , storage_capacity_bytes_(int64_t{0})
   , storage_usage_bytes_(int64_t{0})
+  , invite_code_expires_at_(int64_t{0})
   , member_count_(0){}
 struct GroupInfoDefaultTypeInternal {
   constexpr GroupInfoDefaultTypeInternal()
@@ -1175,6 +1178,32 @@ struct S_JoinGroupDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT S_JoinGroupDefaultTypeInternal _S_JoinGroup_default_instance_;
+constexpr C_RefreshInviteCode::C_RefreshInviteCode(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : group_id_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
+struct C_RefreshInviteCodeDefaultTypeInternal {
+  constexpr C_RefreshInviteCodeDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~C_RefreshInviteCodeDefaultTypeInternal() {}
+  union {
+    C_RefreshInviteCode _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT C_RefreshInviteCodeDefaultTypeInternal _C_RefreshInviteCode_default_instance_;
+constexpr S_RefreshInviteCode::S_RefreshInviteCode(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : group_code_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , expires_at_(int64_t{0})
+  , success_(false){}
+struct S_RefreshInviteCodeDefaultTypeInternal {
+  constexpr S_RefreshInviteCodeDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~S_RefreshInviteCodeDefaultTypeInternal() {}
+  union {
+    S_RefreshInviteCode _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT S_RefreshInviteCodeDefaultTypeInternal _S_RefreshInviteCode_default_instance_;
 constexpr C_GroupMemberList::C_GroupMemberList(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : group_id_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
@@ -1552,6 +1581,112 @@ struct S_SetAnnouncementDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT S_SetAnnouncementDefaultTypeInternal _S_SetAnnouncement_default_instance_;
+constexpr C_CreateBallDrop::C_CreateBallDrop(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : participant_ids_()
+  , ball_counts_()
+  , _ball_counts_cached_byte_size_()
+  , conv_id_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
+struct C_CreateBallDropDefaultTypeInternal {
+  constexpr C_CreateBallDropDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~C_CreateBallDropDefaultTypeInternal() {}
+  union {
+    C_CreateBallDrop _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT C_CreateBallDropDefaultTypeInternal _C_CreateBallDrop_default_instance_;
+constexpr S_CreateBallDrop::S_CreateBallDrop(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : conv_id_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , game_json_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , msg_seq_(int64_t{0}){}
+struct S_CreateBallDropDefaultTypeInternal {
+  constexpr S_CreateBallDropDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~S_CreateBallDropDefaultTypeInternal() {}
+  union {
+    S_CreateBallDrop _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT S_CreateBallDropDefaultTypeInternal _S_CreateBallDrop_default_instance_;
+constexpr C_CreatePhotoSlide::C_CreatePhotoSlide(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : image_urls_()
+  , thumbnail_urls_()
+  , conv_id_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , message_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , font_style_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , text_position_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , bg_theme_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , ending_message_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , font_size_(0){}
+struct C_CreatePhotoSlideDefaultTypeInternal {
+  constexpr C_CreatePhotoSlideDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~C_CreatePhotoSlideDefaultTypeInternal() {}
+  union {
+    C_CreatePhotoSlide _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT C_CreatePhotoSlideDefaultTypeInternal _C_CreatePhotoSlide_default_instance_;
+constexpr S_CreatePhotoSlide::S_CreatePhotoSlide(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : conv_id_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , slide_json_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , msg_seq_(int64_t{0}){}
+struct S_CreatePhotoSlideDefaultTypeInternal {
+  constexpr S_CreatePhotoSlideDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~S_CreatePhotoSlideDefaultTypeInternal() {}
+  union {
+    S_CreatePhotoSlide _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT S_CreatePhotoSlideDefaultTypeInternal _S_CreatePhotoSlide_default_instance_;
+constexpr C_SocialLogin::C_SocialLogin(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : provider_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , id_token_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
+struct C_SocialLoginDefaultTypeInternal {
+  constexpr C_SocialLoginDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~C_SocialLoginDefaultTypeInternal() {}
+  union {
+    C_SocialLogin _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT C_SocialLoginDefaultTypeInternal _C_SocialLogin_default_instance_;
+constexpr S_SocialLogin::S_SocialLogin(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : email_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , name_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , profile_image_url_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , needs_registration_(false){}
+struct S_SocialLoginDefaultTypeInternal {
+  constexpr S_SocialLoginDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~S_SocialLoginDefaultTypeInternal() {}
+  union {
+    S_SocialLogin _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT S_SocialLoginDefaultTypeInternal _S_SocialLogin_default_instance_;
+constexpr C_CompleteSocialSignup::C_CompleteSocialSignup(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : provider_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , id_token_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , user_id_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , name_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
+struct C_CompleteSocialSignupDefaultTypeInternal {
+  constexpr C_CompleteSocialSignupDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~C_CompleteSocialSignupDefaultTypeInternal() {}
+  union {
+    C_CompleteSocialSignup _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT C_CompleteSocialSignupDefaultTypeInternal _C_CompleteSocialSignup_default_instance_;
 constexpr S_Error::S_Error(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : message_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
@@ -1590,7 +1725,7 @@ struct S_HeartbeatDefaultTypeInternal {
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT S_HeartbeatDefaultTypeInternal _S_Heartbeat_default_instance_;
 }  // namespace Protocol
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_protocol_2eproto[113];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_protocol_2eproto[122];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_protocol_2eproto[5];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_protocol_2eproto = nullptr;
 
@@ -1603,6 +1738,15 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_protocol_2eproto::offsets[] PR
   PROTOBUF_FIELD_OFFSET(::Protocol::Envelope, version_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Envelope, request_id_),
   PROTOBUF_FIELD_OFFSET(::Protocol::Envelope, auth_token_),
+  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
+  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
+  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
+  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
+  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
+  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
+  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
+  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
+  ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
   ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
   ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
   ::PROTOBUF_NAMESPACE_ID::internal::kInvalidFieldOffsetTag,
@@ -1718,6 +1862,8 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_protocol_2eproto::offsets[] PR
   PROTOBUF_FIELD_OFFSET(::Protocol::UserInfo, storage_usage_bytes_),
   PROTOBUF_FIELD_OFFSET(::Protocol::UserInfo, last_seen_),
   PROTOBUF_FIELD_OFFSET(::Protocol::UserInfo, status_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::UserInfo, is_email_verified_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::UserInfo, oauth_provider_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::DeviceInfo, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -2290,6 +2436,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_protocol_2eproto::offsets[] PR
   PROTOBUF_FIELD_OFFSET(::Protocol::GroupInfo, member_count_),
   PROTOBUF_FIELD_OFFSET(::Protocol::GroupInfo, storage_capacity_bytes_),
   PROTOBUF_FIELD_OFFSET(::Protocol::GroupInfo, storage_usage_bytes_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::GroupInfo, invite_code_expires_at_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::C_CreateGroup, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -2353,6 +2500,20 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_protocol_2eproto::offsets[] PR
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::Protocol::S_JoinGroup, success_),
   PROTOBUF_FIELD_OFFSET(::Protocol::S_JoinGroup, group_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_RefreshInviteCode, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_RefreshInviteCode, group_id_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_RefreshInviteCode, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_RefreshInviteCode, success_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_RefreshInviteCode, group_code_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_RefreshInviteCode, expires_at_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::C_GroupMemberList, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -2567,6 +2728,69 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_protocol_2eproto::offsets[] PR
   PROTOBUF_FIELD_OFFSET(::Protocol::S_SetAnnouncement, sender_name_),
   PROTOBUF_FIELD_OFFSET(::Protocol::S_SetAnnouncement, setter_id_),
   ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_CreateBallDrop, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_CreateBallDrop, conv_id_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_CreateBallDrop, participant_ids_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_CreateBallDrop, ball_counts_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_CreateBallDrop, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_CreateBallDrop, conv_id_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_CreateBallDrop, msg_seq_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_CreateBallDrop, game_json_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_CreatePhotoSlide, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_CreatePhotoSlide, conv_id_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_CreatePhotoSlide, image_urls_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_CreatePhotoSlide, thumbnail_urls_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_CreatePhotoSlide, message_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_CreatePhotoSlide, font_style_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_CreatePhotoSlide, text_position_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_CreatePhotoSlide, bg_theme_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_CreatePhotoSlide, ending_message_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_CreatePhotoSlide, font_size_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_CreatePhotoSlide, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_CreatePhotoSlide, conv_id_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_CreatePhotoSlide, msg_seq_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_CreatePhotoSlide, slide_json_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_SocialLogin, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_SocialLogin, provider_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_SocialLogin, id_token_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_SocialLogin, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_SocialLogin, needs_registration_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_SocialLogin, email_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_SocialLogin, name_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S_SocialLogin, profile_image_url_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_CompleteSocialSignup, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_CompleteSocialSignup, provider_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_CompleteSocialSignup, id_token_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_CompleteSocialSignup, user_id_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_CompleteSocialSignup, name_),
+  ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::S_Error, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -2587,118 +2811,127 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_protocol_2eproto::offsets[] PR
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::Protocol::Envelope)},
-  { 106, -1, sizeof(::Protocol::UserInfo)},
-  { 123, -1, sizeof(::Protocol::DeviceInfo)},
-  { 135, -1, sizeof(::Protocol::C_CheckId)},
-  { 141, -1, sizeof(::Protocol::S_CheckId)},
-  { 147, -1, sizeof(::Protocol::C_CheckEmail)},
-  { 153, -1, sizeof(::Protocol::S_CheckEmail)},
-  { 159, -1, sizeof(::Protocol::C_RequestEmailVerify)},
-  { 165, -1, sizeof(::Protocol::S_RequestEmailVerify)},
-  { 172, -1, sizeof(::Protocol::C_ConfirmEmailVerify)},
-  { 179, -1, sizeof(::Protocol::S_ConfirmEmailVerify)},
-  { 185, -1, sizeof(::Protocol::C_SignUp)},
-  { 194, -1, sizeof(::Protocol::S_SignUp)},
-  { 202, -1, sizeof(::Protocol::C_Login)},
-  { 209, -1, sizeof(::Protocol::S_Login)},
-  { 217, -1, sizeof(::Protocol::C_Logout)},
-  { 224, -1, sizeof(::Protocol::S_Logout)},
-  { 230, -1, sizeof(::Protocol::C_GetMyDevices)},
-  { 235, -1, sizeof(::Protocol::S_GetMyDevices)},
-  { 241, -1, sizeof(::Protocol::C_RemoveDevice)},
-  { 247, -1, sizeof(::Protocol::S_RemoveDevice)},
-  { 254, -1, sizeof(::Protocol::C_FetchMyInfo)},
-  { 259, -1, sizeof(::Protocol::S_FetchMyInfo)},
-  { 265, -1, sizeof(::Protocol::C_EditMyInfo)},
-  { 275, -1, sizeof(::Protocol::S_EditMyInfo)},
-  { 283, -1, sizeof(::Protocol::C_RegisterFcmToken)},
-  { 293, -1, sizeof(::Protocol::S_RegisterFcmToken)},
-  { 300, -1, sizeof(::Protocol::C_ChangeEmail)},
-  { 306, -1, sizeof(::Protocol::S_ChangeEmail)},
-  { 314, -1, sizeof(::Protocol::C_ChangePassword)},
-  { 321, -1, sizeof(::Protocol::S_ChangePassword)},
-  { 328, -1, sizeof(::Protocol::Text)},
-  { 334, -1, sizeof(::Protocol::Image)},
-  { 342, -1, sizeof(::Protocol::Video)},
-  { 351, -1, sizeof(::Protocol::File)},
-  { 360, -1, sizeof(::Protocol::SystemMsg)},
-  { 368, -1, sizeof(::Protocol::Audio)},
-  { 376, -1, sizeof(::Protocol::ChatPayload)},
-  { 388, -1, sizeof(::Protocol::C_Chat)},
-  { 400, -1, sizeof(::Protocol::S_Chat)},
-  { 421, -1, sizeof(::Protocol::C_ReadReceipt)},
-  { 428, -1, sizeof(::Protocol::S_ReadReceipt)},
-  { 436, -1, sizeof(::Protocol::C_DeleteMessage)},
-  { 443, -1, sizeof(::Protocol::S_DeleteMessage)},
-  { 451, -1, sizeof(::Protocol::C_EditMessage)},
-  { 459, -1, sizeof(::Protocol::S_EditMessage)},
-  { 469, -1, sizeof(::Protocol::C_ReqHistory)},
-  { 477, -1, sizeof(::Protocol::S_ReqHistory)},
-  { 485, -1, sizeof(::Protocol::C_UploadFile)},
-  { 496, -1, sizeof(::Protocol::S_UploadFile)},
-  { 511, -1, sizeof(::Protocol::C_Ack)},
-  { 518, -1, sizeof(::Protocol::C_FetchOffline)},
-  { 524, -1, sizeof(::Protocol::S_MessageBatch_ConversationBatch)},
-  { 533, -1, sizeof(::Protocol::S_MessageBatch)},
-  { 539, -1, sizeof(::Protocol::C_GetSubscription)},
-  { 544, -1, sizeof(::Protocol::SubscriptionPlan)},
-  { 557, -1, sizeof(::Protocol::S_GetSubscription)},
-  { 570, -1, sizeof(::Protocol::C_VerifyPurchase)},
-  { 579, -1, sizeof(::Protocol::S_VerifyPurchase)},
-  { 589, -1, sizeof(::Protocol::C_CancelSubscription)},
-  { 594, -1, sizeof(::Protocol::S_CancelSubscription)},
-  { 602, -1, sizeof(::Protocol::C_Withdraw)},
-  { 609, -1, sizeof(::Protocol::S_Withdraw)},
-  { 616, -1, sizeof(::Protocol::C_SearchUser)},
-  { 622, -1, sizeof(::Protocol::S_SearchUser)},
-  { 631, -1, sizeof(::Protocol::FriendRequest)},
-  { 639, -1, sizeof(::Protocol::C_FriendAction)},
-  { 646, -1, sizeof(::Protocol::S_FriendAction)},
-  { 654, -1, sizeof(::Protocol::C_FetchFriendData)},
-  { 659, -1, sizeof(::Protocol::S_FetchFriendData)},
-  { 667, -1, sizeof(::Protocol::S_FriendPush)},
-  { 674, -1, sizeof(::Protocol::GroupMemberInfo)},
-  { 682, -1, sizeof(::Protocol::GroupInfo)},
-  { 695, -1, sizeof(::Protocol::C_CreateGroup)},
-  { 701, -1, sizeof(::Protocol::S_CreateGroup)},
-  { 708, -1, sizeof(::Protocol::C_GroupList)},
-  { 713, -1, sizeof(::Protocol::S_GroupList)},
-  { 719, -1, sizeof(::Protocol::C_GroupInfo)},
-  { 725, -1, sizeof(::Protocol::S_GroupInfo)},
-  { 732, -1, sizeof(::Protocol::C_InviteFriend)},
-  { 739, -1, sizeof(::Protocol::S_InviteFriend)},
-  { 745, -1, sizeof(::Protocol::C_JoinGroup)},
-  { 751, -1, sizeof(::Protocol::S_JoinGroup)},
-  { 758, -1, sizeof(::Protocol::C_GroupMemberList)},
-  { 764, -1, sizeof(::Protocol::S_GroupMemberList)},
-  { 771, -1, sizeof(::Protocol::C_LeaveGroup)},
-  { 777, -1, sizeof(::Protocol::S_LeaveGroup)},
-  { 783, -1, sizeof(::Protocol::C_EditGroup)},
-  { 792, -1, sizeof(::Protocol::S_EditGroup)},
-  { 799, -1, sizeof(::Protocol::C_DeleteGroup)},
-  { 805, -1, sizeof(::Protocol::S_DeleteGroup)},
-  { 811, -1, sizeof(::Protocol::BlockedUserInfo)},
-  { 820, -1, sizeof(::Protocol::C_BlockUser)},
-  { 826, -1, sizeof(::Protocol::S_BlockUser)},
-  { 833, -1, sizeof(::Protocol::C_UnblockUser)},
-  { 839, -1, sizeof(::Protocol::S_UnblockUser)},
-  { 845, -1, sizeof(::Protocol::C_GetBlockedList)},
-  { 850, -1, sizeof(::Protocol::S_GetBlockedList)},
-  { 856, -1, sizeof(::Protocol::C_ReportUser)},
-  { 864, -1, sizeof(::Protocol::S_ReportUser)},
-  { 870, -1, sizeof(::Protocol::C_AddReaction)},
-  { 878, -1, sizeof(::Protocol::S_AddReaction)},
-  { 888, -1, sizeof(::Protocol::C_CreatePoll)},
-  { 899, -1, sizeof(::Protocol::S_CreatePoll)},
-  { 915, -1, sizeof(::Protocol::C_Vote)},
-  { 924, -1, sizeof(::Protocol::S_Vote)},
-  { 936, -1, sizeof(::Protocol::C_ClosePoll)},
-  { 944, -1, sizeof(::Protocol::S_ClosePoll)},
-  { 952, -1, sizeof(::Protocol::C_SetAnnouncement)},
-  { 961, -1, sizeof(::Protocol::S_SetAnnouncement)},
-  { 971, -1, sizeof(::Protocol::S_Error)},
-  { 979, -1, sizeof(::Protocol::C_Heartbeat)},
-  { 984, -1, sizeof(::Protocol::S_Heartbeat)},
+  { 115, -1, sizeof(::Protocol::UserInfo)},
+  { 134, -1, sizeof(::Protocol::DeviceInfo)},
+  { 146, -1, sizeof(::Protocol::C_CheckId)},
+  { 152, -1, sizeof(::Protocol::S_CheckId)},
+  { 158, -1, sizeof(::Protocol::C_CheckEmail)},
+  { 164, -1, sizeof(::Protocol::S_CheckEmail)},
+  { 170, -1, sizeof(::Protocol::C_RequestEmailVerify)},
+  { 176, -1, sizeof(::Protocol::S_RequestEmailVerify)},
+  { 183, -1, sizeof(::Protocol::C_ConfirmEmailVerify)},
+  { 190, -1, sizeof(::Protocol::S_ConfirmEmailVerify)},
+  { 196, -1, sizeof(::Protocol::C_SignUp)},
+  { 205, -1, sizeof(::Protocol::S_SignUp)},
+  { 213, -1, sizeof(::Protocol::C_Login)},
+  { 220, -1, sizeof(::Protocol::S_Login)},
+  { 228, -1, sizeof(::Protocol::C_Logout)},
+  { 235, -1, sizeof(::Protocol::S_Logout)},
+  { 241, -1, sizeof(::Protocol::C_GetMyDevices)},
+  { 246, -1, sizeof(::Protocol::S_GetMyDevices)},
+  { 252, -1, sizeof(::Protocol::C_RemoveDevice)},
+  { 258, -1, sizeof(::Protocol::S_RemoveDevice)},
+  { 265, -1, sizeof(::Protocol::C_FetchMyInfo)},
+  { 270, -1, sizeof(::Protocol::S_FetchMyInfo)},
+  { 276, -1, sizeof(::Protocol::C_EditMyInfo)},
+  { 286, -1, sizeof(::Protocol::S_EditMyInfo)},
+  { 294, -1, sizeof(::Protocol::C_RegisterFcmToken)},
+  { 304, -1, sizeof(::Protocol::S_RegisterFcmToken)},
+  { 311, -1, sizeof(::Protocol::C_ChangeEmail)},
+  { 317, -1, sizeof(::Protocol::S_ChangeEmail)},
+  { 325, -1, sizeof(::Protocol::C_ChangePassword)},
+  { 332, -1, sizeof(::Protocol::S_ChangePassword)},
+  { 339, -1, sizeof(::Protocol::Text)},
+  { 345, -1, sizeof(::Protocol::Image)},
+  { 353, -1, sizeof(::Protocol::Video)},
+  { 362, -1, sizeof(::Protocol::File)},
+  { 371, -1, sizeof(::Protocol::SystemMsg)},
+  { 379, -1, sizeof(::Protocol::Audio)},
+  { 387, -1, sizeof(::Protocol::ChatPayload)},
+  { 399, -1, sizeof(::Protocol::C_Chat)},
+  { 411, -1, sizeof(::Protocol::S_Chat)},
+  { 432, -1, sizeof(::Protocol::C_ReadReceipt)},
+  { 439, -1, sizeof(::Protocol::S_ReadReceipt)},
+  { 447, -1, sizeof(::Protocol::C_DeleteMessage)},
+  { 454, -1, sizeof(::Protocol::S_DeleteMessage)},
+  { 462, -1, sizeof(::Protocol::C_EditMessage)},
+  { 470, -1, sizeof(::Protocol::S_EditMessage)},
+  { 480, -1, sizeof(::Protocol::C_ReqHistory)},
+  { 488, -1, sizeof(::Protocol::S_ReqHistory)},
+  { 496, -1, sizeof(::Protocol::C_UploadFile)},
+  { 507, -1, sizeof(::Protocol::S_UploadFile)},
+  { 522, -1, sizeof(::Protocol::C_Ack)},
+  { 529, -1, sizeof(::Protocol::C_FetchOffline)},
+  { 535, -1, sizeof(::Protocol::S_MessageBatch_ConversationBatch)},
+  { 544, -1, sizeof(::Protocol::S_MessageBatch)},
+  { 550, -1, sizeof(::Protocol::C_GetSubscription)},
+  { 555, -1, sizeof(::Protocol::SubscriptionPlan)},
+  { 568, -1, sizeof(::Protocol::S_GetSubscription)},
+  { 581, -1, sizeof(::Protocol::C_VerifyPurchase)},
+  { 590, -1, sizeof(::Protocol::S_VerifyPurchase)},
+  { 600, -1, sizeof(::Protocol::C_CancelSubscription)},
+  { 605, -1, sizeof(::Protocol::S_CancelSubscription)},
+  { 613, -1, sizeof(::Protocol::C_Withdraw)},
+  { 620, -1, sizeof(::Protocol::S_Withdraw)},
+  { 627, -1, sizeof(::Protocol::C_SearchUser)},
+  { 633, -1, sizeof(::Protocol::S_SearchUser)},
+  { 642, -1, sizeof(::Protocol::FriendRequest)},
+  { 650, -1, sizeof(::Protocol::C_FriendAction)},
+  { 657, -1, sizeof(::Protocol::S_FriendAction)},
+  { 665, -1, sizeof(::Protocol::C_FetchFriendData)},
+  { 670, -1, sizeof(::Protocol::S_FetchFriendData)},
+  { 678, -1, sizeof(::Protocol::S_FriendPush)},
+  { 685, -1, sizeof(::Protocol::GroupMemberInfo)},
+  { 693, -1, sizeof(::Protocol::GroupInfo)},
+  { 707, -1, sizeof(::Protocol::C_CreateGroup)},
+  { 713, -1, sizeof(::Protocol::S_CreateGroup)},
+  { 720, -1, sizeof(::Protocol::C_GroupList)},
+  { 725, -1, sizeof(::Protocol::S_GroupList)},
+  { 731, -1, sizeof(::Protocol::C_GroupInfo)},
+  { 737, -1, sizeof(::Protocol::S_GroupInfo)},
+  { 744, -1, sizeof(::Protocol::C_InviteFriend)},
+  { 751, -1, sizeof(::Protocol::S_InviteFriend)},
+  { 757, -1, sizeof(::Protocol::C_JoinGroup)},
+  { 763, -1, sizeof(::Protocol::S_JoinGroup)},
+  { 770, -1, sizeof(::Protocol::C_RefreshInviteCode)},
+  { 776, -1, sizeof(::Protocol::S_RefreshInviteCode)},
+  { 784, -1, sizeof(::Protocol::C_GroupMemberList)},
+  { 790, -1, sizeof(::Protocol::S_GroupMemberList)},
+  { 797, -1, sizeof(::Protocol::C_LeaveGroup)},
+  { 803, -1, sizeof(::Protocol::S_LeaveGroup)},
+  { 809, -1, sizeof(::Protocol::C_EditGroup)},
+  { 818, -1, sizeof(::Protocol::S_EditGroup)},
+  { 825, -1, sizeof(::Protocol::C_DeleteGroup)},
+  { 831, -1, sizeof(::Protocol::S_DeleteGroup)},
+  { 837, -1, sizeof(::Protocol::BlockedUserInfo)},
+  { 846, -1, sizeof(::Protocol::C_BlockUser)},
+  { 852, -1, sizeof(::Protocol::S_BlockUser)},
+  { 859, -1, sizeof(::Protocol::C_UnblockUser)},
+  { 865, -1, sizeof(::Protocol::S_UnblockUser)},
+  { 871, -1, sizeof(::Protocol::C_GetBlockedList)},
+  { 876, -1, sizeof(::Protocol::S_GetBlockedList)},
+  { 882, -1, sizeof(::Protocol::C_ReportUser)},
+  { 890, -1, sizeof(::Protocol::S_ReportUser)},
+  { 896, -1, sizeof(::Protocol::C_AddReaction)},
+  { 904, -1, sizeof(::Protocol::S_AddReaction)},
+  { 914, -1, sizeof(::Protocol::C_CreatePoll)},
+  { 925, -1, sizeof(::Protocol::S_CreatePoll)},
+  { 941, -1, sizeof(::Protocol::C_Vote)},
+  { 950, -1, sizeof(::Protocol::S_Vote)},
+  { 962, -1, sizeof(::Protocol::C_ClosePoll)},
+  { 970, -1, sizeof(::Protocol::S_ClosePoll)},
+  { 978, -1, sizeof(::Protocol::C_SetAnnouncement)},
+  { 987, -1, sizeof(::Protocol::S_SetAnnouncement)},
+  { 997, -1, sizeof(::Protocol::C_CreateBallDrop)},
+  { 1005, -1, sizeof(::Protocol::S_CreateBallDrop)},
+  { 1013, -1, sizeof(::Protocol::C_CreatePhotoSlide)},
+  { 1027, -1, sizeof(::Protocol::S_CreatePhotoSlide)},
+  { 1035, -1, sizeof(::Protocol::C_SocialLogin)},
+  { 1042, -1, sizeof(::Protocol::S_SocialLogin)},
+  { 1051, -1, sizeof(::Protocol::C_CompleteSocialSignup)},
+  { 1060, -1, sizeof(::Protocol::S_Error)},
+  { 1068, -1, sizeof(::Protocol::C_Heartbeat)},
+  { 1073, -1, sizeof(::Protocol::S_Heartbeat)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -2785,6 +3018,8 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S_InviteFriend_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_C_JoinGroup_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S_JoinGroup_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_C_RefreshInviteCode_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S_RefreshInviteCode_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_C_GroupMemberList_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S_GroupMemberList_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_C_LeaveGroup_default_instance_),
@@ -2812,13 +3047,20 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S_ClosePoll_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_C_SetAnnouncement_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S_SetAnnouncement_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_C_CreateBallDrop_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S_CreateBallDrop_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_C_CreatePhotoSlide_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S_CreatePhotoSlide_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_C_SocialLogin_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S_SocialLogin_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_C_CompleteSocialSignup_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S_Error_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_C_Heartbeat_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Protocol::_S_Heartbeat_default_instance_),
 };
 
 const char descriptor_table_protodef_protocol_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\016protocol.proto\022\010Protocol\"\371&\n\010Envelope\022"
+  "\n\016protocol.proto\022\010Protocol\"\225+\n\010Envelope\022"
   "\017\n\007version\030\001 \001(\r\022\022\n\nrequest_id\030\002 \001(\r\022\022\n\n"
   "auth_token\030\003 \001(\t\022)\n\nc_check_id\030\n \001(\0132\023.P"
   "rotocol.C_CheckIdH\000\022)\n\ns_check_id\030\013 \001(\0132"
@@ -2915,299 +3157,338 @@ const char descriptor_table_protodef_protocol_2eproto[] PROTOBUF_SECTION_VARIABL
   "otocol.S_VoteH\000\022-\n\014s_close_poll\030k \001(\0132\025."
   "Protocol.S_ClosePollH\000\0229\n\022s_set_announce"
   "ment\030l \001(\0132\033.Protocol.S_SetAnnouncementH"
-  "\000\0221\n\016c_create_group\030P \001(\0132\027.Protocol.C_C"
-  "reateGroupH\000\0221\n\016s_create_group\030Q \001(\0132\027.P"
-  "rotocol.S_CreateGroupH\000\022-\n\014c_group_list\030"
-  "R \001(\0132\025.Protocol.C_GroupListH\000\022-\n\014s_grou"
-  "p_list\030S \001(\0132\025.Protocol.S_GroupListH\000\022-\n"
-  "\014c_join_group\030T \001(\0132\025.Protocol.C_JoinGro"
-  "upH\000\022-\n\014s_join_group\030U \001(\0132\025.Protocol.S_"
-  "JoinGroupH\000\0223\n\017c_invite_friend\030V \001(\0132\030.P"
-  "rotocol.C_InviteFriendH\000\0223\n\017s_invite_fri"
-  "end\030W \001(\0132\030.Protocol.S_InviteFriendH\000\022/\n"
-  "\rc_leave_group\030X \001(\0132\026.Protocol.C_LeaveG"
-  "roupH\000\022/\n\rs_leave_group\030Y \001(\0132\026.Protocol"
-  ".S_LeaveGroupH\000\022:\n\023c_group_member_list\030Z"
-  " \001(\0132\033.Protocol.C_GroupMemberListH\000\022:\n\023s"
-  "_group_member_list\030[ \001(\0132\033.Protocol.S_Gr"
-  "oupMemberListH\000\022-\n\014c_group_info\030\\ \001(\0132\025."
-  "Protocol.C_GroupInfoH\000\022-\n\014s_group_info\030]"
-  " \001(\0132\025.Protocol.S_GroupInfoH\000\022-\n\014c_edit_"
-  "group\030^ \001(\0132\025.Protocol.C_EditGroupH\000\022-\n\014"
-  "s_edit_group\030_ \001(\0132\025.Protocol.S_EditGrou"
-  "pH\000\022*\n\nc_withdraw\030` \001(\0132\024.Protocol.C_Wit"
-  "hdrawH\000\022*\n\ns_withdraw\030a \001(\0132\024.Protocol.S"
-  "_WithdrawH\000\0221\n\016c_delete_group\030b \001(\0132\027.Pr"
-  "otocol.C_DeleteGroupH\000\0221\n\016s_delete_group"
-  "\030c \001(\0132\027.Protocol.S_DeleteGroupH\000\022$\n\007s_e"
-  "rror\030d \001(\0132\021.Protocol.S_ErrorH\000\022,\n\013c_hea"
-  "rtbeat\030e \001(\0132\025.Protocol.C_HeartbeatH\000\022,\n"
-  "\013s_heartbeat\030f \001(\0132\025.Protocol.S_Heartbea"
-  "tH\000B\t\n\007payload\"\213\002\n\010UserInfo\022\017\n\007user_id\030\001"
-  " \001(\t\022\014\n\004name\030\002 \001(\t\022\026\n\016status_message\030\003 \001"
-  "(\t\022\031\n\021profile_image_url\030\004 \001(\t\022\034\n\024backgro"
-  "und_image_url\030\005 \001(\t\022\r\n\005email\030\006 \001(\t\022\r\n\005ph"
-  "one\030\007 \001(\t\022\021\n\tsub_grade\030\010 \001(\r\022\036\n\026storage_"
-  "capacity_bytes\030\t \001(\003\022\033\n\023storage_usage_by"
-  "tes\030\n \001(\003\022\021\n\tlast_seen\030\013 \001(\003\022\016\n\006status\030\014"
-  " \001(\t\"\233\001\n\nDeviceInfo\022\021\n\tdevice_id\030\001 \001(\t\022\023"
-  "\n\013device_name\030\002 \001(\t\022\020\n\010platform\030\003 \001(\t\022\023\n"
-  "\013last_active\030\004 \001(\003\022\025\n\rregistered_at\030\005 \001("
-  "\003\022\023\n\013app_version\030\006 \001(\t\022\022\n\nis_current\030\007 \001"
-  "(\010\"\034\n\tC_CheckId\022\017\n\007user_id\030\001 \001(\t\"!\n\tS_Ch"
-  "eckId\022\024\n\014is_available\030\001 \001(\010\"\035\n\014C_CheckEm"
-  "ail\022\r\n\005email\030\001 \001(\t\"$\n\014S_CheckEmail\022\024\n\014is"
-  "_available\030\001 \001(\010\"%\n\024C_RequestEmailVerify"
-  "\022\r\n\005email\030\001 \001(\t\"8\n\024S_RequestEmailVerify\022"
-  "\017\n\007success\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\"3\n\024C_C"
-  "onfirmEmailVerify\022\r\n\005email\030\001 \001(\t\022\014\n\004code"
-  "\030\002 \001(\t\"\'\n\024S_ConfirmEmailVerify\022\017\n\007succes"
-  "s\030\001 \001(\010\"J\n\010C_SignUp\022\017\n\007user_id\030\001 \001(\t\022\020\n\010"
-  "password\030\002 \001(\t\022\014\n\004name\030\003 \001(\t\022\r\n\005email\030\004 "
-  "\001(\t\"=\n\010S_SignUp\022\017\n\007success\030\001 \001(\010\022\017\n\007mess"
-  "age\030\002 \001(\t\022\017\n\007user_id\030\003 \001(\t\",\n\007C_Login\022\017\n"
-  "\007user_id\030\001 \001(\t\022\020\n\010password\030\002 \001(\t\"S\n\007S_Lo"
-  "gin\022\017\n\007success\030\001 \001(\010\022\022\n\nauth_token\030\002 \001(\t"
-  "\022#\n\007my_info\030\003 \001(\0132\022.Protocol.UserInfo\"0\n"
-  "\010C_Logout\022\021\n\tfcm_token\030\001 \001(\t\022\021\n\tdevice_i"
-  "d\030\002 \001(\t\"\033\n\010S_Logout\022\017\n\007success\030\001 \001(\010\"\020\n\016"
-  "C_GetMyDevices\"7\n\016S_GetMyDevices\022%\n\007devi"
-  "ces\030\001 \003(\0132\024.Protocol.DeviceInfo\"#\n\016C_Rem"
-  "oveDevice\022\021\n\tdevice_id\030\001 \001(\t\"2\n\016S_Remove"
-  "Device\022\017\n\007success\030\001 \001(\010\022\017\n\007message\030\002 \001(\t"
-  "\"\017\n\rC_FetchMyInfo\"4\n\rS_FetchMyInfo\022#\n\007my"
-  "_info\030\001 \001(\0132\022.Protocol.UserInfo\"|\n\014C_Edi"
-  "tMyInfo\022\014\n\004name\030\001 \001(\t\022\026\n\016status_message\030"
-  "\002 \001(\t\022\031\n\021profile_image_url\030\003 \001(\t\022\034\n\024back"
-  "ground_image_url\030\004 \001(\t\022\r\n\005phone\030\005 \001(\t\"Z\n"
-  "\014S_EditMyInfo\022\017\n\007success\030\001 \001(\010\022\017\n\007messag"
-  "e\030\002 \001(\t\022(\n\014updated_info\030\003 \001(\0132\022.Protocol"
-  ".UserInfo\"v\n\022C_RegisterFcmToken\022\021\n\tfcm_t"
-  "oken\030\001 \001(\t\022\020\n\010platform\030\002 \001(\t\022\021\n\tdevice_i"
-  "d\030\003 \001(\t\022\023\n\013device_name\030\004 \001(\t\022\023\n\013app_vers"
-  "ion\030\005 \001(\t\"6\n\022S_RegisterFcmToken\022\017\n\007succe"
-  "ss\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\"\"\n\rC_ChangeEma"
-  "il\022\021\n\tnew_email\030\001 \001(\t\"[\n\rS_ChangeEmail\022\017"
-  "\n\007success\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\022(\n\014upda"
-  "ted_info\030\003 \001(\0132\022.Protocol.UserInfo\"B\n\020C_"
-  "ChangePassword\022\030\n\020current_password\030\001 \001(\t"
-  "\022\024\n\014new_password\030\002 \001(\t\"4\n\020S_ChangePasswo"
-  "rd\022\017\n\007success\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\"\027\n\004"
-  "Text\022\017\n\007message\030\001 \001(\t\"5\n\005Image\022\013\n\003url\030\001 "
-  "\001(\t\022\021\n\tthumbnail\030\002 \001(\t\022\014\n\004size\030\003 \001(\003\"K\n\005"
-  "Video\022\013\n\003url\030\001 \001(\t\022\021\n\tthumbnail\030\002 \001(\t\022\024\n"
-  "\014duration_sec\030\003 \001(\005\022\014\n\004size\030\004 \001(\003\"F\n\004Fil"
-  "e\022\013\n\003url\030\001 \001(\t\022\020\n\010filename\030\002 \001(\t\022\014\n\004size"
-  "\030\003 \001(\003\022\021\n\tmime_type\030\004 \001(\t\"C\n\tSystemMsg\022\017"
-  "\n\007message\030\001 \001(\t\022\014\n\004type\030\002 \001(\005\022\027\n\017invite_"
-  "group_id\030\003 \001(\t\"8\n\005Audio\022\013\n\003url\030\001 \001(\t\022\024\n\014"
-  "duration_sec\030\002 \001(\005\022\014\n\004size\030\003 \001(\003\"\345\001\n\013Cha"
-  "tPayload\022\036\n\004text\030\001 \001(\0132\016.Protocol.TextH\000"
-  "\022 \n\005image\030\002 \001(\0132\017.Protocol.ImageH\000\022 \n\005vi"
-  "deo\030\003 \001(\0132\017.Protocol.VideoH\000\022\036\n\004file\030\004 \001"
-  "(\0132\016.Protocol.FileH\000\022%\n\006system\030\005 \001(\0132\023.P"
-  "rotocol.SystemMsgH\000\022 \n\005audio\030\006 \001(\0132\017.Pro"
-  "tocol.AudioH\000B\t\n\007content\"\257\001\n\006C_Chat\022\017\n\007c"
-  "onv_id\030\001 \001(\t\022\025\n\rclient_msg_id\030\002 \001(\005\022&\n\007p"
-  "ayload\030\003 \001(\0132\025.Protocol.ChatPayload\022\021\n\tt"
-  "s_client\030\004 \001(\003\022\024\n\014reply_to_seq\030\005 \001(\003\022\020\n\010"
-  "gcs_path\030\006 \001(\t\022\032\n\022mentioned_user_ids\030\007 \003"
-  "(\t\"\366\002\n\006S_Chat\022\017\n\007conv_id\030\001 \001(\t\022\025\n\rclient"
-  "_msg_id\030\002 \001(\005\022\017\n\007msg_seq\030\003 \001(\003\022\021\n\tsender"
-  "_id\030\004 \001(\t\022\023\n\013sender_name\030\005 \001(\t\022&\n\007payloa"
-  "d\030\006 \001(\0132\025.Protocol.ChatPayload\022\021\n\tts_ser"
-  "ver\030\007 \001(\003\022\024\n\014reply_to_seq\030\010 \001(\003\022\034\n\024reply"
-  "_to_sender_name\030\t \001(\t\022\025\n\rreply_to_text\030\n"
-  " \001(\t\022\022\n\nis_deleted\030\013 \001(\010\022\021\n\tis_edited\030\014 "
-  "\001(\010\022\024\n\014unread_count\030\r \001(\005\022\027\n\017file_expire"
-  "s_at\030\016 \001(\003\022\023\n\013file_status\030\017 \001(\t\022\032\n\022menti"
-  "oned_user_ids\030\020 \003(\t\"7\n\rC_ReadReceipt\022\017\n\007"
-  "conv_id\030\001 \001(\t\022\025\n\rlast_read_seq\030\002 \001(\003\"J\n\r"
-  "S_ReadReceipt\022\017\n\007conv_id\030\001 \001(\t\022\021\n\treader"
-  "_id\030\002 \001(\t\022\025\n\rlast_read_seq\030\003 \001(\003\"3\n\017C_De"
-  "leteMessage\022\017\n\007conv_id\030\001 \001(\t\022\017\n\007msg_seq\030"
-  "\002 \001(\003\"D\n\017S_DeleteMessage\022\017\n\007success\030\001 \001("
-  "\010\022\017\n\007conv_id\030\002 \001(\t\022\017\n\007msg_seq\030\003 \001(\003\"C\n\rC"
-  "_EditMessage\022\017\n\007conv_id\030\001 \001(\t\022\017\n\007msg_seq"
-  "\030\002 \001(\003\022\020\n\010new_text\030\003 \001(\t\"g\n\rS_EditMessag"
-  "e\022\017\n\007success\030\001 \001(\010\022\017\n\007conv_id\030\002 \001(\t\022\017\n\007m"
-  "sg_seq\030\003 \001(\003\022\020\n\010new_text\030\004 \001(\t\022\021\n\tedited"
-  "_at\030\005 \001(\003\"D\n\014C_ReqHistory\022\017\n\007conv_id\030\001 \001"
-  "(\t\022\024\n\014last_msg_seq\030\002 \001(\003\022\r\n\005limit\030\003 \001(\005\""
-  "S\n\014S_ReqHistory\022\017\n\007conv_id\030\001 \001(\t\022\"\n\010mess"
-  "ages\030\002 \003(\0132\020.Protocol.S_Chat\022\016\n\006is_end\030\003"
-  " \001(\010\"\211\002\n\014C_UploadFile\022\020\n\010filename\030\001 \001(\t\022"
-  "\014\n\004size\030\002 \001(\003\022\021\n\tmime_type\030\003 \001(\t\022\020\n\010is_i"
-  "mage\030\004 \001(\010\0226\n\013upload_type\030\005 \001(\0162!.Protoc"
-  "ol.C_UploadFile.UploadType\022\021\n\ttarget_id\030"
-  "\006 \001(\t\"i\n\nUploadType\022\017\n\013DIRECT_CHAT\020\000\022\016\n\n"
-  "GROUP_CHAT\020\001\022\017\n\013PROFILE_IMG\020\002\022\025\n\021GROUP_P"
-  "ROFILE_IMG\020\003\022\022\n\016BACKGROUND_IMG\020\004\"\341\001\n\014S_U"
-  "ploadFile\022\017\n\007success\030\001 \001(\010\022\017\n\007message\030\002 "
-  "\001(\t\022\017\n\007file_id\030\003 \001(\t\022\022\n\nupload_url\030\004 \001(\t"
-  "\022\024\n\014download_url\030\005 \001(\t\022\030\n\020thumb_upload_u"
-  "rl\030\006 \001(\t\022\025\n\rthumbnail_url\030\007 \001(\t\022\022\n\nexpir"
-  "es_at\030\010 \001(\003\022\014\n\004path\030\t \001(\t\022!\n\031file_retent"
-  "ion_expires_at\030\n \001(\003\")\n\005C_Ack\022\017\n\007conv_id"
-  "\030\001 \001(\t\022\017\n\007msg_seq\030\002 \001(\003\"\"\n\016C_FetchOfflin"
-  "e\022\020\n\010since_ts\030\001 \001(\003\"\304\001\n\016S_MessageBatch\022;"
-  "\n\007batches\030\001 \003(\0132*.Protocol.S_MessageBatc"
-  "h.ConversationBatch\032u\n\021ConversationBatch"
-  "\022\017\n\007conv_id\030\001 \001(\t\022\"\n\010messages\030\002 \003(\0132\020.Pr"
-  "otocol.S_Chat\022\024\n\014unread_count\030\003 \001(\005\022\025\n\rl"
-  "ast_read_seq\030\004 \001(\003\"\023\n\021C_GetSubscription\""
-  "\252\001\n\020SubscriptionPlan\022\017\n\007plan_id\030\001 \001(\005\022\021\n"
-  "\tplan_type\030\002 \001(\t\022\014\n\004name\030\003 \001(\t\022\r\n\005grade\030"
-  "\004 \001(\005\022\025\n\rstorage_bytes\030\005 \001(\003\022\025\n\rmax_file"
-  "_size\030\006 \001(\003\022\025\n\rmonthly_price\030\007 \001(\003\022\020\n\010fe"
-  "atures\030\010 \003(\t\"\360\001\n\021S_GetSubscription\022\017\n\007su"
-  "ccess\030\001 \001(\010\022\025\n\rcurrent_grade\030\002 \001(\005\022\031\n\021cu"
-  "rrent_plan_name\030\003 \001(\t\022\036\n\026storage_capacit"
-  "y_bytes\030\004 \001(\003\022\033\n\023storage_usage_bytes\030\005 \001"
-  "(\003\022\022\n\nexpires_at\030\006 \001(\003\022\022\n\nauto_renew\030\007 \001"
-  "(\010\0223\n\017available_plans\030\010 \003(\0132\032.Protocol.S"
-  "ubscriptionPlan\"h\n\020C_VerifyPurchase\022\020\n\010p"
-  "latform\030\001 \001(\t\022\022\n\nproduct_id\030\002 \001(\t\022\026\n\016tra"
-  "nsaction_id\030\003 \001(\t\022\026\n\016purchase_token\030\004 \001("
-  "\t\"u\n\020S_VerifyPurchase\022\017\n\007success\030\001 \001(\010\022\017"
-  "\n\007message\030\002 \001(\t\022\021\n\tnew_grade\030\003 \001(\005\022\022\n\nex"
-  "pires_at\030\004 \001(\003\022\030\n\020storage_capacity\030\005 \001(\003"
-  "\"\026\n\024C_CancelSubscription\"R\n\024S_CancelSubs"
-  "cription\022\017\n\007success\030\001 \001(\010\022\017\n\007message\030\002 \001"
-  "(\t\022\030\n\020grace_expires_at\030\003 \001(\003\".\n\nC_Withdr"
-  "aw\022\020\n\010password\030\001 \001(\t\022\016\n\006reason\030\002 \001(\t\".\n\n"
-  "S_Withdraw\022\017\n\007success\030\001 \001(\010\022\017\n\007message\030\002"
-  " \001(\t\"\037\n\014C_SearchUser\022\017\n\007user_id\030\001 \001(\t\"s\n"
-  "\014S_SearchUser\022\017\n\007success\030\001 \001(\010\022%\n\tuser_i"
-  "nfo\030\002 \001(\0132\022.Protocol.UserInfo\022\021\n\tis_frie"
-  "nd\030\003 \001(\010\022\030\n\020has_sent_request\030\004 \001(\010\"a\n\rFr"
-  "iendRequest\022%\n\trequester\030\001 \001(\0132\022.Protoco"
-  "l.UserInfo\022\024\n\014requested_at\030\002 \001(\003\022\023\n\013is_r"
-  "eceived\030\003 \001(\010\"\314\001\n\016C_FriendAction\0223\n\006acti"
-  "on\030\001 \001(\0162#.Protocol.C_FriendAction.Actio"
-  "nType\022\026\n\016target_user_id\030\002 \001(\t\"m\n\nActionT"
-  "ype\022\020\n\014SEND_REQUEST\020\000\022\022\n\016CANCEL_REQUEST\020"
-  "\001\022\022\n\016ACCEPT_REQUEST\020\002\022\022\n\016REJECT_REQUEST\020"
-  "\003\022\021\n\rDELETE_FRIEND\020\004\"^\n\016S_FriendAction\022\017"
-  "\n\007success\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\022*\n\016upda"
-  "ted_friend\030\003 \001(\0132\022.Protocol.UserInfo\"\023\n\021"
-  "C_FetchFriendData\"\234\001\n\021S_FetchFriendData\022"
-  "#\n\007friends\030\001 \003(\0132\022.Protocol.UserInfo\0222\n\021"
-  "received_requests\030\002 \003(\0132\027.Protocol.Frien"
-  "dRequest\022.\n\rsent_requests\030\003 \003(\0132\027.Protoc"
-  "ol.FriendRequest\"\241\001\n\014S_FriendPush\0222\n\tpus"
-  "h_type\030\001 \001(\0162\037.Protocol.S_FriendPush.Pus"
-  "hType\022%\n\tuser_info\030\002 \001(\0132\022.Protocol.User"
-  "Info\"6\n\010PushType\022\017\n\013NEW_REQUEST\020\000\022\014\n\010ACC"
-  "EPTED\020\001\022\013\n\007DELETED\020\002\"n\n\017GroupMemberInfo\022"
-  "%\n\tuser_info\030\001 \001(\0132\022.Protocol.UserInfo\022!"
-  "\n\004role\030\002 \001(\0162\023.Protocol.GroupRole\022\021\n\tjoi"
-  "ned_at\030\003 \001(\003\"\306\001\n\tGroupInfo\022\020\n\010group_id\030\001"
-  " \001(\t\022\022\n\ngroup_name\030\002 \001(\t\022\022\n\ngroup_code\030\003"
-  " \001(\t\022\023\n\013description\030\004 \001(\t\022\027\n\017group_image"
-  "_url\030\005 \001(\t\022\024\n\014member_count\030\006 \001(\005\022\036\n\026stor"
-  "age_capacity_bytes\030\007 \001(\003\022\033\n\023storage_usag"
-  "e_bytes\030\010 \001(\003\"#\n\rC_CreateGroup\022\022\n\ngroup_"
-  "name\030\001 \001(\t\"D\n\rS_CreateGroup\022\017\n\007success\030\001"
-  " \001(\010\022\"\n\005group\030\002 \001(\0132\023.Protocol.GroupInfo"
-  "\"\r\n\013C_GroupList\"2\n\013S_GroupList\022#\n\006groups"
-  "\030\001 \003(\0132\023.Protocol.GroupInfo\"\037\n\013C_GroupIn"
-  "fo\022\020\n\010group_id\030\001 \001(\t\"W\n\013S_GroupInfo\022\"\n\005g"
-  "roup\030\001 \001(\0132\023.Protocol.GroupInfo\022$\n\007my_ro"
-  "le\030\002 \001(\0162\023.Protocol.GroupRole\";\n\016C_Invit"
-  "eFriend\022\020\n\010group_id\030\001 \001(\t\022\027\n\017friend_user"
-  "_ids\030\002 \003(\t\"!\n\016S_InviteFriend\022\017\n\007success\030"
-  "\001 \001(\010\"!\n\013C_JoinGroup\022\022\n\ngroup_code\030\001 \001(\t"
-  "\"B\n\013S_JoinGroup\022\017\n\007success\030\001 \001(\010\022\"\n\005grou"
-  "p\030\002 \001(\0132\023.Protocol.GroupInfo\"%\n\021C_GroupM"
-  "emberList\022\020\n\010group_id\030\001 \001(\t\"Q\n\021S_GroupMe"
-  "mberList\022\020\n\010group_id\030\001 \001(\t\022*\n\007members\030\002 "
-  "\003(\0132\031.Protocol.GroupMemberInfo\" \n\014C_Leav"
-  "eGroup\022\020\n\010group_id\030\001 \001(\t\"\037\n\014S_LeaveGroup"
-  "\022\017\n\007success\030\001 \001(\010\"a\n\013C_EditGroup\022\020\n\010grou"
-  "p_id\030\001 \001(\t\022\020\n\010new_name\030\002 \001(\t\022\027\n\017new_desc"
-  "ription\030\003 \001(\t\022\025\n\rnew_image_url\030\004 \001(\t\"B\n\013"
-  "S_EditGroup\022\017\n\007success\030\001 \001(\010\022\"\n\005group\030\002 "
-  "\001(\0132\023.Protocol.GroupInfo\"!\n\rC_DeleteGrou"
-  "p\022\020\n\010group_id\030\001 \001(\t\" \n\rS_DeleteGroup\022\017\n\007"
-  "success\030\001 \001(\010\"Y\n\017BlockedUserInfo\022\017\n\007user"
-  "_id\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\023\n\013profile_img\030\003"
-  " \001(\t\022\022\n\nblocked_at\030\004 \001(\003\"%\n\013C_BlockUser\022"
-  "\026\n\016target_user_id\030\001 \001(\t\"/\n\013S_BlockUser\022\017"
-  "\n\007success\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\"\'\n\rC_Un"
-  "blockUser\022\026\n\016target_user_id\030\001 \001(\t\" \n\rS_U"
-  "nblockUser\022\017\n\007success\030\001 \001(\010\"\022\n\020C_GetBloc"
-  "kedList\"D\n\020S_GetBlockedList\0220\n\rblocked_u"
-  "sers\030\001 \003(\0132\031.Protocol.BlockedUserInfo\"F\n"
-  "\014C_ReportUser\022\026\n\016target_user_id\030\001 \001(\t\022\016\n"
-  "\006reason\030\002 \001(\t\022\016\n\006detail\030\003 \001(\t\"\037\n\014S_Repor"
-  "tUser\022\017\n\007success\030\001 \001(\010\"@\n\rC_AddReaction\022"
-  "\017\n\007conv_id\030\001 \001(\t\022\017\n\007msg_seq\030\002 \001(\003\022\r\n\005emo"
-  "ji\030\003 \001(\t\"b\n\rS_AddReaction\022\017\n\007conv_id\030\001 \001"
-  "(\t\022\017\n\007msg_seq\030\002 \001(\003\022\017\n\007user_id\030\003 \001(\t\022\r\n\005"
-  "emoji\030\004 \001(\t\022\017\n\007removed\030\005 \001(\010\"\205\001\n\014C_Creat"
-  "ePoll\022\017\n\007conv_id\030\001 \001(\t\022\020\n\010question\030\002 \001(\t"
-  "\022\017\n\007options\030\003 \003(\t\022\027\n\017is_multi_select\030\004 \001"
-  "(\010\022\024\n\014is_anonymous\030\005 \001(\010\022\022\n\nexpires_at\030\006"
-  " \001(\003\"\344\001\n\014S_CreatePoll\022\017\n\007conv_id\030\001 \001(\t\022\017"
-  "\n\007poll_id\030\002 \001(\t\022\017\n\007msg_seq\030\003 \001(\003\022\022\n\ncrea"
-  "tor_id\030\004 \001(\t\022\024\n\014creator_name\030\005 \001(\t\022\020\n\010qu"
-  "estion\030\006 \001(\t\022\017\n\007options\030\007 \003(\t\022\027\n\017is_mult"
-  "i_select\030\010 \001(\010\022\024\n\014is_anonymous\030\t \001(\010\022\022\n\n"
-  "expires_at\030\n \001(\003\022\021\n\tts_server\030\013 \001(\003\"U\n\006C"
-  "_Vote\022\017\n\007conv_id\030\001 \001(\t\022\017\n\007poll_id\030\002 \001(\t\022"
-  "\017\n\007msg_seq\030\003 \001(\003\022\030\n\020selected_options\030\004 \003"
-  "(\005\"\217\001\n\006S_Vote\022\017\n\007conv_id\030\001 \001(\t\022\017\n\007poll_i"
-  "d\030\002 \001(\t\022\017\n\007msg_seq\030\003 \001(\003\022\020\n\010voter_id\030\004 \001"
-  "(\t\022\022\n\nvoter_name\030\005 \001(\t\022\030\n\020selected_optio"
-  "ns\030\006 \003(\005\022\022\n\nvotes_json\030\007 \001(\t\"@\n\013C_CloseP"
-  "oll\022\017\n\007conv_id\030\001 \001(\t\022\017\n\007poll_id\030\002 \001(\t\022\017\n"
-  "\007msg_seq\030\003 \001(\003\"@\n\013S_ClosePoll\022\017\n\007conv_id"
+  "\000\0228\n\022c_create_ball_drop\030m \001(\0132\032.Protocol"
+  ".C_CreateBallDropH\000\0228\n\022s_create_ball_dro"
+  "p\030n \001(\0132\032.Protocol.S_CreateBallDropH\000\022<\n"
+  "\024c_create_photo_slide\030o \001(\0132\034.Protocol.C"
+  "_CreatePhotoSlideH\000\022<\n\024s_create_photo_sl"
+  "ide\030p \001(\0132\034.Protocol.S_CreatePhotoSlideH"
+  "\000\022>\n\025c_refresh_invite_code\030q \001(\0132\035.Proto"
+  "col.C_RefreshInviteCodeH\000\022>\n\025s_refresh_i"
+  "nvite_code\030r \001(\0132\035.Protocol.S_RefreshInv"
+  "iteCodeH\000\0221\n\016c_social_login\030s \001(\0132\027.Prot"
+  "ocol.C_SocialLoginH\000\0221\n\016s_social_login\030t"
+  " \001(\0132\027.Protocol.S_SocialLoginH\000\022D\n\030c_com"
+  "plete_social_signup\030u \001(\0132 .Protocol.C_C"
+  "ompleteSocialSignupH\000\0221\n\016c_create_group\030"
+  "P \001(\0132\027.Protocol.C_CreateGroupH\000\0221\n\016s_cr"
+  "eate_group\030Q \001(\0132\027.Protocol.S_CreateGrou"
+  "pH\000\022-\n\014c_group_list\030R \001(\0132\025.Protocol.C_G"
+  "roupListH\000\022-\n\014s_group_list\030S \001(\0132\025.Proto"
+  "col.S_GroupListH\000\022-\n\014c_join_group\030T \001(\0132"
+  "\025.Protocol.C_JoinGroupH\000\022-\n\014s_join_group"
+  "\030U \001(\0132\025.Protocol.S_JoinGroupH\000\0223\n\017c_inv"
+  "ite_friend\030V \001(\0132\030.Protocol.C_InviteFrie"
+  "ndH\000\0223\n\017s_invite_friend\030W \001(\0132\030.Protocol"
+  ".S_InviteFriendH\000\022/\n\rc_leave_group\030X \001(\013"
+  "2\026.Protocol.C_LeaveGroupH\000\022/\n\rs_leave_gr"
+  "oup\030Y \001(\0132\026.Protocol.S_LeaveGroupH\000\022:\n\023c"
+  "_group_member_list\030Z \001(\0132\033.Protocol.C_Gr"
+  "oupMemberListH\000\022:\n\023s_group_member_list\030["
+  " \001(\0132\033.Protocol.S_GroupMemberListH\000\022-\n\014c"
+  "_group_info\030\\ \001(\0132\025.Protocol.C_GroupInfo"
+  "H\000\022-\n\014s_group_info\030] \001(\0132\025.Protocol.S_Gr"
+  "oupInfoH\000\022-\n\014c_edit_group\030^ \001(\0132\025.Protoc"
+  "ol.C_EditGroupH\000\022-\n\014s_edit_group\030_ \001(\0132\025"
+  ".Protocol.S_EditGroupH\000\022*\n\nc_withdraw\030` "
+  "\001(\0132\024.Protocol.C_WithdrawH\000\022*\n\ns_withdra"
+  "w\030a \001(\0132\024.Protocol.S_WithdrawH\000\0221\n\016c_del"
+  "ete_group\030b \001(\0132\027.Protocol.C_DeleteGroup"
+  "H\000\0221\n\016s_delete_group\030c \001(\0132\027.Protocol.S_"
+  "DeleteGroupH\000\022$\n\007s_error\030d \001(\0132\021.Protoco"
+  "l.S_ErrorH\000\022,\n\013c_heartbeat\030e \001(\0132\025.Proto"
+  "col.C_HeartbeatH\000\022,\n\013s_heartbeat\030f \001(\0132\025"
+  ".Protocol.S_HeartbeatH\000B\t\n\007payload\"\276\002\n\010U"
+  "serInfo\022\017\n\007user_id\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\026"
+  "\n\016status_message\030\003 \001(\t\022\031\n\021profile_image_"
+  "url\030\004 \001(\t\022\034\n\024background_image_url\030\005 \001(\t\022"
+  "\r\n\005email\030\006 \001(\t\022\r\n\005phone\030\007 \001(\t\022\021\n\tsub_gra"
+  "de\030\010 \001(\r\022\036\n\026storage_capacity_bytes\030\t \001(\003"
+  "\022\033\n\023storage_usage_bytes\030\n \001(\003\022\021\n\tlast_se"
+  "en\030\013 \001(\003\022\016\n\006status\030\014 \001(\t\022\031\n\021is_email_ver"
+  "ified\030\r \001(\010\022\026\n\016oauth_provider\030\016 \001(\t\"\233\001\n\n"
+  "DeviceInfo\022\021\n\tdevice_id\030\001 \001(\t\022\023\n\013device_"
+  "name\030\002 \001(\t\022\020\n\010platform\030\003 \001(\t\022\023\n\013last_act"
+  "ive\030\004 \001(\003\022\025\n\rregistered_at\030\005 \001(\003\022\023\n\013app_"
+  "version\030\006 \001(\t\022\022\n\nis_current\030\007 \001(\010\"\034\n\tC_C"
+  "heckId\022\017\n\007user_id\030\001 \001(\t\"!\n\tS_CheckId\022\024\n\014"
+  "is_available\030\001 \001(\010\"\035\n\014C_CheckEmail\022\r\n\005em"
+  "ail\030\001 \001(\t\"$\n\014S_CheckEmail\022\024\n\014is_availabl"
+  "e\030\001 \001(\010\"%\n\024C_RequestEmailVerify\022\r\n\005email"
+  "\030\001 \001(\t\"8\n\024S_RequestEmailVerify\022\017\n\007succes"
+  "s\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\"3\n\024C_ConfirmEma"
+  "ilVerify\022\r\n\005email\030\001 \001(\t\022\014\n\004code\030\002 \001(\t\"\'\n"
+  "\024S_ConfirmEmailVerify\022\017\n\007success\030\001 \001(\010\"J"
+  "\n\010C_SignUp\022\017\n\007user_id\030\001 \001(\t\022\020\n\010password\030"
+  "\002 \001(\t\022\014\n\004name\030\003 \001(\t\022\r\n\005email\030\004 \001(\t\"=\n\010S_"
+  "SignUp\022\017\n\007success\030\001 \001(\010\022\017\n\007message\030\002 \001(\t"
+  "\022\017\n\007user_id\030\003 \001(\t\",\n\007C_Login\022\017\n\007user_id\030"
+  "\001 \001(\t\022\020\n\010password\030\002 \001(\t\"S\n\007S_Login\022\017\n\007su"
+  "ccess\030\001 \001(\010\022\022\n\nauth_token\030\002 \001(\t\022#\n\007my_in"
+  "fo\030\003 \001(\0132\022.Protocol.UserInfo\"0\n\010C_Logout"
+  "\022\021\n\tfcm_token\030\001 \001(\t\022\021\n\tdevice_id\030\002 \001(\t\"\033"
+  "\n\010S_Logout\022\017\n\007success\030\001 \001(\010\"\020\n\016C_GetMyDe"
+  "vices\"7\n\016S_GetMyDevices\022%\n\007devices\030\001 \003(\013"
+  "2\024.Protocol.DeviceInfo\"#\n\016C_RemoveDevice"
+  "\022\021\n\tdevice_id\030\001 \001(\t\"2\n\016S_RemoveDevice\022\017\n"
+  "\007success\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\"\017\n\rC_Fet"
+  "chMyInfo\"4\n\rS_FetchMyInfo\022#\n\007my_info\030\001 \001"
+  "(\0132\022.Protocol.UserInfo\"|\n\014C_EditMyInfo\022\014"
+  "\n\004name\030\001 \001(\t\022\026\n\016status_message\030\002 \001(\t\022\031\n\021"
+  "profile_image_url\030\003 \001(\t\022\034\n\024background_im"
+  "age_url\030\004 \001(\t\022\r\n\005phone\030\005 \001(\t\"Z\n\014S_EditMy"
+  "Info\022\017\n\007success\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\022("
+  "\n\014updated_info\030\003 \001(\0132\022.Protocol.UserInfo"
+  "\"v\n\022C_RegisterFcmToken\022\021\n\tfcm_token\030\001 \001("
+  "\t\022\020\n\010platform\030\002 \001(\t\022\021\n\tdevice_id\030\003 \001(\t\022\023"
+  "\n\013device_name\030\004 \001(\t\022\023\n\013app_version\030\005 \001(\t"
+  "\"6\n\022S_RegisterFcmToken\022\017\n\007success\030\001 \001(\010\022"
+  "\017\n\007message\030\002 \001(\t\"\"\n\rC_ChangeEmail\022\021\n\tnew"
+  "_email\030\001 \001(\t\"[\n\rS_ChangeEmail\022\017\n\007success"
+  "\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\022(\n\014updated_info\030"
+  "\003 \001(\0132\022.Protocol.UserInfo\"B\n\020C_ChangePas"
+  "sword\022\030\n\020current_password\030\001 \001(\t\022\024\n\014new_p"
+  "assword\030\002 \001(\t\"4\n\020S_ChangePassword\022\017\n\007suc"
+  "cess\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\"\027\n\004Text\022\017\n\007m"
+  "essage\030\001 \001(\t\"5\n\005Image\022\013\n\003url\030\001 \001(\t\022\021\n\tth"
+  "umbnail\030\002 \001(\t\022\014\n\004size\030\003 \001(\003\"K\n\005Video\022\013\n\003"
+  "url\030\001 \001(\t\022\021\n\tthumbnail\030\002 \001(\t\022\024\n\014duration"
+  "_sec\030\003 \001(\005\022\014\n\004size\030\004 \001(\003\"F\n\004File\022\013\n\003url\030"
+  "\001 \001(\t\022\020\n\010filename\030\002 \001(\t\022\014\n\004size\030\003 \001(\003\022\021\n"
+  "\tmime_type\030\004 \001(\t\"C\n\tSystemMsg\022\017\n\007message"
+  "\030\001 \001(\t\022\014\n\004type\030\002 \001(\005\022\027\n\017invite_group_id\030"
+  "\003 \001(\t\"8\n\005Audio\022\013\n\003url\030\001 \001(\t\022\024\n\014duration_"
+  "sec\030\002 \001(\005\022\014\n\004size\030\003 \001(\003\"\345\001\n\013ChatPayload\022"
+  "\036\n\004text\030\001 \001(\0132\016.Protocol.TextH\000\022 \n\005image"
+  "\030\002 \001(\0132\017.Protocol.ImageH\000\022 \n\005video\030\003 \001(\013"
+  "2\017.Protocol.VideoH\000\022\036\n\004file\030\004 \001(\0132\016.Prot"
+  "ocol.FileH\000\022%\n\006system\030\005 \001(\0132\023.Protocol.S"
+  "ystemMsgH\000\022 \n\005audio\030\006 \001(\0132\017.Protocol.Aud"
+  "ioH\000B\t\n\007content\"\257\001\n\006C_Chat\022\017\n\007conv_id\030\001 "
+  "\001(\t\022\025\n\rclient_msg_id\030\002 \001(\005\022&\n\007payload\030\003 "
+  "\001(\0132\025.Protocol.ChatPayload\022\021\n\tts_client\030"
+  "\004 \001(\003\022\024\n\014reply_to_seq\030\005 \001(\003\022\020\n\010gcs_path\030"
+  "\006 \001(\t\022\032\n\022mentioned_user_ids\030\007 \003(\t\"\366\002\n\006S_"
+  "Chat\022\017\n\007conv_id\030\001 \001(\t\022\025\n\rclient_msg_id\030\002"
+  " \001(\005\022\017\n\007msg_seq\030\003 \001(\003\022\021\n\tsender_id\030\004 \001(\t"
+  "\022\023\n\013sender_name\030\005 \001(\t\022&\n\007payload\030\006 \001(\0132\025"
+  ".Protocol.ChatPayload\022\021\n\tts_server\030\007 \001(\003"
+  "\022\024\n\014reply_to_seq\030\010 \001(\003\022\034\n\024reply_to_sende"
+  "r_name\030\t \001(\t\022\025\n\rreply_to_text\030\n \001(\t\022\022\n\ni"
+  "s_deleted\030\013 \001(\010\022\021\n\tis_edited\030\014 \001(\010\022\024\n\014un"
+  "read_count\030\r \001(\005\022\027\n\017file_expires_at\030\016 \001("
+  "\003\022\023\n\013file_status\030\017 \001(\t\022\032\n\022mentioned_user"
+  "_ids\030\020 \003(\t\"7\n\rC_ReadReceipt\022\017\n\007conv_id\030\001"
+  " \001(\t\022\025\n\rlast_read_seq\030\002 \001(\003\"J\n\rS_ReadRec"
+  "eipt\022\017\n\007conv_id\030\001 \001(\t\022\021\n\treader_id\030\002 \001(\t"
+  "\022\025\n\rlast_read_seq\030\003 \001(\003\"3\n\017C_DeleteMessa"
+  "ge\022\017\n\007conv_id\030\001 \001(\t\022\017\n\007msg_seq\030\002 \001(\003\"D\n\017"
+  "S_DeleteMessage\022\017\n\007success\030\001 \001(\010\022\017\n\007conv"
+  "_id\030\002 \001(\t\022\017\n\007msg_seq\030\003 \001(\003\"C\n\rC_EditMess"
+  "age\022\017\n\007conv_id\030\001 \001(\t\022\017\n\007msg_seq\030\002 \001(\003\022\020\n"
+  "\010new_text\030\003 \001(\t\"g\n\rS_EditMessage\022\017\n\007succ"
+  "ess\030\001 \001(\010\022\017\n\007conv_id\030\002 \001(\t\022\017\n\007msg_seq\030\003 "
+  "\001(\003\022\020\n\010new_text\030\004 \001(\t\022\021\n\tedited_at\030\005 \001(\003"
+  "\"D\n\014C_ReqHistory\022\017\n\007conv_id\030\001 \001(\t\022\024\n\014las"
+  "t_msg_seq\030\002 \001(\003\022\r\n\005limit\030\003 \001(\005\"S\n\014S_ReqH"
+  "istory\022\017\n\007conv_id\030\001 \001(\t\022\"\n\010messages\030\002 \003("
+  "\0132\020.Protocol.S_Chat\022\016\n\006is_end\030\003 \001(\010\"\211\002\n\014"
+  "C_UploadFile\022\020\n\010filename\030\001 \001(\t\022\014\n\004size\030\002"
+  " \001(\003\022\021\n\tmime_type\030\003 \001(\t\022\020\n\010is_image\030\004 \001("
+  "\010\0226\n\013upload_type\030\005 \001(\0162!.Protocol.C_Uplo"
+  "adFile.UploadType\022\021\n\ttarget_id\030\006 \001(\t\"i\n\n"
+  "UploadType\022\017\n\013DIRECT_CHAT\020\000\022\016\n\nGROUP_CHA"
+  "T\020\001\022\017\n\013PROFILE_IMG\020\002\022\025\n\021GROUP_PROFILE_IM"
+  "G\020\003\022\022\n\016BACKGROUND_IMG\020\004\"\341\001\n\014S_UploadFile"
+  "\022\017\n\007success\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\022\017\n\007fi"
+  "le_id\030\003 \001(\t\022\022\n\nupload_url\030\004 \001(\t\022\024\n\014downl"
+  "oad_url\030\005 \001(\t\022\030\n\020thumb_upload_url\030\006 \001(\t\022"
+  "\025\n\rthumbnail_url\030\007 \001(\t\022\022\n\nexpires_at\030\010 \001"
+  "(\003\022\014\n\004path\030\t \001(\t\022!\n\031file_retention_expir"
+  "es_at\030\n \001(\003\")\n\005C_Ack\022\017\n\007conv_id\030\001 \001(\t\022\017\n"
+  "\007msg_seq\030\002 \001(\003\"\"\n\016C_FetchOffline\022\020\n\010sinc"
+  "e_ts\030\001 \001(\003\"\304\001\n\016S_MessageBatch\022;\n\007batches"
+  "\030\001 \003(\0132*.Protocol.S_MessageBatch.Convers"
+  "ationBatch\032u\n\021ConversationBatch\022\017\n\007conv_"
+  "id\030\001 \001(\t\022\"\n\010messages\030\002 \003(\0132\020.Protocol.S_"
+  "Chat\022\024\n\014unread_count\030\003 \001(\005\022\025\n\rlast_read_"
+  "seq\030\004 \001(\003\"\023\n\021C_GetSubscription\"\252\001\n\020Subsc"
+  "riptionPlan\022\017\n\007plan_id\030\001 \001(\005\022\021\n\tplan_typ"
+  "e\030\002 \001(\t\022\014\n\004name\030\003 \001(\t\022\r\n\005grade\030\004 \001(\005\022\025\n\r"
+  "storage_bytes\030\005 \001(\003\022\025\n\rmax_file_size\030\006 \001"
+  "(\003\022\025\n\rmonthly_price\030\007 \001(\003\022\020\n\010features\030\010 "
+  "\003(\t\"\360\001\n\021S_GetSubscription\022\017\n\007success\030\001 \001"
+  "(\010\022\025\n\rcurrent_grade\030\002 \001(\005\022\031\n\021current_pla"
+  "n_name\030\003 \001(\t\022\036\n\026storage_capacity_bytes\030\004"
+  " \001(\003\022\033\n\023storage_usage_bytes\030\005 \001(\003\022\022\n\nexp"
+  "ires_at\030\006 \001(\003\022\022\n\nauto_renew\030\007 \001(\010\0223\n\017ava"
+  "ilable_plans\030\010 \003(\0132\032.Protocol.Subscripti"
+  "onPlan\"h\n\020C_VerifyPurchase\022\020\n\010platform\030\001"
+  " \001(\t\022\022\n\nproduct_id\030\002 \001(\t\022\026\n\016transaction_"
+  "id\030\003 \001(\t\022\026\n\016purchase_token\030\004 \001(\t\"u\n\020S_Ve"
+  "rifyPurchase\022\017\n\007success\030\001 \001(\010\022\017\n\007message"
+  "\030\002 \001(\t\022\021\n\tnew_grade\030\003 \001(\005\022\022\n\nexpires_at\030"
+  "\004 \001(\003\022\030\n\020storage_capacity\030\005 \001(\003\"\026\n\024C_Can"
+  "celSubscription\"R\n\024S_CancelSubscription\022"
+  "\017\n\007success\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\022\030\n\020gra"
+  "ce_expires_at\030\003 \001(\003\".\n\nC_Withdraw\022\020\n\010pas"
+  "sword\030\001 \001(\t\022\016\n\006reason\030\002 \001(\t\".\n\nS_Withdra"
+  "w\022\017\n\007success\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\"\037\n\014C"
+  "_SearchUser\022\017\n\007user_id\030\001 \001(\t\"s\n\014S_Search"
+  "User\022\017\n\007success\030\001 \001(\010\022%\n\tuser_info\030\002 \001(\013"
+  "2\022.Protocol.UserInfo\022\021\n\tis_friend\030\003 \001(\010\022"
+  "\030\n\020has_sent_request\030\004 \001(\010\"a\n\rFriendReque"
+  "st\022%\n\trequester\030\001 \001(\0132\022.Protocol.UserInf"
+  "o\022\024\n\014requested_at\030\002 \001(\003\022\023\n\013is_received\030\003"
+  " \001(\010\"\314\001\n\016C_FriendAction\0223\n\006action\030\001 \001(\0162"
+  "#.Protocol.C_FriendAction.ActionType\022\026\n\016"
+  "target_user_id\030\002 \001(\t\"m\n\nActionType\022\020\n\014SE"
+  "ND_REQUEST\020\000\022\022\n\016CANCEL_REQUEST\020\001\022\022\n\016ACCE"
+  "PT_REQUEST\020\002\022\022\n\016REJECT_REQUEST\020\003\022\021\n\rDELE"
+  "TE_FRIEND\020\004\"^\n\016S_FriendAction\022\017\n\007success"
+  "\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\022*\n\016updated_frien"
+  "d\030\003 \001(\0132\022.Protocol.UserInfo\"\023\n\021C_FetchFr"
+  "iendData\"\234\001\n\021S_FetchFriendData\022#\n\007friend"
+  "s\030\001 \003(\0132\022.Protocol.UserInfo\0222\n\021received_"
+  "requests\030\002 \003(\0132\027.Protocol.FriendRequest\022"
+  ".\n\rsent_requests\030\003 \003(\0132\027.Protocol.Friend"
+  "Request\"\241\001\n\014S_FriendPush\0222\n\tpush_type\030\001 "
+  "\001(\0162\037.Protocol.S_FriendPush.PushType\022%\n\t"
+  "user_info\030\002 \001(\0132\022.Protocol.UserInfo\"6\n\010P"
+  "ushType\022\017\n\013NEW_REQUEST\020\000\022\014\n\010ACCEPTED\020\001\022\013"
+  "\n\007DELETED\020\002\"n\n\017GroupMemberInfo\022%\n\tuser_i"
+  "nfo\030\001 \001(\0132\022.Protocol.UserInfo\022!\n\004role\030\002 "
+  "\001(\0162\023.Protocol.GroupRole\022\021\n\tjoined_at\030\003 "
+  "\001(\003\"\346\001\n\tGroupInfo\022\020\n\010group_id\030\001 \001(\t\022\022\n\ng"
+  "roup_name\030\002 \001(\t\022\022\n\ngroup_code\030\003 \001(\t\022\023\n\013d"
+  "escription\030\004 \001(\t\022\027\n\017group_image_url\030\005 \001("
+  "\t\022\024\n\014member_count\030\006 \001(\005\022\036\n\026storage_capac"
+  "ity_bytes\030\007 \001(\003\022\033\n\023storage_usage_bytes\030\010"
+  " \001(\003\022\036\n\026invite_code_expires_at\030\t \001(\003\"#\n\r"
+  "C_CreateGroup\022\022\n\ngroup_name\030\001 \001(\t\"D\n\rS_C"
+  "reateGroup\022\017\n\007success\030\001 \001(\010\022\"\n\005group\030\002 \001"
+  "(\0132\023.Protocol.GroupInfo\"\r\n\013C_GroupList\"2"
+  "\n\013S_GroupList\022#\n\006groups\030\001 \003(\0132\023.Protocol"
+  ".GroupInfo\"\037\n\013C_GroupInfo\022\020\n\010group_id\030\001 "
+  "\001(\t\"W\n\013S_GroupInfo\022\"\n\005group\030\001 \001(\0132\023.Prot"
+  "ocol.GroupInfo\022$\n\007my_role\030\002 \001(\0162\023.Protoc"
+  "ol.GroupRole\";\n\016C_InviteFriend\022\020\n\010group_"
+  "id\030\001 \001(\t\022\027\n\017friend_user_ids\030\002 \003(\t\"!\n\016S_I"
+  "nviteFriend\022\017\n\007success\030\001 \001(\010\"!\n\013C_JoinGr"
+  "oup\022\022\n\ngroup_code\030\001 \001(\t\"B\n\013S_JoinGroup\022\017"
+  "\n\007success\030\001 \001(\010\022\"\n\005group\030\002 \001(\0132\023.Protoco"
+  "l.GroupInfo\"\'\n\023C_RefreshInviteCode\022\020\n\010gr"
+  "oup_id\030\001 \001(\t\"N\n\023S_RefreshInviteCode\022\017\n\007s"
+  "uccess\030\001 \001(\010\022\022\n\ngroup_code\030\002 \001(\t\022\022\n\nexpi"
+  "res_at\030\003 \001(\003\"%\n\021C_GroupMemberList\022\020\n\010gro"
+  "up_id\030\001 \001(\t\"Q\n\021S_GroupMemberList\022\020\n\010grou"
+  "p_id\030\001 \001(\t\022*\n\007members\030\002 \003(\0132\031.Protocol.G"
+  "roupMemberInfo\" \n\014C_LeaveGroup\022\020\n\010group_"
+  "id\030\001 \001(\t\"\037\n\014S_LeaveGroup\022\017\n\007success\030\001 \001("
+  "\010\"a\n\013C_EditGroup\022\020\n\010group_id\030\001 \001(\t\022\020\n\010ne"
+  "w_name\030\002 \001(\t\022\027\n\017new_description\030\003 \001(\t\022\025\n"
+  "\rnew_image_url\030\004 \001(\t\"B\n\013S_EditGroup\022\017\n\007s"
+  "uccess\030\001 \001(\010\022\"\n\005group\030\002 \001(\0132\023.Protocol.G"
+  "roupInfo\"!\n\rC_DeleteGroup\022\020\n\010group_id\030\001 "
+  "\001(\t\" \n\rS_DeleteGroup\022\017\n\007success\030\001 \001(\010\"Y\n"
+  "\017BlockedUserInfo\022\017\n\007user_id\030\001 \001(\t\022\014\n\004nam"
+  "e\030\002 \001(\t\022\023\n\013profile_img\030\003 \001(\t\022\022\n\nblocked_"
+  "at\030\004 \001(\003\"%\n\013C_BlockUser\022\026\n\016target_user_i"
+  "d\030\001 \001(\t\"/\n\013S_BlockUser\022\017\n\007success\030\001 \001(\010\022"
+  "\017\n\007message\030\002 \001(\t\"\'\n\rC_UnblockUser\022\026\n\016tar"
+  "get_user_id\030\001 \001(\t\" \n\rS_UnblockUser\022\017\n\007su"
+  "ccess\030\001 \001(\010\"\022\n\020C_GetBlockedList\"D\n\020S_Get"
+  "BlockedList\0220\n\rblocked_users\030\001 \003(\0132\031.Pro"
+  "tocol.BlockedUserInfo\"F\n\014C_ReportUser\022\026\n"
+  "\016target_user_id\030\001 \001(\t\022\016\n\006reason\030\002 \001(\t\022\016\n"
+  "\006detail\030\003 \001(\t\"\037\n\014S_ReportUser\022\017\n\007success"
+  "\030\001 \001(\010\"@\n\rC_AddReaction\022\017\n\007conv_id\030\001 \001(\t"
+  "\022\017\n\007msg_seq\030\002 \001(\003\022\r\n\005emoji\030\003 \001(\t\"b\n\rS_Ad"
+  "dReaction\022\017\n\007conv_id\030\001 \001(\t\022\017\n\007msg_seq\030\002 "
+  "\001(\003\022\017\n\007user_id\030\003 \001(\t\022\r\n\005emoji\030\004 \001(\t\022\017\n\007r"
+  "emoved\030\005 \001(\010\"\205\001\n\014C_CreatePoll\022\017\n\007conv_id"
+  "\030\001 \001(\t\022\020\n\010question\030\002 \001(\t\022\017\n\007options\030\003 \003("
+  "\t\022\027\n\017is_multi_select\030\004 \001(\010\022\024\n\014is_anonymo"
+  "us\030\005 \001(\010\022\022\n\nexpires_at\030\006 \001(\003\"\344\001\n\014S_Creat"
+  "ePoll\022\017\n\007conv_id\030\001 \001(\t\022\017\n\007poll_id\030\002 \001(\t\022"
+  "\017\n\007msg_seq\030\003 \001(\003\022\022\n\ncreator_id\030\004 \001(\t\022\024\n\014"
+  "creator_name\030\005 \001(\t\022\020\n\010question\030\006 \001(\t\022\017\n\007"
+  "options\030\007 \003(\t\022\027\n\017is_multi_select\030\010 \001(\010\022\024"
+  "\n\014is_anonymous\030\t \001(\010\022\022\n\nexpires_at\030\n \001(\003"
+  "\022\021\n\tts_server\030\013 \001(\003\"U\n\006C_Vote\022\017\n\007conv_id"
   "\030\001 \001(\t\022\017\n\007poll_id\030\002 \001(\t\022\017\n\007msg_seq\030\003 \001(\003"
-  "\"X\n\021C_SetAnnouncement\022\017\n\007conv_id\030\001 \001(\t\022\017"
-  "\n\007msg_seq\030\002 \001(\003\022\014\n\004text\030\003 \001(\t\022\023\n\013sender_"
-  "name\030\004 \001(\t\"k\n\021S_SetAnnouncement\022\017\n\007conv_"
-  "id\030\001 \001(\t\022\017\n\007msg_seq\030\002 \001(\003\022\014\n\004text\030\003 \001(\t\022"
-  "\023\n\013sender_name\030\004 \001(\t\022\021\n\tsetter_id\030\005 \001(\t\""
-  "Q\n\007S_Error\022\'\n\nerror_code\030\001 \001(\0162\023.Protoco"
-  "l.ErrorCode\022\014\n\004code\030\002 \001(\r\022\017\n\007message\030\003 \001"
-  "(\t\"\r\n\013C_Heartbeat\"\r\n\013S_Heartbeat*-\n\tGrou"
-  "pRole\022\n\n\006MEMBER\020\000\022\t\n\005ADMIN\020\001\022\t\n\005OWNER\020\002*"
-  "\226\t\n\tErrorCode\022\017\n\013ERR_SUCCESS\020\000\022\017\n\013ERR_UN"
-  "KNOWN\020\001\022\027\n\023ERR_SERVER_INTERNAL\020\002\022\026\n\022ERR_"
-  "INVALID_PACKET\020\003\022\030\n\024ERR_VERSION_MISMATCH"
-  "\020\004\022\024\n\020ERR_UNAUTHORIZED\020\005\022\025\n\021ERR_INVALID_"
-  "TOKEN\020\006\022\025\n\021ERR_USER_ID_EMPTY\020d\022\030\n\024ERR_US"
-  "ER_ID_REQUIRED\020e\022\031\n\025ERR_PASSWORD_REQUIRE"
-  "D\020f\022\025\n\021ERR_NAME_REQUIRED\020g\022\026\n\022ERR_EMAIL_"
-  "REQUIRED\020h\022\026\n\022ERR_USER_NOT_FOUND\020i\022\030\n\024ER"
-  "R_INVALID_PASSWORD\020j\022\033\n\027ERR_USER_ALREADY"
-  "_EXISTS\020k\022\034\n\030ERR_EMAIL_ALREADY_EXISTS\020l\022"
-  "\026\n\021ERR_PAYLOAD_EMPTY\020\310\001\022\030\n\023ERR_INVALID_C"
-  "ONV_ID\020\311\001\022\034\n\027ERR_INVALID_RECEIVER_ID\020\312\001\022"
-  "\024\n\017ERR_INVALID_ACK\020\313\001\022\037\n\032ERR_INVALID_FRI"
-  "END_USER_ID\020\254\002\022\030\n\023ERR_CANNOT_ADD_SELF\020\255\002"
-  "\022\025\n\020ERR_NOT_A_FRIEND\020\256\002\022!\n\034ERR_FRIEND_RE"
-  "QUEST_NOT_FOUND\020\257\002\022%\n ERR_FILE_SERVICE_N"
-  "OT_INITIALIZED\020\220\003\022&\n!ERR_CLOUD_STORAGE_N"
-  "OT_INITIALIZED\020\221\003\022\032\n\025ERR_FILENAME_REQUIR"
-  "ED\020\222\003\022\032\n\025ERR_INVALID_FILE_SIZE\020\223\003\022\033\n\026ERR"
-  "_MIME_TYPE_REQUIRED\020\224\003\022\037\n\032ERR_FAILED_TO_"
-  "GENERATE_URL\020\225\003\022\031\n\024ERR_INVALID_FILE_URL\020"
-  "\226\003\022\031\n\024ERR_INVALID_ARGUMENT\020\227\003\022\031\n\024ERR_STO"
-  "RAGE_EXCEEDED\020\230\003\022\027\n\022ERR_FILE_TOO_LARGE\020\231"
-  "\003\022\027\n\022ERR_PAYMENT_FAILED\020\232\003\022\030\n\023ERR_RECEIP"
-  "T_INVALID\020\233\003\022\026\n\021ERR_NO_PERMISSION\020\364\003\022\030\n\023"
-  "ERR_ALREADY_BLOCKED\020\330\004\022\024\n\017ERR_NOT_BLOCKE"
-  "D\020\331\004\022\032\n\025ERR_CANNOT_BLOCK_SELF\020\332\004\022\031\n\024ERR_"
-  "REPORT_DUPLICATE\020\342\004\022\027\n\022ERR_POLL_NOT_FOUN"
-  "D\020\274\005\022\024\n\017ERR_POLL_CLOSED\020\275\005\022\034\n\027ERR_POLL_I"
-  "NVALID_OPTION\020\276\005b\006proto3"
+  "\022\030\n\020selected_options\030\004 \003(\005\"\217\001\n\006S_Vote\022\017\n"
+  "\007conv_id\030\001 \001(\t\022\017\n\007poll_id\030\002 \001(\t\022\017\n\007msg_s"
+  "eq\030\003 \001(\003\022\020\n\010voter_id\030\004 \001(\t\022\022\n\nvoter_name"
+  "\030\005 \001(\t\022\030\n\020selected_options\030\006 \003(\005\022\022\n\nvote"
+  "s_json\030\007 \001(\t\"@\n\013C_ClosePoll\022\017\n\007conv_id\030\001"
+  " \001(\t\022\017\n\007poll_id\030\002 \001(\t\022\017\n\007msg_seq\030\003 \001(\003\"@"
+  "\n\013S_ClosePoll\022\017\n\007conv_id\030\001 \001(\t\022\017\n\007poll_i"
+  "d\030\002 \001(\t\022\017\n\007msg_seq\030\003 \001(\003\"X\n\021C_SetAnnounc"
+  "ement\022\017\n\007conv_id\030\001 \001(\t\022\017\n\007msg_seq\030\002 \001(\003\022"
+  "\014\n\004text\030\003 \001(\t\022\023\n\013sender_name\030\004 \001(\t\"k\n\021S_"
+  "SetAnnouncement\022\017\n\007conv_id\030\001 \001(\t\022\017\n\007msg_"
+  "seq\030\002 \001(\003\022\014\n\004text\030\003 \001(\t\022\023\n\013sender_name\030\004"
+  " \001(\t\022\021\n\tsetter_id\030\005 \001(\t\"Q\n\020C_CreateBallD"
+  "rop\022\017\n\007conv_id\030\001 \001(\t\022\027\n\017participant_ids\030"
+  "\002 \003(\t\022\023\n\013ball_counts\030\003 \003(\005\"G\n\020S_CreateBa"
+  "llDrop\022\017\n\007conv_id\030\001 \001(\t\022\017\n\007msg_seq\030\002 \001(\003"
+  "\022\021\n\tgame_json\030\003 \001(\t\"\312\001\n\022C_CreatePhotoSli"
+  "de\022\017\n\007conv_id\030\001 \001(\t\022\022\n\nimage_urls\030\002 \003(\t\022"
+  "\026\n\016thumbnail_urls\030\003 \003(\t\022\017\n\007message\030\004 \001(\t"
+  "\022\022\n\nfont_style\030\005 \001(\t\022\025\n\rtext_position\030\006 "
+  "\001(\t\022\020\n\010bg_theme\030\007 \001(\t\022\026\n\016ending_message\030"
+  "\010 \001(\t\022\021\n\tfont_size\030\t \001(\005\"J\n\022S_CreatePhot"
+  "oSlide\022\017\n\007conv_id\030\001 \001(\t\022\017\n\007msg_seq\030\002 \001(\003"
+  "\022\022\n\nslide_json\030\003 \001(\t\"3\n\rC_SocialLogin\022\020\n"
+  "\010provider\030\001 \001(\t\022\020\n\010id_token\030\002 \001(\t\"c\n\rS_S"
+  "ocialLogin\022\032\n\022needs_registration\030\001 \001(\010\022\r"
+  "\n\005email\030\002 \001(\t\022\014\n\004name\030\003 \001(\t\022\031\n\021profile_i"
+  "mage_url\030\004 \001(\t\"[\n\026C_CompleteSocialSignup"
+  "\022\020\n\010provider\030\001 \001(\t\022\020\n\010id_token\030\002 \001(\t\022\017\n\007"
+  "user_id\030\003 \001(\t\022\014\n\004name\030\004 \001(\t\"Q\n\007S_Error\022\'"
+  "\n\nerror_code\030\001 \001(\0162\023.Protocol.ErrorCode\022"
+  "\014\n\004code\030\002 \001(\r\022\017\n\007message\030\003 \001(\t\"\r\n\013C_Hear"
+  "tbeat\"\r\n\013S_Heartbeat*-\n\tGroupRole\022\n\n\006MEM"
+  "BER\020\000\022\t\n\005ADMIN\020\001\022\t\n\005OWNER\020\002*\216\n\n\tErrorCod"
+  "e\022\017\n\013ERR_SUCCESS\020\000\022\017\n\013ERR_UNKNOWN\020\001\022\027\n\023E"
+  "RR_SERVER_INTERNAL\020\002\022\026\n\022ERR_INVALID_PACK"
+  "ET\020\003\022\030\n\024ERR_VERSION_MISMATCH\020\004\022\024\n\020ERR_UN"
+  "AUTHORIZED\020\005\022\025\n\021ERR_INVALID_TOKEN\020\006\022\025\n\021E"
+  "RR_USER_ID_EMPTY\020d\022\030\n\024ERR_USER_ID_REQUIR"
+  "ED\020e\022\031\n\025ERR_PASSWORD_REQUIRED\020f\022\025\n\021ERR_N"
+  "AME_REQUIRED\020g\022\026\n\022ERR_EMAIL_REQUIRED\020h\022\026"
+  "\n\022ERR_USER_NOT_FOUND\020i\022\030\n\024ERR_INVALID_PA"
+  "SSWORD\020j\022\033\n\027ERR_USER_ALREADY_EXISTS\020k\022\034\n"
+  "\030ERR_EMAIL_ALREADY_EXISTS\020l\022\032\n\026ERR_EMAIL"
+  "_NOT_VERIFIED\020m\022\026\n\021ERR_PAYLOAD_EMPTY\020\310\001\022"
+  "\030\n\023ERR_INVALID_CONV_ID\020\311\001\022\034\n\027ERR_INVALID"
+  "_RECEIVER_ID\020\312\001\022\024\n\017ERR_INVALID_ACK\020\313\001\022\037\n"
+  "\032ERR_INVALID_FRIEND_USER_ID\020\254\002\022\030\n\023ERR_CA"
+  "NNOT_ADD_SELF\020\255\002\022\025\n\020ERR_NOT_A_FRIEND\020\256\002\022"
+  "!\n\034ERR_FRIEND_REQUEST_NOT_FOUND\020\257\002\022%\n ER"
+  "R_FILE_SERVICE_NOT_INITIALIZED\020\220\003\022&\n!ERR"
+  "_CLOUD_STORAGE_NOT_INITIALIZED\020\221\003\022\032\n\025ERR"
+  "_FILENAME_REQUIRED\020\222\003\022\032\n\025ERR_INVALID_FIL"
+  "E_SIZE\020\223\003\022\033\n\026ERR_MIME_TYPE_REQUIRED\020\224\003\022\037"
+  "\n\032ERR_FAILED_TO_GENERATE_URL\020\225\003\022\031\n\024ERR_I"
+  "NVALID_FILE_URL\020\226\003\022\031\n\024ERR_INVALID_ARGUME"
+  "NT\020\227\003\022\031\n\024ERR_STORAGE_EXCEEDED\020\230\003\022\027\n\022ERR_"
+  "FILE_TOO_LARGE\020\231\003\022\027\n\022ERR_PAYMENT_FAILED\020"
+  "\232\003\022\030\n\023ERR_RECEIPT_INVALID\020\233\003\022\026\n\021ERR_NO_P"
+  "ERMISSION\020\364\003\022\030\n\023ERR_ALREADY_BLOCKED\020\330\004\022\024"
+  "\n\017ERR_NOT_BLOCKED\020\331\004\022\032\n\025ERR_CANNOT_BLOCK"
+  "_SELF\020\332\004\022\031\n\024ERR_REPORT_DUPLICATE\020\342\004\022\027\n\022E"
+  "RR_POLL_NOT_FOUND\020\274\005\022\024\n\017ERR_POLL_CLOSED\020"
+  "\275\005\022\034\n\027ERR_POLL_INVALID_OPTION\020\276\005\022\027\n\022ERR_"
+  "INVITE_EXPIRED\020\240\006\022!\n\035ERR_OAUTH_VERIFICAT"
+  "ION_FAILED\020x\022\036\n\032ERR_OAUTH_PROVIDER_INVAL"
+  "ID\020yb\006proto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_protocol_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_protocol_2eproto = {
-  false, false, 15384, descriptor_table_protodef_protocol_2eproto, "protocol.proto", 
-  &descriptor_table_protocol_2eproto_once, nullptr, 0, 113,
+  false, false, 16932, descriptor_table_protodef_protocol_2eproto, "protocol.proto", 
+  &descriptor_table_protocol_2eproto_once, nullptr, 0, 122,
   schemas, file_default_instances, TableStruct_protocol_2eproto::offsets,
   file_level_metadata_protocol_2eproto, file_level_enum_descriptors_protocol_2eproto, file_level_service_descriptors_protocol_2eproto,
 };
@@ -3332,6 +3613,9 @@ bool ErrorCode_IsValid(int value) {
     case 106:
     case 107:
     case 108:
+    case 109:
+    case 120:
+    case 121:
     case 200:
     case 201:
     case 202:
@@ -3360,6 +3644,7 @@ bool ErrorCode_IsValid(int value) {
     case 700:
     case 701:
     case 702:
+    case 800:
       return true;
     default:
       return false;
@@ -3445,6 +3730,15 @@ class Envelope::_Internal {
   static const ::Protocol::S_Vote& s_vote(const Envelope* msg);
   static const ::Protocol::S_ClosePoll& s_close_poll(const Envelope* msg);
   static const ::Protocol::S_SetAnnouncement& s_set_announcement(const Envelope* msg);
+  static const ::Protocol::C_CreateBallDrop& c_create_ball_drop(const Envelope* msg);
+  static const ::Protocol::S_CreateBallDrop& s_create_ball_drop(const Envelope* msg);
+  static const ::Protocol::C_CreatePhotoSlide& c_create_photo_slide(const Envelope* msg);
+  static const ::Protocol::S_CreatePhotoSlide& s_create_photo_slide(const Envelope* msg);
+  static const ::Protocol::C_RefreshInviteCode& c_refresh_invite_code(const Envelope* msg);
+  static const ::Protocol::S_RefreshInviteCode& s_refresh_invite_code(const Envelope* msg);
+  static const ::Protocol::C_SocialLogin& c_social_login(const Envelope* msg);
+  static const ::Protocol::S_SocialLogin& s_social_login(const Envelope* msg);
+  static const ::Protocol::C_CompleteSocialSignup& c_complete_social_signup(const Envelope* msg);
   static const ::Protocol::C_CreateGroup& c_create_group(const Envelope* msg);
   static const ::Protocol::S_CreateGroup& s_create_group(const Envelope* msg);
   static const ::Protocol::C_GroupList& c_group_list(const Envelope* msg);
@@ -3765,6 +4059,42 @@ Envelope::_Internal::s_close_poll(const Envelope* msg) {
 const ::Protocol::S_SetAnnouncement&
 Envelope::_Internal::s_set_announcement(const Envelope* msg) {
   return *msg->payload_.s_set_announcement_;
+}
+const ::Protocol::C_CreateBallDrop&
+Envelope::_Internal::c_create_ball_drop(const Envelope* msg) {
+  return *msg->payload_.c_create_ball_drop_;
+}
+const ::Protocol::S_CreateBallDrop&
+Envelope::_Internal::s_create_ball_drop(const Envelope* msg) {
+  return *msg->payload_.s_create_ball_drop_;
+}
+const ::Protocol::C_CreatePhotoSlide&
+Envelope::_Internal::c_create_photo_slide(const Envelope* msg) {
+  return *msg->payload_.c_create_photo_slide_;
+}
+const ::Protocol::S_CreatePhotoSlide&
+Envelope::_Internal::s_create_photo_slide(const Envelope* msg) {
+  return *msg->payload_.s_create_photo_slide_;
+}
+const ::Protocol::C_RefreshInviteCode&
+Envelope::_Internal::c_refresh_invite_code(const Envelope* msg) {
+  return *msg->payload_.c_refresh_invite_code_;
+}
+const ::Protocol::S_RefreshInviteCode&
+Envelope::_Internal::s_refresh_invite_code(const Envelope* msg) {
+  return *msg->payload_.s_refresh_invite_code_;
+}
+const ::Protocol::C_SocialLogin&
+Envelope::_Internal::c_social_login(const Envelope* msg) {
+  return *msg->payload_.c_social_login_;
+}
+const ::Protocol::S_SocialLogin&
+Envelope::_Internal::s_social_login(const Envelope* msg) {
+  return *msg->payload_.s_social_login_;
+}
+const ::Protocol::C_CompleteSocialSignup&
+Envelope::_Internal::c_complete_social_signup(const Envelope* msg) {
+  return *msg->payload_.c_complete_social_signup_;
 }
 const ::Protocol::C_CreateGroup&
 Envelope::_Internal::c_create_group(const Envelope* msg) {
@@ -4968,6 +5298,141 @@ void Envelope::set_allocated_s_set_announcement(::Protocol::S_SetAnnouncement* s
   }
   // @@protoc_insertion_point(field_set_allocated:Protocol.Envelope.s_set_announcement)
 }
+void Envelope::set_allocated_c_create_ball_drop(::Protocol::C_CreateBallDrop* c_create_ball_drop) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_payload();
+  if (c_create_ball_drop) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::Protocol::C_CreateBallDrop>::GetOwningArena(c_create_ball_drop);
+    if (message_arena != submessage_arena) {
+      c_create_ball_drop = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, c_create_ball_drop, submessage_arena);
+    }
+    set_has_c_create_ball_drop();
+    payload_.c_create_ball_drop_ = c_create_ball_drop;
+  }
+  // @@protoc_insertion_point(field_set_allocated:Protocol.Envelope.c_create_ball_drop)
+}
+void Envelope::set_allocated_s_create_ball_drop(::Protocol::S_CreateBallDrop* s_create_ball_drop) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_payload();
+  if (s_create_ball_drop) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::Protocol::S_CreateBallDrop>::GetOwningArena(s_create_ball_drop);
+    if (message_arena != submessage_arena) {
+      s_create_ball_drop = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, s_create_ball_drop, submessage_arena);
+    }
+    set_has_s_create_ball_drop();
+    payload_.s_create_ball_drop_ = s_create_ball_drop;
+  }
+  // @@protoc_insertion_point(field_set_allocated:Protocol.Envelope.s_create_ball_drop)
+}
+void Envelope::set_allocated_c_create_photo_slide(::Protocol::C_CreatePhotoSlide* c_create_photo_slide) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_payload();
+  if (c_create_photo_slide) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::Protocol::C_CreatePhotoSlide>::GetOwningArena(c_create_photo_slide);
+    if (message_arena != submessage_arena) {
+      c_create_photo_slide = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, c_create_photo_slide, submessage_arena);
+    }
+    set_has_c_create_photo_slide();
+    payload_.c_create_photo_slide_ = c_create_photo_slide;
+  }
+  // @@protoc_insertion_point(field_set_allocated:Protocol.Envelope.c_create_photo_slide)
+}
+void Envelope::set_allocated_s_create_photo_slide(::Protocol::S_CreatePhotoSlide* s_create_photo_slide) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_payload();
+  if (s_create_photo_slide) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::Protocol::S_CreatePhotoSlide>::GetOwningArena(s_create_photo_slide);
+    if (message_arena != submessage_arena) {
+      s_create_photo_slide = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, s_create_photo_slide, submessage_arena);
+    }
+    set_has_s_create_photo_slide();
+    payload_.s_create_photo_slide_ = s_create_photo_slide;
+  }
+  // @@protoc_insertion_point(field_set_allocated:Protocol.Envelope.s_create_photo_slide)
+}
+void Envelope::set_allocated_c_refresh_invite_code(::Protocol::C_RefreshInviteCode* c_refresh_invite_code) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_payload();
+  if (c_refresh_invite_code) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::Protocol::C_RefreshInviteCode>::GetOwningArena(c_refresh_invite_code);
+    if (message_arena != submessage_arena) {
+      c_refresh_invite_code = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, c_refresh_invite_code, submessage_arena);
+    }
+    set_has_c_refresh_invite_code();
+    payload_.c_refresh_invite_code_ = c_refresh_invite_code;
+  }
+  // @@protoc_insertion_point(field_set_allocated:Protocol.Envelope.c_refresh_invite_code)
+}
+void Envelope::set_allocated_s_refresh_invite_code(::Protocol::S_RefreshInviteCode* s_refresh_invite_code) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_payload();
+  if (s_refresh_invite_code) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::Protocol::S_RefreshInviteCode>::GetOwningArena(s_refresh_invite_code);
+    if (message_arena != submessage_arena) {
+      s_refresh_invite_code = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, s_refresh_invite_code, submessage_arena);
+    }
+    set_has_s_refresh_invite_code();
+    payload_.s_refresh_invite_code_ = s_refresh_invite_code;
+  }
+  // @@protoc_insertion_point(field_set_allocated:Protocol.Envelope.s_refresh_invite_code)
+}
+void Envelope::set_allocated_c_social_login(::Protocol::C_SocialLogin* c_social_login) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_payload();
+  if (c_social_login) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::Protocol::C_SocialLogin>::GetOwningArena(c_social_login);
+    if (message_arena != submessage_arena) {
+      c_social_login = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, c_social_login, submessage_arena);
+    }
+    set_has_c_social_login();
+    payload_.c_social_login_ = c_social_login;
+  }
+  // @@protoc_insertion_point(field_set_allocated:Protocol.Envelope.c_social_login)
+}
+void Envelope::set_allocated_s_social_login(::Protocol::S_SocialLogin* s_social_login) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_payload();
+  if (s_social_login) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::Protocol::S_SocialLogin>::GetOwningArena(s_social_login);
+    if (message_arena != submessage_arena) {
+      s_social_login = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, s_social_login, submessage_arena);
+    }
+    set_has_s_social_login();
+    payload_.s_social_login_ = s_social_login;
+  }
+  // @@protoc_insertion_point(field_set_allocated:Protocol.Envelope.s_social_login)
+}
+void Envelope::set_allocated_c_complete_social_signup(::Protocol::C_CompleteSocialSignup* c_complete_social_signup) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  clear_payload();
+  if (c_complete_social_signup) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+      ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::Protocol::C_CompleteSocialSignup>::GetOwningArena(c_complete_social_signup);
+    if (message_arena != submessage_arena) {
+      c_complete_social_signup = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, c_complete_social_signup, submessage_arena);
+    }
+    set_has_c_complete_social_signup();
+    payload_.c_complete_social_signup_ = c_complete_social_signup;
+  }
+  // @@protoc_insertion_point(field_set_allocated:Protocol.Envelope.c_complete_social_signup)
+}
 void Envelope::set_allocated_c_create_group(::Protocol::C_CreateGroup* c_create_group) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   clear_payload();
@@ -5628,6 +6093,42 @@ Envelope::Envelope(const Envelope& from)
       _internal_mutable_s_set_announcement()->::Protocol::S_SetAnnouncement::MergeFrom(from._internal_s_set_announcement());
       break;
     }
+    case kCCreateBallDrop: {
+      _internal_mutable_c_create_ball_drop()->::Protocol::C_CreateBallDrop::MergeFrom(from._internal_c_create_ball_drop());
+      break;
+    }
+    case kSCreateBallDrop: {
+      _internal_mutable_s_create_ball_drop()->::Protocol::S_CreateBallDrop::MergeFrom(from._internal_s_create_ball_drop());
+      break;
+    }
+    case kCCreatePhotoSlide: {
+      _internal_mutable_c_create_photo_slide()->::Protocol::C_CreatePhotoSlide::MergeFrom(from._internal_c_create_photo_slide());
+      break;
+    }
+    case kSCreatePhotoSlide: {
+      _internal_mutable_s_create_photo_slide()->::Protocol::S_CreatePhotoSlide::MergeFrom(from._internal_s_create_photo_slide());
+      break;
+    }
+    case kCRefreshInviteCode: {
+      _internal_mutable_c_refresh_invite_code()->::Protocol::C_RefreshInviteCode::MergeFrom(from._internal_c_refresh_invite_code());
+      break;
+    }
+    case kSRefreshInviteCode: {
+      _internal_mutable_s_refresh_invite_code()->::Protocol::S_RefreshInviteCode::MergeFrom(from._internal_s_refresh_invite_code());
+      break;
+    }
+    case kCSocialLogin: {
+      _internal_mutable_c_social_login()->::Protocol::C_SocialLogin::MergeFrom(from._internal_c_social_login());
+      break;
+    }
+    case kSSocialLogin: {
+      _internal_mutable_s_social_login()->::Protocol::S_SocialLogin::MergeFrom(from._internal_s_social_login());
+      break;
+    }
+    case kCCompleteSocialSignup: {
+      _internal_mutable_c_complete_social_signup()->::Protocol::C_CompleteSocialSignup::MergeFrom(from._internal_c_complete_social_signup());
+      break;
+    }
     case kCCreateGroup: {
       _internal_mutable_c_create_group()->::Protocol::C_CreateGroup::MergeFrom(from._internal_c_create_group());
       break;
@@ -6204,6 +6705,60 @@ void Envelope::clear_payload() {
     case kSSetAnnouncement: {
       if (GetArenaForAllocation() == nullptr) {
         delete payload_.s_set_announcement_;
+      }
+      break;
+    }
+    case kCCreateBallDrop: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete payload_.c_create_ball_drop_;
+      }
+      break;
+    }
+    case kSCreateBallDrop: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete payload_.s_create_ball_drop_;
+      }
+      break;
+    }
+    case kCCreatePhotoSlide: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete payload_.c_create_photo_slide_;
+      }
+      break;
+    }
+    case kSCreatePhotoSlide: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete payload_.s_create_photo_slide_;
+      }
+      break;
+    }
+    case kCRefreshInviteCode: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete payload_.c_refresh_invite_code_;
+      }
+      break;
+    }
+    case kSRefreshInviteCode: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete payload_.s_refresh_invite_code_;
+      }
+      break;
+    }
+    case kCSocialLogin: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete payload_.c_social_login_;
+      }
+      break;
+    }
+    case kSSocialLogin: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete payload_.s_social_login_;
+      }
+      break;
+    }
+    case kCCompleteSocialSignup: {
+      if (GetArenaForAllocation() == nullptr) {
+        delete payload_.c_complete_social_signup_;
       }
       break;
     }
@@ -7075,6 +7630,69 @@ const char* Envelope::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
+      // .Protocol.C_CreateBallDrop c_create_ball_drop = 109;
+      case 109:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 106)) {
+          ptr = ctx->ParseMessage(_internal_mutable_c_create_ball_drop(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .Protocol.S_CreateBallDrop s_create_ball_drop = 110;
+      case 110:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 114)) {
+          ptr = ctx->ParseMessage(_internal_mutable_s_create_ball_drop(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .Protocol.C_CreatePhotoSlide c_create_photo_slide = 111;
+      case 111:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 122)) {
+          ptr = ctx->ParseMessage(_internal_mutable_c_create_photo_slide(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .Protocol.S_CreatePhotoSlide s_create_photo_slide = 112;
+      case 112:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 130)) {
+          ptr = ctx->ParseMessage(_internal_mutable_s_create_photo_slide(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .Protocol.C_RefreshInviteCode c_refresh_invite_code = 113;
+      case 113:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 138)) {
+          ptr = ctx->ParseMessage(_internal_mutable_c_refresh_invite_code(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .Protocol.S_RefreshInviteCode s_refresh_invite_code = 114;
+      case 114:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 146)) {
+          ptr = ctx->ParseMessage(_internal_mutable_s_refresh_invite_code(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .Protocol.C_SocialLogin c_social_login = 115;
+      case 115:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 154)) {
+          ptr = ctx->ParseMessage(_internal_mutable_c_social_login(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .Protocol.S_SocialLogin s_social_login = 116;
+      case 116:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 162)) {
+          ptr = ctx->ParseMessage(_internal_mutable_s_social_login(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .Protocol.C_CompleteSocialSignup c_complete_social_signup = 117;
+      case 117:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 170)) {
+          ptr = ctx->ParseMessage(_internal_mutable_c_complete_social_signup(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
       default: {
       handle_unusual:
         if ((tag == 0) || ((tag & 7) == 4)) {
@@ -7902,6 +8520,78 @@ failure:
         108, _Internal::s_set_announcement(this), target, stream);
   }
 
+  // .Protocol.C_CreateBallDrop c_create_ball_drop = 109;
+  if (_internal_has_c_create_ball_drop()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        109, _Internal::c_create_ball_drop(this), target, stream);
+  }
+
+  // .Protocol.S_CreateBallDrop s_create_ball_drop = 110;
+  if (_internal_has_s_create_ball_drop()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        110, _Internal::s_create_ball_drop(this), target, stream);
+  }
+
+  // .Protocol.C_CreatePhotoSlide c_create_photo_slide = 111;
+  if (_internal_has_c_create_photo_slide()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        111, _Internal::c_create_photo_slide(this), target, stream);
+  }
+
+  // .Protocol.S_CreatePhotoSlide s_create_photo_slide = 112;
+  if (_internal_has_s_create_photo_slide()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        112, _Internal::s_create_photo_slide(this), target, stream);
+  }
+
+  // .Protocol.C_RefreshInviteCode c_refresh_invite_code = 113;
+  if (_internal_has_c_refresh_invite_code()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        113, _Internal::c_refresh_invite_code(this), target, stream);
+  }
+
+  // .Protocol.S_RefreshInviteCode s_refresh_invite_code = 114;
+  if (_internal_has_s_refresh_invite_code()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        114, _Internal::s_refresh_invite_code(this), target, stream);
+  }
+
+  // .Protocol.C_SocialLogin c_social_login = 115;
+  if (_internal_has_c_social_login()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        115, _Internal::c_social_login(this), target, stream);
+  }
+
+  // .Protocol.S_SocialLogin s_social_login = 116;
+  if (_internal_has_s_social_login()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        116, _Internal::s_social_login(this), target, stream);
+  }
+
+  // .Protocol.C_CompleteSocialSignup c_complete_social_signup = 117;
+  if (_internal_has_c_complete_social_signup()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        117, _Internal::c_complete_social_signup(this), target, stream);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -8458,6 +9148,69 @@ size_t Envelope::ByteSizeLong() const {
           *payload_.s_set_announcement_);
       break;
     }
+    // .Protocol.C_CreateBallDrop c_create_ball_drop = 109;
+    case kCCreateBallDrop: {
+      total_size += 2 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *payload_.c_create_ball_drop_);
+      break;
+    }
+    // .Protocol.S_CreateBallDrop s_create_ball_drop = 110;
+    case kSCreateBallDrop: {
+      total_size += 2 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *payload_.s_create_ball_drop_);
+      break;
+    }
+    // .Protocol.C_CreatePhotoSlide c_create_photo_slide = 111;
+    case kCCreatePhotoSlide: {
+      total_size += 2 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *payload_.c_create_photo_slide_);
+      break;
+    }
+    // .Protocol.S_CreatePhotoSlide s_create_photo_slide = 112;
+    case kSCreatePhotoSlide: {
+      total_size += 2 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *payload_.s_create_photo_slide_);
+      break;
+    }
+    // .Protocol.C_RefreshInviteCode c_refresh_invite_code = 113;
+    case kCRefreshInviteCode: {
+      total_size += 2 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *payload_.c_refresh_invite_code_);
+      break;
+    }
+    // .Protocol.S_RefreshInviteCode s_refresh_invite_code = 114;
+    case kSRefreshInviteCode: {
+      total_size += 2 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *payload_.s_refresh_invite_code_);
+      break;
+    }
+    // .Protocol.C_SocialLogin c_social_login = 115;
+    case kCSocialLogin: {
+      total_size += 2 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *payload_.c_social_login_);
+      break;
+    }
+    // .Protocol.S_SocialLogin s_social_login = 116;
+    case kSSocialLogin: {
+      total_size += 2 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *payload_.s_social_login_);
+      break;
+    }
+    // .Protocol.C_CompleteSocialSignup c_complete_social_signup = 117;
+    case kCCompleteSocialSignup: {
+      total_size += 2 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+          *payload_.c_complete_social_signup_);
+      break;
+    }
     // .Protocol.C_CreateGroup c_create_group = 80;
     case kCCreateGroup: {
       total_size += 2 +
@@ -8960,6 +9713,42 @@ void Envelope::MergeFrom(const Envelope& from) {
       _internal_mutable_s_set_announcement()->::Protocol::S_SetAnnouncement::MergeFrom(from._internal_s_set_announcement());
       break;
     }
+    case kCCreateBallDrop: {
+      _internal_mutable_c_create_ball_drop()->::Protocol::C_CreateBallDrop::MergeFrom(from._internal_c_create_ball_drop());
+      break;
+    }
+    case kSCreateBallDrop: {
+      _internal_mutable_s_create_ball_drop()->::Protocol::S_CreateBallDrop::MergeFrom(from._internal_s_create_ball_drop());
+      break;
+    }
+    case kCCreatePhotoSlide: {
+      _internal_mutable_c_create_photo_slide()->::Protocol::C_CreatePhotoSlide::MergeFrom(from._internal_c_create_photo_slide());
+      break;
+    }
+    case kSCreatePhotoSlide: {
+      _internal_mutable_s_create_photo_slide()->::Protocol::S_CreatePhotoSlide::MergeFrom(from._internal_s_create_photo_slide());
+      break;
+    }
+    case kCRefreshInviteCode: {
+      _internal_mutable_c_refresh_invite_code()->::Protocol::C_RefreshInviteCode::MergeFrom(from._internal_c_refresh_invite_code());
+      break;
+    }
+    case kSRefreshInviteCode: {
+      _internal_mutable_s_refresh_invite_code()->::Protocol::S_RefreshInviteCode::MergeFrom(from._internal_s_refresh_invite_code());
+      break;
+    }
+    case kCSocialLogin: {
+      _internal_mutable_c_social_login()->::Protocol::C_SocialLogin::MergeFrom(from._internal_c_social_login());
+      break;
+    }
+    case kSSocialLogin: {
+      _internal_mutable_s_social_login()->::Protocol::S_SocialLogin::MergeFrom(from._internal_s_social_login());
+      break;
+    }
+    case kCCompleteSocialSignup: {
+      _internal_mutable_c_complete_social_signup()->::Protocol::C_CompleteSocialSignup::MergeFrom(from._internal_c_complete_social_signup());
+      break;
+    }
     case kCCreateGroup: {
       _internal_mutable_c_create_group()->::Protocol::C_CreateGroup::MergeFrom(from._internal_c_create_group());
       break;
@@ -9155,9 +9944,14 @@ UserInfo::UserInfo(const UserInfo& from)
     status_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_status(), 
       GetArenaForAllocation());
   }
+  oauth_provider_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_oauth_provider().empty()) {
+    oauth_provider_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_oauth_provider(), 
+      GetArenaForAllocation());
+  }
   ::memcpy(&storage_capacity_bytes_, &from.storage_capacity_bytes_,
-    static_cast<size_t>(reinterpret_cast<char*>(&sub_grade_) -
-    reinterpret_cast<char*>(&storage_capacity_bytes_)) + sizeof(sub_grade_));
+    static_cast<size_t>(reinterpret_cast<char*>(&last_seen_) -
+    reinterpret_cast<char*>(&storage_capacity_bytes_)) + sizeof(last_seen_));
   // @@protoc_insertion_point(copy_constructor:Protocol.UserInfo)
 }
 
@@ -9170,10 +9964,11 @@ background_image_url_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEm
 email_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 phone_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 status_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+oauth_provider_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
     reinterpret_cast<char*>(&storage_capacity_bytes_) - reinterpret_cast<char*>(this)),
-    0, static_cast<size_t>(reinterpret_cast<char*>(&sub_grade_) -
-    reinterpret_cast<char*>(&storage_capacity_bytes_)) + sizeof(sub_grade_));
+    0, static_cast<size_t>(reinterpret_cast<char*>(&last_seen_) -
+    reinterpret_cast<char*>(&storage_capacity_bytes_)) + sizeof(last_seen_));
 }
 
 UserInfo::~UserInfo() {
@@ -9192,6 +9987,7 @@ void UserInfo::SharedDtor() {
   email_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   phone_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   status_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  oauth_provider_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
 void UserInfo::ArenaDtor(void* object) {
@@ -9218,9 +10014,10 @@ void UserInfo::Clear() {
   email_.ClearToEmpty();
   phone_.ClearToEmpty();
   status_.ClearToEmpty();
+  oauth_provider_.ClearToEmpty();
   ::memset(&storage_capacity_bytes_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&sub_grade_) -
-      reinterpret_cast<char*>(&storage_capacity_bytes_)) + sizeof(sub_grade_));
+      reinterpret_cast<char*>(&last_seen_) -
+      reinterpret_cast<char*>(&storage_capacity_bytes_)) + sizeof(last_seen_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -9327,6 +10124,22 @@ const char* UserInfo::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
           auto str = _internal_mutable_status();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.UserInfo.status"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // bool is_email_verified = 13;
+      case 13:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 104)) {
+          is_email_verified_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string oauth_provider = 14;
+      case 14:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 114)) {
+          auto str = _internal_mutable_oauth_provider();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.UserInfo.oauth_provider"));
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -9463,6 +10276,22 @@ failure:
         12, this->_internal_status(), target);
   }
 
+  // bool is_email_verified = 13;
+  if (this->is_email_verified() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(13, this->_internal_is_email_verified(), target);
+  }
+
+  // string oauth_provider = 14;
+  if (!this->oauth_provider().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_oauth_provider().data(), static_cast<int>(this->_internal_oauth_provider().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.UserInfo.oauth_provider");
+    target = stream->WriteStringMaybeAliased(
+        14, this->_internal_oauth_provider(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -9535,6 +10364,13 @@ size_t UserInfo::ByteSizeLong() const {
         this->_internal_status());
   }
 
+  // string oauth_provider = 14;
+  if (!this->oauth_provider().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_oauth_provider());
+  }
+
   // int64 storage_capacity_bytes = 9;
   if (this->storage_capacity_bytes() != 0) {
     total_size += 1 +
@@ -9549,18 +10385,23 @@ size_t UserInfo::ByteSizeLong() const {
         this->_internal_storage_usage_bytes());
   }
 
-  // int64 last_seen = 11;
-  if (this->last_seen() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int64Size(
-        this->_internal_last_seen());
-  }
-
   // uint32 sub_grade = 8;
   if (this->sub_grade() != 0) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
         this->_internal_sub_grade());
+  }
+
+  // bool is_email_verified = 13;
+  if (this->is_email_verified() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // int64 last_seen = 11;
+  if (this->last_seen() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int64Size(
+        this->_internal_last_seen());
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -9618,17 +10459,23 @@ void UserInfo::MergeFrom(const UserInfo& from) {
   if (!from.status().empty()) {
     _internal_set_status(from._internal_status());
   }
+  if (!from.oauth_provider().empty()) {
+    _internal_set_oauth_provider(from._internal_oauth_provider());
+  }
   if (from.storage_capacity_bytes() != 0) {
     _internal_set_storage_capacity_bytes(from._internal_storage_capacity_bytes());
   }
   if (from.storage_usage_bytes() != 0) {
     _internal_set_storage_usage_bytes(from._internal_storage_usage_bytes());
   }
-  if (from.last_seen() != 0) {
-    _internal_set_last_seen(from._internal_last_seen());
-  }
   if (from.sub_grade() != 0) {
     _internal_set_sub_grade(from._internal_sub_grade());
+  }
+  if (from.is_email_verified() != 0) {
+    _internal_set_is_email_verified(from._internal_is_email_verified());
+  }
+  if (from.last_seen() != 0) {
+    _internal_set_last_seen(from._internal_last_seen());
   }
 }
 
@@ -9693,9 +10540,14 @@ void UserInfo::InternalSwap(UserInfo* other) {
       &status_, GetArenaForAllocation(),
       &other->status_, other->GetArenaForAllocation()
   );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &oauth_provider_, GetArenaForAllocation(),
+      &other->oauth_provider_, other->GetArenaForAllocation()
+  );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(UserInfo, sub_grade_)
-      + sizeof(UserInfo::sub_grade_)
+      PROTOBUF_FIELD_OFFSET(UserInfo, last_seen_)
+      + sizeof(UserInfo::last_seen_)
       - PROTOBUF_FIELD_OFFSET(UserInfo, storage_capacity_bytes_)>(
           reinterpret_cast<char*>(&storage_capacity_bytes_),
           reinterpret_cast<char*>(&other->storage_capacity_bytes_));
@@ -28802,6 +29654,13 @@ const char* GroupInfo::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
+      // int64 invite_code_expires_at = 9;
+      case 9:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 72)) {
+          invite_code_expires_at_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
       default: {
       handle_unusual:
         if ((tag == 0) || ((tag & 7) == 4)) {
@@ -28899,6 +29758,12 @@ failure:
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64ToArray(8, this->_internal_storage_usage_bytes(), target);
   }
 
+  // int64 invite_code_expires_at = 9;
+  if (this->invite_code_expires_at() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64ToArray(9, this->_internal_invite_code_expires_at(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -28964,6 +29829,13 @@ size_t GroupInfo::ByteSizeLong() const {
         this->_internal_storage_usage_bytes());
   }
 
+  // int64 invite_code_expires_at = 9;
+  if (this->invite_code_expires_at() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int64Size(
+        this->_internal_invite_code_expires_at());
+  }
+
   // int32 member_count = 6;
   if (this->member_count() != 0) {
     total_size += 1 +
@@ -29022,6 +29894,9 @@ void GroupInfo::MergeFrom(const GroupInfo& from) {
   }
   if (from.storage_usage_bytes() != 0) {
     _internal_set_storage_usage_bytes(from._internal_storage_usage_bytes());
+  }
+  if (from.invite_code_expires_at() != 0) {
+    _internal_set_invite_code_expires_at(from._internal_invite_code_expires_at());
   }
   if (from.member_count() != 0) {
     _internal_set_member_count(from._internal_member_count());
@@ -31199,6 +32074,476 @@ void S_JoinGroup::InternalSwap(S_JoinGroup* other) {
 
 // ===================================================================
 
+class C_RefreshInviteCode::_Internal {
+ public:
+};
+
+C_RefreshInviteCode::C_RefreshInviteCode(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+  SharedCtor();
+  RegisterArenaDtor(arena);
+  // @@protoc_insertion_point(arena_constructor:Protocol.C_RefreshInviteCode)
+}
+C_RefreshInviteCode::C_RefreshInviteCode(const C_RefreshInviteCode& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  group_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_group_id().empty()) {
+    group_id_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_group_id(), 
+      GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:Protocol.C_RefreshInviteCode)
+}
+
+void C_RefreshInviteCode::SharedCtor() {
+group_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+C_RefreshInviteCode::~C_RefreshInviteCode() {
+  // @@protoc_insertion_point(destructor:Protocol.C_RefreshInviteCode)
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+void C_RefreshInviteCode::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  group_id_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void C_RefreshInviteCode::ArenaDtor(void* object) {
+  C_RefreshInviteCode* _this = reinterpret_cast< C_RefreshInviteCode* >(object);
+  (void)_this;
+}
+void C_RefreshInviteCode::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void C_RefreshInviteCode::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void C_RefreshInviteCode::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.C_RefreshInviteCode)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  group_id_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* C_RefreshInviteCode::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string group_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          auto str = _internal_mutable_group_id();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.C_RefreshInviteCode.group_id"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* C_RefreshInviteCode::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.C_RefreshInviteCode)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string group_id = 1;
+  if (!this->group_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_group_id().data(), static_cast<int>(this->_internal_group_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.C_RefreshInviteCode.group_id");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_group_id(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.C_RefreshInviteCode)
+  return target;
+}
+
+size_t C_RefreshInviteCode::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.C_RefreshInviteCode)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string group_id = 1;
+  if (!this->group_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_group_id());
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void C_RefreshInviteCode::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:Protocol.C_RefreshInviteCode)
+  GOOGLE_DCHECK_NE(&from, this);
+  const C_RefreshInviteCode* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<C_RefreshInviteCode>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:Protocol.C_RefreshInviteCode)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:Protocol.C_RefreshInviteCode)
+    MergeFrom(*source);
+  }
+}
+
+void C_RefreshInviteCode::MergeFrom(const C_RefreshInviteCode& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:Protocol.C_RefreshInviteCode)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from.group_id().empty()) {
+    _internal_set_group_id(from._internal_group_id());
+  }
+}
+
+void C_RefreshInviteCode::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:Protocol.C_RefreshInviteCode)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void C_RefreshInviteCode::CopyFrom(const C_RefreshInviteCode& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.C_RefreshInviteCode)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool C_RefreshInviteCode::IsInitialized() const {
+  return true;
+}
+
+void C_RefreshInviteCode::InternalSwap(C_RefreshInviteCode* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &group_id_, GetArenaForAllocation(),
+      &other->group_id_, other->GetArenaForAllocation()
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata C_RefreshInviteCode::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
+      file_level_metadata_protocol_2eproto[83]);
+}
+
+// ===================================================================
+
+class S_RefreshInviteCode::_Internal {
+ public:
+};
+
+S_RefreshInviteCode::S_RefreshInviteCode(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+  SharedCtor();
+  RegisterArenaDtor(arena);
+  // @@protoc_insertion_point(arena_constructor:Protocol.S_RefreshInviteCode)
+}
+S_RefreshInviteCode::S_RefreshInviteCode(const S_RefreshInviteCode& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  group_code_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_group_code().empty()) {
+    group_code_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_group_code(), 
+      GetArenaForAllocation());
+  }
+  ::memcpy(&expires_at_, &from.expires_at_,
+    static_cast<size_t>(reinterpret_cast<char*>(&success_) -
+    reinterpret_cast<char*>(&expires_at_)) + sizeof(success_));
+  // @@protoc_insertion_point(copy_constructor:Protocol.S_RefreshInviteCode)
+}
+
+void S_RefreshInviteCode::SharedCtor() {
+group_code_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&expires_at_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&success_) -
+    reinterpret_cast<char*>(&expires_at_)) + sizeof(success_));
+}
+
+S_RefreshInviteCode::~S_RefreshInviteCode() {
+  // @@protoc_insertion_point(destructor:Protocol.S_RefreshInviteCode)
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+void S_RefreshInviteCode::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  group_code_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void S_RefreshInviteCode::ArenaDtor(void* object) {
+  S_RefreshInviteCode* _this = reinterpret_cast< S_RefreshInviteCode* >(object);
+  (void)_this;
+}
+void S_RefreshInviteCode::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void S_RefreshInviteCode::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void S_RefreshInviteCode::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.S_RefreshInviteCode)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  group_code_.ClearToEmpty();
+  ::memset(&expires_at_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&success_) -
+      reinterpret_cast<char*>(&expires_at_)) + sizeof(success_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* S_RefreshInviteCode::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // bool success = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
+          success_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string group_code = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+          auto str = _internal_mutable_group_code();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.S_RefreshInviteCode.group_code"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int64 expires_at = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
+          expires_at_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* S_RefreshInviteCode::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.S_RefreshInviteCode)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // bool success = 1;
+  if (this->success() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(1, this->_internal_success(), target);
+  }
+
+  // string group_code = 2;
+  if (!this->group_code().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_group_code().data(), static_cast<int>(this->_internal_group_code().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.S_RefreshInviteCode.group_code");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_group_code(), target);
+  }
+
+  // int64 expires_at = 3;
+  if (this->expires_at() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64ToArray(3, this->_internal_expires_at(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.S_RefreshInviteCode)
+  return target;
+}
+
+size_t S_RefreshInviteCode::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.S_RefreshInviteCode)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string group_code = 2;
+  if (!this->group_code().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_group_code());
+  }
+
+  // int64 expires_at = 3;
+  if (this->expires_at() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int64Size(
+        this->_internal_expires_at());
+  }
+
+  // bool success = 1;
+  if (this->success() != 0) {
+    total_size += 1 + 1;
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void S_RefreshInviteCode::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:Protocol.S_RefreshInviteCode)
+  GOOGLE_DCHECK_NE(&from, this);
+  const S_RefreshInviteCode* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<S_RefreshInviteCode>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:Protocol.S_RefreshInviteCode)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:Protocol.S_RefreshInviteCode)
+    MergeFrom(*source);
+  }
+}
+
+void S_RefreshInviteCode::MergeFrom(const S_RefreshInviteCode& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:Protocol.S_RefreshInviteCode)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from.group_code().empty()) {
+    _internal_set_group_code(from._internal_group_code());
+  }
+  if (from.expires_at() != 0) {
+    _internal_set_expires_at(from._internal_expires_at());
+  }
+  if (from.success() != 0) {
+    _internal_set_success(from._internal_success());
+  }
+}
+
+void S_RefreshInviteCode::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:Protocol.S_RefreshInviteCode)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void S_RefreshInviteCode::CopyFrom(const S_RefreshInviteCode& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.S_RefreshInviteCode)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool S_RefreshInviteCode::IsInitialized() const {
+  return true;
+}
+
+void S_RefreshInviteCode::InternalSwap(S_RefreshInviteCode* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &group_code_, GetArenaForAllocation(),
+      &other->group_code_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(S_RefreshInviteCode, success_)
+      + sizeof(S_RefreshInviteCode::success_)
+      - PROTOBUF_FIELD_OFFSET(S_RefreshInviteCode, expires_at_)>(
+          reinterpret_cast<char*>(&expires_at_),
+          reinterpret_cast<char*>(&other->expires_at_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata S_RefreshInviteCode::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
+      file_level_metadata_protocol_2eproto[84]);
+}
+
+// ===================================================================
+
 class C_GroupMemberList::_Internal {
  public:
 };
@@ -31399,7 +32744,7 @@ void C_GroupMemberList::InternalSwap(C_GroupMemberList* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_GroupMemberList::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[83]);
+      file_level_metadata_protocol_2eproto[85]);
 }
 
 // ===================================================================
@@ -31636,7 +32981,7 @@ void S_GroupMemberList::InternalSwap(S_GroupMemberList* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_GroupMemberList::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[84]);
+      file_level_metadata_protocol_2eproto[86]);
 }
 
 // ===================================================================
@@ -31841,7 +33186,7 @@ void C_LeaveGroup::InternalSwap(C_LeaveGroup* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_LeaveGroup::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[85]);
+      file_level_metadata_protocol_2eproto[87]);
 }
 
 // ===================================================================
@@ -32029,7 +33374,7 @@ void S_LeaveGroup::InternalSwap(S_LeaveGroup* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_LeaveGroup::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[86]);
+      file_level_metadata_protocol_2eproto[88]);
 }
 
 // ===================================================================
@@ -32360,7 +33705,7 @@ void C_EditGroup::InternalSwap(C_EditGroup* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_EditGroup::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[87]);
+      file_level_metadata_protocol_2eproto[89]);
 }
 
 // ===================================================================
@@ -32596,7 +33941,7 @@ void S_EditGroup::InternalSwap(S_EditGroup* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_EditGroup::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[88]);
+      file_level_metadata_protocol_2eproto[90]);
 }
 
 // ===================================================================
@@ -32801,7 +34146,7 @@ void C_DeleteGroup::InternalSwap(C_DeleteGroup* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_DeleteGroup::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[89]);
+      file_level_metadata_protocol_2eproto[91]);
 }
 
 // ===================================================================
@@ -32989,7 +34334,7 @@ void S_DeleteGroup::InternalSwap(S_DeleteGroup* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_DeleteGroup::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[90]);
+      file_level_metadata_protocol_2eproto[92]);
 }
 
 // ===================================================================
@@ -33305,7 +34650,7 @@ void BlockedUserInfo::InternalSwap(BlockedUserInfo* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata BlockedUserInfo::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[91]);
+      file_level_metadata_protocol_2eproto[93]);
 }
 
 // ===================================================================
@@ -33510,7 +34855,7 @@ void C_BlockUser::InternalSwap(C_BlockUser* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_BlockUser::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[92]);
+      file_level_metadata_protocol_2eproto[94]);
 }
 
 // ===================================================================
@@ -33740,7 +35085,7 @@ void S_BlockUser::InternalSwap(S_BlockUser* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_BlockUser::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[93]);
+      file_level_metadata_protocol_2eproto[95]);
 }
 
 // ===================================================================
@@ -33945,7 +35290,7 @@ void C_UnblockUser::InternalSwap(C_UnblockUser* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_UnblockUser::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[94]);
+      file_level_metadata_protocol_2eproto[96]);
 }
 
 // ===================================================================
@@ -34133,7 +35478,7 @@ void S_UnblockUser::InternalSwap(S_UnblockUser* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_UnblockUser::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[95]);
+      file_level_metadata_protocol_2eproto[97]);
 }
 
 // ===================================================================
@@ -34291,7 +35636,7 @@ void C_GetBlockedList::InternalSwap(C_GetBlockedList* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_GetBlockedList::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[96]);
+      file_level_metadata_protocol_2eproto[98]);
 }
 
 // ===================================================================
@@ -34486,7 +35831,7 @@ void S_GetBlockedList::InternalSwap(S_GetBlockedList* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_GetBlockedList::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[97]);
+      file_level_metadata_protocol_2eproto[99]);
 }
 
 // ===================================================================
@@ -34775,7 +36120,7 @@ void C_ReportUser::InternalSwap(C_ReportUser* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_ReportUser::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[98]);
+      file_level_metadata_protocol_2eproto[100]);
 }
 
 // ===================================================================
@@ -34963,7 +36308,7 @@ void S_ReportUser::InternalSwap(S_ReportUser* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_ReportUser::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[99]);
+      file_level_metadata_protocol_2eproto[101]);
 }
 
 // ===================================================================
@@ -35237,7 +36582,7 @@ void C_AddReaction::InternalSwap(C_AddReaction* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_AddReaction::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[100]);
+      file_level_metadata_protocol_2eproto[102]);
 }
 
 // ===================================================================
@@ -35586,7 +36931,7 @@ void S_AddReaction::InternalSwap(S_AddReaction* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_AddReaction::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[101]);
+      file_level_metadata_protocol_2eproto[103]);
 }
 
 // ===================================================================
@@ -35951,7 +37296,7 @@ void C_CreatePoll::InternalSwap(C_CreatePoll* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_CreatePoll::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[102]);
+      file_level_metadata_protocol_2eproto[104]);
 }
 
 // ===================================================================
@@ -36488,7 +37833,7 @@ void S_CreatePoll::InternalSwap(S_CreatePoll* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_CreatePoll::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[103]);
+      file_level_metadata_protocol_2eproto[105]);
 }
 
 // ===================================================================
@@ -36801,7 +38146,7 @@ void C_Vote::InternalSwap(C_Vote* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_Vote::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[104]);
+      file_level_metadata_protocol_2eproto[106]);
 }
 
 // ===================================================================
@@ -37240,7 +38585,7 @@ void S_Vote::InternalSwap(S_Vote* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_Vote::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[105]);
+      file_level_metadata_protocol_2eproto[107]);
 }
 
 // ===================================================================
@@ -37514,7 +38859,7 @@ void C_ClosePoll::InternalSwap(C_ClosePoll* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_ClosePoll::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[106]);
+      file_level_metadata_protocol_2eproto[108]);
 }
 
 // ===================================================================
@@ -37788,7 +39133,7 @@ void S_ClosePoll::InternalSwap(S_ClosePoll* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_ClosePoll::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[107]);
+      file_level_metadata_protocol_2eproto[109]);
 }
 
 // ===================================================================
@@ -38104,7 +39449,7 @@ void C_SetAnnouncement::InternalSwap(C_SetAnnouncement* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_SetAnnouncement::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[108]);
+      file_level_metadata_protocol_2eproto[110]);
 }
 
 // ===================================================================
@@ -38462,7 +39807,2244 @@ void S_SetAnnouncement::InternalSwap(S_SetAnnouncement* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_SetAnnouncement::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[109]);
+      file_level_metadata_protocol_2eproto[111]);
+}
+
+// ===================================================================
+
+class C_CreateBallDrop::_Internal {
+ public:
+};
+
+C_CreateBallDrop::C_CreateBallDrop(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena),
+  participant_ids_(arena),
+  ball_counts_(arena) {
+  SharedCtor();
+  RegisterArenaDtor(arena);
+  // @@protoc_insertion_point(arena_constructor:Protocol.C_CreateBallDrop)
+}
+C_CreateBallDrop::C_CreateBallDrop(const C_CreateBallDrop& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      participant_ids_(from.participant_ids_),
+      ball_counts_(from.ball_counts_) {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  conv_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_conv_id().empty()) {
+    conv_id_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_conv_id(), 
+      GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:Protocol.C_CreateBallDrop)
+}
+
+void C_CreateBallDrop::SharedCtor() {
+conv_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+C_CreateBallDrop::~C_CreateBallDrop() {
+  // @@protoc_insertion_point(destructor:Protocol.C_CreateBallDrop)
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+void C_CreateBallDrop::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  conv_id_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void C_CreateBallDrop::ArenaDtor(void* object) {
+  C_CreateBallDrop* _this = reinterpret_cast< C_CreateBallDrop* >(object);
+  (void)_this;
+}
+void C_CreateBallDrop::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void C_CreateBallDrop::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void C_CreateBallDrop::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.C_CreateBallDrop)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  participant_ids_.Clear();
+  ball_counts_.Clear();
+  conv_id_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* C_CreateBallDrop::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string conv_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          auto str = _internal_mutable_conv_id();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.C_CreateBallDrop.conv_id"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // repeated string participant_ids = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            auto str = _internal_add_participant_ids();
+            ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+            CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.C_CreateBallDrop.participant_ids"));
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<18>(ptr));
+        } else goto handle_unusual;
+        continue;
+      // repeated int32 ball_counts = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedInt32Parser(_internal_mutable_ball_counts(), ptr, ctx);
+          CHK_(ptr);
+        } else if (static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24) {
+          _internal_add_ball_counts(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* C_CreateBallDrop::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.C_CreateBallDrop)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string conv_id = 1;
+  if (!this->conv_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_conv_id().data(), static_cast<int>(this->_internal_conv_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.C_CreateBallDrop.conv_id");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_conv_id(), target);
+  }
+
+  // repeated string participant_ids = 2;
+  for (int i = 0, n = this->_internal_participant_ids_size(); i < n; i++) {
+    const auto& s = this->_internal_participant_ids(i);
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      s.data(), static_cast<int>(s.length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.C_CreateBallDrop.participant_ids");
+    target = stream->WriteString(2, s, target);
+  }
+
+  // repeated int32 ball_counts = 3;
+  {
+    int byte_size = _ball_counts_cached_byte_size_.load(std::memory_order_relaxed);
+    if (byte_size > 0) {
+      target = stream->WriteInt32Packed(
+          3, _internal_ball_counts(), byte_size, target);
+    }
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.C_CreateBallDrop)
+  return target;
+}
+
+size_t C_CreateBallDrop::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.C_CreateBallDrop)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated string participant_ids = 2;
+  total_size += 1 *
+      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(participant_ids_.size());
+  for (int i = 0, n = participant_ids_.size(); i < n; i++) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+      participant_ids_.Get(i));
+  }
+
+  // repeated int32 ball_counts = 3;
+  {
+    size_t data_size = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      Int32Size(this->ball_counts_);
+    if (data_size > 0) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+            static_cast<::PROTOBUF_NAMESPACE_ID::int32>(data_size));
+    }
+    int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(data_size);
+    _ball_counts_cached_byte_size_.store(cached_size,
+                                    std::memory_order_relaxed);
+    total_size += data_size;
+  }
+
+  // string conv_id = 1;
+  if (!this->conv_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_conv_id());
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void C_CreateBallDrop::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:Protocol.C_CreateBallDrop)
+  GOOGLE_DCHECK_NE(&from, this);
+  const C_CreateBallDrop* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<C_CreateBallDrop>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:Protocol.C_CreateBallDrop)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:Protocol.C_CreateBallDrop)
+    MergeFrom(*source);
+  }
+}
+
+void C_CreateBallDrop::MergeFrom(const C_CreateBallDrop& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:Protocol.C_CreateBallDrop)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  participant_ids_.MergeFrom(from.participant_ids_);
+  ball_counts_.MergeFrom(from.ball_counts_);
+  if (!from.conv_id().empty()) {
+    _internal_set_conv_id(from._internal_conv_id());
+  }
+}
+
+void C_CreateBallDrop::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:Protocol.C_CreateBallDrop)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void C_CreateBallDrop::CopyFrom(const C_CreateBallDrop& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.C_CreateBallDrop)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool C_CreateBallDrop::IsInitialized() const {
+  return true;
+}
+
+void C_CreateBallDrop::InternalSwap(C_CreateBallDrop* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  participant_ids_.InternalSwap(&other->participant_ids_);
+  ball_counts_.InternalSwap(&other->ball_counts_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &conv_id_, GetArenaForAllocation(),
+      &other->conv_id_, other->GetArenaForAllocation()
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata C_CreateBallDrop::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
+      file_level_metadata_protocol_2eproto[112]);
+}
+
+// ===================================================================
+
+class S_CreateBallDrop::_Internal {
+ public:
+};
+
+S_CreateBallDrop::S_CreateBallDrop(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+  SharedCtor();
+  RegisterArenaDtor(arena);
+  // @@protoc_insertion_point(arena_constructor:Protocol.S_CreateBallDrop)
+}
+S_CreateBallDrop::S_CreateBallDrop(const S_CreateBallDrop& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  conv_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_conv_id().empty()) {
+    conv_id_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_conv_id(), 
+      GetArenaForAllocation());
+  }
+  game_json_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_game_json().empty()) {
+    game_json_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_game_json(), 
+      GetArenaForAllocation());
+  }
+  msg_seq_ = from.msg_seq_;
+  // @@protoc_insertion_point(copy_constructor:Protocol.S_CreateBallDrop)
+}
+
+void S_CreateBallDrop::SharedCtor() {
+conv_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+game_json_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+msg_seq_ = int64_t{0};
+}
+
+S_CreateBallDrop::~S_CreateBallDrop() {
+  // @@protoc_insertion_point(destructor:Protocol.S_CreateBallDrop)
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+void S_CreateBallDrop::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  conv_id_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  game_json_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void S_CreateBallDrop::ArenaDtor(void* object) {
+  S_CreateBallDrop* _this = reinterpret_cast< S_CreateBallDrop* >(object);
+  (void)_this;
+}
+void S_CreateBallDrop::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void S_CreateBallDrop::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void S_CreateBallDrop::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.S_CreateBallDrop)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  conv_id_.ClearToEmpty();
+  game_json_.ClearToEmpty();
+  msg_seq_ = int64_t{0};
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* S_CreateBallDrop::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string conv_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          auto str = _internal_mutable_conv_id();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.S_CreateBallDrop.conv_id"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int64 msg_seq = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
+          msg_seq_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string game_json = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+          auto str = _internal_mutable_game_json();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.S_CreateBallDrop.game_json"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* S_CreateBallDrop::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.S_CreateBallDrop)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string conv_id = 1;
+  if (!this->conv_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_conv_id().data(), static_cast<int>(this->_internal_conv_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.S_CreateBallDrop.conv_id");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_conv_id(), target);
+  }
+
+  // int64 msg_seq = 2;
+  if (this->msg_seq() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64ToArray(2, this->_internal_msg_seq(), target);
+  }
+
+  // string game_json = 3;
+  if (!this->game_json().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_game_json().data(), static_cast<int>(this->_internal_game_json().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.S_CreateBallDrop.game_json");
+    target = stream->WriteStringMaybeAliased(
+        3, this->_internal_game_json(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.S_CreateBallDrop)
+  return target;
+}
+
+size_t S_CreateBallDrop::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.S_CreateBallDrop)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string conv_id = 1;
+  if (!this->conv_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_conv_id());
+  }
+
+  // string game_json = 3;
+  if (!this->game_json().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_game_json());
+  }
+
+  // int64 msg_seq = 2;
+  if (this->msg_seq() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int64Size(
+        this->_internal_msg_seq());
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void S_CreateBallDrop::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:Protocol.S_CreateBallDrop)
+  GOOGLE_DCHECK_NE(&from, this);
+  const S_CreateBallDrop* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<S_CreateBallDrop>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:Protocol.S_CreateBallDrop)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:Protocol.S_CreateBallDrop)
+    MergeFrom(*source);
+  }
+}
+
+void S_CreateBallDrop::MergeFrom(const S_CreateBallDrop& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:Protocol.S_CreateBallDrop)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from.conv_id().empty()) {
+    _internal_set_conv_id(from._internal_conv_id());
+  }
+  if (!from.game_json().empty()) {
+    _internal_set_game_json(from._internal_game_json());
+  }
+  if (from.msg_seq() != 0) {
+    _internal_set_msg_seq(from._internal_msg_seq());
+  }
+}
+
+void S_CreateBallDrop::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:Protocol.S_CreateBallDrop)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void S_CreateBallDrop::CopyFrom(const S_CreateBallDrop& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.S_CreateBallDrop)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool S_CreateBallDrop::IsInitialized() const {
+  return true;
+}
+
+void S_CreateBallDrop::InternalSwap(S_CreateBallDrop* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &conv_id_, GetArenaForAllocation(),
+      &other->conv_id_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &game_json_, GetArenaForAllocation(),
+      &other->game_json_, other->GetArenaForAllocation()
+  );
+  swap(msg_seq_, other->msg_seq_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata S_CreateBallDrop::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
+      file_level_metadata_protocol_2eproto[113]);
+}
+
+// ===================================================================
+
+class C_CreatePhotoSlide::_Internal {
+ public:
+};
+
+C_CreatePhotoSlide::C_CreatePhotoSlide(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena),
+  image_urls_(arena),
+  thumbnail_urls_(arena) {
+  SharedCtor();
+  RegisterArenaDtor(arena);
+  // @@protoc_insertion_point(arena_constructor:Protocol.C_CreatePhotoSlide)
+}
+C_CreatePhotoSlide::C_CreatePhotoSlide(const C_CreatePhotoSlide& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      image_urls_(from.image_urls_),
+      thumbnail_urls_(from.thumbnail_urls_) {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  conv_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_conv_id().empty()) {
+    conv_id_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_conv_id(), 
+      GetArenaForAllocation());
+  }
+  message_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_message().empty()) {
+    message_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_message(), 
+      GetArenaForAllocation());
+  }
+  font_style_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_font_style().empty()) {
+    font_style_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_font_style(), 
+      GetArenaForAllocation());
+  }
+  text_position_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_text_position().empty()) {
+    text_position_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_text_position(), 
+      GetArenaForAllocation());
+  }
+  bg_theme_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_bg_theme().empty()) {
+    bg_theme_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_bg_theme(), 
+      GetArenaForAllocation());
+  }
+  ending_message_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_ending_message().empty()) {
+    ending_message_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_ending_message(), 
+      GetArenaForAllocation());
+  }
+  font_size_ = from.font_size_;
+  // @@protoc_insertion_point(copy_constructor:Protocol.C_CreatePhotoSlide)
+}
+
+void C_CreatePhotoSlide::SharedCtor() {
+conv_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+message_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+font_style_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+text_position_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+bg_theme_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+ending_message_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+font_size_ = 0;
+}
+
+C_CreatePhotoSlide::~C_CreatePhotoSlide() {
+  // @@protoc_insertion_point(destructor:Protocol.C_CreatePhotoSlide)
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+void C_CreatePhotoSlide::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  conv_id_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  message_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  font_style_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  text_position_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  bg_theme_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  ending_message_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void C_CreatePhotoSlide::ArenaDtor(void* object) {
+  C_CreatePhotoSlide* _this = reinterpret_cast< C_CreatePhotoSlide* >(object);
+  (void)_this;
+}
+void C_CreatePhotoSlide::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void C_CreatePhotoSlide::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void C_CreatePhotoSlide::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.C_CreatePhotoSlide)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  image_urls_.Clear();
+  thumbnail_urls_.Clear();
+  conv_id_.ClearToEmpty();
+  message_.ClearToEmpty();
+  font_style_.ClearToEmpty();
+  text_position_.ClearToEmpty();
+  bg_theme_.ClearToEmpty();
+  ending_message_.ClearToEmpty();
+  font_size_ = 0;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* C_CreatePhotoSlide::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string conv_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          auto str = _internal_mutable_conv_id();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.C_CreatePhotoSlide.conv_id"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // repeated string image_urls = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            auto str = _internal_add_image_urls();
+            ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+            CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.C_CreatePhotoSlide.image_urls"));
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<18>(ptr));
+        } else goto handle_unusual;
+        continue;
+      // repeated string thumbnail_urls = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            auto str = _internal_add_thumbnail_urls();
+            ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+            CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.C_CreatePhotoSlide.thumbnail_urls"));
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<26>(ptr));
+        } else goto handle_unusual;
+        continue;
+      // string message = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
+          auto str = _internal_mutable_message();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.C_CreatePhotoSlide.message"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string font_style = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 42)) {
+          auto str = _internal_mutable_font_style();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.C_CreatePhotoSlide.font_style"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string text_position = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 50)) {
+          auto str = _internal_mutable_text_position();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.C_CreatePhotoSlide.text_position"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string bg_theme = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 58)) {
+          auto str = _internal_mutable_bg_theme();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.C_CreatePhotoSlide.bg_theme"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string ending_message = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 66)) {
+          auto str = _internal_mutable_ending_message();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.C_CreatePhotoSlide.ending_message"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int32 font_size = 9;
+      case 9:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 72)) {
+          font_size_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* C_CreatePhotoSlide::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.C_CreatePhotoSlide)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string conv_id = 1;
+  if (!this->conv_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_conv_id().data(), static_cast<int>(this->_internal_conv_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.C_CreatePhotoSlide.conv_id");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_conv_id(), target);
+  }
+
+  // repeated string image_urls = 2;
+  for (int i = 0, n = this->_internal_image_urls_size(); i < n; i++) {
+    const auto& s = this->_internal_image_urls(i);
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      s.data(), static_cast<int>(s.length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.C_CreatePhotoSlide.image_urls");
+    target = stream->WriteString(2, s, target);
+  }
+
+  // repeated string thumbnail_urls = 3;
+  for (int i = 0, n = this->_internal_thumbnail_urls_size(); i < n; i++) {
+    const auto& s = this->_internal_thumbnail_urls(i);
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      s.data(), static_cast<int>(s.length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.C_CreatePhotoSlide.thumbnail_urls");
+    target = stream->WriteString(3, s, target);
+  }
+
+  // string message = 4;
+  if (!this->message().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_message().data(), static_cast<int>(this->_internal_message().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.C_CreatePhotoSlide.message");
+    target = stream->WriteStringMaybeAliased(
+        4, this->_internal_message(), target);
+  }
+
+  // string font_style = 5;
+  if (!this->font_style().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_font_style().data(), static_cast<int>(this->_internal_font_style().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.C_CreatePhotoSlide.font_style");
+    target = stream->WriteStringMaybeAliased(
+        5, this->_internal_font_style(), target);
+  }
+
+  // string text_position = 6;
+  if (!this->text_position().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_text_position().data(), static_cast<int>(this->_internal_text_position().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.C_CreatePhotoSlide.text_position");
+    target = stream->WriteStringMaybeAliased(
+        6, this->_internal_text_position(), target);
+  }
+
+  // string bg_theme = 7;
+  if (!this->bg_theme().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_bg_theme().data(), static_cast<int>(this->_internal_bg_theme().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.C_CreatePhotoSlide.bg_theme");
+    target = stream->WriteStringMaybeAliased(
+        7, this->_internal_bg_theme(), target);
+  }
+
+  // string ending_message = 8;
+  if (!this->ending_message().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_ending_message().data(), static_cast<int>(this->_internal_ending_message().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.C_CreatePhotoSlide.ending_message");
+    target = stream->WriteStringMaybeAliased(
+        8, this->_internal_ending_message(), target);
+  }
+
+  // int32 font_size = 9;
+  if (this->font_size() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(9, this->_internal_font_size(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.C_CreatePhotoSlide)
+  return target;
+}
+
+size_t C_CreatePhotoSlide::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.C_CreatePhotoSlide)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated string image_urls = 2;
+  total_size += 1 *
+      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(image_urls_.size());
+  for (int i = 0, n = image_urls_.size(); i < n; i++) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+      image_urls_.Get(i));
+  }
+
+  // repeated string thumbnail_urls = 3;
+  total_size += 1 *
+      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(thumbnail_urls_.size());
+  for (int i = 0, n = thumbnail_urls_.size(); i < n; i++) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+      thumbnail_urls_.Get(i));
+  }
+
+  // string conv_id = 1;
+  if (!this->conv_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_conv_id());
+  }
+
+  // string message = 4;
+  if (!this->message().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_message());
+  }
+
+  // string font_style = 5;
+  if (!this->font_style().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_font_style());
+  }
+
+  // string text_position = 6;
+  if (!this->text_position().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_text_position());
+  }
+
+  // string bg_theme = 7;
+  if (!this->bg_theme().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_bg_theme());
+  }
+
+  // string ending_message = 8;
+  if (!this->ending_message().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_ending_message());
+  }
+
+  // int32 font_size = 9;
+  if (this->font_size() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_font_size());
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void C_CreatePhotoSlide::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:Protocol.C_CreatePhotoSlide)
+  GOOGLE_DCHECK_NE(&from, this);
+  const C_CreatePhotoSlide* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<C_CreatePhotoSlide>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:Protocol.C_CreatePhotoSlide)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:Protocol.C_CreatePhotoSlide)
+    MergeFrom(*source);
+  }
+}
+
+void C_CreatePhotoSlide::MergeFrom(const C_CreatePhotoSlide& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:Protocol.C_CreatePhotoSlide)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  image_urls_.MergeFrom(from.image_urls_);
+  thumbnail_urls_.MergeFrom(from.thumbnail_urls_);
+  if (!from.conv_id().empty()) {
+    _internal_set_conv_id(from._internal_conv_id());
+  }
+  if (!from.message().empty()) {
+    _internal_set_message(from._internal_message());
+  }
+  if (!from.font_style().empty()) {
+    _internal_set_font_style(from._internal_font_style());
+  }
+  if (!from.text_position().empty()) {
+    _internal_set_text_position(from._internal_text_position());
+  }
+  if (!from.bg_theme().empty()) {
+    _internal_set_bg_theme(from._internal_bg_theme());
+  }
+  if (!from.ending_message().empty()) {
+    _internal_set_ending_message(from._internal_ending_message());
+  }
+  if (from.font_size() != 0) {
+    _internal_set_font_size(from._internal_font_size());
+  }
+}
+
+void C_CreatePhotoSlide::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:Protocol.C_CreatePhotoSlide)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void C_CreatePhotoSlide::CopyFrom(const C_CreatePhotoSlide& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.C_CreatePhotoSlide)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool C_CreatePhotoSlide::IsInitialized() const {
+  return true;
+}
+
+void C_CreatePhotoSlide::InternalSwap(C_CreatePhotoSlide* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  image_urls_.InternalSwap(&other->image_urls_);
+  thumbnail_urls_.InternalSwap(&other->thumbnail_urls_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &conv_id_, GetArenaForAllocation(),
+      &other->conv_id_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &message_, GetArenaForAllocation(),
+      &other->message_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &font_style_, GetArenaForAllocation(),
+      &other->font_style_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &text_position_, GetArenaForAllocation(),
+      &other->text_position_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &bg_theme_, GetArenaForAllocation(),
+      &other->bg_theme_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &ending_message_, GetArenaForAllocation(),
+      &other->ending_message_, other->GetArenaForAllocation()
+  );
+  swap(font_size_, other->font_size_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata C_CreatePhotoSlide::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
+      file_level_metadata_protocol_2eproto[114]);
+}
+
+// ===================================================================
+
+class S_CreatePhotoSlide::_Internal {
+ public:
+};
+
+S_CreatePhotoSlide::S_CreatePhotoSlide(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+  SharedCtor();
+  RegisterArenaDtor(arena);
+  // @@protoc_insertion_point(arena_constructor:Protocol.S_CreatePhotoSlide)
+}
+S_CreatePhotoSlide::S_CreatePhotoSlide(const S_CreatePhotoSlide& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  conv_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_conv_id().empty()) {
+    conv_id_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_conv_id(), 
+      GetArenaForAllocation());
+  }
+  slide_json_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_slide_json().empty()) {
+    slide_json_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_slide_json(), 
+      GetArenaForAllocation());
+  }
+  msg_seq_ = from.msg_seq_;
+  // @@protoc_insertion_point(copy_constructor:Protocol.S_CreatePhotoSlide)
+}
+
+void S_CreatePhotoSlide::SharedCtor() {
+conv_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+slide_json_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+msg_seq_ = int64_t{0};
+}
+
+S_CreatePhotoSlide::~S_CreatePhotoSlide() {
+  // @@protoc_insertion_point(destructor:Protocol.S_CreatePhotoSlide)
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+void S_CreatePhotoSlide::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  conv_id_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  slide_json_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void S_CreatePhotoSlide::ArenaDtor(void* object) {
+  S_CreatePhotoSlide* _this = reinterpret_cast< S_CreatePhotoSlide* >(object);
+  (void)_this;
+}
+void S_CreatePhotoSlide::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void S_CreatePhotoSlide::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void S_CreatePhotoSlide::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.S_CreatePhotoSlide)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  conv_id_.ClearToEmpty();
+  slide_json_.ClearToEmpty();
+  msg_seq_ = int64_t{0};
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* S_CreatePhotoSlide::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string conv_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          auto str = _internal_mutable_conv_id();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.S_CreatePhotoSlide.conv_id"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int64 msg_seq = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
+          msg_seq_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string slide_json = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+          auto str = _internal_mutable_slide_json();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.S_CreatePhotoSlide.slide_json"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* S_CreatePhotoSlide::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.S_CreatePhotoSlide)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string conv_id = 1;
+  if (!this->conv_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_conv_id().data(), static_cast<int>(this->_internal_conv_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.S_CreatePhotoSlide.conv_id");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_conv_id(), target);
+  }
+
+  // int64 msg_seq = 2;
+  if (this->msg_seq() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64ToArray(2, this->_internal_msg_seq(), target);
+  }
+
+  // string slide_json = 3;
+  if (!this->slide_json().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_slide_json().data(), static_cast<int>(this->_internal_slide_json().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.S_CreatePhotoSlide.slide_json");
+    target = stream->WriteStringMaybeAliased(
+        3, this->_internal_slide_json(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.S_CreatePhotoSlide)
+  return target;
+}
+
+size_t S_CreatePhotoSlide::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.S_CreatePhotoSlide)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string conv_id = 1;
+  if (!this->conv_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_conv_id());
+  }
+
+  // string slide_json = 3;
+  if (!this->slide_json().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_slide_json());
+  }
+
+  // int64 msg_seq = 2;
+  if (this->msg_seq() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int64Size(
+        this->_internal_msg_seq());
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void S_CreatePhotoSlide::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:Protocol.S_CreatePhotoSlide)
+  GOOGLE_DCHECK_NE(&from, this);
+  const S_CreatePhotoSlide* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<S_CreatePhotoSlide>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:Protocol.S_CreatePhotoSlide)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:Protocol.S_CreatePhotoSlide)
+    MergeFrom(*source);
+  }
+}
+
+void S_CreatePhotoSlide::MergeFrom(const S_CreatePhotoSlide& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:Protocol.S_CreatePhotoSlide)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from.conv_id().empty()) {
+    _internal_set_conv_id(from._internal_conv_id());
+  }
+  if (!from.slide_json().empty()) {
+    _internal_set_slide_json(from._internal_slide_json());
+  }
+  if (from.msg_seq() != 0) {
+    _internal_set_msg_seq(from._internal_msg_seq());
+  }
+}
+
+void S_CreatePhotoSlide::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:Protocol.S_CreatePhotoSlide)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void S_CreatePhotoSlide::CopyFrom(const S_CreatePhotoSlide& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.S_CreatePhotoSlide)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool S_CreatePhotoSlide::IsInitialized() const {
+  return true;
+}
+
+void S_CreatePhotoSlide::InternalSwap(S_CreatePhotoSlide* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &conv_id_, GetArenaForAllocation(),
+      &other->conv_id_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &slide_json_, GetArenaForAllocation(),
+      &other->slide_json_, other->GetArenaForAllocation()
+  );
+  swap(msg_seq_, other->msg_seq_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata S_CreatePhotoSlide::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
+      file_level_metadata_protocol_2eproto[115]);
+}
+
+// ===================================================================
+
+class C_SocialLogin::_Internal {
+ public:
+};
+
+C_SocialLogin::C_SocialLogin(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+  SharedCtor();
+  RegisterArenaDtor(arena);
+  // @@protoc_insertion_point(arena_constructor:Protocol.C_SocialLogin)
+}
+C_SocialLogin::C_SocialLogin(const C_SocialLogin& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  provider_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_provider().empty()) {
+    provider_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_provider(), 
+      GetArenaForAllocation());
+  }
+  id_token_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_id_token().empty()) {
+    id_token_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_id_token(), 
+      GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:Protocol.C_SocialLogin)
+}
+
+void C_SocialLogin::SharedCtor() {
+provider_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+id_token_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+C_SocialLogin::~C_SocialLogin() {
+  // @@protoc_insertion_point(destructor:Protocol.C_SocialLogin)
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+void C_SocialLogin::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  provider_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  id_token_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void C_SocialLogin::ArenaDtor(void* object) {
+  C_SocialLogin* _this = reinterpret_cast< C_SocialLogin* >(object);
+  (void)_this;
+}
+void C_SocialLogin::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void C_SocialLogin::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void C_SocialLogin::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.C_SocialLogin)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  provider_.ClearToEmpty();
+  id_token_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* C_SocialLogin::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string provider = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          auto str = _internal_mutable_provider();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.C_SocialLogin.provider"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string id_token = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+          auto str = _internal_mutable_id_token();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.C_SocialLogin.id_token"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* C_SocialLogin::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.C_SocialLogin)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string provider = 1;
+  if (!this->provider().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_provider().data(), static_cast<int>(this->_internal_provider().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.C_SocialLogin.provider");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_provider(), target);
+  }
+
+  // string id_token = 2;
+  if (!this->id_token().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_id_token().data(), static_cast<int>(this->_internal_id_token().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.C_SocialLogin.id_token");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_id_token(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.C_SocialLogin)
+  return target;
+}
+
+size_t C_SocialLogin::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.C_SocialLogin)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string provider = 1;
+  if (!this->provider().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_provider());
+  }
+
+  // string id_token = 2;
+  if (!this->id_token().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_id_token());
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void C_SocialLogin::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:Protocol.C_SocialLogin)
+  GOOGLE_DCHECK_NE(&from, this);
+  const C_SocialLogin* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<C_SocialLogin>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:Protocol.C_SocialLogin)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:Protocol.C_SocialLogin)
+    MergeFrom(*source);
+  }
+}
+
+void C_SocialLogin::MergeFrom(const C_SocialLogin& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:Protocol.C_SocialLogin)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from.provider().empty()) {
+    _internal_set_provider(from._internal_provider());
+  }
+  if (!from.id_token().empty()) {
+    _internal_set_id_token(from._internal_id_token());
+  }
+}
+
+void C_SocialLogin::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:Protocol.C_SocialLogin)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void C_SocialLogin::CopyFrom(const C_SocialLogin& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.C_SocialLogin)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool C_SocialLogin::IsInitialized() const {
+  return true;
+}
+
+void C_SocialLogin::InternalSwap(C_SocialLogin* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &provider_, GetArenaForAllocation(),
+      &other->provider_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &id_token_, GetArenaForAllocation(),
+      &other->id_token_, other->GetArenaForAllocation()
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata C_SocialLogin::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
+      file_level_metadata_protocol_2eproto[116]);
+}
+
+// ===================================================================
+
+class S_SocialLogin::_Internal {
+ public:
+};
+
+S_SocialLogin::S_SocialLogin(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+  SharedCtor();
+  RegisterArenaDtor(arena);
+  // @@protoc_insertion_point(arena_constructor:Protocol.S_SocialLogin)
+}
+S_SocialLogin::S_SocialLogin(const S_SocialLogin& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  email_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_email().empty()) {
+    email_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_email(), 
+      GetArenaForAllocation());
+  }
+  name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_name().empty()) {
+    name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_name(), 
+      GetArenaForAllocation());
+  }
+  profile_image_url_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_profile_image_url().empty()) {
+    profile_image_url_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_profile_image_url(), 
+      GetArenaForAllocation());
+  }
+  needs_registration_ = from.needs_registration_;
+  // @@protoc_insertion_point(copy_constructor:Protocol.S_SocialLogin)
+}
+
+void S_SocialLogin::SharedCtor() {
+email_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+profile_image_url_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+needs_registration_ = false;
+}
+
+S_SocialLogin::~S_SocialLogin() {
+  // @@protoc_insertion_point(destructor:Protocol.S_SocialLogin)
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+void S_SocialLogin::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  email_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  name_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  profile_image_url_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void S_SocialLogin::ArenaDtor(void* object) {
+  S_SocialLogin* _this = reinterpret_cast< S_SocialLogin* >(object);
+  (void)_this;
+}
+void S_SocialLogin::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void S_SocialLogin::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void S_SocialLogin::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.S_SocialLogin)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  email_.ClearToEmpty();
+  name_.ClearToEmpty();
+  profile_image_url_.ClearToEmpty();
+  needs_registration_ = false;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* S_SocialLogin::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // bool needs_registration = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
+          needs_registration_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string email = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+          auto str = _internal_mutable_email();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.S_SocialLogin.email"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string name = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+          auto str = _internal_mutable_name();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.S_SocialLogin.name"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string profile_image_url = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
+          auto str = _internal_mutable_profile_image_url();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.S_SocialLogin.profile_image_url"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* S_SocialLogin::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.S_SocialLogin)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // bool needs_registration = 1;
+  if (this->needs_registration() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(1, this->_internal_needs_registration(), target);
+  }
+
+  // string email = 2;
+  if (!this->email().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_email().data(), static_cast<int>(this->_internal_email().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.S_SocialLogin.email");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_email(), target);
+  }
+
+  // string name = 3;
+  if (!this->name().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_name().data(), static_cast<int>(this->_internal_name().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.S_SocialLogin.name");
+    target = stream->WriteStringMaybeAliased(
+        3, this->_internal_name(), target);
+  }
+
+  // string profile_image_url = 4;
+  if (!this->profile_image_url().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_profile_image_url().data(), static_cast<int>(this->_internal_profile_image_url().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.S_SocialLogin.profile_image_url");
+    target = stream->WriteStringMaybeAliased(
+        4, this->_internal_profile_image_url(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.S_SocialLogin)
+  return target;
+}
+
+size_t S_SocialLogin::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.S_SocialLogin)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string email = 2;
+  if (!this->email().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_email());
+  }
+
+  // string name = 3;
+  if (!this->name().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_name());
+  }
+
+  // string profile_image_url = 4;
+  if (!this->profile_image_url().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_profile_image_url());
+  }
+
+  // bool needs_registration = 1;
+  if (this->needs_registration() != 0) {
+    total_size += 1 + 1;
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void S_SocialLogin::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:Protocol.S_SocialLogin)
+  GOOGLE_DCHECK_NE(&from, this);
+  const S_SocialLogin* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<S_SocialLogin>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:Protocol.S_SocialLogin)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:Protocol.S_SocialLogin)
+    MergeFrom(*source);
+  }
+}
+
+void S_SocialLogin::MergeFrom(const S_SocialLogin& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:Protocol.S_SocialLogin)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from.email().empty()) {
+    _internal_set_email(from._internal_email());
+  }
+  if (!from.name().empty()) {
+    _internal_set_name(from._internal_name());
+  }
+  if (!from.profile_image_url().empty()) {
+    _internal_set_profile_image_url(from._internal_profile_image_url());
+  }
+  if (from.needs_registration() != 0) {
+    _internal_set_needs_registration(from._internal_needs_registration());
+  }
+}
+
+void S_SocialLogin::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:Protocol.S_SocialLogin)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void S_SocialLogin::CopyFrom(const S_SocialLogin& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.S_SocialLogin)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool S_SocialLogin::IsInitialized() const {
+  return true;
+}
+
+void S_SocialLogin::InternalSwap(S_SocialLogin* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &email_, GetArenaForAllocation(),
+      &other->email_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &name_, GetArenaForAllocation(),
+      &other->name_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &profile_image_url_, GetArenaForAllocation(),
+      &other->profile_image_url_, other->GetArenaForAllocation()
+  );
+  swap(needs_registration_, other->needs_registration_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata S_SocialLogin::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
+      file_level_metadata_protocol_2eproto[117]);
+}
+
+// ===================================================================
+
+class C_CompleteSocialSignup::_Internal {
+ public:
+};
+
+C_CompleteSocialSignup::C_CompleteSocialSignup(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+  SharedCtor();
+  RegisterArenaDtor(arena);
+  // @@protoc_insertion_point(arena_constructor:Protocol.C_CompleteSocialSignup)
+}
+C_CompleteSocialSignup::C_CompleteSocialSignup(const C_CompleteSocialSignup& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  provider_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_provider().empty()) {
+    provider_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_provider(), 
+      GetArenaForAllocation());
+  }
+  id_token_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_id_token().empty()) {
+    id_token_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_id_token(), 
+      GetArenaForAllocation());
+  }
+  user_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_user_id().empty()) {
+    user_id_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_user_id(), 
+      GetArenaForAllocation());
+  }
+  name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_name().empty()) {
+    name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_name(), 
+      GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:Protocol.C_CompleteSocialSignup)
+}
+
+void C_CompleteSocialSignup::SharedCtor() {
+provider_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+id_token_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+user_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+C_CompleteSocialSignup::~C_CompleteSocialSignup() {
+  // @@protoc_insertion_point(destructor:Protocol.C_CompleteSocialSignup)
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+void C_CompleteSocialSignup::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  provider_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  id_token_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  user_id_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  name_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void C_CompleteSocialSignup::ArenaDtor(void* object) {
+  C_CompleteSocialSignup* _this = reinterpret_cast< C_CompleteSocialSignup* >(object);
+  (void)_this;
+}
+void C_CompleteSocialSignup::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void C_CompleteSocialSignup::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void C_CompleteSocialSignup::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.C_CompleteSocialSignup)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  provider_.ClearToEmpty();
+  id_token_.ClearToEmpty();
+  user_id_.ClearToEmpty();
+  name_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* C_CompleteSocialSignup::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string provider = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          auto str = _internal_mutable_provider();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.C_CompleteSocialSignup.provider"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string id_token = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+          auto str = _internal_mutable_id_token();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.C_CompleteSocialSignup.id_token"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string user_id = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+          auto str = _internal_mutable_user_id();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.C_CompleteSocialSignup.user_id"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string name = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
+          auto str = _internal_mutable_name();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Protocol.C_CompleteSocialSignup.name"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag == 0) || ((tag & 7) == 4)) {
+          CHK_(ptr);
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* C_CompleteSocialSignup::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.C_CompleteSocialSignup)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string provider = 1;
+  if (!this->provider().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_provider().data(), static_cast<int>(this->_internal_provider().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.C_CompleteSocialSignup.provider");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_provider(), target);
+  }
+
+  // string id_token = 2;
+  if (!this->id_token().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_id_token().data(), static_cast<int>(this->_internal_id_token().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.C_CompleteSocialSignup.id_token");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_id_token(), target);
+  }
+
+  // string user_id = 3;
+  if (!this->user_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_user_id().data(), static_cast<int>(this->_internal_user_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.C_CompleteSocialSignup.user_id");
+    target = stream->WriteStringMaybeAliased(
+        3, this->_internal_user_id(), target);
+  }
+
+  // string name = 4;
+  if (!this->name().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_name().data(), static_cast<int>(this->_internal_name().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.C_CompleteSocialSignup.name");
+    target = stream->WriteStringMaybeAliased(
+        4, this->_internal_name(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.C_CompleteSocialSignup)
+  return target;
+}
+
+size_t C_CompleteSocialSignup::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.C_CompleteSocialSignup)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string provider = 1;
+  if (!this->provider().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_provider());
+  }
+
+  // string id_token = 2;
+  if (!this->id_token().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_id_token());
+  }
+
+  // string user_id = 3;
+  if (!this->user_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_user_id());
+  }
+
+  // string name = 4;
+  if (!this->name().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_name());
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void C_CompleteSocialSignup::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:Protocol.C_CompleteSocialSignup)
+  GOOGLE_DCHECK_NE(&from, this);
+  const C_CompleteSocialSignup* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<C_CompleteSocialSignup>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:Protocol.C_CompleteSocialSignup)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:Protocol.C_CompleteSocialSignup)
+    MergeFrom(*source);
+  }
+}
+
+void C_CompleteSocialSignup::MergeFrom(const C_CompleteSocialSignup& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:Protocol.C_CompleteSocialSignup)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from.provider().empty()) {
+    _internal_set_provider(from._internal_provider());
+  }
+  if (!from.id_token().empty()) {
+    _internal_set_id_token(from._internal_id_token());
+  }
+  if (!from.user_id().empty()) {
+    _internal_set_user_id(from._internal_user_id());
+  }
+  if (!from.name().empty()) {
+    _internal_set_name(from._internal_name());
+  }
+}
+
+void C_CompleteSocialSignup::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:Protocol.C_CompleteSocialSignup)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void C_CompleteSocialSignup::CopyFrom(const C_CompleteSocialSignup& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.C_CompleteSocialSignup)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool C_CompleteSocialSignup::IsInitialized() const {
+  return true;
+}
+
+void C_CompleteSocialSignup::InternalSwap(C_CompleteSocialSignup* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &provider_, GetArenaForAllocation(),
+      &other->provider_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &id_token_, GetArenaForAllocation(),
+      &other->id_token_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &user_id_, GetArenaForAllocation(),
+      &other->user_id_, other->GetArenaForAllocation()
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &name_, GetArenaForAllocation(),
+      &other->name_, other->GetArenaForAllocation()
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata C_CompleteSocialSignup::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
+      file_level_metadata_protocol_2eproto[118]);
 }
 
 // ===================================================================
@@ -38730,7 +42312,7 @@ void S_Error::InternalSwap(S_Error* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_Error::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[110]);
+      file_level_metadata_protocol_2eproto[119]);
 }
 
 // ===================================================================
@@ -38888,7 +42470,7 @@ void C_Heartbeat::InternalSwap(C_Heartbeat* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C_Heartbeat::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[111]);
+      file_level_metadata_protocol_2eproto[120]);
 }
 
 // ===================================================================
@@ -39046,7 +42628,7 @@ void S_Heartbeat::InternalSwap(S_Heartbeat* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S_Heartbeat::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_protocol_2eproto_getter, &descriptor_table_protocol_2eproto_once,
-      file_level_metadata_protocol_2eproto[112]);
+      file_level_metadata_protocol_2eproto[121]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -39301,6 +42883,12 @@ template<> PROTOBUF_NOINLINE ::Protocol::C_JoinGroup* Arena::CreateMaybeMessage<
 template<> PROTOBUF_NOINLINE ::Protocol::S_JoinGroup* Arena::CreateMaybeMessage< ::Protocol::S_JoinGroup >(Arena* arena) {
   return Arena::CreateMessageInternal< ::Protocol::S_JoinGroup >(arena);
 }
+template<> PROTOBUF_NOINLINE ::Protocol::C_RefreshInviteCode* Arena::CreateMaybeMessage< ::Protocol::C_RefreshInviteCode >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::C_RefreshInviteCode >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::S_RefreshInviteCode* Arena::CreateMaybeMessage< ::Protocol::S_RefreshInviteCode >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::S_RefreshInviteCode >(arena);
+}
 template<> PROTOBUF_NOINLINE ::Protocol::C_GroupMemberList* Arena::CreateMaybeMessage< ::Protocol::C_GroupMemberList >(Arena* arena) {
   return Arena::CreateMessageInternal< ::Protocol::C_GroupMemberList >(arena);
 }
@@ -39381,6 +42969,27 @@ template<> PROTOBUF_NOINLINE ::Protocol::C_SetAnnouncement* Arena::CreateMaybeMe
 }
 template<> PROTOBUF_NOINLINE ::Protocol::S_SetAnnouncement* Arena::CreateMaybeMessage< ::Protocol::S_SetAnnouncement >(Arena* arena) {
   return Arena::CreateMessageInternal< ::Protocol::S_SetAnnouncement >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::C_CreateBallDrop* Arena::CreateMaybeMessage< ::Protocol::C_CreateBallDrop >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::C_CreateBallDrop >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::S_CreateBallDrop* Arena::CreateMaybeMessage< ::Protocol::S_CreateBallDrop >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::S_CreateBallDrop >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::C_CreatePhotoSlide* Arena::CreateMaybeMessage< ::Protocol::C_CreatePhotoSlide >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::C_CreatePhotoSlide >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::S_CreatePhotoSlide* Arena::CreateMaybeMessage< ::Protocol::S_CreatePhotoSlide >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::S_CreatePhotoSlide >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::C_SocialLogin* Arena::CreateMaybeMessage< ::Protocol::C_SocialLogin >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::C_SocialLogin >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::S_SocialLogin* Arena::CreateMaybeMessage< ::Protocol::S_SocialLogin >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::S_SocialLogin >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::C_CompleteSocialSignup* Arena::CreateMaybeMessage< ::Protocol::C_CompleteSocialSignup >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::C_CompleteSocialSignup >(arena);
 }
 template<> PROTOBUF_NOINLINE ::Protocol::S_Error* Arena::CreateMaybeMessage< ::Protocol::S_Error >(Arena* arena) {
   return Arena::CreateMessageInternal< ::Protocol::S_Error >(arena);

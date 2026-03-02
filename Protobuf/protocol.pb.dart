@@ -119,6 +119,15 @@ enum Envelope_Payload {
   sVote,
   sClosePoll,
   sSetAnnouncement,
+  cCreateBallDrop,
+  sCreateBallDrop,
+  cCreatePhotoSlide,
+  sCreatePhotoSlide,
+  cRefreshInviteCode,
+  sRefreshInviteCode,
+  cSocialLogin,
+  sSocialLogin,
+  cCompleteSocialSignup,
   notSet
 }
 
@@ -227,6 +236,15 @@ class Envelope extends $pb.GeneratedMessage {
     S_Vote? sVote,
     S_ClosePoll? sClosePoll,
     S_SetAnnouncement? sSetAnnouncement,
+    C_CreateBallDrop? cCreateBallDrop,
+    S_CreateBallDrop? sCreateBallDrop,
+    C_CreatePhotoSlide? cCreatePhotoSlide,
+    S_CreatePhotoSlide? sCreatePhotoSlide,
+    C_RefreshInviteCode? cRefreshInviteCode,
+    S_RefreshInviteCode? sRefreshInviteCode,
+    C_SocialLogin? cSocialLogin,
+    S_SocialLogin? sSocialLogin,
+    C_CompleteSocialSignup? cCompleteSocialSignup,
   }) {
     final result = create();
     if (version != null) result.version = version;
@@ -333,6 +351,18 @@ class Envelope extends $pb.GeneratedMessage {
     if (sVote != null) result.sVote = sVote;
     if (sClosePoll != null) result.sClosePoll = sClosePoll;
     if (sSetAnnouncement != null) result.sSetAnnouncement = sSetAnnouncement;
+    if (cCreateBallDrop != null) result.cCreateBallDrop = cCreateBallDrop;
+    if (sCreateBallDrop != null) result.sCreateBallDrop = sCreateBallDrop;
+    if (cCreatePhotoSlide != null) result.cCreatePhotoSlide = cCreatePhotoSlide;
+    if (sCreatePhotoSlide != null) result.sCreatePhotoSlide = sCreatePhotoSlide;
+    if (cRefreshInviteCode != null)
+      result.cRefreshInviteCode = cRefreshInviteCode;
+    if (sRefreshInviteCode != null)
+      result.sRefreshInviteCode = sRefreshInviteCode;
+    if (cSocialLogin != null) result.cSocialLogin = cSocialLogin;
+    if (sSocialLogin != null) result.sSocialLogin = sSocialLogin;
+    if (cCompleteSocialSignup != null)
+      result.cCompleteSocialSignup = cCompleteSocialSignup;
     return result;
   }
 
@@ -443,6 +473,15 @@ class Envelope extends $pb.GeneratedMessage {
     106: Envelope_Payload.sVote,
     107: Envelope_Payload.sClosePoll,
     108: Envelope_Payload.sSetAnnouncement,
+    109: Envelope_Payload.cCreateBallDrop,
+    110: Envelope_Payload.sCreateBallDrop,
+    111: Envelope_Payload.cCreatePhotoSlide,
+    112: Envelope_Payload.sCreatePhotoSlide,
+    113: Envelope_Payload.cRefreshInviteCode,
+    114: Envelope_Payload.sRefreshInviteCode,
+    115: Envelope_Payload.cSocialLogin,
+    116: Envelope_Payload.sSocialLogin,
+    117: Envelope_Payload.cCompleteSocialSignup,
     0: Envelope_Payload.notSet
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
@@ -546,7 +585,16 @@ class Envelope extends $pb.GeneratedMessage {
       105,
       106,
       107,
-      108
+      108,
+      109,
+      110,
+      111,
+      112,
+      113,
+      114,
+      115,
+      116,
+      117
     ])
     ..aI(1, _omitFieldNames ? '' : 'version', fieldType: $pb.PbFieldType.OU3)
     ..aI(2, _omitFieldNames ? '' : 'requestId', fieldType: $pb.PbFieldType.OU3)
@@ -745,6 +793,25 @@ class Envelope extends $pb.GeneratedMessage {
         subBuilder: S_ClosePoll.create)
     ..aOM<S_SetAnnouncement>(108, _omitFieldNames ? '' : 'sSetAnnouncement',
         subBuilder: S_SetAnnouncement.create)
+    ..aOM<C_CreateBallDrop>(109, _omitFieldNames ? '' : 'cCreateBallDrop',
+        subBuilder: C_CreateBallDrop.create)
+    ..aOM<S_CreateBallDrop>(110, _omitFieldNames ? '' : 'sCreateBallDrop',
+        subBuilder: S_CreateBallDrop.create)
+    ..aOM<C_CreatePhotoSlide>(111, _omitFieldNames ? '' : 'cCreatePhotoSlide',
+        subBuilder: C_CreatePhotoSlide.create)
+    ..aOM<S_CreatePhotoSlide>(112, _omitFieldNames ? '' : 'sCreatePhotoSlide',
+        subBuilder: S_CreatePhotoSlide.create)
+    ..aOM<C_RefreshInviteCode>(113, _omitFieldNames ? '' : 'cRefreshInviteCode',
+        subBuilder: C_RefreshInviteCode.create)
+    ..aOM<S_RefreshInviteCode>(114, _omitFieldNames ? '' : 'sRefreshInviteCode',
+        subBuilder: S_RefreshInviteCode.create)
+    ..aOM<C_SocialLogin>(115, _omitFieldNames ? '' : 'cSocialLogin',
+        subBuilder: C_SocialLogin.create)
+    ..aOM<S_SocialLogin>(116, _omitFieldNames ? '' : 'sSocialLogin',
+        subBuilder: S_SocialLogin.create)
+    ..aOM<C_CompleteSocialSignup>(
+        117, _omitFieldNames ? '' : 'cCompleteSocialSignup',
+        subBuilder: C_CompleteSocialSignup.create)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -862,6 +929,15 @@ class Envelope extends $pb.GeneratedMessage {
   @$pb.TagNumber(106)
   @$pb.TagNumber(107)
   @$pb.TagNumber(108)
+  @$pb.TagNumber(109)
+  @$pb.TagNumber(110)
+  @$pb.TagNumber(111)
+  @$pb.TagNumber(112)
+  @$pb.TagNumber(113)
+  @$pb.TagNumber(114)
+  @$pb.TagNumber(115)
+  @$pb.TagNumber(116)
+  @$pb.TagNumber(117)
   Envelope_Payload whichPayload() => _Envelope_PayloadByTag[$_whichOneof(0)]!;
   @$pb.TagNumber(10)
   @$pb.TagNumber(11)
@@ -960,6 +1036,15 @@ class Envelope extends $pb.GeneratedMessage {
   @$pb.TagNumber(106)
   @$pb.TagNumber(107)
   @$pb.TagNumber(108)
+  @$pb.TagNumber(109)
+  @$pb.TagNumber(110)
+  @$pb.TagNumber(111)
+  @$pb.TagNumber(112)
+  @$pb.TagNumber(113)
+  @$pb.TagNumber(114)
+  @$pb.TagNumber(115)
+  @$pb.TagNumber(116)
+  @$pb.TagNumber(117)
   void clearPayload() => $_clearField($_whichOneof(0));
 
   @$pb.TagNumber(1)
@@ -2062,6 +2147,106 @@ class Envelope extends $pb.GeneratedMessage {
   void clearSSetAnnouncement() => $_clearField(108);
   @$pb.TagNumber(108)
   S_SetAnnouncement ensureSSetAnnouncement() => $_ensure(99);
+
+  @$pb.TagNumber(109)
+  C_CreateBallDrop get cCreateBallDrop => $_getN(100);
+  @$pb.TagNumber(109)
+  set cCreateBallDrop(C_CreateBallDrop value) => $_setField(109, value);
+  @$pb.TagNumber(109)
+  $core.bool hasCCreateBallDrop() => $_has(100);
+  @$pb.TagNumber(109)
+  void clearCCreateBallDrop() => $_clearField(109);
+  @$pb.TagNumber(109)
+  C_CreateBallDrop ensureCCreateBallDrop() => $_ensure(100);
+
+  @$pb.TagNumber(110)
+  S_CreateBallDrop get sCreateBallDrop => $_getN(101);
+  @$pb.TagNumber(110)
+  set sCreateBallDrop(S_CreateBallDrop value) => $_setField(110, value);
+  @$pb.TagNumber(110)
+  $core.bool hasSCreateBallDrop() => $_has(101);
+  @$pb.TagNumber(110)
+  void clearSCreateBallDrop() => $_clearField(110);
+  @$pb.TagNumber(110)
+  S_CreateBallDrop ensureSCreateBallDrop() => $_ensure(101);
+
+  @$pb.TagNumber(111)
+  C_CreatePhotoSlide get cCreatePhotoSlide => $_getN(102);
+  @$pb.TagNumber(111)
+  set cCreatePhotoSlide(C_CreatePhotoSlide value) => $_setField(111, value);
+  @$pb.TagNumber(111)
+  $core.bool hasCCreatePhotoSlide() => $_has(102);
+  @$pb.TagNumber(111)
+  void clearCCreatePhotoSlide() => $_clearField(111);
+  @$pb.TagNumber(111)
+  C_CreatePhotoSlide ensureCCreatePhotoSlide() => $_ensure(102);
+
+  @$pb.TagNumber(112)
+  S_CreatePhotoSlide get sCreatePhotoSlide => $_getN(103);
+  @$pb.TagNumber(112)
+  set sCreatePhotoSlide(S_CreatePhotoSlide value) => $_setField(112, value);
+  @$pb.TagNumber(112)
+  $core.bool hasSCreatePhotoSlide() => $_has(103);
+  @$pb.TagNumber(112)
+  void clearSCreatePhotoSlide() => $_clearField(112);
+  @$pb.TagNumber(112)
+  S_CreatePhotoSlide ensureSCreatePhotoSlide() => $_ensure(103);
+
+  @$pb.TagNumber(113)
+  C_RefreshInviteCode get cRefreshInviteCode => $_getN(104);
+  @$pb.TagNumber(113)
+  set cRefreshInviteCode(C_RefreshInviteCode value) => $_setField(113, value);
+  @$pb.TagNumber(113)
+  $core.bool hasCRefreshInviteCode() => $_has(104);
+  @$pb.TagNumber(113)
+  void clearCRefreshInviteCode() => $_clearField(113);
+  @$pb.TagNumber(113)
+  C_RefreshInviteCode ensureCRefreshInviteCode() => $_ensure(104);
+
+  @$pb.TagNumber(114)
+  S_RefreshInviteCode get sRefreshInviteCode => $_getN(105);
+  @$pb.TagNumber(114)
+  set sRefreshInviteCode(S_RefreshInviteCode value) => $_setField(114, value);
+  @$pb.TagNumber(114)
+  $core.bool hasSRefreshInviteCode() => $_has(105);
+  @$pb.TagNumber(114)
+  void clearSRefreshInviteCode() => $_clearField(114);
+  @$pb.TagNumber(114)
+  S_RefreshInviteCode ensureSRefreshInviteCode() => $_ensure(105);
+
+  @$pb.TagNumber(115)
+  C_SocialLogin get cSocialLogin => $_getN(106);
+  @$pb.TagNumber(115)
+  set cSocialLogin(C_SocialLogin value) => $_setField(115, value);
+  @$pb.TagNumber(115)
+  $core.bool hasCSocialLogin() => $_has(106);
+  @$pb.TagNumber(115)
+  void clearCSocialLogin() => $_clearField(115);
+  @$pb.TagNumber(115)
+  C_SocialLogin ensureCSocialLogin() => $_ensure(106);
+
+  @$pb.TagNumber(116)
+  S_SocialLogin get sSocialLogin => $_getN(107);
+  @$pb.TagNumber(116)
+  set sSocialLogin(S_SocialLogin value) => $_setField(116, value);
+  @$pb.TagNumber(116)
+  $core.bool hasSSocialLogin() => $_has(107);
+  @$pb.TagNumber(116)
+  void clearSSocialLogin() => $_clearField(116);
+  @$pb.TagNumber(116)
+  S_SocialLogin ensureSSocialLogin() => $_ensure(107);
+
+  @$pb.TagNumber(117)
+  C_CompleteSocialSignup get cCompleteSocialSignup => $_getN(108);
+  @$pb.TagNumber(117)
+  set cCompleteSocialSignup(C_CompleteSocialSignup value) =>
+      $_setField(117, value);
+  @$pb.TagNumber(117)
+  $core.bool hasCCompleteSocialSignup() => $_has(108);
+  @$pb.TagNumber(117)
+  void clearCCompleteSocialSignup() => $_clearField(117);
+  @$pb.TagNumber(117)
+  C_CompleteSocialSignup ensureCCompleteSocialSignup() => $_ensure(108);
 }
 
 /// UserInfo
@@ -2079,6 +2264,8 @@ class UserInfo extends $pb.GeneratedMessage {
     $fixnum.Int64? storageUsageBytes,
     $fixnum.Int64? lastSeen,
     $core.String? status,
+    $core.bool? isEmailVerified,
+    $core.String? oauthProvider,
   }) {
     final result = create();
     if (userId != null) result.userId = userId;
@@ -2095,6 +2282,8 @@ class UserInfo extends $pb.GeneratedMessage {
     if (storageUsageBytes != null) result.storageUsageBytes = storageUsageBytes;
     if (lastSeen != null) result.lastSeen = lastSeen;
     if (status != null) result.status = status;
+    if (isEmailVerified != null) result.isEmailVerified = isEmailVerified;
+    if (oauthProvider != null) result.oauthProvider = oauthProvider;
     return result;
   }
 
@@ -2123,6 +2312,8 @@ class UserInfo extends $pb.GeneratedMessage {
     ..aInt64(10, _omitFieldNames ? '' : 'storageUsageBytes')
     ..aInt64(11, _omitFieldNames ? '' : 'lastSeen')
     ..aOS(12, _omitFieldNames ? '' : 'status')
+    ..aOB(13, _omitFieldNames ? '' : 'isEmailVerified')
+    ..aOS(14, _omitFieldNames ? '' : 'oauthProvider')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -2250,6 +2441,24 @@ class UserInfo extends $pb.GeneratedMessage {
   $core.bool hasStatus() => $_has(11);
   @$pb.TagNumber(12)
   void clearStatus() => $_clearField(12);
+
+  @$pb.TagNumber(13)
+  $core.bool get isEmailVerified => $_getBF(12);
+  @$pb.TagNumber(13)
+  set isEmailVerified($core.bool value) => $_setBool(12, value);
+  @$pb.TagNumber(13)
+  $core.bool hasIsEmailVerified() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearIsEmailVerified() => $_clearField(13);
+
+  @$pb.TagNumber(14)
+  $core.String get oauthProvider => $_getSZ(13);
+  @$pb.TagNumber(14)
+  set oauthProvider($core.String value) => $_setString(13, value);
+  @$pb.TagNumber(14)
+  $core.bool hasOauthProvider() => $_has(13);
+  @$pb.TagNumber(14)
+  void clearOauthProvider() => $_clearField(14);
 }
 
 class DeviceInfo extends $pb.GeneratedMessage {
@@ -7690,6 +7899,7 @@ class GroupInfo extends $pb.GeneratedMessage {
     $core.int? memberCount,
     $fixnum.Int64? storageCapacityBytes,
     $fixnum.Int64? storageUsageBytes,
+    $fixnum.Int64? inviteCodeExpiresAt,
   }) {
     final result = create();
     if (groupId != null) result.groupId = groupId;
@@ -7701,6 +7911,8 @@ class GroupInfo extends $pb.GeneratedMessage {
     if (storageCapacityBytes != null)
       result.storageCapacityBytes = storageCapacityBytes;
     if (storageUsageBytes != null) result.storageUsageBytes = storageUsageBytes;
+    if (inviteCodeExpiresAt != null)
+      result.inviteCodeExpiresAt = inviteCodeExpiresAt;
     return result;
   }
 
@@ -7725,6 +7937,7 @@ class GroupInfo extends $pb.GeneratedMessage {
     ..aI(6, _omitFieldNames ? '' : 'memberCount')
     ..aInt64(7, _omitFieldNames ? '' : 'storageCapacityBytes')
     ..aInt64(8, _omitFieldNames ? '' : 'storageUsageBytes')
+    ..aInt64(9, _omitFieldNames ? '' : 'inviteCodeExpiresAt')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -7816,6 +8029,15 @@ class GroupInfo extends $pb.GeneratedMessage {
   $core.bool hasStorageUsageBytes() => $_has(7);
   @$pb.TagNumber(8)
   void clearStorageUsageBytes() => $_clearField(8);
+
+  @$pb.TagNumber(9)
+  $fixnum.Int64 get inviteCodeExpiresAt => $_getI64(8);
+  @$pb.TagNumber(9)
+  set inviteCodeExpiresAt($fixnum.Int64 value) => $_setInt64(8, value);
+  @$pb.TagNumber(9)
+  $core.bool hasInviteCodeExpiresAt() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearInviteCodeExpiresAt() => $_clearField(9);
 }
 
 class C_CreateGroup extends $pb.GeneratedMessage {
@@ -8387,6 +8609,138 @@ class S_JoinGroup extends $pb.GeneratedMessage {
   void clearGroup() => $_clearField(2);
   @$pb.TagNumber(2)
   GroupInfo ensureGroup() => $_ensure(1);
+}
+
+class C_RefreshInviteCode extends $pb.GeneratedMessage {
+  factory C_RefreshInviteCode({
+    $core.String? groupId,
+  }) {
+    final result = create();
+    if (groupId != null) result.groupId = groupId;
+    return result;
+  }
+
+  C_RefreshInviteCode._();
+
+  factory C_RefreshInviteCode.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory C_RefreshInviteCode.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'C_RefreshInviteCode',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'groupId')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_RefreshInviteCode clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_RefreshInviteCode copyWith(void Function(C_RefreshInviteCode) updates) =>
+      super.copyWith((message) => updates(message as C_RefreshInviteCode))
+          as C_RefreshInviteCode;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static C_RefreshInviteCode create() => C_RefreshInviteCode._();
+  @$core.override
+  C_RefreshInviteCode createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static C_RefreshInviteCode getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<C_RefreshInviteCode>(create);
+  static C_RefreshInviteCode? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get groupId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set groupId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasGroupId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearGroupId() => $_clearField(1);
+}
+
+class S_RefreshInviteCode extends $pb.GeneratedMessage {
+  factory S_RefreshInviteCode({
+    $core.bool? success,
+    $core.String? groupCode,
+    $fixnum.Int64? expiresAt,
+  }) {
+    final result = create();
+    if (success != null) result.success = success;
+    if (groupCode != null) result.groupCode = groupCode;
+    if (expiresAt != null) result.expiresAt = expiresAt;
+    return result;
+  }
+
+  S_RefreshInviteCode._();
+
+  factory S_RefreshInviteCode.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory S_RefreshInviteCode.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'S_RefreshInviteCode',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'success')
+    ..aOS(2, _omitFieldNames ? '' : 'groupCode')
+    ..aInt64(3, _omitFieldNames ? '' : 'expiresAt')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_RefreshInviteCode clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_RefreshInviteCode copyWith(void Function(S_RefreshInviteCode) updates) =>
+      super.copyWith((message) => updates(message as S_RefreshInviteCode))
+          as S_RefreshInviteCode;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static S_RefreshInviteCode create() => S_RefreshInviteCode._();
+  @$core.override
+  S_RefreshInviteCode createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static S_RefreshInviteCode getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<S_RefreshInviteCode>(create);
+  static S_RefreshInviteCode? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get success => $_getBF(0);
+  @$pb.TagNumber(1)
+  set success($core.bool value) => $_setBool(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasSuccess() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSuccess() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get groupCode => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set groupCode($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasGroupCode() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearGroupCode() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $fixnum.Int64 get expiresAt => $_getI64(2);
+  @$pb.TagNumber(3)
+  set expiresAt($fixnum.Int64 value) => $_setInt64(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasExpiresAt() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearExpiresAt() => $_clearField(3);
 }
 
 class C_GroupMemberList extends $pb.GeneratedMessage {
@@ -10425,6 +10779,613 @@ class S_SetAnnouncement extends $pb.GeneratedMessage {
   $core.bool hasSetterId() => $_has(4);
   @$pb.TagNumber(5)
   void clearSetterId() => $_clearField(5);
+}
+
+class C_CreateBallDrop extends $pb.GeneratedMessage {
+  factory C_CreateBallDrop({
+    $core.String? convId,
+    $core.Iterable<$core.String>? participantIds,
+    $core.Iterable<$core.int>? ballCounts,
+  }) {
+    final result = create();
+    if (convId != null) result.convId = convId;
+    if (participantIds != null) result.participantIds.addAll(participantIds);
+    if (ballCounts != null) result.ballCounts.addAll(ballCounts);
+    return result;
+  }
+
+  C_CreateBallDrop._();
+
+  factory C_CreateBallDrop.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory C_CreateBallDrop.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'C_CreateBallDrop',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'convId')
+    ..pPS(2, _omitFieldNames ? '' : 'participantIds')
+    ..p<$core.int>(3, _omitFieldNames ? '' : 'ballCounts', $pb.PbFieldType.K3)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_CreateBallDrop clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_CreateBallDrop copyWith(void Function(C_CreateBallDrop) updates) =>
+      super.copyWith((message) => updates(message as C_CreateBallDrop))
+          as C_CreateBallDrop;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static C_CreateBallDrop create() => C_CreateBallDrop._();
+  @$core.override
+  C_CreateBallDrop createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static C_CreateBallDrop getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<C_CreateBallDrop>(create);
+  static C_CreateBallDrop? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get convId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set convId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasConvId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearConvId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $pb.PbList<$core.String> get participantIds => $_getList(1);
+
+  @$pb.TagNumber(3)
+  $pb.PbList<$core.int> get ballCounts => $_getList(2);
+}
+
+class S_CreateBallDrop extends $pb.GeneratedMessage {
+  factory S_CreateBallDrop({
+    $core.String? convId,
+    $fixnum.Int64? msgSeq,
+    $core.String? gameJson,
+  }) {
+    final result = create();
+    if (convId != null) result.convId = convId;
+    if (msgSeq != null) result.msgSeq = msgSeq;
+    if (gameJson != null) result.gameJson = gameJson;
+    return result;
+  }
+
+  S_CreateBallDrop._();
+
+  factory S_CreateBallDrop.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory S_CreateBallDrop.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'S_CreateBallDrop',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'convId')
+    ..aInt64(2, _omitFieldNames ? '' : 'msgSeq')
+    ..aOS(3, _omitFieldNames ? '' : 'gameJson')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_CreateBallDrop clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_CreateBallDrop copyWith(void Function(S_CreateBallDrop) updates) =>
+      super.copyWith((message) => updates(message as S_CreateBallDrop))
+          as S_CreateBallDrop;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static S_CreateBallDrop create() => S_CreateBallDrop._();
+  @$core.override
+  S_CreateBallDrop createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static S_CreateBallDrop getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<S_CreateBallDrop>(create);
+  static S_CreateBallDrop? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get convId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set convId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasConvId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearConvId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $fixnum.Int64 get msgSeq => $_getI64(1);
+  @$pb.TagNumber(2)
+  set msgSeq($fixnum.Int64 value) => $_setInt64(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasMsgSeq() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearMsgSeq() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get gameJson => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set gameJson($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasGameJson() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearGameJson() => $_clearField(3);
+}
+
+class C_CreatePhotoSlide extends $pb.GeneratedMessage {
+  factory C_CreatePhotoSlide({
+    $core.String? convId,
+    $core.Iterable<$core.String>? imageUrls,
+    $core.Iterable<$core.String>? thumbnailUrls,
+    $core.String? message,
+    $core.String? fontStyle,
+    $core.String? textPosition,
+    $core.String? bgTheme,
+    $core.String? endingMessage,
+    $core.int? fontSize,
+  }) {
+    final result = create();
+    if (convId != null) result.convId = convId;
+    if (imageUrls != null) result.imageUrls.addAll(imageUrls);
+    if (thumbnailUrls != null) result.thumbnailUrls.addAll(thumbnailUrls);
+    if (message != null) result.message = message;
+    if (fontStyle != null) result.fontStyle = fontStyle;
+    if (textPosition != null) result.textPosition = textPosition;
+    if (bgTheme != null) result.bgTheme = bgTheme;
+    if (endingMessage != null) result.endingMessage = endingMessage;
+    if (fontSize != null) result.fontSize = fontSize;
+    return result;
+  }
+
+  C_CreatePhotoSlide._();
+
+  factory C_CreatePhotoSlide.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory C_CreatePhotoSlide.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'C_CreatePhotoSlide',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'convId')
+    ..pPS(2, _omitFieldNames ? '' : 'imageUrls')
+    ..pPS(3, _omitFieldNames ? '' : 'thumbnailUrls')
+    ..aOS(4, _omitFieldNames ? '' : 'message')
+    ..aOS(5, _omitFieldNames ? '' : 'fontStyle')
+    ..aOS(6, _omitFieldNames ? '' : 'textPosition')
+    ..aOS(7, _omitFieldNames ? '' : 'bgTheme')
+    ..aOS(8, _omitFieldNames ? '' : 'endingMessage')
+    ..aI(9, _omitFieldNames ? '' : 'fontSize')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_CreatePhotoSlide clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_CreatePhotoSlide copyWith(void Function(C_CreatePhotoSlide) updates) =>
+      super.copyWith((message) => updates(message as C_CreatePhotoSlide))
+          as C_CreatePhotoSlide;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static C_CreatePhotoSlide create() => C_CreatePhotoSlide._();
+  @$core.override
+  C_CreatePhotoSlide createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static C_CreatePhotoSlide getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<C_CreatePhotoSlide>(create);
+  static C_CreatePhotoSlide? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get convId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set convId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasConvId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearConvId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $pb.PbList<$core.String> get imageUrls => $_getList(1);
+
+  @$pb.TagNumber(3)
+  $pb.PbList<$core.String> get thumbnailUrls => $_getList(2);
+
+  @$pb.TagNumber(4)
+  $core.String get message => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set message($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasMessage() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearMessage() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get fontStyle => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set fontStyle($core.String value) => $_setString(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasFontStyle() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearFontStyle() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.String get textPosition => $_getSZ(5);
+  @$pb.TagNumber(6)
+  set textPosition($core.String value) => $_setString(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasTextPosition() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearTextPosition() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.String get bgTheme => $_getSZ(6);
+  @$pb.TagNumber(7)
+  set bgTheme($core.String value) => $_setString(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasBgTheme() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearBgTheme() => $_clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.String get endingMessage => $_getSZ(7);
+  @$pb.TagNumber(8)
+  set endingMessage($core.String value) => $_setString(7, value);
+  @$pb.TagNumber(8)
+  $core.bool hasEndingMessage() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearEndingMessage() => $_clearField(8);
+
+  @$pb.TagNumber(9)
+  $core.int get fontSize => $_getIZ(8);
+  @$pb.TagNumber(9)
+  set fontSize($core.int value) => $_setSignedInt32(8, value);
+  @$pb.TagNumber(9)
+  $core.bool hasFontSize() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearFontSize() => $_clearField(9);
+}
+
+class S_CreatePhotoSlide extends $pb.GeneratedMessage {
+  factory S_CreatePhotoSlide({
+    $core.String? convId,
+    $fixnum.Int64? msgSeq,
+    $core.String? slideJson,
+  }) {
+    final result = create();
+    if (convId != null) result.convId = convId;
+    if (msgSeq != null) result.msgSeq = msgSeq;
+    if (slideJson != null) result.slideJson = slideJson;
+    return result;
+  }
+
+  S_CreatePhotoSlide._();
+
+  factory S_CreatePhotoSlide.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory S_CreatePhotoSlide.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'S_CreatePhotoSlide',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'convId')
+    ..aInt64(2, _omitFieldNames ? '' : 'msgSeq')
+    ..aOS(3, _omitFieldNames ? '' : 'slideJson')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_CreatePhotoSlide clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_CreatePhotoSlide copyWith(void Function(S_CreatePhotoSlide) updates) =>
+      super.copyWith((message) => updates(message as S_CreatePhotoSlide))
+          as S_CreatePhotoSlide;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static S_CreatePhotoSlide create() => S_CreatePhotoSlide._();
+  @$core.override
+  S_CreatePhotoSlide createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static S_CreatePhotoSlide getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<S_CreatePhotoSlide>(create);
+  static S_CreatePhotoSlide? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get convId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set convId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasConvId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearConvId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $fixnum.Int64 get msgSeq => $_getI64(1);
+  @$pb.TagNumber(2)
+  set msgSeq($fixnum.Int64 value) => $_setInt64(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasMsgSeq() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearMsgSeq() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get slideJson => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set slideJson($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasSlideJson() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearSlideJson() => $_clearField(3);
+}
+
+class C_SocialLogin extends $pb.GeneratedMessage {
+  factory C_SocialLogin({
+    $core.String? provider,
+    $core.String? idToken,
+  }) {
+    final result = create();
+    if (provider != null) result.provider = provider;
+    if (idToken != null) result.idToken = idToken;
+    return result;
+  }
+
+  C_SocialLogin._();
+
+  factory C_SocialLogin.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory C_SocialLogin.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'C_SocialLogin',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'provider')
+    ..aOS(2, _omitFieldNames ? '' : 'idToken')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_SocialLogin clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_SocialLogin copyWith(void Function(C_SocialLogin) updates) =>
+      super.copyWith((message) => updates(message as C_SocialLogin))
+          as C_SocialLogin;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static C_SocialLogin create() => C_SocialLogin._();
+  @$core.override
+  C_SocialLogin createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static C_SocialLogin getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<C_SocialLogin>(create);
+  static C_SocialLogin? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get provider => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set provider($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasProvider() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearProvider() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get idToken => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set idToken($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasIdToken() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearIdToken() => $_clearField(2);
+}
+
+class S_SocialLogin extends $pb.GeneratedMessage {
+  factory S_SocialLogin({
+    $core.bool? needsRegistration,
+    $core.String? email,
+    $core.String? name,
+    $core.String? profileImageUrl,
+  }) {
+    final result = create();
+    if (needsRegistration != null) result.needsRegistration = needsRegistration;
+    if (email != null) result.email = email;
+    if (name != null) result.name = name;
+    if (profileImageUrl != null) result.profileImageUrl = profileImageUrl;
+    return result;
+  }
+
+  S_SocialLogin._();
+
+  factory S_SocialLogin.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory S_SocialLogin.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'S_SocialLogin',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'needsRegistration')
+    ..aOS(2, _omitFieldNames ? '' : 'email')
+    ..aOS(3, _omitFieldNames ? '' : 'name')
+    ..aOS(4, _omitFieldNames ? '' : 'profileImageUrl')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_SocialLogin clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  S_SocialLogin copyWith(void Function(S_SocialLogin) updates) =>
+      super.copyWith((message) => updates(message as S_SocialLogin))
+          as S_SocialLogin;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static S_SocialLogin create() => S_SocialLogin._();
+  @$core.override
+  S_SocialLogin createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static S_SocialLogin getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<S_SocialLogin>(create);
+  static S_SocialLogin? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get needsRegistration => $_getBF(0);
+  @$pb.TagNumber(1)
+  set needsRegistration($core.bool value) => $_setBool(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasNeedsRegistration() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearNeedsRegistration() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get email => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set email($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasEmail() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearEmail() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get name => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set name($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasName() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearName() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get profileImageUrl => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set profileImageUrl($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasProfileImageUrl() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearProfileImageUrl() => $_clearField(4);
+}
+
+class C_CompleteSocialSignup extends $pb.GeneratedMessage {
+  factory C_CompleteSocialSignup({
+    $core.String? provider,
+    $core.String? idToken,
+    $core.String? userId,
+    $core.String? name,
+  }) {
+    final result = create();
+    if (provider != null) result.provider = provider;
+    if (idToken != null) result.idToken = idToken;
+    if (userId != null) result.userId = userId;
+    if (name != null) result.name = name;
+    return result;
+  }
+
+  C_CompleteSocialSignup._();
+
+  factory C_CompleteSocialSignup.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory C_CompleteSocialSignup.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'C_CompleteSocialSignup',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'Protocol'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'provider')
+    ..aOS(2, _omitFieldNames ? '' : 'idToken')
+    ..aOS(3, _omitFieldNames ? '' : 'userId')
+    ..aOS(4, _omitFieldNames ? '' : 'name')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_CompleteSocialSignup clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  C_CompleteSocialSignup copyWith(
+          void Function(C_CompleteSocialSignup) updates) =>
+      super.copyWith((message) => updates(message as C_CompleteSocialSignup))
+          as C_CompleteSocialSignup;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static C_CompleteSocialSignup create() => C_CompleteSocialSignup._();
+  @$core.override
+  C_CompleteSocialSignup createEmptyInstance() => create();
+  @$core.pragma('dart2js:noInline')
+  static C_CompleteSocialSignup getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<C_CompleteSocialSignup>(create);
+  static C_CompleteSocialSignup? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get provider => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set provider($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasProvider() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearProvider() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get idToken => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set idToken($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasIdToken() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearIdToken() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get userId => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set userId($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasUserId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearUserId() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get name => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set name($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasName() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearName() => $_clearField(4);
 }
 
 class S_Error extends $pb.GeneratedMessage {

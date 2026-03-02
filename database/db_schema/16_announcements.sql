@@ -7,3 +7,6 @@ CREATE TABLE IF NOT EXISTS announcements (
     setter_id    VARCHAR(100) DEFAULT '',
     set_at       BIGINT       DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+DROP TABLE announcements;

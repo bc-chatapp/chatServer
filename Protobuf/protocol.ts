@@ -66,6 +66,7 @@ export enum ErrorCode {
   ERR_INVALID_PASSWORD = 106,
   ERR_USER_ALREADY_EXISTS = 107,
   ERR_EMAIL_ALREADY_EXISTS = 108,
+  ERR_EMAIL_NOT_VERIFIED = 109,
   ERR_PAYLOAD_EMPTY = 200,
   ERR_INVALID_CONV_ID = 201,
   ERR_INVALID_RECEIVER_ID = 202,
@@ -94,6 +95,9 @@ export enum ErrorCode {
   ERR_POLL_NOT_FOUND = 700,
   ERR_POLL_CLOSED = 701,
   ERR_POLL_INVALID_OPTION = 702,
+  ERR_INVITE_EXPIRED = 800,
+  ERR_OAUTH_VERIFICATION_FAILED = 120,
+  ERR_OAUTH_PROVIDER_INVALID = 121,
   UNRECOGNIZED = -1,
 }
 
@@ -147,6 +151,9 @@ export function errorCodeFromJSON(object: any): ErrorCode {
     case 108:
     case "ERR_EMAIL_ALREADY_EXISTS":
       return ErrorCode.ERR_EMAIL_ALREADY_EXISTS;
+    case 109:
+    case "ERR_EMAIL_NOT_VERIFIED":
+      return ErrorCode.ERR_EMAIL_NOT_VERIFIED;
     case 200:
     case "ERR_PAYLOAD_EMPTY":
       return ErrorCode.ERR_PAYLOAD_EMPTY;
@@ -231,6 +238,15 @@ export function errorCodeFromJSON(object: any): ErrorCode {
     case 702:
     case "ERR_POLL_INVALID_OPTION":
       return ErrorCode.ERR_POLL_INVALID_OPTION;
+    case 800:
+    case "ERR_INVITE_EXPIRED":
+      return ErrorCode.ERR_INVITE_EXPIRED;
+    case 120:
+    case "ERR_OAUTH_VERIFICATION_FAILED":
+      return ErrorCode.ERR_OAUTH_VERIFICATION_FAILED;
+    case 121:
+    case "ERR_OAUTH_PROVIDER_INVALID":
+      return ErrorCode.ERR_OAUTH_PROVIDER_INVALID;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -272,6 +288,8 @@ export function errorCodeToJSON(object: ErrorCode): string {
       return "ERR_USER_ALREADY_EXISTS";
     case ErrorCode.ERR_EMAIL_ALREADY_EXISTS:
       return "ERR_EMAIL_ALREADY_EXISTS";
+    case ErrorCode.ERR_EMAIL_NOT_VERIFIED:
+      return "ERR_EMAIL_NOT_VERIFIED";
     case ErrorCode.ERR_PAYLOAD_EMPTY:
       return "ERR_PAYLOAD_EMPTY";
     case ErrorCode.ERR_INVALID_CONV_ID:
@@ -328,6 +346,12 @@ export function errorCodeToJSON(object: ErrorCode): string {
       return "ERR_POLL_CLOSED";
     case ErrorCode.ERR_POLL_INVALID_OPTION:
       return "ERR_POLL_INVALID_OPTION";
+    case ErrorCode.ERR_INVITE_EXPIRED:
+      return "ERR_INVITE_EXPIRED";
+    case ErrorCode.ERR_OAUTH_VERIFICATION_FAILED:
+      return "ERR_OAUTH_VERIFICATION_FAILED";
+    case ErrorCode.ERR_OAUTH_PROVIDER_INVALID:
+      return "ERR_OAUTH_PROVIDER_INVALID";
     case ErrorCode.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
@@ -429,8 +453,17 @@ export interface Envelope {
   sCreatePoll?: SCreatePoll | undefined;
   sVote?: SVote | undefined;
   sClosePoll?: SClosePoll | undefined;
-  sSetAnnouncement?:
-    | SSetAnnouncement
+  sSetAnnouncement?: SSetAnnouncement | undefined;
+  cCreateBallDrop?: CCreateBallDrop | undefined;
+  sCreateBallDrop?: SCreateBallDrop | undefined;
+  cCreatePhotoSlide?: CCreatePhotoSlide | undefined;
+  sCreatePhotoSlide?: SCreatePhotoSlide | undefined;
+  cRefreshInviteCode?: CRefreshInviteCode | undefined;
+  sRefreshInviteCode?: SRefreshInviteCode | undefined;
+  cSocialLogin?: CSocialLogin | undefined;
+  sSocialLogin?: SSocialLogin | undefined;
+  cCompleteSocialSignup?:
+    | CCompleteSocialSignup
     | undefined;
   /** GROUPS (80 ~ 99) */
   cCreateGroup?: CCreateGroup | undefined;
@@ -475,6 +508,8 @@ export interface UserInfo {
   storageUsageBytes: number;
   lastSeen: number;
   status: string;
+  isEmailVerified: boolean;
+  oauthProvider: string;
 }
 
 export interface DeviceInfo {
@@ -1045,6 +1080,7 @@ export interface GroupInfo {
   memberCount: number;
   storageCapacityBytes: number;
   storageUsageBytes: number;
+  inviteCodeExpiresAt: number;
 }
 
 export interface CCreateGroup {
@@ -1088,6 +1124,16 @@ export interface CJoinGroup {
 export interface SJoinGroup {
   success: boolean;
   group: GroupInfo | undefined;
+}
+
+export interface CRefreshInviteCode {
+  groupId: string;
+}
+
+export interface SRefreshInviteCode {
+  success: boolean;
+  groupCode: string;
+  expiresAt: number;
 }
 
 export interface CGroupMemberList {
@@ -1258,6 +1304,68 @@ export interface SSetAnnouncement {
   setterId: string;
 }
 
+export interface CCreateBallDrop {
+  convId: string;
+  /** 비워두면 그룹 전체 */
+  participantIds: string[];
+  /** participant_ids와 병렬 배열 */
+  ballCounts: number[];
+}
+
+export interface SCreateBallDrop {
+  convId: string;
+  msgSeq: number;
+  /** 전체 게임 데이터 JSON */
+  gameJson: string;
+}
+
+export interface CCreatePhotoSlide {
+  convId: string;
+  /** GCS URLs (사전 업로드) */
+  imageUrls: string[];
+  /** 썸네일 URLs */
+  thumbnailUrls: string[];
+  /** 슬라이드 메시지 (사진 위 누적 표시) */
+  message: string;
+  /** handwriting | elegant | casual */
+  fontStyle: string;
+  /** (deprecated) 하위호환용 */
+  textPosition: string;
+  /** dark | light | gradient */
+  bgTheme: string;
+  /** 마무리 메시지 (엔딩 화면) */
+  endingMessage: string;
+  /** 글꼴 크기 (18~40, 기본 26) */
+  fontSize: number;
+}
+
+export interface SCreatePhotoSlide {
+  convId: string;
+  msgSeq: number;
+  /** PhotoSlideData JSON 전체 */
+  slideJson: string;
+}
+
+export interface CSocialLogin {
+  /** "google" | "apple" */
+  provider: string;
+  idToken: string;
+}
+
+export interface SSocialLogin {
+  needsRegistration: boolean;
+  email: string;
+  name: string;
+  profileImageUrl: string;
+}
+
+export interface CCompleteSocialSignup {
+  provider: string;
+  idToken: string;
+  userId: string;
+  name: string;
+}
+
 export interface SError {
   errorCode: ErrorCode;
   code: number;
@@ -1349,6 +1457,15 @@ function createBaseEnvelope(): Envelope {
     sVote: undefined,
     sClosePoll: undefined,
     sSetAnnouncement: undefined,
+    cCreateBallDrop: undefined,
+    sCreateBallDrop: undefined,
+    cCreatePhotoSlide: undefined,
+    sCreatePhotoSlide: undefined,
+    cRefreshInviteCode: undefined,
+    sRefreshInviteCode: undefined,
+    cSocialLogin: undefined,
+    sSocialLogin: undefined,
+    cCompleteSocialSignup: undefined,
     cCreateGroup: undefined,
     sCreateGroup: undefined,
     cGroupList: undefined,
@@ -1607,6 +1724,33 @@ export const Envelope = {
     }
     if (message.sSetAnnouncement !== undefined) {
       SSetAnnouncement.encode(message.sSetAnnouncement, writer.uint32(866).fork()).ldelim();
+    }
+    if (message.cCreateBallDrop !== undefined) {
+      CCreateBallDrop.encode(message.cCreateBallDrop, writer.uint32(874).fork()).ldelim();
+    }
+    if (message.sCreateBallDrop !== undefined) {
+      SCreateBallDrop.encode(message.sCreateBallDrop, writer.uint32(882).fork()).ldelim();
+    }
+    if (message.cCreatePhotoSlide !== undefined) {
+      CCreatePhotoSlide.encode(message.cCreatePhotoSlide, writer.uint32(890).fork()).ldelim();
+    }
+    if (message.sCreatePhotoSlide !== undefined) {
+      SCreatePhotoSlide.encode(message.sCreatePhotoSlide, writer.uint32(898).fork()).ldelim();
+    }
+    if (message.cRefreshInviteCode !== undefined) {
+      CRefreshInviteCode.encode(message.cRefreshInviteCode, writer.uint32(906).fork()).ldelim();
+    }
+    if (message.sRefreshInviteCode !== undefined) {
+      SRefreshInviteCode.encode(message.sRefreshInviteCode, writer.uint32(914).fork()).ldelim();
+    }
+    if (message.cSocialLogin !== undefined) {
+      CSocialLogin.encode(message.cSocialLogin, writer.uint32(922).fork()).ldelim();
+    }
+    if (message.sSocialLogin !== undefined) {
+      SSocialLogin.encode(message.sSocialLogin, writer.uint32(930).fork()).ldelim();
+    }
+    if (message.cCompleteSocialSignup !== undefined) {
+      CCompleteSocialSignup.encode(message.cCompleteSocialSignup, writer.uint32(938).fork()).ldelim();
     }
     if (message.cCreateGroup !== undefined) {
       CCreateGroup.encode(message.cCreateGroup, writer.uint32(642).fork()).ldelim();
@@ -2226,6 +2370,69 @@ export const Envelope = {
 
           message.sSetAnnouncement = SSetAnnouncement.decode(reader, reader.uint32());
           continue;
+        case 109:
+          if (tag !== 874) {
+            break;
+          }
+
+          message.cCreateBallDrop = CCreateBallDrop.decode(reader, reader.uint32());
+          continue;
+        case 110:
+          if (tag !== 882) {
+            break;
+          }
+
+          message.sCreateBallDrop = SCreateBallDrop.decode(reader, reader.uint32());
+          continue;
+        case 111:
+          if (tag !== 890) {
+            break;
+          }
+
+          message.cCreatePhotoSlide = CCreatePhotoSlide.decode(reader, reader.uint32());
+          continue;
+        case 112:
+          if (tag !== 898) {
+            break;
+          }
+
+          message.sCreatePhotoSlide = SCreatePhotoSlide.decode(reader, reader.uint32());
+          continue;
+        case 113:
+          if (tag !== 906) {
+            break;
+          }
+
+          message.cRefreshInviteCode = CRefreshInviteCode.decode(reader, reader.uint32());
+          continue;
+        case 114:
+          if (tag !== 914) {
+            break;
+          }
+
+          message.sRefreshInviteCode = SRefreshInviteCode.decode(reader, reader.uint32());
+          continue;
+        case 115:
+          if (tag !== 922) {
+            break;
+          }
+
+          message.cSocialLogin = CSocialLogin.decode(reader, reader.uint32());
+          continue;
+        case 116:
+          if (tag !== 930) {
+            break;
+          }
+
+          message.sSocialLogin = SSocialLogin.decode(reader, reader.uint32());
+          continue;
+        case 117:
+          if (tag !== 938) {
+            break;
+          }
+
+          message.cCompleteSocialSignup = CCompleteSocialSignup.decode(reader, reader.uint32());
+          continue;
         case 80:
           if (tag !== 642) {
             break;
@@ -2487,6 +2694,25 @@ export const Envelope = {
       sVote: isSet(object.sVote) ? SVote.fromJSON(object.sVote) : undefined,
       sClosePoll: isSet(object.sClosePoll) ? SClosePoll.fromJSON(object.sClosePoll) : undefined,
       sSetAnnouncement: isSet(object.sSetAnnouncement) ? SSetAnnouncement.fromJSON(object.sSetAnnouncement) : undefined,
+      cCreateBallDrop: isSet(object.cCreateBallDrop) ? CCreateBallDrop.fromJSON(object.cCreateBallDrop) : undefined,
+      sCreateBallDrop: isSet(object.sCreateBallDrop) ? SCreateBallDrop.fromJSON(object.sCreateBallDrop) : undefined,
+      cCreatePhotoSlide: isSet(object.cCreatePhotoSlide)
+        ? CCreatePhotoSlide.fromJSON(object.cCreatePhotoSlide)
+        : undefined,
+      sCreatePhotoSlide: isSet(object.sCreatePhotoSlide)
+        ? SCreatePhotoSlide.fromJSON(object.sCreatePhotoSlide)
+        : undefined,
+      cRefreshInviteCode: isSet(object.cRefreshInviteCode)
+        ? CRefreshInviteCode.fromJSON(object.cRefreshInviteCode)
+        : undefined,
+      sRefreshInviteCode: isSet(object.sRefreshInviteCode)
+        ? SRefreshInviteCode.fromJSON(object.sRefreshInviteCode)
+        : undefined,
+      cSocialLogin: isSet(object.cSocialLogin) ? CSocialLogin.fromJSON(object.cSocialLogin) : undefined,
+      sSocialLogin: isSet(object.sSocialLogin) ? SSocialLogin.fromJSON(object.sSocialLogin) : undefined,
+      cCompleteSocialSignup: isSet(object.cCompleteSocialSignup)
+        ? CCompleteSocialSignup.fromJSON(object.cCompleteSocialSignup)
+        : undefined,
       cCreateGroup: isSet(object.cCreateGroup) ? CCreateGroup.fromJSON(object.cCreateGroup) : undefined,
       sCreateGroup: isSet(object.sCreateGroup) ? SCreateGroup.fromJSON(object.sCreateGroup) : undefined,
       cGroupList: isSet(object.cGroupList) ? CGroupList.fromJSON(object.cGroupList) : undefined,
@@ -2745,6 +2971,33 @@ export const Envelope = {
     }
     if (message.sSetAnnouncement !== undefined) {
       obj.sSetAnnouncement = SSetAnnouncement.toJSON(message.sSetAnnouncement);
+    }
+    if (message.cCreateBallDrop !== undefined) {
+      obj.cCreateBallDrop = CCreateBallDrop.toJSON(message.cCreateBallDrop);
+    }
+    if (message.sCreateBallDrop !== undefined) {
+      obj.sCreateBallDrop = SCreateBallDrop.toJSON(message.sCreateBallDrop);
+    }
+    if (message.cCreatePhotoSlide !== undefined) {
+      obj.cCreatePhotoSlide = CCreatePhotoSlide.toJSON(message.cCreatePhotoSlide);
+    }
+    if (message.sCreatePhotoSlide !== undefined) {
+      obj.sCreatePhotoSlide = SCreatePhotoSlide.toJSON(message.sCreatePhotoSlide);
+    }
+    if (message.cRefreshInviteCode !== undefined) {
+      obj.cRefreshInviteCode = CRefreshInviteCode.toJSON(message.cRefreshInviteCode);
+    }
+    if (message.sRefreshInviteCode !== undefined) {
+      obj.sRefreshInviteCode = SRefreshInviteCode.toJSON(message.sRefreshInviteCode);
+    }
+    if (message.cSocialLogin !== undefined) {
+      obj.cSocialLogin = CSocialLogin.toJSON(message.cSocialLogin);
+    }
+    if (message.sSocialLogin !== undefined) {
+      obj.sSocialLogin = SSocialLogin.toJSON(message.sSocialLogin);
+    }
+    if (message.cCompleteSocialSignup !== undefined) {
+      obj.cCompleteSocialSignup = CCompleteSocialSignup.toJSON(message.cCompleteSocialSignup);
     }
     if (message.cCreateGroup !== undefined) {
       obj.cCreateGroup = CCreateGroup.toJSON(message.cCreateGroup);
@@ -3038,6 +3291,34 @@ export const Envelope = {
     message.sSetAnnouncement = (object.sSetAnnouncement !== undefined && object.sSetAnnouncement !== null)
       ? SSetAnnouncement.fromPartial(object.sSetAnnouncement)
       : undefined;
+    message.cCreateBallDrop = (object.cCreateBallDrop !== undefined && object.cCreateBallDrop !== null)
+      ? CCreateBallDrop.fromPartial(object.cCreateBallDrop)
+      : undefined;
+    message.sCreateBallDrop = (object.sCreateBallDrop !== undefined && object.sCreateBallDrop !== null)
+      ? SCreateBallDrop.fromPartial(object.sCreateBallDrop)
+      : undefined;
+    message.cCreatePhotoSlide = (object.cCreatePhotoSlide !== undefined && object.cCreatePhotoSlide !== null)
+      ? CCreatePhotoSlide.fromPartial(object.cCreatePhotoSlide)
+      : undefined;
+    message.sCreatePhotoSlide = (object.sCreatePhotoSlide !== undefined && object.sCreatePhotoSlide !== null)
+      ? SCreatePhotoSlide.fromPartial(object.sCreatePhotoSlide)
+      : undefined;
+    message.cRefreshInviteCode = (object.cRefreshInviteCode !== undefined && object.cRefreshInviteCode !== null)
+      ? CRefreshInviteCode.fromPartial(object.cRefreshInviteCode)
+      : undefined;
+    message.sRefreshInviteCode = (object.sRefreshInviteCode !== undefined && object.sRefreshInviteCode !== null)
+      ? SRefreshInviteCode.fromPartial(object.sRefreshInviteCode)
+      : undefined;
+    message.cSocialLogin = (object.cSocialLogin !== undefined && object.cSocialLogin !== null)
+      ? CSocialLogin.fromPartial(object.cSocialLogin)
+      : undefined;
+    message.sSocialLogin = (object.sSocialLogin !== undefined && object.sSocialLogin !== null)
+      ? SSocialLogin.fromPartial(object.sSocialLogin)
+      : undefined;
+    message.cCompleteSocialSignup =
+      (object.cCompleteSocialSignup !== undefined && object.cCompleteSocialSignup !== null)
+        ? CCompleteSocialSignup.fromPartial(object.cCompleteSocialSignup)
+        : undefined;
     message.cCreateGroup = (object.cCreateGroup !== undefined && object.cCreateGroup !== null)
       ? CCreateGroup.fromPartial(object.cCreateGroup)
       : undefined;
@@ -3125,6 +3406,8 @@ function createBaseUserInfo(): UserInfo {
     storageUsageBytes: 0,
     lastSeen: 0,
     status: "",
+    isEmailVerified: false,
+    oauthProvider: "",
   };
 }
 
@@ -3165,6 +3448,12 @@ export const UserInfo = {
     }
     if (message.status !== "") {
       writer.uint32(98).string(message.status);
+    }
+    if (message.isEmailVerified !== false) {
+      writer.uint32(104).bool(message.isEmailVerified);
+    }
+    if (message.oauthProvider !== "") {
+      writer.uint32(114).string(message.oauthProvider);
     }
     return writer;
   },
@@ -3260,6 +3549,20 @@ export const UserInfo = {
 
           message.status = reader.string();
           continue;
+        case 13:
+          if (tag !== 104) {
+            break;
+          }
+
+          message.isEmailVerified = reader.bool();
+          continue;
+        case 14:
+          if (tag !== 114) {
+            break;
+          }
+
+          message.oauthProvider = reader.string();
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -3283,6 +3586,8 @@ export const UserInfo = {
       storageUsageBytes: isSet(object.storageUsageBytes) ? globalThis.Number(object.storageUsageBytes) : 0,
       lastSeen: isSet(object.lastSeen) ? globalThis.Number(object.lastSeen) : 0,
       status: isSet(object.status) ? globalThis.String(object.status) : "",
+      isEmailVerified: isSet(object.isEmailVerified) ? globalThis.Boolean(object.isEmailVerified) : false,
+      oauthProvider: isSet(object.oauthProvider) ? globalThis.String(object.oauthProvider) : "",
     };
   },
 
@@ -3324,6 +3629,12 @@ export const UserInfo = {
     if (message.status !== "") {
       obj.status = message.status;
     }
+    if (message.isEmailVerified !== false) {
+      obj.isEmailVerified = message.isEmailVerified;
+    }
+    if (message.oauthProvider !== "") {
+      obj.oauthProvider = message.oauthProvider;
+    }
     return obj;
   },
 
@@ -3344,6 +3655,8 @@ export const UserInfo = {
     message.storageUsageBytes = object.storageUsageBytes ?? 0;
     message.lastSeen = object.lastSeen ?? 0;
     message.status = object.status ?? "";
+    message.isEmailVerified = object.isEmailVerified ?? false;
+    message.oauthProvider = object.oauthProvider ?? "";
     return message;
   },
 };
@@ -9629,6 +9942,7 @@ function createBaseGroupInfo(): GroupInfo {
     memberCount: 0,
     storageCapacityBytes: 0,
     storageUsageBytes: 0,
+    inviteCodeExpiresAt: 0,
   };
 }
 
@@ -9657,6 +9971,9 @@ export const GroupInfo = {
     }
     if (message.storageUsageBytes !== 0) {
       writer.uint32(64).int64(message.storageUsageBytes);
+    }
+    if (message.inviteCodeExpiresAt !== 0) {
+      writer.uint32(72).int64(message.inviteCodeExpiresAt);
     }
     return writer;
   },
@@ -9724,6 +10041,13 @@ export const GroupInfo = {
 
           message.storageUsageBytes = longToNumber(reader.int64() as Long);
           continue;
+        case 9:
+          if (tag !== 72) {
+            break;
+          }
+
+          message.inviteCodeExpiresAt = longToNumber(reader.int64() as Long);
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -9743,6 +10067,7 @@ export const GroupInfo = {
       memberCount: isSet(object.memberCount) ? globalThis.Number(object.memberCount) : 0,
       storageCapacityBytes: isSet(object.storageCapacityBytes) ? globalThis.Number(object.storageCapacityBytes) : 0,
       storageUsageBytes: isSet(object.storageUsageBytes) ? globalThis.Number(object.storageUsageBytes) : 0,
+      inviteCodeExpiresAt: isSet(object.inviteCodeExpiresAt) ? globalThis.Number(object.inviteCodeExpiresAt) : 0,
     };
   },
 
@@ -9772,6 +10097,9 @@ export const GroupInfo = {
     if (message.storageUsageBytes !== 0) {
       obj.storageUsageBytes = Math.round(message.storageUsageBytes);
     }
+    if (message.inviteCodeExpiresAt !== 0) {
+      obj.inviteCodeExpiresAt = Math.round(message.inviteCodeExpiresAt);
+    }
     return obj;
   },
 
@@ -9788,6 +10116,7 @@ export const GroupInfo = {
     message.memberCount = object.memberCount ?? 0;
     message.storageCapacityBytes = object.storageCapacityBytes ?? 0;
     message.storageUsageBytes = object.storageUsageBytes ?? 0;
+    message.inviteCodeExpiresAt = object.inviteCodeExpiresAt ?? 0;
     return message;
   },
 };
@@ -10422,6 +10751,152 @@ export const SJoinGroup = {
     message.group = (object.group !== undefined && object.group !== null)
       ? GroupInfo.fromPartial(object.group)
       : undefined;
+    return message;
+  },
+};
+
+function createBaseCRefreshInviteCode(): CRefreshInviteCode {
+  return { groupId: "" };
+}
+
+export const CRefreshInviteCode = {
+  encode(message: CRefreshInviteCode, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.groupId !== "") {
+      writer.uint32(10).string(message.groupId);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CRefreshInviteCode {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCRefreshInviteCode();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.groupId = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CRefreshInviteCode {
+    return { groupId: isSet(object.groupId) ? globalThis.String(object.groupId) : "" };
+  },
+
+  toJSON(message: CRefreshInviteCode): unknown {
+    const obj: any = {};
+    if (message.groupId !== "") {
+      obj.groupId = message.groupId;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CRefreshInviteCode>, I>>(base?: I): CRefreshInviteCode {
+    return CRefreshInviteCode.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CRefreshInviteCode>, I>>(object: I): CRefreshInviteCode {
+    const message = createBaseCRefreshInviteCode();
+    message.groupId = object.groupId ?? "";
+    return message;
+  },
+};
+
+function createBaseSRefreshInviteCode(): SRefreshInviteCode {
+  return { success: false, groupCode: "", expiresAt: 0 };
+}
+
+export const SRefreshInviteCode = {
+  encode(message: SRefreshInviteCode, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.success !== false) {
+      writer.uint32(8).bool(message.success);
+    }
+    if (message.groupCode !== "") {
+      writer.uint32(18).string(message.groupCode);
+    }
+    if (message.expiresAt !== 0) {
+      writer.uint32(24).int64(message.expiresAt);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SRefreshInviteCode {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSRefreshInviteCode();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.success = reader.bool();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.groupCode = reader.string();
+          continue;
+        case 3:
+          if (tag !== 24) {
+            break;
+          }
+
+          message.expiresAt = longToNumber(reader.int64() as Long);
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SRefreshInviteCode {
+    return {
+      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
+      groupCode: isSet(object.groupCode) ? globalThis.String(object.groupCode) : "",
+      expiresAt: isSet(object.expiresAt) ? globalThis.Number(object.expiresAt) : 0,
+    };
+  },
+
+  toJSON(message: SRefreshInviteCode): unknown {
+    const obj: any = {};
+    if (message.success !== false) {
+      obj.success = message.success;
+    }
+    if (message.groupCode !== "") {
+      obj.groupCode = message.groupCode;
+    }
+    if (message.expiresAt !== 0) {
+      obj.expiresAt = Math.round(message.expiresAt);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SRefreshInviteCode>, I>>(base?: I): SRefreshInviteCode {
+    return SRefreshInviteCode.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SRefreshInviteCode>, I>>(object: I): SRefreshInviteCode {
+    const message = createBaseSRefreshInviteCode();
+    message.success = object.success ?? false;
+    message.groupCode = object.groupCode ?? "";
+    message.expiresAt = object.expiresAt ?? 0;
     return message;
   },
 };
@@ -12807,6 +13282,764 @@ export const SSetAnnouncement = {
     message.text = object.text ?? "";
     message.senderName = object.senderName ?? "";
     message.setterId = object.setterId ?? "";
+    return message;
+  },
+};
+
+function createBaseCCreateBallDrop(): CCreateBallDrop {
+  return { convId: "", participantIds: [], ballCounts: [] };
+}
+
+export const CCreateBallDrop = {
+  encode(message: CCreateBallDrop, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.convId !== "") {
+      writer.uint32(10).string(message.convId);
+    }
+    for (const v of message.participantIds) {
+      writer.uint32(18).string(v!);
+    }
+    writer.uint32(26).fork();
+    for (const v of message.ballCounts) {
+      writer.int32(v);
+    }
+    writer.ldelim();
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CCreateBallDrop {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCCreateBallDrop();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.convId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.participantIds.push(reader.string());
+          continue;
+        case 3:
+          if (tag === 24) {
+            message.ballCounts.push(reader.int32());
+
+            continue;
+          }
+
+          if (tag === 26) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.ballCounts.push(reader.int32());
+            }
+
+            continue;
+          }
+
+          break;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CCreateBallDrop {
+    return {
+      convId: isSet(object.convId) ? globalThis.String(object.convId) : "",
+      participantIds: globalThis.Array.isArray(object?.participantIds)
+        ? object.participantIds.map((e: any) => globalThis.String(e))
+        : [],
+      ballCounts: globalThis.Array.isArray(object?.ballCounts)
+        ? object.ballCounts.map((e: any) => globalThis.Number(e))
+        : [],
+    };
+  },
+
+  toJSON(message: CCreateBallDrop): unknown {
+    const obj: any = {};
+    if (message.convId !== "") {
+      obj.convId = message.convId;
+    }
+    if (message.participantIds?.length) {
+      obj.participantIds = message.participantIds;
+    }
+    if (message.ballCounts?.length) {
+      obj.ballCounts = message.ballCounts.map((e) => Math.round(e));
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CCreateBallDrop>, I>>(base?: I): CCreateBallDrop {
+    return CCreateBallDrop.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CCreateBallDrop>, I>>(object: I): CCreateBallDrop {
+    const message = createBaseCCreateBallDrop();
+    message.convId = object.convId ?? "";
+    message.participantIds = object.participantIds?.map((e) => e) || [];
+    message.ballCounts = object.ballCounts?.map((e) => e) || [];
+    return message;
+  },
+};
+
+function createBaseSCreateBallDrop(): SCreateBallDrop {
+  return { convId: "", msgSeq: 0, gameJson: "" };
+}
+
+export const SCreateBallDrop = {
+  encode(message: SCreateBallDrop, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.convId !== "") {
+      writer.uint32(10).string(message.convId);
+    }
+    if (message.msgSeq !== 0) {
+      writer.uint32(16).int64(message.msgSeq);
+    }
+    if (message.gameJson !== "") {
+      writer.uint32(26).string(message.gameJson);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SCreateBallDrop {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSCreateBallDrop();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.convId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.msgSeq = longToNumber(reader.int64() as Long);
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.gameJson = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SCreateBallDrop {
+    return {
+      convId: isSet(object.convId) ? globalThis.String(object.convId) : "",
+      msgSeq: isSet(object.msgSeq) ? globalThis.Number(object.msgSeq) : 0,
+      gameJson: isSet(object.gameJson) ? globalThis.String(object.gameJson) : "",
+    };
+  },
+
+  toJSON(message: SCreateBallDrop): unknown {
+    const obj: any = {};
+    if (message.convId !== "") {
+      obj.convId = message.convId;
+    }
+    if (message.msgSeq !== 0) {
+      obj.msgSeq = Math.round(message.msgSeq);
+    }
+    if (message.gameJson !== "") {
+      obj.gameJson = message.gameJson;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SCreateBallDrop>, I>>(base?: I): SCreateBallDrop {
+    return SCreateBallDrop.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SCreateBallDrop>, I>>(object: I): SCreateBallDrop {
+    const message = createBaseSCreateBallDrop();
+    message.convId = object.convId ?? "";
+    message.msgSeq = object.msgSeq ?? 0;
+    message.gameJson = object.gameJson ?? "";
+    return message;
+  },
+};
+
+function createBaseCCreatePhotoSlide(): CCreatePhotoSlide {
+  return {
+    convId: "",
+    imageUrls: [],
+    thumbnailUrls: [],
+    message: "",
+    fontStyle: "",
+    textPosition: "",
+    bgTheme: "",
+    endingMessage: "",
+    fontSize: 0,
+  };
+}
+
+export const CCreatePhotoSlide = {
+  encode(message: CCreatePhotoSlide, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.convId !== "") {
+      writer.uint32(10).string(message.convId);
+    }
+    for (const v of message.imageUrls) {
+      writer.uint32(18).string(v!);
+    }
+    for (const v of message.thumbnailUrls) {
+      writer.uint32(26).string(v!);
+    }
+    if (message.message !== "") {
+      writer.uint32(34).string(message.message);
+    }
+    if (message.fontStyle !== "") {
+      writer.uint32(42).string(message.fontStyle);
+    }
+    if (message.textPosition !== "") {
+      writer.uint32(50).string(message.textPosition);
+    }
+    if (message.bgTheme !== "") {
+      writer.uint32(58).string(message.bgTheme);
+    }
+    if (message.endingMessage !== "") {
+      writer.uint32(66).string(message.endingMessage);
+    }
+    if (message.fontSize !== 0) {
+      writer.uint32(72).int32(message.fontSize);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CCreatePhotoSlide {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCCreatePhotoSlide();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.convId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.imageUrls.push(reader.string());
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.thumbnailUrls.push(reader.string());
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.message = reader.string();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.fontStyle = reader.string();
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.textPosition = reader.string();
+          continue;
+        case 7:
+          if (tag !== 58) {
+            break;
+          }
+
+          message.bgTheme = reader.string();
+          continue;
+        case 8:
+          if (tag !== 66) {
+            break;
+          }
+
+          message.endingMessage = reader.string();
+          continue;
+        case 9:
+          if (tag !== 72) {
+            break;
+          }
+
+          message.fontSize = reader.int32();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CCreatePhotoSlide {
+    return {
+      convId: isSet(object.convId) ? globalThis.String(object.convId) : "",
+      imageUrls: globalThis.Array.isArray(object?.imageUrls)
+        ? object.imageUrls.map((e: any) => globalThis.String(e))
+        : [],
+      thumbnailUrls: globalThis.Array.isArray(object?.thumbnailUrls)
+        ? object.thumbnailUrls.map((e: any) => globalThis.String(e))
+        : [],
+      message: isSet(object.message) ? globalThis.String(object.message) : "",
+      fontStyle: isSet(object.fontStyle) ? globalThis.String(object.fontStyle) : "",
+      textPosition: isSet(object.textPosition) ? globalThis.String(object.textPosition) : "",
+      bgTheme: isSet(object.bgTheme) ? globalThis.String(object.bgTheme) : "",
+      endingMessage: isSet(object.endingMessage) ? globalThis.String(object.endingMessage) : "",
+      fontSize: isSet(object.fontSize) ? globalThis.Number(object.fontSize) : 0,
+    };
+  },
+
+  toJSON(message: CCreatePhotoSlide): unknown {
+    const obj: any = {};
+    if (message.convId !== "") {
+      obj.convId = message.convId;
+    }
+    if (message.imageUrls?.length) {
+      obj.imageUrls = message.imageUrls;
+    }
+    if (message.thumbnailUrls?.length) {
+      obj.thumbnailUrls = message.thumbnailUrls;
+    }
+    if (message.message !== "") {
+      obj.message = message.message;
+    }
+    if (message.fontStyle !== "") {
+      obj.fontStyle = message.fontStyle;
+    }
+    if (message.textPosition !== "") {
+      obj.textPosition = message.textPosition;
+    }
+    if (message.bgTheme !== "") {
+      obj.bgTheme = message.bgTheme;
+    }
+    if (message.endingMessage !== "") {
+      obj.endingMessage = message.endingMessage;
+    }
+    if (message.fontSize !== 0) {
+      obj.fontSize = Math.round(message.fontSize);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CCreatePhotoSlide>, I>>(base?: I): CCreatePhotoSlide {
+    return CCreatePhotoSlide.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CCreatePhotoSlide>, I>>(object: I): CCreatePhotoSlide {
+    const message = createBaseCCreatePhotoSlide();
+    message.convId = object.convId ?? "";
+    message.imageUrls = object.imageUrls?.map((e) => e) || [];
+    message.thumbnailUrls = object.thumbnailUrls?.map((e) => e) || [];
+    message.message = object.message ?? "";
+    message.fontStyle = object.fontStyle ?? "";
+    message.textPosition = object.textPosition ?? "";
+    message.bgTheme = object.bgTheme ?? "";
+    message.endingMessage = object.endingMessage ?? "";
+    message.fontSize = object.fontSize ?? 0;
+    return message;
+  },
+};
+
+function createBaseSCreatePhotoSlide(): SCreatePhotoSlide {
+  return { convId: "", msgSeq: 0, slideJson: "" };
+}
+
+export const SCreatePhotoSlide = {
+  encode(message: SCreatePhotoSlide, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.convId !== "") {
+      writer.uint32(10).string(message.convId);
+    }
+    if (message.msgSeq !== 0) {
+      writer.uint32(16).int64(message.msgSeq);
+    }
+    if (message.slideJson !== "") {
+      writer.uint32(26).string(message.slideJson);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SCreatePhotoSlide {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSCreatePhotoSlide();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.convId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.msgSeq = longToNumber(reader.int64() as Long);
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.slideJson = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SCreatePhotoSlide {
+    return {
+      convId: isSet(object.convId) ? globalThis.String(object.convId) : "",
+      msgSeq: isSet(object.msgSeq) ? globalThis.Number(object.msgSeq) : 0,
+      slideJson: isSet(object.slideJson) ? globalThis.String(object.slideJson) : "",
+    };
+  },
+
+  toJSON(message: SCreatePhotoSlide): unknown {
+    const obj: any = {};
+    if (message.convId !== "") {
+      obj.convId = message.convId;
+    }
+    if (message.msgSeq !== 0) {
+      obj.msgSeq = Math.round(message.msgSeq);
+    }
+    if (message.slideJson !== "") {
+      obj.slideJson = message.slideJson;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SCreatePhotoSlide>, I>>(base?: I): SCreatePhotoSlide {
+    return SCreatePhotoSlide.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SCreatePhotoSlide>, I>>(object: I): SCreatePhotoSlide {
+    const message = createBaseSCreatePhotoSlide();
+    message.convId = object.convId ?? "";
+    message.msgSeq = object.msgSeq ?? 0;
+    message.slideJson = object.slideJson ?? "";
+    return message;
+  },
+};
+
+function createBaseCSocialLogin(): CSocialLogin {
+  return { provider: "", idToken: "" };
+}
+
+export const CSocialLogin = {
+  encode(message: CSocialLogin, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.provider !== "") {
+      writer.uint32(10).string(message.provider);
+    }
+    if (message.idToken !== "") {
+      writer.uint32(18).string(message.idToken);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CSocialLogin {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCSocialLogin();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.provider = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.idToken = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CSocialLogin {
+    return {
+      provider: isSet(object.provider) ? globalThis.String(object.provider) : "",
+      idToken: isSet(object.idToken) ? globalThis.String(object.idToken) : "",
+    };
+  },
+
+  toJSON(message: CSocialLogin): unknown {
+    const obj: any = {};
+    if (message.provider !== "") {
+      obj.provider = message.provider;
+    }
+    if (message.idToken !== "") {
+      obj.idToken = message.idToken;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CSocialLogin>, I>>(base?: I): CSocialLogin {
+    return CSocialLogin.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CSocialLogin>, I>>(object: I): CSocialLogin {
+    const message = createBaseCSocialLogin();
+    message.provider = object.provider ?? "";
+    message.idToken = object.idToken ?? "";
+    return message;
+  },
+};
+
+function createBaseSSocialLogin(): SSocialLogin {
+  return { needsRegistration: false, email: "", name: "", profileImageUrl: "" };
+}
+
+export const SSocialLogin = {
+  encode(message: SSocialLogin, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.needsRegistration !== false) {
+      writer.uint32(8).bool(message.needsRegistration);
+    }
+    if (message.email !== "") {
+      writer.uint32(18).string(message.email);
+    }
+    if (message.name !== "") {
+      writer.uint32(26).string(message.name);
+    }
+    if (message.profileImageUrl !== "") {
+      writer.uint32(34).string(message.profileImageUrl);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): SSocialLogin {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSSocialLogin();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.needsRegistration = reader.bool();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.email = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.name = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.profileImageUrl = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SSocialLogin {
+    return {
+      needsRegistration: isSet(object.needsRegistration) ? globalThis.Boolean(object.needsRegistration) : false,
+      email: isSet(object.email) ? globalThis.String(object.email) : "",
+      name: isSet(object.name) ? globalThis.String(object.name) : "",
+      profileImageUrl: isSet(object.profileImageUrl) ? globalThis.String(object.profileImageUrl) : "",
+    };
+  },
+
+  toJSON(message: SSocialLogin): unknown {
+    const obj: any = {};
+    if (message.needsRegistration !== false) {
+      obj.needsRegistration = message.needsRegistration;
+    }
+    if (message.email !== "") {
+      obj.email = message.email;
+    }
+    if (message.name !== "") {
+      obj.name = message.name;
+    }
+    if (message.profileImageUrl !== "") {
+      obj.profileImageUrl = message.profileImageUrl;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SSocialLogin>, I>>(base?: I): SSocialLogin {
+    return SSocialLogin.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SSocialLogin>, I>>(object: I): SSocialLogin {
+    const message = createBaseSSocialLogin();
+    message.needsRegistration = object.needsRegistration ?? false;
+    message.email = object.email ?? "";
+    message.name = object.name ?? "";
+    message.profileImageUrl = object.profileImageUrl ?? "";
+    return message;
+  },
+};
+
+function createBaseCCompleteSocialSignup(): CCompleteSocialSignup {
+  return { provider: "", idToken: "", userId: "", name: "" };
+}
+
+export const CCompleteSocialSignup = {
+  encode(message: CCompleteSocialSignup, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.provider !== "") {
+      writer.uint32(10).string(message.provider);
+    }
+    if (message.idToken !== "") {
+      writer.uint32(18).string(message.idToken);
+    }
+    if (message.userId !== "") {
+      writer.uint32(26).string(message.userId);
+    }
+    if (message.name !== "") {
+      writer.uint32(34).string(message.name);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CCompleteSocialSignup {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCCompleteSocialSignup();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.provider = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.idToken = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.userId = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.name = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CCompleteSocialSignup {
+    return {
+      provider: isSet(object.provider) ? globalThis.String(object.provider) : "",
+      idToken: isSet(object.idToken) ? globalThis.String(object.idToken) : "",
+      userId: isSet(object.userId) ? globalThis.String(object.userId) : "",
+      name: isSet(object.name) ? globalThis.String(object.name) : "",
+    };
+  },
+
+  toJSON(message: CCompleteSocialSignup): unknown {
+    const obj: any = {};
+    if (message.provider !== "") {
+      obj.provider = message.provider;
+    }
+    if (message.idToken !== "") {
+      obj.idToken = message.idToken;
+    }
+    if (message.userId !== "") {
+      obj.userId = message.userId;
+    }
+    if (message.name !== "") {
+      obj.name = message.name;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CCompleteSocialSignup>, I>>(base?: I): CCompleteSocialSignup {
+    return CCompleteSocialSignup.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CCompleteSocialSignup>, I>>(object: I): CCompleteSocialSignup {
+    const message = createBaseCCompleteSocialSignup();
+    message.provider = object.provider ?? "";
+    message.idToken = object.idToken ?? "";
+    message.userId = object.userId ?? "";
+    message.name = object.name ?? "";
     return message;
   },
 };
