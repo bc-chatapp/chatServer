@@ -69,8 +69,11 @@ bool GroupRepository::CreateGroup(const string& groupName, const string& creator
         session.startTransaction();
 
         auto groups = db.GetSchema().getTable("groups");
-        groups.insert("group_id", "group_name", "group_code", "creator_id", "description", "group_image_url", "storage_capacity_bytes", "storage_usage_bytes", "member_count")
-            .values(groupId, groupName, groupCode, creatorId, "", "", defaultLimit, 0, 0)
+        // 초대 코드 만료: 3일 (밀리초)
+        int64_t inviteExpires = ::time(nullptr) * 1000LL + 3LL * 24 * 60 * 60 * 1000;
+
+        groups.insert("group_id", "group_name", "group_code", "creator_id", "description", "group_image_url", "storage_capacity_bytes", "storage_usage_bytes", "member_count", "invite_code_expires_at")
+            .values(groupId, groupName, groupCode, creatorId, "", "", defaultLimit, 0, 0, inviteExpires)
             .execute();
 
         auto members = db.GetSchema().getTable("group_members");
@@ -91,15 +94,16 @@ bool GroupRepository::CreateGroup(const string& groupName, const string& creator
         groupInfo.storageLimit = defaultLimit;
         groupInfo.storageUsage = 0;
         groupInfo.createdAt = ::time(nullptr) * 1000;
+        groupInfo.inviteCodeExpiresAt = inviteExpires;
 
         groupInfo.memberCount = 1;
 
-        cout << "[GroupRepo] Created: " << groupName << " (" << groupCode << ")" << endl;
+        LOG_INFO("[GroupRepo] Created: {} ({})", groupName, groupCode);
         return true;
     }
     catch (const mysqlx::Error& err)
     {
-        cerr << "[GroupRepo] Create Failed: " << err.what() << endl;
+        LOG_ERROR("[GroupRepo] Create Failed: {}", err.what());
         return false;
     }
 }
@@ -129,7 +133,7 @@ bool GroupRepository::AddMember(const string& groupId, const string& userId, con
     }
     catch (const mysqlx::Error& err) 
     { 
-        cerr << "[GroupRepo] AddMember Failed: " << err.what() << endl;
+        LOG_ERROR("[GroupRepo] AddMember Failed: {}", err.what());
         return false; 
     }
 }
@@ -162,7 +166,7 @@ bool GroupRepository::RemoveMember(const string& groupId, const string& userId)
     }
     catch (const mysqlx::Error& err)
     {
-        cerr << "[GroupRepo] RemoveMember Failed: " << err.what() << endl;
+        LOG_ERROR("[GroupRepo] RemoveMember Failed: {}", err.what());
         return false;
     }
 }
@@ -184,11 +188,11 @@ bool GroupRepository::SaveGroupAsset(const string& groupId, const string& userId
             .bind(groupId, userId, msgSeq, fileSize, fileType)
             .execute();
 
-        cout << "[DB] Group Asset 저장 완료: Group=" << groupId << ", Size=" << fileSize << " bytes" << endl;
+        LOG_INFO("[DB] Group Asset 저장 완료: Group={}, Size={} bytes", groupId, fileSize);
         return true;
     }
     catch (const mysqlx::Error& err) {
-        cerr << "[GroupRepository] 에셋 기록 실패: " << err.what() << endl;
+        LOG_ERROR("[GroupRepository] 에셋 기록 실패: {}", err.what());
         return false;
     }
 }
@@ -207,20 +211,48 @@ bool GroupRepository::UpdateGroupInfo(const string& groupId, const string& newNa
 
 
         if (result.getAffectedItemsCount() > 0) {
-            cout << "[DB] 그룹 정보 업데이트 성공: " << groupId << endl;
+            LOG_INFO("[DB] 그룹 정보 업데이트 성공: {}", groupId);
             return true;
         }
         else {
-            cout << "[DB] 그룹 정보 업데이트: 변경사항 없음 또는 대상 없음 (ID: " << groupId << ")" << endl;
+            LOG_INFO("[DB] 그룹 정보 업데이트: 변경사항 없음 또는 대상 없음 (ID: {})", groupId);
             return false;
         }
     }
     catch (const mysqlx::Error& err) {
-        cerr << "[GroupRepository] Update Error: " << err.what() << endl;
+        LOG_ERROR("[GroupRepository] Update Error: {}", err.what());
         return false;
     }
     catch (const std::exception& e) {
-        cerr << "[GroupRepository] Std Exception: " << e.what() << endl;
+        LOG_ERROR("[GroupRepository] Std Exception: {}", e.what());
+        return false;
+    }
+}
+
+
+bool GroupRepository::RefreshInviteCode(const string& groupId, string& OUT newCode, int64& OUT expiresAt)
+{
+    try {
+        string code = GenerateGroupCode();
+        int64_t expires = ::time(nullptr) * 1000LL + 3LL * 24 * 60 * 60 * 1000; // 3일
+
+        auto& db = DBManager::GetInstance();
+        auto& session = db.GetSession();
+
+        auto result = session.sql("UPDATE `groups` SET group_code = ?, invite_code_expires_at = ? WHERE group_id = ?")
+            .bind(code, expires, groupId)
+            .execute();
+
+        if (result.getAffectedItemsCount() > 0) {
+            newCode = code;
+            expiresAt = expires;
+            LOG_INFO("[GroupRepo] Invite code refreshed: {} -> {}", groupId, code);
+            return true;
+        }
+        return false;
+    }
+    catch (const mysqlx::Error& err) {
+        LOG_ERROR("[GroupRepo] RefreshInviteCode Error: {}", err.what());
         return false;
     }
 }
@@ -262,15 +294,15 @@ bool GroupRepository::DeleteGroup(const string& groupId)
             .execute();
 
         session.commit();
-        cout << "[DB] 그룹 영구 삭제 완료: " << groupId << endl;
+        LOG_INFO("[DB] 그룹 영구 삭제 완료: {}", groupId);
         return true;
     }
     catch (const mysqlx::Error& err) {
-        cerr << "[GroupRepository] DeleteGroup Error: " << err.what() << endl;
+        LOG_ERROR("[GroupRepository] DeleteGroup Error: {}", err.what());
         return false;
     }
     catch (const std::exception& e) {
-        cerr << "[GroupRepository] DeleteGroup Exception: " << e.what() << endl;
+        LOG_ERROR("[GroupRepository] DeleteGroup Exception: {}", e.what());
         return false;
     }
 }
@@ -294,7 +326,8 @@ vector<cGroupInfo> GroupRepository::GetUserGroups(const string& userId)
 
         string query = "SELECT g.group_id, g.group_name, g.group_code, g.creator_id, "
             "g.description, g.group_image_url, "
-            "g.storage_usage_bytes, g.storage_capacity_bytes, g.member_count, g.created_at "
+            "g.storage_usage_bytes, g.storage_capacity_bytes, g.member_count, g.created_at, "
+            "g.invite_code_expires_at "
             "FROM `groups` g "
             "JOIN group_members m ON g.group_id = m.group_id "
             "WHERE m.user_id = ?";
@@ -317,12 +350,13 @@ vector<cGroupInfo> GroupRepository::GetUserGroups(const string& userId)
             info.storageLimit = row[7].get<int64_t>();
             info.memberCount = row[8].get<int>();
             info.createdAt = ParseTimestamp(row[9]);
+            if (!row[10].isNull()) info.inviteCodeExpiresAt = row[10].get<int64_t>();
             result.push_back(info);
         }
     }
     catch (const mysqlx::Error& err)
     {
-        cerr << "[GroupRepo] GetUserGroups Error: " << err.what() << endl;
+        LOG_ERROR("[GroupRepo] GetUserGroups Error: {}", err.what());
     }
 
     return result;
@@ -339,7 +373,8 @@ bool GroupRepository::GetGroupInfoById(const string& groupId, cGroupInfo& OUT in
 
         auto rows = groups.select("group_id", "group_name", "group_code", "creator_id",
             "description", "group_image_url",
-            "storage_usage_bytes", "storage_capacity_bytes", "member_count", "created_at")
+            "storage_usage_bytes", "storage_capacity_bytes", "member_count", "created_at",
+            "invite_code_expires_at")
             .where("group_id = :id")
             .bind("id", groupId)
             .execute();
@@ -360,12 +395,13 @@ bool GroupRepository::GetGroupInfoById(const string& groupId, cGroupInfo& OUT in
         info.storageLimit = row[7].get<int64_t>();
         info.memberCount = row[8].get<int>();
         info.createdAt = ParseTimestamp(row[9]);
+        if (!row[10].isNull()) info.inviteCodeExpiresAt = row[10].get<int64_t>();
 
         return true;
     }
     catch (const mysqlx::Error& err)
     {
-        cerr << "[GroupRepo] GetUserGroups Error: " << err.what() << endl;
+        LOG_ERROR("[GroupRepo] GetGroupInfoById Error: {}", err.what());
     }
     return false;
 }
@@ -382,10 +418,11 @@ bool GroupRepository::GetGroupInfoByCode(const string& groupCode, cGroupInfo& OU
         auto rows = groups.select(
             "group_id", "group_name", "group_code", "creator_id",
             "description", "group_image_url",
-            "storage_usage_bytes", "storage_capacity_bytes", "member_count", "created_at"
+            "storage_usage_bytes", "storage_capacity_bytes", "member_count", "created_at",
+            "invite_code_expires_at"
         )
-            .where("group_code = :code") 
-            .bind("code", groupCode)     
+            .where("group_code = :code")
+            .bind("code", groupCode)
             .execute();
 
 
@@ -411,12 +448,13 @@ bool GroupRepository::GetGroupInfoByCode(const string& groupCode, cGroupInfo& OU
         if (!row[9].isNull()) {
             info.createdAt = ParseTimestamp(row[9]);
         }
+        if (!row[10].isNull()) info.inviteCodeExpiresAt = row[10].get<int64_t>();
 
         return true;
     }
     catch (const mysqlx::Error& err)
     {
-        cerr << "[GroupRepo] GetUserGroups Error: " << err.what() << endl;
+        LOG_ERROR("[GroupRepo] GetGroupInfoByCode Error: {}", err.what());
     }
     return false;
 }
@@ -441,7 +479,7 @@ bool GroupRepository::IsMember(const string& groupId, const string& userId)
     }
     catch (const mysqlx::Error& err)
     {
-        cerr << "[GroupRepo] GetUserGroups Error: " << err.what() << endl;
+        LOG_ERROR("[GroupRepo] GetUserGroups Error: {}", err.what());
     }
     return false;
 }
@@ -464,7 +502,7 @@ string GroupRepository::GetMemberRole(const string& groupId, const string& userI
     }
     catch (const mysqlx::Error& err)
     {
-        cerr << "[GroupRepo] GetUserGroups Error: " << err.what() << endl;
+        LOG_ERROR("[GroupRepo] GetUserGroups Error: {}", err.what());
     }
     return "";
 }
@@ -500,7 +538,7 @@ vector<cGroupMemberInfo> GroupRepository::GetGroupMembers(const string& groupId)
     }
     catch (const mysqlx::Error& err)
     {
-        cerr << "[GroupRepo] GetUserGroups Error: " << err.what() << endl;
+        LOG_ERROR("[GroupRepo] GetUserGroups Error: {}", err.what());
     }
     return result;
 }
@@ -525,7 +563,7 @@ bool GroupRepository::IsGroupCodeExists(const string& groupCode) {
         return rows.count() > 0;
 
     } catch (const mysqlx::Error& err) {
-        cerr << "[GroupRepository] IsGroupCodeExists Failed: " << err.what() << endl;
+        LOG_ERROR("[GroupRepository] IsGroupCodeExists Failed: {}", err.what());
         return false;
     }
 }
@@ -553,7 +591,7 @@ uint64 GroupRepository::ParseTimestamp(const mysqlx::Value& value)
         }
     }
     catch (const mysqlx::Error& err) {
-        cerr << "[FriendRepository] Parse Err: " << err.what() << endl;
+        LOG_ERROR("[FriendRepository] Parse Err: {}", err.what());
     }
     return 0;
 }

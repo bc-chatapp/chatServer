@@ -22,7 +22,7 @@ bool UserRepository::CreateUser(const string& userId, const string& passwordHash
                         .execute();
         
         if (existing.count() > 0) {
-            cerr << "[UserRepository] 이미 존재하는 사용자 ID: " << userId << endl;
+            LOG_ERROR("[UserRepository] 이미 존재하는 사용자 ID: {}", userId);
             return false;
         }
         
@@ -31,10 +31,10 @@ bool UserRepository::CreateUser(const string& userId, const string& passwordHash
              .values(userId, passwordHash, name, email)
              .execute();
         
-        cout << "[UserRepository] 사용자 생성 성공: " << userId << endl;
+        LOG_INFO("[UserRepository] 사용자 생성 성공: {}", userId);
         return true;
     } catch (const mysqlx::Error& err) {
-        cerr << "[UserRepository] 사용자 생성 실패: " << err.what() << endl;
+        LOG_ERROR("[UserRepository] 사용자 생성 실패: {}", err.what());
         return false;
     }
 }
@@ -52,7 +52,7 @@ bool UserRepository::UserExists(const string& userId) {
         
         return result.count() > 0;
     } catch (const mysqlx::Error& err) {
-        cerr << "[UserRepository] 사용자 존재 확인 실패: " << err.what() << endl;
+        LOG_ERROR("[UserRepository] 사용자 존재 확인 실패: {}", err.what());
         return false;
     }
 }
@@ -72,7 +72,7 @@ bool UserRepository::EmailExists(const string& email)
         return result.count() > 0;
     }
     catch (const mysqlx::Error& err) {
-        cerr << "[UserRepository] 이메일 확인 실패: " << err.what() << endl;
+        LOG_ERROR("[UserRepository] 이메일 확인 실패: {}", err.what());
         return true; 
     }
 }
@@ -87,7 +87,8 @@ bool UserRepository::GetUser(const string& userId, cUserInfo& OUT userInfo) {
 
         auto result = users.select("user_id", "auth_token", "name", "email", "phone",
             "status_message", "profile_image_url", "background_image_url",
-            "sub_grade", "storage_capacity_bytes", "storage_usage_bytes", "last_seen", "is_deleted")
+            "sub_grade", "storage_capacity_bytes", "storage_usage_bytes", "last_seen", "is_deleted",
+            "is_email_verified", "oauth_provider", "oauth_provider_id")
             .where("user_id = :uid")
             .bind("uid", userId)
             .execute();
@@ -109,10 +110,13 @@ bool UserRepository::GetUser(const string& userId, cUserInfo& OUT userInfo) {
         userInfo.storageUsage = row[10].get<int64>();
         userInfo.lastSeen = row[11].isNull() ? 0 : FriendRepository::ParseTimestamp(row[11]);
         userInfo.isDeleted = row[12].isNull() ? false : (row[12].get<int>() == 1);
+        userInfo.isEmailVerified = row[13].isNull() ? false : (row[13].get<int>() == 1);
+        if (!row[14].isNull()) userInfo.oauthProvider = row[14].get<string>();
+        if (!row[15].isNull()) userInfo.oauthProviderId = row[15].get<string>();
 
         return true;
     } catch (const mysqlx::Error& err) {
-        cerr << "[UserRepository] 사용자 정보 조회 실패: " << err.what() << endl;
+        LOG_ERROR("[UserRepository] 사용자 정보 조회 실패: {}", err.what());
         return false;
     }
 }
@@ -129,7 +133,8 @@ bool UserRepository::GetUserWithPassword(const string& userId, cUserInfo& OUT us
 
         auto result = users.select("user_id", "password_hash", "auth_token", "name", "email", "phone",
             "status_message", "profile_image_url", "background_image_url",
-            "sub_grade", "storage_capacity_bytes", "storage_usage_bytes", "last_seen", "is_deleted")
+            "sub_grade", "storage_capacity_bytes", "storage_usage_bytes", "last_seen", "is_deleted",
+            "is_email_verified", "oauth_provider", "oauth_provider_id")
             .where("user_id = :uid")
             .bind("uid", userId)
             .execute();
@@ -140,7 +145,7 @@ bool UserRepository::GetUserWithPassword(const string& userId, cUserInfo& OUT us
         }
 
         userInfo.userId = row[0].get<string>();
-        userInfo.passwordHash = row[1].get<string>();
+        if (!row[1].isNull()) userInfo.passwordHash = row[1].get<string>();
         if (!row[2].isNull()) userInfo.authToken = row[2].get<string>();
         if (!row[3].isNull()) userInfo.name = row[3].get<string>();
         if (!row[4].isNull()) userInfo.email = row[4].get<string>();
@@ -154,10 +159,13 @@ bool UserRepository::GetUserWithPassword(const string& userId, cUserInfo& OUT us
         userInfo.storageUsage = row[11].get<int64>();
         userInfo.lastSeen = row[12].isNull() ? 0 : FriendRepository::ParseTimestamp(row[12]);
         userInfo.isDeleted = row[13].isNull() ? false : (row[13].get<int>() == 1);
+        userInfo.isEmailVerified = row[14].isNull() ? false : (row[14].get<int>() == 1);
+        if (!row[15].isNull()) userInfo.oauthProvider = row[15].get<string>();
+        if (!row[16].isNull()) userInfo.oauthProviderId = row[16].get<string>();
 
         return true;
     } catch (const mysqlx::Error& err) {
-        cerr << "[UserRepository] 사용자 정보 조회 실패: " << err.what() << endl;
+        LOG_ERROR("[UserRepository] 사용자 정보 조회 실패: {}", err.what());
         return false;
     }
 }
@@ -188,7 +196,7 @@ bool UserRepository::GetUserNameWithId(const string& userId, string& OUT userNam
         }
     }
     catch (const mysqlx::Error& err) {
-        cerr << "[UserRepository] 사용자 이름 조회 실패: " << err.what() << endl;
+        LOG_ERROR("[UserRepository] 사용자 이름 조회 실패: {}", err.what());
         return false;
     }
     return false;
@@ -221,7 +229,7 @@ bool UserRepository::UpdateAuthToken(const string& userId, const string& authTok
         
         return true;
     } catch (const mysqlx::Error& err) {
-        cerr << "[UserRepository] Auth Token 업데이트 실패: " << err.what() << endl;
+        LOG_ERROR("[UserRepository] Auth Token 업데이트 실패: {}", err.what());
         return false;
     }
 }
@@ -271,12 +279,12 @@ bool UserRepository::UpdateMyInfo(const string& userId, const Protocol::C_EditMy
             .execute();
 
 
-        cout << "[UserRepository] 사용자 정보 업데이트 성공: " << userId << endl;
+        LOG_INFO("[UserRepository] 사용자 정보 업데이트 성공: {}", userId);
         return true;
 
     }
     catch (const mysqlx::Error& err) {
-        cerr << "[UserRepository] 정보 업데이트 실패: " << err.what() << endl;
+        LOG_ERROR("[UserRepository] 정보 업데이트 실패: {}", err.what());
         return false;
     }
 }
@@ -300,7 +308,7 @@ bool UserRepository::UpdateLastSeen(const string& userId) {
         
         return true;
     } catch (const mysqlx::Error& err) {
-        cerr << "[UserRepository] Last Seen 업데이트 실패: " << err.what() << endl;
+        LOG_ERROR("[UserRepository] Last Seen 업데이트 실패: {}", err.what());
         return false;
     }
 }
@@ -326,7 +334,7 @@ bool UserRepository::GetUserIdByToken(const string& authToken, string& userId) {
         userId = row[0].get<string>();
         return true;
     } catch (const mysqlx::Error& err) {
-        cerr << "[UserRepository] 토큰으로 사용자 ID 조회 실패: " << err.what() << endl;
+        LOG_ERROR("[UserRepository] 토큰으로 사용자 ID 조회 실패: {}", err.what());
         return false;
     }
 }
@@ -344,10 +352,10 @@ bool UserRepository::UpdateEmail(const string& userId, const string& newEmail) {
              .bind("uid", userId)
              .execute();
 
-        cout << "[UserRepository] 이메일 업데이트 성공: " << userId << " -> " << newEmail << endl;
+        LOG_INFO("[UserRepository] 이메일 업데이트 성공: {} -> {}", userId, newEmail);
         return true;
     } catch (const mysqlx::Error& err) {
-        cerr << "[UserRepository] 이메일 업데이트 실패: " << err.what() << endl;
+        LOG_ERROR("[UserRepository] 이메일 업데이트 실패: {}", err.what());
         return false;
     }
 }
@@ -365,10 +373,10 @@ bool UserRepository::UpdatePassword(const string& userId, const string& newPassw
              .bind("uid", userId)
              .execute();
 
-        cout << "[UserRepository] 비밀번호 업데이트 성공: " << userId << endl;
+        LOG_INFO("[UserRepository] 비밀번호 업데이트 성공: {}", userId);
         return true;
     } catch (const mysqlx::Error& err) {
-        cerr << "[UserRepository] 비밀번호 업데이트 실패: " << err.what() << endl;
+        LOG_ERROR("[UserRepository] 비밀번호 업데이트 실패: {}", err.what());
         return false;
     }
 }
@@ -395,10 +403,10 @@ bool UserRepository::SoftDeleteUser(const string& userId) {
              .bind("uid", userId)
              .execute();
 
-        cout << "[UserRepository] 회원 탈퇴 처리 완료 (Soft Delete): " << userId << endl;
+        LOG_INFO("[UserRepository] 회원 탈퇴 처리 완료 (Soft Delete): {}", userId);
         return true;
     } catch (const mysqlx::Error& err) {
-        cerr << "[UserRepository] 회원 탈퇴 처리 실패: " << err.what() << endl;
+        LOG_ERROR("[UserRepository] 회원 탈퇴 처리 실패: {}", err.what());
         return false;
     }
 }
@@ -409,7 +417,7 @@ bool UserRepository::HardDeleteUser(const string& userId) {
         auto& db = DBManager::GetInstance();
         auto& sess = db.GetSession();
 
-        cout << "[UserRepository] Hard Delete 시작: " << userId << endl;
+        LOG_INFO("[UserRepository] Hard Delete 시작: {}", userId);
 
         // 1. 메시지 발신자 익명화 (대화 맥락은 상대방에게 남기되, 발신자 식별 정보 제거)
         //    채팅 히스토리에는 "[탈퇴한 사용자]"로 표시됨
@@ -457,10 +465,10 @@ bool UserRepository::HardDeleteUser(const string& userId) {
               .bind("uid", userId)
               .execute();
 
-        cout << "[UserRepository] Hard Delete 완료: " << userId << endl;
+        LOG_INFO("[UserRepository] Hard Delete 완료: {}", userId);
         return true;
     } catch (const mysqlx::Error& err) {
-        cerr << "[UserRepository] Hard Delete 실패: " << err.what() << endl;
+        LOG_ERROR("[UserRepository] Hard Delete 실패: {}", err.what());
         return false;
     }
 }
@@ -502,7 +510,7 @@ bool UserRepository::GetStorageInfo(const string& userId, StorageInfo& OUT info)
 
         return true;
     } catch (const mysqlx::Error& err) {
-        cerr << "[UserRepository] GetStorageInfo 실패: " << err.what() << endl;
+        LOG_ERROR("[UserRepository] GetStorageInfo 실패: {}", err.what());
         return false;
     }
 }
@@ -527,10 +535,140 @@ bool UserRepository::SaveUserAsset(const string& userId, int64 msgSeq, int64 fil
             .bind("uid", userId)
             .execute();
 
-        cout << "[UserRepository] SaveUserAsset: userId=" << userId << ", size=" << fileSize << endl;
+        LOG_INFO("[UserRepository] SaveUserAsset: userId={}, size={}", userId, fileSize);
         return true;
     } catch (const mysqlx::Error& err) {
-        cerr << "[UserRepository] SaveUserAsset 실패: " << err.what() << endl;
+        LOG_ERROR("[UserRepository] SaveUserAsset 실패: {}", err.what());
+        return false;
+    }
+}
+
+
+bool UserRepository::GetUserByOAuthProvider(const string& provider, const string& providerId, cUserInfo& OUT userInfo) {
+    try {
+        auto& db = DBManager::GetInstance();
+        auto schema = db.GetSchema();
+        auto users = schema.getTable("users");
+
+        auto result = users.select("user_id", "auth_token", "name", "email", "phone",
+            "status_message", "profile_image_url", "background_image_url",
+            "sub_grade", "storage_capacity_bytes", "storage_usage_bytes", "last_seen", "is_deleted",
+            "is_email_verified", "oauth_provider", "oauth_provider_id")
+            .where("oauth_provider = :prov AND oauth_provider_id = :pid AND is_deleted = 0")
+            .bind("prov", provider)
+            .bind("pid", providerId)
+            .execute();
+
+        auto row = result.fetchOne();
+        if (!row) return false;
+
+        userInfo.userId = row[0].get<string>();
+        if (!row[1].isNull()) userInfo.authToken = row[1].get<string>();
+        if (!row[2].isNull()) userInfo.name = row[2].get<string>();
+        if (!row[3].isNull()) userInfo.email = row[3].get<string>();
+        if (!row[4].isNull()) userInfo.phone = row[4].get<string>();
+        if (!row[5].isNull()) userInfo.status_message = row[5].get<string>();
+        if (!row[6].isNull()) userInfo.profileImageUrl = row[6].get<string>();
+        if (!row[7].isNull()) userInfo.backgroundImageUrl = row[7].get<string>();
+        userInfo.subGrade = row[8].get<int64>();
+        userInfo.storageCapacity = row[9].get<int64>();
+        userInfo.storageUsage = row[10].get<int64>();
+        userInfo.lastSeen = row[11].isNull() ? 0 : FriendRepository::ParseTimestamp(row[11]);
+        userInfo.isDeleted = row[12].isNull() ? false : (row[12].get<int>() == 1);
+        userInfo.isEmailVerified = row[13].isNull() ? false : (row[13].get<int>() == 1);
+        if (!row[14].isNull()) userInfo.oauthProvider = row[14].get<string>();
+        if (!row[15].isNull()) userInfo.oauthProviderId = row[15].get<string>();
+
+        return true;
+    } catch (const mysqlx::Error& err) {
+        LOG_ERROR("[UserRepository] GetUserByOAuthProvider 실패: {}", err.what());
+        return false;
+    }
+}
+
+
+bool UserRepository::GetUserByEmail(const string& email, cUserInfo& OUT userInfo) {
+    try {
+        auto& db = DBManager::GetInstance();
+        auto schema = db.GetSchema();
+        auto users = schema.getTable("users");
+
+        auto result = users.select("user_id", "auth_token", "name", "email", "phone",
+            "status_message", "profile_image_url", "background_image_url",
+            "sub_grade", "storage_capacity_bytes", "storage_usage_bytes", "last_seen", "is_deleted",
+            "is_email_verified", "oauth_provider", "oauth_provider_id")
+            .where("email = :email AND is_deleted = 0")
+            .bind("email", email)
+            .execute();
+
+        auto row = result.fetchOne();
+        if (!row) return false;
+
+        userInfo.userId = row[0].get<string>();
+        if (!row[1].isNull()) userInfo.authToken = row[1].get<string>();
+        if (!row[2].isNull()) userInfo.name = row[2].get<string>();
+        if (!row[3].isNull()) userInfo.email = row[3].get<string>();
+        if (!row[4].isNull()) userInfo.phone = row[4].get<string>();
+        if (!row[5].isNull()) userInfo.status_message = row[5].get<string>();
+        if (!row[6].isNull()) userInfo.profileImageUrl = row[6].get<string>();
+        if (!row[7].isNull()) userInfo.backgroundImageUrl = row[7].get<string>();
+        userInfo.subGrade = row[8].get<int64>();
+        userInfo.storageCapacity = row[9].get<int64>();
+        userInfo.storageUsage = row[10].get<int64>();
+        userInfo.lastSeen = row[11].isNull() ? 0 : FriendRepository::ParseTimestamp(row[11]);
+        userInfo.isDeleted = row[12].isNull() ? false : (row[12].get<int>() == 1);
+        userInfo.isEmailVerified = row[13].isNull() ? false : (row[13].get<int>() == 1);
+        if (!row[14].isNull()) userInfo.oauthProvider = row[14].get<string>();
+        if (!row[15].isNull()) userInfo.oauthProviderId = row[15].get<string>();
+
+        return true;
+    } catch (const mysqlx::Error& err) {
+        LOG_ERROR("[UserRepository] GetUserByEmail 실패: {}", err.what());
+        return false;
+    }
+}
+
+
+bool UserRepository::CreateOAuthUser(const string& userId, const string& name, const string& email,
+                                      const string& provider, const string& providerId, const string& profileImageUrl) {
+    try {
+        auto& db = DBManager::GetInstance();
+        auto schema = db.GetSchema();
+        auto users = schema.getTable("users");
+
+        // 소셜 유저는 password_hash=NULL, is_email_verified=1
+        users.insert("user_id", "name", "email", "oauth_provider", "oauth_provider_id",
+                      "profile_image_url", "is_email_verified")
+             .values(userId, name, email, provider, providerId, profileImageUrl, 1)
+             .execute();
+
+        LOG_INFO("[UserRepository] OAuth 사용자 생성 성공: {} ({})", userId, provider);
+        return true;
+    } catch (const mysqlx::Error& err) {
+        LOG_ERROR("[UserRepository] OAuth 사용자 생성 실패: {}", err.what());
+        return false;
+    }
+}
+
+
+bool UserRepository::LinkOAuthProvider(const string& userId, const string& provider, const string& providerId) {
+    try {
+        auto& db = DBManager::GetInstance();
+        auto schema = db.GetSchema();
+        auto users = schema.getTable("users");
+
+        users.update()
+             .set("oauth_provider", provider)
+             .set("oauth_provider_id", providerId)
+             .set("is_email_verified", 1)
+             .where("user_id = :uid")
+             .bind("uid", userId)
+             .execute();
+
+        LOG_INFO("[UserRepository] OAuth 연동 성공: {} ← {}", userId, provider);
+        return true;
+    } catch (const mysqlx::Error& err) {
+        LOG_ERROR("[UserRepository] OAuth 연동 실패: {}", err.what());
         return false;
     }
 }
@@ -551,6 +689,9 @@ void UserRepository::ConvertToProto(const cUserInfo& dbUser, Protocol::UserInfo*
     outProto->set_sub_grade(dbUser.subGrade);
     outProto->set_storage_capacity_bytes(dbUser.storageCapacity);
     outProto->set_storage_usage_bytes(dbUser.storageUsage);
+    outProto->set_is_email_verified(dbUser.isEmailVerified);
+    if (!dbUser.oauthProvider.empty())
+        outProto->set_oauth_provider(dbUser.oauthProvider);
 
     // passwordHash나 authToken은 절대 넣지 않음!
 }

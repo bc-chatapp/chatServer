@@ -17,7 +17,7 @@ void UserManager::UpsertSession(const string& userId, const shared_ptr<Session>&
 
 		if (oldSession && oldSession != newSession)
 		{
-			cout << "[UserManager] 중복 로그인 감지! 기존 세션 종료: " << userId << endl;
+			LOG_INFO("[UserManager] 중복 로그인 감지! 기존 세션 종료: {}", userId);
 			oldSession->Disconnect();
 		}
 		else if (oldSession == newSession)
@@ -41,10 +41,10 @@ void UserManager::RemoveSession(const string& userId, SessionPtr session)
 		SessionPtr currentSession = it->second.lock();
 		if (currentSession == session) {
 			_sessions.erase(it);
-			cout << "[UserManager] 세션 정상 제거 완료: " << userId << endl;
+			LOG_INFO("[UserManager] 세션 정상 제거 완료: {}", userId);
 		}
 		else {
-			cout << "[UserManager] 제거 요청 무시됨 (이미 다른 세션으로 교체됨): " << userId << endl;
+			LOG_INFO("[UserManager] 제거 요청 무시됨 (이미 다른 세션으로 교체됨): {}", userId);
 		}
 	}
 }
@@ -86,7 +86,7 @@ void UserManager::CheckDeadSessions()
 
 	for (auto& s : deadList) {
 		auto serverSession = static_pointer_cast<ServerSession>(s);
-		cout << "[Reaper] 유저 (" << serverSession->GetUserId() << ") 타임아웃! 강제 종료." << endl;
+		LOG_INFO("[Reaper] 유저 ({}) 타임아웃! 강제 종료.", serverSession->GetUserId());
 
 
 		s->Disconnect();

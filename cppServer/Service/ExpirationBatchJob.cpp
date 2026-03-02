@@ -25,7 +25,7 @@ void ExpirationBatchJob::Start()
     if (_running.exchange(true)) return;
 
     _thread = thread([this]() { RunLoop(); });
-    cout << "[ExpirationBatchJob] Started (interval: " << _intervalSec << "s)" << endl;
+    LOG_INFO("[ExpirationBatchJob] Started (interval: {}s)", _intervalSec);
 }
 
 void ExpirationBatchJob::Stop()
@@ -33,7 +33,7 @@ void ExpirationBatchJob::Stop()
     if (!_running.exchange(false)) return;
     if (_thread.joinable())
         _thread.join();
-    cout << "[ExpirationBatchJob] Stopped" << endl;
+    LOG_INFO("[ExpirationBatchJob] Stopped");
 }
 
 void ExpirationBatchJob::RunOnce()
@@ -59,20 +59,20 @@ void ExpirationBatchJob::RunLoop()
 void ExpirationBatchJob::ProcessExpiredFiles()
 {
     if (!_cloudStorage) {
-        cerr << "[ExpirationBatchJob] CloudStorage not initialized - skip" << endl;
+        LOG_ERROR("[ExpirationBatchJob] CloudStorage not initialized - skip");
         return;
     }
 
     int64 now = Nowts();
-    cout << "[ExpirationBatchJob] Processing expired files (now=" << now << ")" << endl;
+    LOG_INFO("[ExpirationBatchJob] Processing expired files (now={})", now);
 
     auto expiredFiles = FileRepository::GetExpiredFiles(now);
     if (expiredFiles.empty()) {
-        cout << "[ExpirationBatchJob] No expired files" << endl;
+        LOG_INFO("[ExpirationBatchJob] No expired files");
         return;
     }
 
-    cout << "[ExpirationBatchJob] Found " << expiredFiles.size() << " expired file(s)" << endl;
+    LOG_INFO("[ExpirationBatchJob] Found {} expired file(s)", expiredFiles.size());
 
     int deleted = 0, failed = 0;
     for (const auto& fi : expiredFiles) {
@@ -82,7 +82,7 @@ void ExpirationBatchJob::ProcessExpiredFiles()
         if (!fi.gcsPath.empty()) {
             gcsOk = _cloudStorage->RemoveFile(fi.gcsPath);
             if (!gcsOk) {
-                cerr << "[ExpirationBatchJob] GCS delete failed: " << fi.gcsPath << endl;
+                LOG_ERROR("[ExpirationBatchJob] GCS delete failed: {}", fi.gcsPath);
             }
         }
 
@@ -101,11 +101,11 @@ void ExpirationBatchJob::ProcessExpiredFiles()
 
         if (gcsOk) {
             ++deleted;
-            cout << "[ExpirationBatchJob] Deleted: " << fi.gcsPath << endl;
+            LOG_INFO("[ExpirationBatchJob] Deleted: {}", fi.gcsPath);
         } else {
             ++failed;
         }
     }
 
-    cout << "[ExpirationBatchJob] Done: deleted=" << deleted << " failed=" << failed << endl;
+    LOG_INFO("[ExpirationBatchJob] Done: deleted={} failed={}", deleted, failed);
 }

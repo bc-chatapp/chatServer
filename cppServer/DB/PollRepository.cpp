@@ -25,7 +25,7 @@ bool PollRepository::CreatePoll(const string& pollId, const string& convId, int6
         return true;
     }
     catch (const std::exception& e) {
-        std::cerr << "[PollRepository] CreatePoll error: " << e.what() << std::endl;
+        LOG_ERROR("[PollRepository] CreatePoll error: {}", e.what());
         return false;
     }
 }
@@ -57,7 +57,7 @@ bool PollRepository::Vote(const string& pollId, const string& userId,
         return true;
     }
     catch (const std::exception& e) {
-        std::cerr << "[PollRepository] Vote error: " << e.what() << std::endl;
+        LOG_ERROR("[PollRepository] Vote error: {}", e.what());
         return false;
     }
 }
@@ -120,7 +120,7 @@ string PollRepository::GetPollVotes(const string& pollId)
         return oss.str();
     }
     catch (const std::exception& e) {
-        std::cerr << "[PollRepository] GetPollVotes error: " << e.what() << std::endl;
+        LOG_ERROR("[PollRepository] GetPollVotes error: {}", e.what());
         return "{}";
     }
 }
@@ -139,7 +139,7 @@ bool PollRepository::ClosePoll(const string& pollId, const string& creatorId)
         return result.getAffectedItemsCount() > 0;
     }
     catch (const std::exception& e) {
-        std::cerr << "[PollRepository] ClosePoll error: " << e.what() << std::endl;
+        LOG_ERROR("[PollRepository] ClosePoll error: {}", e.what());
         return false;
     }
 }
@@ -175,7 +175,7 @@ PollInfo PollRepository::GetPollInfo(const string& pollId)
         info.createdAt = row[10].get<int64_t>();
     }
     catch (const std::exception& e) {
-        std::cerr << "[PollRepository] GetPollInfo error: " << e.what() << std::endl;
+        LOG_ERROR("[PollRepository] GetPollInfo error: {}", e.what());
     }
     return info;
 }
@@ -212,7 +212,7 @@ vector<PollInfo> PollRepository::GetActivePollsForConv(const string& convId)
         }
     }
     catch (const std::exception& e) {
-        std::cerr << "[PollRepository] GetActivePollsForConv error: " << e.what() << std::endl;
+        LOG_ERROR("[PollRepository] GetActivePollsForConv error: {}", e.what());
     }
     return polls;
 }

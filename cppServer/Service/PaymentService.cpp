@@ -42,7 +42,7 @@ PaymentService::PaymentService(UserManager& userManager)
 bool PaymentService::Initialize(const string& credentialsPath)
 {
     try {
-        cout << "[PaymentService] Initializing..." << endl;
+        LOG_INFO("[PaymentService] Initializing...");
 
         if (!LoadServiceAccountJson(credentialsPath)) {
             HandleErr("Initialize", "Failed to load credentials");
@@ -73,7 +73,7 @@ bool PaymentService::Initialize(const string& credentialsPath)
         // Apple shared secret 로드
         _appleSharedSecret = LoadAppleSharedSecret();
 
-        cout << "[PaymentService] Initialized: package=" << _packageName << endl;
+        LOG_INFO("[PaymentService] Initialized: package={}", _packageName);
         return true;
     }
     catch (const exception& e) {
@@ -94,10 +94,7 @@ bool PaymentService::HandleVerifyPurchase(sessionPtr& session, uint64 reqId,
     const string& transactionId = pkt.transaction_id();
     const string& purchaseToken = pkt.purchase_token();
 
-    cout << "[PaymentService] VerifyPurchase: user=" << userId
-         << " platform=" << platform
-         << " product=" << productId
-         << " txn=" << transactionId << endl;
+    LOG_INFO("[PaymentService] VerifyPurchase: user={} platform={} product={} txn={}", userId, platform, productId, transactionId);
 
     int planId = 0;
     int64 expiresAt = 0;
@@ -146,8 +143,7 @@ bool PaymentService::HandleVerifyPurchase(sessionPtr& session, uint64 reqId,
     *env.mutable_s_verify_purchase() = response;
     PacketDispatcher::SendEnvelope(session, env);
 
-    cout << "[PaymentService] VerifyPurchase 성공: user=" << userId
-         << " grade=" << userInfo.subGrade << endl;
+    LOG_INFO("[PaymentService] VerifyPurchase 성공: user={} grade={}", userId, userInfo.subGrade);
     return true;
 }
 
@@ -213,8 +209,7 @@ bool PaymentService::VerifyGooglePurchase(const string& userId, const string& pr
 
         outPlanId = GetPlanIdFromProductId(productId);
 
-        cout << "[PaymentService] Google 검증 성공: product=" << productId
-             << " expires=" << outExpiresAt << endl;
+        LOG_INFO("[PaymentService] Google 검증 성공: product={} expires={}", productId, outExpiresAt);
         return true;
     }
     catch (const exception& e) {
@@ -278,8 +273,7 @@ bool PaymentService::VerifyApplePurchase(const string& userId, const string& pro
 
         outPlanId = GetPlanIdFromProductId(productId);
 
-        cout << "[PaymentService] Apple 검증 성공: product=" << productId
-             << " expires=" << outExpiresAt << endl;
+        LOG_INFO("[PaymentService] Apple 검증 성공: product={} expires={}", productId, outExpiresAt);
         return true;
     }
     catch (const exception& e) {
@@ -382,8 +376,7 @@ bool PaymentService::UpdateSubscription(const string& userId, int planId,
             .bind("uid", userId)
             .execute();
 
-        cout << "[PaymentService] DB 업데이트 완료: user=" << userId
-             << " grade=" << grade << " storage=" << storageBytes << endl;
+        LOG_INFO("[PaymentService] DB 업데이트 완료: user={} grade={} storage={}", userId, grade, storageBytes);
 
         // 5) 파일 보관 정책 전환: 구독 시작 → 모든 파일 영구 보관으로 전환
         if (grade > 0) {
@@ -398,7 +391,7 @@ bool PaymentService::UpdateSubscription(const string& userId, int planId,
                 "AND (file_retention_expires_at IS NOT NULL OR file_status = 'expiring_soon')")
                 .bind(userId).execute();
 
-            cout << "[PaymentService] 파일 보관 정책 전환: 영구 보관 적용 userId=" << userId << endl;
+            LOG_INFO("[PaymentService] 파일 보관 정책 전환: 영구 보관 적용 userId={}", userId);
         }
 
         return true;
@@ -479,8 +472,7 @@ bool PaymentService::HandleCancelSubscription(sessionPtr& session, uint64 reqId)
             "AND file_status = 'active'")
             .bind(graceExpiresAt, userId, graceExpiresAt).execute();
 
-        cout << "[PaymentService] 구독 해지: userId=" << userId
-             << ", 유예기간 만료=" << graceExpiresAt << endl;
+        LOG_INFO("[PaymentService] 구독 해지: userId={}, 유예기간 만료={}", userId, graceExpiresAt);
 
         Protocol::S_CancelSubscription resp;
         resp.set_success(true);
@@ -712,7 +704,7 @@ string PaymentService::LoadAppleSharedSecret()
     try {
         ::filesystem::path secretFile = ::filesystem::path("config") / "apple_iap_secret.txt";
         if (!::filesystem::exists(secretFile)) {
-            cout << "[PaymentService] Apple shared secret file not found (iOS IAP will not work)" << endl;
+            LOG_INFO("[PaymentService] Apple shared secret file not found (iOS IAP will not work)");
             return "";
         }
 
@@ -725,7 +717,7 @@ string PaymentService::LoadAppleSharedSecret()
         secret.erase(secret.find_last_not_of(" \t\r\n") + 1);
         file.close();
 
-        cout << "[PaymentService] Apple shared secret loaded" << endl;
+        LOG_INFO("[PaymentService] Apple shared secret loaded");
         return secret;
     }
     catch (...) {

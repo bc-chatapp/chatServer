@@ -12,6 +12,7 @@
 #include "../Cloud/FcmClient.h"
 
 #include "../CoreGlobal.h"
+#include <random>
 
 using namespace Protocol;
 
@@ -81,9 +82,9 @@ bool ChatService::SendDirect(sessionPtr& senderSession, uint64 reqId, const stri
         }
         else if (GFcmClient) {
             // 오프라인 - FCM 푸시 발송
-            cout << "[ChatService] SendDirect FCM: sender=" << senderId << ", receiver=" << receiverId << endl;
+            LOG_INFO("[ChatService] SendDirect FCM: sender={}, receiver={}", senderId, receiverId);
             auto tokens = FcmTokenRepository::GetUserTokens(receiverId);
-            cout << "[ChatService] Found " << tokens.size() << " FCM tokens for " << receiverId << endl;
+            LOG_INFO("[ChatService] Found {} FCM tokens for {}", tokens.size(), receiverId);
             if (!tokens.empty()) {
                 string msgPreview = "[메시지]";
                 if (pkt_s_chat.has_payload() && pkt_s_chat.payload().has_text()) {
@@ -109,12 +110,11 @@ bool ChatService::SendDirect(sessionPtr& senderSession, uint64 reqId, const stri
                 };
 
                 for (const auto& tokenInfo : tokens) {
-                    cout << "[ChatService] Sending FCM to userId=" << tokenInfo.userId
-                         << ", token=" << tokenInfo.fcmToken.substr(0, 20) << "..." << endl;
+                    LOG_INFO("[ChatService] Sending FCM to userId={}, token={}...", tokenInfo.userId, tokenInfo.fcmToken.substr(0, 20));
                     bool invalidToken = false;
                     bool ok = GFcmClient->SendPush(tokenInfo.fcmToken, senderName, msgPreview, data, &invalidToken);
                     if (!ok && invalidToken) {
-                        cout << "[ChatService] Deleting stale FCM token for " << tokenInfo.userId << endl;
+                        LOG_INFO("[ChatService] Deleting stale FCM token for {}", tokenInfo.userId);
                         FcmTokenRepository::DeleteToken(tokenInfo.userId, tokenInfo.fcmToken);
                     }
                 }
@@ -223,7 +223,7 @@ bool ChatService::SendGroup(sessionPtr& senderSession, uint64 reqId, const strin
                     bool invalidToken = false;
                     bool ok = GFcmClient->SendPush(tokenInfo.fcmToken, title, msgPreview, data, &invalidToken);
                     if (!ok && invalidToken) {
-                        cout << "[ChatService] Deleting stale FCM token for " << tokenInfo.userId << endl;
+                        LOG_INFO("[ChatService] Deleting stale FCM token for {}", tokenInfo.userId);
                         FcmTokenRepository::DeleteToken(tokenInfo.userId, tokenInfo.fcmToken);
                     }
                 }
@@ -267,7 +267,7 @@ bool ChatService::SendSystemMessage(const string& groupId, const string& message
         }
     }
 
-    cout << "[ChatService] System Msg to Group(" << groupId << "): " << message << endl;
+    LOG_INFO("[ChatService] System Msg to Group({}): {}", groupId, message);
     return true;
 }
 
@@ -299,12 +299,12 @@ bool ChatService::HandleAck(sessionPtr& session, uint64 reqId, bool bDirect, con
 
     bool success = MessageRepository::UpdateReadStatus(userId, dbConvId, msg_seq);
     if (!success) {
-        cout << "[ChatService] DB Update 실패" << endl;
+        LOG_INFO("[ChatService] DB Update 실패");
         return false;
     }
     /* TODO 상대가 읽음 처리 */
 
-    cout << "[ChatService] Ack 처리: User=" << userId << " ReadUpTo=" << msg_seq << endl;
+    LOG_INFO("[ChatService] Ack 처리: User={} ReadUpTo={}", userId, msg_seq);
 
     return true;
 }
@@ -541,7 +541,7 @@ bool ChatService::HandleDeleteMessage(sessionPtr& session, uint64 reqId, const P
         }
     }
 
-    cout << "[ChatService] DeleteMessage: conv=" << convId << " seq=" << msgSeq << endl;
+    LOG_INFO("[ChatService] DeleteMessage: conv={} seq={}", convId, msgSeq);
     return true;
 }
 
@@ -621,7 +621,7 @@ bool ChatService::HandleEditMessage(sessionPtr& session, uint64 reqId, const Pro
         }
     }
 
-    cout << "[ChatService] EditMessage: conv=" << convId << " seq=" << msgSeq << " newText=\"" << newText << "\"" << endl;
+    LOG_INFO("[ChatService] EditMessage: conv={} seq={} newText=\"{}\"", convId, msgSeq, newText);
     return true;
 }
 
@@ -640,8 +640,7 @@ bool ChatService::HandleReadReceipt(sessionPtr& session, uint64 reqId, const Pro
     bool ok = MessageRepository::UpdateReadStatus(userId, convId, lastReadSeq);
     if (!ok) return false;
 
-    cout << "[ChatService] ReadReceipt: user=" << userId
-         << " conv=" << convId << " seq=" << lastReadSeq << endl;
+    LOG_INFO("[ChatService] ReadReceipt: user={} conv={} seq={}", userId, convId, lastReadSeq);
 
     // S_ReadReceipt 브로드캐스트 (본인 제외 참여자들에게)
     Protocol::S_ReadReceipt sReadReceipt;
@@ -871,7 +870,7 @@ bool ChatService::HandleCreatePoll(sessionPtr& session, uint64 reqId, const Prot
         }
     }
 
-    cout << "[ChatService] CreatePoll: " << pollId << " in " << convId << endl;
+    LOG_INFO("[ChatService] CreatePoll: {} in {}", pollId, convId);
     return true;
 }
 
@@ -949,7 +948,7 @@ bool ChatService::HandleVote(sessionPtr& session, uint64 reqId, const Protocol::
         }
     }
 
-    cout << "[ChatService] Vote: " << pollId << " by " << userId << endl;
+    LOG_INFO("[ChatService] Vote: {} by {}", pollId, userId);
     return true;
 }
 
@@ -993,7 +992,7 @@ bool ChatService::HandleClosePoll(sessionPtr& session, uint64 reqId, const Proto
         }
     }
 
-    cout << "[ChatService] ClosePoll: " << pollId << endl;
+    LOG_INFO("[ChatService] ClosePoll: {}", pollId);
     return true;
 }
 
@@ -1066,13 +1065,375 @@ bool ChatService::HandleSetAnnouncement(sessionPtr& session, uint64 reqId, const
         }
     }
 
-    cout << "[ChatService] SetAnnouncement: convId=" << convId << ", msgSeq=" << msgSeq << endl;
+    LOG_INFO("[ChatService] SetAnnouncement: convId={}, msgSeq={}", convId, msgSeq);
+    return true;
+}
+
+
+/*======================
+    HandleCreateBallDrop
+========================*/
+bool ChatService::HandleCreateBallDrop(sessionPtr& session, uint64 reqId, const Protocol::C_CreateBallDrop& pkt)
+{
+    auto serverSession = static_pointer_cast<ServerSession>(session);
+    const string userId = serverSession->GetUserId();
+    if (userId.empty()) {
+        HandleErr(session, reqId, ERR_UNAUTHORIZED);
+        return false;
+    }
+
+    const string& clientConvId = pkt.conv_id();
+    if (clientConvId.find("group:") != 0) {
+        HandleErr(session, reqId, ERR_INVALID_CONV_ID, "공 뽑기는 그룹에서만 가능");
+        return false;
+    }
+
+    string groupId = clientConvId.substr(6);
+    string convId = clientConvId;
+
+    // 참가자 목록 결정
+    auto allMembers = GroupRepository::GetGroupMembers(groupId);
+
+    struct ParticipantInfo {
+        string uId;
+        string name;
+        int32_t ballCount;
+    };
+    vector<ParticipantInfo> participants;
+
+    if (pkt.participant_ids_size() == 0) {
+        // 전체 멤버 — ball_counts가 비어있으면 기본 3개
+        int32_t defaultCount = pkt.ball_counts_size() > 0 ? 3 : 3;
+        for (size_t i = 0; i < allMembers.size(); i++) {
+            int32_t bc = (i < (size_t)pkt.ball_counts_size()) ? pkt.ball_counts(i) : defaultCount;
+            if (bc < 1) bc = 1;
+            if (bc > 20) bc = 20;
+            participants.push_back({allMembers[i].userId, allMembers[i].name, bc});
+        }
+    } else {
+        // 지정된 멤버
+        for (int i = 0; i < pkt.participant_ids_size(); i++) {
+            const string& pid = pkt.participant_ids(i);
+            int32_t bc = (i < pkt.ball_counts_size()) ? pkt.ball_counts(i) : 3;
+            if (bc < 1) bc = 1;
+            if (bc > 20) bc = 20;
+            for (const auto& m : allMembers) {
+                if (m.userId == pid) {
+                    participants.push_back({m.userId, m.name, bc});
+                    break;
+                }
+            }
+        }
+    }
+
+    if (participants.size() < 2) {
+        HandleErr(session, reqId, ERR_INVALID_PACKET, "최소 2명 이상 필요");
+        return false;
+    }
+
+    int32_t totalBalls = 0;
+    for (const auto& p : participants) totalBalls += p.ballCount;
+    if (totalBalls < 2 || totalBalls > 100) {
+        HandleErr(session, reqId, ERR_INVALID_PACKET, "총 공 개수는 2~100개");
+        return false;
+    }
+
+    // seed 생성
+    std::random_device rd;
+    uint64_t seed = ((uint64_t)rd() << 32) | rd();
+
+    // 공 뽑기 시뮬레이션: 각 공의 도착 시간 결정 (시드 기반)
+    // 공 리스트 생성
+    struct BallInfo {
+        int ownerIdx;
+        double arrivalTime;
+    };
+    vector<BallInfo> balls;
+    for (size_t pi = 0; pi < participants.size(); pi++) {
+        for (int bi = 0; bi < participants[pi].ballCount; bi++) {
+            balls.push_back({(int)pi, 0.0});
+        }
+    }
+
+    // mulberry32 PRNG (클라이언트와 동일 알고리즘 — 결과 검증용)
+    std::mt19937_64 rng(seed);
+
+    // 셔플 공 순서 (드롭 순서)
+    for (int i = (int)balls.size() - 1; i > 0; i--) {
+        std::uniform_int_distribution<int> dist(0, i);
+        int j = dist(rng);
+        std::swap(balls[i], balls[j]);
+    }
+
+    // 도착 시간 계산: 시작 딜레이 + 속도 변동
+    double dropInterval = std::max(60.0, 300.0 / balls.size());
+    double baseSegDuration = 180.0;
+    int pegRows = 10;
+    int pathLen = pegRows + 2; // 시작점 + 페그들 + 착지점
+
+    for (size_t i = 0; i < balls.size(); i++) {
+        std::uniform_real_distribution<double> speedDist(0.85, 1.15);
+        double speedVar = speedDist(rng);
+        double segDuration = baseSegDuration / speedVar;
+        double startDelay = i * dropInterval;
+        balls[i].arrivalTime = startDelay + segDuration * pathLen;
+    }
+
+    // 마지막 도착 공 = 당첨자
+    int lastBallIdx = 0;
+    double maxArrival = 0;
+    for (size_t i = 0; i < balls.size(); i++) {
+        if (balls[i].arrivalTime > maxArrival) {
+            maxArrival = balls[i].arrivalTime;
+            lastBallIdx = (int)i;
+        }
+    }
+
+    int winnerOwnerIdx = balls[lastBallIdx].ownerIdx;
+    const string& winnerId = participants[winnerOwnerIdx].uId;
+    const string& winnerName = participants[winnerOwnerIdx].name;
+
+    // 게임 JSON 생성
+    int64 now = Nowts();
+    int64 animationEndsAt = now + 5 * 60 * 1000; // 5분
+
+    auto escapeJson = [](const string& s) -> string {
+        string out;
+        for (char c : s) {
+            if (c == '"') out += "\\\"";
+            else if (c == '\\') out += "\\\\";
+            else out += c;
+        }
+        return out;
+    };
+
+    std::ostringstream oss;
+    oss << "{\"gameType\":\"ballDrop\""
+        << ",\"seed\":" << seed
+        << ",\"participants\":[";
+    for (size_t i = 0; i < participants.size(); i++) {
+        if (i > 0) oss << ",";
+        oss << "{\"userId\":\"" << escapeJson(participants[i].uId) << "\""
+            << ",\"name\":\"" << escapeJson(participants[i].name) << "\""
+            << ",\"ballCount\":" << participants[i].ballCount << "}";
+    }
+    string creatorName = GetUserNameWithId(userId);
+    oss << "],\"winnerId\":\"" << escapeJson(winnerId) << "\""
+        << ",\"winnerName\":\"" << escapeJson(winnerName) << "\""
+        << ",\"creatorId\":\"" << escapeJson(userId) << "\""
+        << ",\"creatorName\":\"" << escapeJson(creatorName) << "\""
+        << ",\"createdAt\":" << now
+        << ",\"animationEndsAt\":" << animationEndsAt
+        << "}";
+    string gameJson = oss.str();
+
+    // msg_type=7 (GAME) 메시지 저장
+    int64 msgSeq = MessageRepository::GetNextMessageSeq(convId);
+    if (msgSeq < 0) {
+        HandleErr(session, reqId, ERR_SERVER_INTERNAL, "msgSeq 생성 실패");
+        return false;
+    }
+
+    Protocol::S_Chat sChat;
+    sChat.set_conv_id(convId);
+    sChat.set_sender_id(userId);
+    sChat.set_sender_name(creatorName);
+    sChat.set_ts_server(now);
+    sChat.set_msg_seq(msgSeq);
+    sChat.mutable_payload()->mutable_text()->set_message(gameJson);
+
+    MessageRepository::SaveMessage(convId, userId, sChat, "", 0, "", 7 /* GAME */);
+
+    // S_CreateBallDrop 브로드캐스트
+    Protocol::S_CreateBallDrop pkt_res;
+    pkt_res.set_conv_id(clientConvId);
+    pkt_res.set_msg_seq(msgSeq);
+    pkt_res.set_game_json(gameJson);
+
+    for (const auto& member : allMembers) {
+        if (auto memberSession = _userManager.FindSession(member.userId)) {
+            Protocol::Envelope env;
+            env.set_version(GProtoVersion);
+            env.set_request_id(member.userId == userId ? reqId : 0);
+            *env.mutable_s_create_ball_drop() = pkt_res;
+            PacketDispatcher::SendEnvelope(memberSession, env);
+        }
+    }
+
+    // FCM 오프라인 멤버
+    if (GFcmClient) {
+        for (const auto& member : allMembers) {
+            if (member.userId == userId) continue;
+            if (!_userManager.FindSession(member.userId)) {
+                auto tokens = FcmTokenRepository::GetUserTokens(member.userId);
+                map<string, string> data = {
+                    {"type", "chat"},
+                    {"conv_id", convId},
+                    {"sender_id", userId}
+                };
+                for (const auto& tokenInfo : tokens) {
+                    bool invalidToken = false;
+                    GFcmClient->SendPush(tokenInfo.fcmToken, creatorName, "[공 뽑기]", data, &invalidToken);
+                    if (invalidToken) {
+                        FcmTokenRepository::DeleteToken(tokenInfo.userId, tokenInfo.fcmToken);
+                    }
+                }
+            }
+        }
+    }
+
+    LOG_INFO("[ChatService] CreateBallDrop: convId={}, participants={}, totalBalls={}, winner={}", convId, participants.size(), totalBalls, winnerName);
+    return true;
+}
+
+
+/*
+=============================================
+    HandleCreatePhotoSlide (포토 슬라이드)
+=============================================
+*/
+bool ChatService::HandleCreatePhotoSlide(sessionPtr& session, uint64 reqId, const Protocol::C_CreatePhotoSlide& pkt)
+{
+    auto serverSession = static_pointer_cast<ServerSession>(session);
+    const string userId = serverSession->GetUserId();
+    if (userId.empty()) {
+        HandleErr(session, reqId, ERR_UNAUTHORIZED);
+        return false;
+    }
+
+    const string& clientConvId = pkt.conv_id();
+    if (clientConvId.find("group:") != 0) {
+        HandleErr(session, reqId, ERR_INVALID_CONV_ID, "포토 슬라이드는 그룹에서만 가능");
+        return false;
+    }
+
+    string groupId = clientConvId.substr(6);
+    string convId = clientConvId;
+
+    // 유효성 검사
+    int imageCount = pkt.image_urls_size();
+    if (imageCount < 2 || imageCount > 10) {
+        HandleErr(session, reqId, ERR_INVALID_PACKET, "사진은 2~10장 필요");
+        return false;
+    }
+
+    string message = pkt.message();
+    if (message.size() > 600) { // UTF-8 최대 200자 × 3바이트
+        message = message.substr(0, 600);
+    }
+
+    string endingMessage = pkt.ending_message();
+    if (endingMessage.size() > 600) {
+        endingMessage = endingMessage.substr(0, 600);
+    }
+
+    int fontSize = pkt.font_size();
+    if (fontSize < 18 || fontSize > 40) fontSize = 26; // 기본값
+
+    auto escapeJson = [](const string& s) -> string {
+        string out;
+        for (char c : s) {
+            if (c == '"') out += "\\\"";
+            else if (c == '\\') out += "\\\\";
+            else if (c == '\n') out += "\\n";
+            else if (c == '\r') out += "\\r";
+            else if (c == '\t') out += "\\t";
+            else out += c;
+        }
+        return out;
+    };
+
+    // PhotoSlideData JSON 생성
+    int64 now = Nowts();
+    string creatorName = GetUserNameWithId(userId);
+
+    std::ostringstream oss;
+    oss << "{\"type\":\"photoSlide\""
+        << ",\"images\":[";
+    for (int i = 0; i < imageCount; i++) {
+        if (i > 0) oss << ",";
+        oss << "{\"url\":\"" << escapeJson(pkt.image_urls(i)) << "\"";
+        if (i < pkt.thumbnail_urls_size() && !pkt.thumbnail_urls(i).empty()) {
+            oss << ",\"thumbUrl\":\"" << escapeJson(pkt.thumbnail_urls(i)) << "\"";
+        }
+        oss << "}";
+    }
+    oss << "],\"slideMessage\":\"" << escapeJson(message) << "\""
+        << ",\"endingMessage\":\"" << escapeJson(endingMessage) << "\""
+        << ",\"fontSize\":" << fontSize
+        << ",\"message\":\"" << escapeJson(message) << "\""
+        << ",\"textPosition\":\"" << escapeJson(pkt.text_position()) << "\""
+        << ",\"fontStyle\":\"" << escapeJson(pkt.font_style()) << "\""
+        << ",\"bgTheme\":\"" << escapeJson(pkt.bg_theme()) << "\""
+        << ",\"creatorId\":\"" << escapeJson(userId) << "\""
+        << ",\"creatorName\":\"" << escapeJson(creatorName) << "\""
+        << ",\"createdAt\":" << now
+        << "}";
+    string slideJson = oss.str();
+
+    // msg_type=8 (PHOTO_SLIDE) 메시지 저장
+    int64 msgSeq = MessageRepository::GetNextMessageSeq(convId);
+    if (msgSeq < 0) {
+        HandleErr(session, reqId, ERR_SERVER_INTERNAL, "msgSeq 생성 실패");
+        return false;
+    }
+
+    Protocol::S_Chat sChat;
+    sChat.set_conv_id(convId);
+    sChat.set_sender_id(userId);
+    sChat.set_sender_name(creatorName);
+    sChat.set_ts_server(now);
+    sChat.set_msg_seq(msgSeq);
+    sChat.mutable_payload()->mutable_text()->set_message(slideJson);
+
+    MessageRepository::SaveMessage(convId, userId, sChat, "", 0, "", 8 /* PHOTO_SLIDE */);
+
+    // S_CreatePhotoSlide 브로드캐스트
+    Protocol::S_CreatePhotoSlide pkt_res;
+    pkt_res.set_conv_id(clientConvId);
+    pkt_res.set_msg_seq(msgSeq);
+    pkt_res.set_slide_json(slideJson);
+
+    auto allMembers = GroupRepository::GetGroupMembers(groupId);
+    for (const auto& member : allMembers) {
+        if (auto memberSession = _userManager.FindSession(member.userId)) {
+            Protocol::Envelope env;
+            env.set_version(GProtoVersion);
+            env.set_request_id(member.userId == userId ? reqId : 0);
+            *env.mutable_s_create_photo_slide() = pkt_res;
+            PacketDispatcher::SendEnvelope(memberSession, env);
+        }
+    }
+
+    // FCM 오프라인 멤버
+    if (GFcmClient) {
+        for (const auto& member : allMembers) {
+            if (member.userId == userId) continue;
+            if (!_userManager.FindSession(member.userId)) {
+                auto tokens = FcmTokenRepository::GetUserTokens(member.userId);
+                map<string, string> data = {
+                    {"type", "chat"},
+                    {"conv_id", convId},
+                    {"sender_id", userId}
+                };
+                for (const auto& tokenInfo : tokens) {
+                    bool invalidToken = false;
+                    GFcmClient->SendPush(tokenInfo.fcmToken, creatorName, "[포토 슬라이드]", data, &invalidToken);
+                    if (invalidToken) {
+                        FcmTokenRepository::DeleteToken(tokenInfo.userId, tokenInfo.fcmToken);
+                    }
+                }
+            }
+        }
+    }
+
+    LOG_INFO("[ChatService] CreatePhotoSlide: convId={}, images={}, creator={}", convId, imageCount, creatorName);
     return true;
 }
 
 
 void ChatService::HandleErr(sessionPtr& session, uint64 reqId, ErrorCode errorCode, const string& errMessage)
 {
-    cerr << "[ChatService] Error: " << errMessage << " (code: " << static_cast<int>(errorCode) << ")" << endl;
+    LOG_ERROR("[ChatService] Error: {} (code: {})", errMessage, static_cast<int>(errorCode));
     PacketDispatcher::DispatchError(session, reqId, errorCode, errMessage);
 }

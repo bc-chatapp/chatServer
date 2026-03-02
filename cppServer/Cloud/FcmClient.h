@@ -34,9 +34,9 @@ private:
 
     inline void HandleErr(const string& func, const string& msg = "") {
         if (msg.empty())
-            cerr << "[FcmClient] " << func << " Failed" << endl;
+            LOG_ERROR("[FcmClient] {} Failed", func);
         else
-            cerr << "[FcmClient] " << func << " Failed: " << msg << endl;
+            LOG_ERROR("[FcmClient] {} Failed: {}", func, msg);
     }
 
 private:

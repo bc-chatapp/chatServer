@@ -22,6 +22,11 @@ extern const int32 GProtoVersion;
 extern const int64 TIMEOUT_MS;
 extern const int32 MAX_GROUP_MEMBERS;
 
+// ─── 저장공간 기본 제공량 (바이트) ───
+extern const int64 DEFAULT_PERSONAL_STORAGE;    // 개인: 100MB
+extern const int64 DEFAULT_GROUP_STORAGE;       // 그룹: 1GB
+extern const int64 DEFAULT_MAX_FILE_SIZE;       // 파일 당: 25MB
+
 int64 Nowts();
 
 extern UserManager* GUserManager;

@@ -20,13 +20,15 @@ int main()
 {
 	SetConsoleOutputCP(65001);
 
-	cout << "[Server] MySQL 연결 시도 중... (localhost:33060)" << endl;
+	Logger::Init();
+
+	LOG_INFO("[Server] MySQL 연결 시도 중... (localhost:33060)");
 	if (!DBManager::GetInstance().Initialize("localhost", 33060, "chat_server", "hoje1095", "chat_server"))
 	{
-		cerr << "[Error] Database connection failed!" << endl;
+		LOG_ERROR("[Server] Database connection failed!");
 		return 1;
 	}
-	cout << "[Server] Database connected successfully" << endl;
+	LOG_INFO("[Server] Database connected successfully");
 
 	// libCurl
 	curl_global_init(CURL_GLOBAL_ALL);
@@ -48,10 +50,10 @@ int main()
 	// 리스닝 시작
 	if (service->Start() == false)
 	{
-		cerr << "[Error] Service 시작 실패" << endl;
+		LOG_ERROR("[Server] Service 시작 실패");
 		return 0;
 	}
-	cout << "[Server] Listening on 127.0.0.1:3000..." << endl;
+	LOG_INFO("[Server] Listening on 127.0.0.1:3000...");
 
 
 	// 워커 스레드 생성 (CPU 코어 수만큼)
@@ -111,7 +113,8 @@ int main()
 	curl_global_cleanup(); // libcurl 정리
 	::WSACleanup();
 
-	cout << "[Server] Successfully shut down." << endl;
+	LOG_INFO("[Server] Successfully shut down.");
+	Logger::Shutdown();
 	return 0;
 
 }

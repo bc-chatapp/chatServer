@@ -49,9 +49,9 @@ private:
 
     inline void HandleErr(const string& func, const string& msg = "") {
         if (msg.empty())
-            cerr << "[PaymentService] " << func << " Failed" << endl;
+            LOG_ERROR("[PaymentService] {} Failed", func);
         else
-            cerr << "[PaymentService] " << func << " Failed: " << msg << endl;
+            LOG_ERROR("[PaymentService] {} Failed: {}", func, msg);
     }
 
 private:

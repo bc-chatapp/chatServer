@@ -81,7 +81,7 @@ bool SubscriptionRepository::GetActiveSubscription(const string& userId, cSubscr
 		return true;
 	}
 	catch (const exception& e) {
-		cerr << "[SubscriptionRepository] GetActiveSubscription 실패: " << e.what() << endl;
+		LOG_ERROR("[SubscriptionRepository] GetActiveSubscription 실패: {}", e.what());
 		return false;
 	}
 }
@@ -112,20 +112,36 @@ vector<cPlanInfo> SubscriptionRepository::GetAvailablePlans(const string& planTy
 			plan.storageBytes = row[4].get<int64>();
 			plan.maxFileSize = row[5].get<int64>();
 
-			// DECIMAL -> double
-			string priceStr = row[6].isNull() ? "0" : row[6].get<string>();
-			plan.monthlyPrice = stod(priceStr);
+			// DECIMAL → double 직접 변환 (X DevAPI에서 string 변환 불가)
+			if (row[6].isNull()) {
+				plan.monthlyPrice = 0;
+			}
+			else {
+				try { plan.monthlyPrice = row[6].get<double>(); }
+				catch (...) {
+					try { plan.monthlyPrice = static_cast<double>(row[6].get<int>()); }
+					catch (...) { plan.monthlyPrice = 0; }
+				}
+			}
 
-			// JSON features
+			// JSON features (X DevAPI에서 JSON은 string 또는 raw bytes)
 			if (!row[7].isNull()) {
-				plan.features = ParseFeaturesJson(row[7].get<string>());
+				try { plan.features = ParseFeaturesJson(row[7].get<string>()); }
+				catch (...) {
+					try {
+						auto raw = row[7].getRawBytes();
+						string jsonStr(raw.first, raw.first + raw.second);
+						plan.features = ParseFeaturesJson(jsonStr);
+					}
+					catch (...) { /* features 파싱 실패 — 빈 배열 유지 */ }
+				}
 			}
 
 			plans.push_back(plan);
 		}
 	}
 	catch (const exception& e) {
-		cerr << "[SubscriptionRepository] GetAvailablePlans 실패: " << e.what() << endl;
+		LOG_ERROR("[SubscriptionRepository] GetAvailablePlans 실패: {}", e.what());
 	}
 
 	return plans;

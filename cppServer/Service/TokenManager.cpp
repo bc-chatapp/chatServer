@@ -17,7 +17,7 @@ bool TokenManager::LoadSecret(const string& filePath)
 	ifstream file(filePath);
 	if (!file.is_open())
 	{
-		cout << "[TokenManager] Error: 키 파일을 찾을 수 없습니다: " << filePath << endl;
+		LOG_INFO("[TokenManager] Error: 키 파일을 찾을 수 없습니다: {}", filePath);
 		return false;
 	}
 
@@ -32,11 +32,11 @@ bool TokenManager::LoadSecret(const string& filePath)
 
 	if (SECRET_KEY.empty())
 	{
-		cout << "[TokenManager] Error: key empty" << endl;
+		LOG_INFO("[TokenManager] Error: key empty");
 		return false;
 	}
 
-	cout << "[TokenManager] JWT secret loaded from " << filePath << endl;
+	LOG_INFO("[TokenManager] JWT secret loaded from {}", filePath);
 	return true;
 }
 
@@ -50,7 +50,7 @@ string TokenManager::GenerateToken(const string& userId)
 
 	if (SECRET_KEY.empty())
 	{
-		cout << "[TokenManager] Error: SECRET_KEY is empty, cannot generate token" << endl;
+		LOG_INFO("[TokenManager] Error: SECRET_KEY is empty, cannot generate token");
 		return "";
 	}
 

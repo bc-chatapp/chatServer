@@ -44,7 +44,7 @@ bool BlockService::HandleBlockUser(sessionPtr& session, uint64 reqId, const C_Bl
     *env.mutable_s_block_user() = res;
     PacketDispatcher::SendEnvelope(session, env);
 
-    cout << "[BlockService] " << userId << " blocked " << targetId << " -> " << (ok ? "OK" : "FAIL") << endl;
+    LOG_INFO("[BlockService] {} blocked {} -> {}", userId, targetId, (ok ? "OK" : "FAIL"));
     return ok;
 }
 
@@ -77,7 +77,7 @@ bool BlockService::HandleUnblockUser(sessionPtr& session, uint64 reqId, const C_
     *env.mutable_s_unblock_user() = res;
     PacketDispatcher::SendEnvelope(session, env);
 
-    cout << "[BlockService] " << userId << " unblocked " << targetId << " -> " << (ok ? "OK" : "FAIL") << endl;
+    LOG_INFO("[BlockService] {} unblocked {} -> {}", userId, targetId, (ok ? "OK" : "FAIL"));
     return ok;
 }
 
@@ -105,7 +105,7 @@ bool BlockService::HandleGetBlockedList(sessionPtr& session, uint64 reqId, const
     *env.mutable_s_get_blocked_list() = res;
     PacketDispatcher::SendEnvelope(session, env);
 
-    cout << "[BlockService] GetBlockedList for " << userId << ": " << list.size() << " entries" << endl;
+    LOG_INFO("[BlockService] GetBlockedList for {}: {} entries", userId, list.size());
     return true;
 }
 
@@ -138,7 +138,6 @@ bool BlockService::HandleReportUser(sessionPtr& session, uint64 reqId, const C_R
     *env.mutable_s_report_user() = res;
     PacketDispatcher::SendEnvelope(session, env);
 
-    cout << "[BlockService] " << userId << " reported " << targetId
-         << " reason=" << pkt.reason() << " -> " << (ok ? "OK" : "FAIL") << endl;
+    LOG_INFO("[BlockService] {} reported {} reason={} -> {}", userId, targetId, pkt.reason(), (ok ? "OK" : "FAIL"));
     return ok;
 }

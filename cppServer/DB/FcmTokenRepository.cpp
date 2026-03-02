@@ -36,8 +36,7 @@ bool FcmTokenRepository::UpsertFcmToken(const string& userId, const string& fcmT
                     .bind("did", deviceId)
                     .execute();
 
-                cout << "[FcmTokenRepository] FCM 토큰 업데이트 (기기): " << userId
-                     << ", device=" << deviceName << endl;
+                LOG_INFO("[FcmTokenRepository] FCM 토큰 업데이트 (기기): {}, device={}", userId, deviceName);
                 return true;
             }
         }
@@ -61,7 +60,7 @@ bool FcmTokenRepository::UpsertFcmToken(const string& userId, const string& fcmT
                 .bind("token", fcmToken)
                 .execute();
 
-            cout << "[FcmTokenRepository] FCM 토큰 업데이트 (계정 전환): " << userId << endl;
+            LOG_INFO("[FcmTokenRepository] FCM 토큰 업데이트 (계정 전환): {}", userId);
         }
         else {
             // 유저당 최대 토큰 수 초과 시 가장 오래된 토큰 삭제
@@ -78,8 +77,7 @@ bool FcmTokenRepository::UpsertFcmToken(const string& userId, const string& fcmT
                     "ORDER BY last_active ASC LIMIT ?";
                 int deleteCount = tokenCount - MAX_TOKENS_PER_USER + 1;
                 sess.sql(deleteSql).bind(userId).bind(deleteCount).execute();
-                cout << "[FcmTokenRepository] 오래된 FCM 토큰 " << deleteCount
-                     << "개 삭제 (최대 " << MAX_TOKENS_PER_USER << "개 제한): " << userId << endl;
+                LOG_INFO("[FcmTokenRepository] 오래된 FCM 토큰 {}개 삭제 (최대 {}개 제한): {}", deleteCount, MAX_TOKENS_PER_USER, userId);
             }
 
             // 새 토큰 삽입
@@ -88,14 +86,13 @@ bool FcmTokenRepository::UpsertFcmToken(const string& userId, const string& fcmT
                 )
                 .execute();
 
-            cout << "[FcmTokenRepository] FCM 토큰 등록: " << userId
-                 << ", device=" << deviceName << endl;
+            LOG_INFO("[FcmTokenRepository] FCM 토큰 등록: {}, device={}", userId, deviceName);
         }
 
         return true;
     }
     catch (const mysqlx::Error& err) {
-        cerr << "[FcmTokenRepository] FCM 토큰 저장 실패: " << err.what() << endl;
+        LOG_ERROR("[FcmTokenRepository] FCM 토큰 저장 실패: {}", err.what());
         return false;
     }
 }
@@ -153,7 +150,7 @@ vector<cFcmTokenInfo> FcmTokenRepository::GetUserTokens(const string& userId)
         }
     }
     catch (const mysqlx::Error& err) {
-        cerr << "[FcmTokenRepository] FCM 토큰 조회 실패: " << err.what() << endl;
+        LOG_ERROR("[FcmTokenRepository] FCM 토큰 조회 실패: {}", err.what());
     }
 
     return tokens;
@@ -189,7 +186,7 @@ bool FcmTokenRepository::GetTokenByDevice(const string& userId, const string& de
         return true;
     }
     catch (const mysqlx::Error& err) {
-        cerr << "[FcmTokenRepository] FCM 토큰 조회 실패: " << err.what() << endl;
+        LOG_ERROR("[FcmTokenRepository] FCM 토큰 조회 실패: {}", err.what());
         return false;
     }
 }
@@ -211,11 +208,11 @@ bool FcmTokenRepository::DeleteToken(const string& userId, const string& fcmToke
             .bind("token", fcmToken)
             .execute();
 
-        cout << "[FcmTokenRepository] FCM 토큰 삭제: " << userId << endl;
+        LOG_INFO("[FcmTokenRepository] FCM 토큰 삭제: {}", userId);
         return true;
     }
     catch (const mysqlx::Error& err) {
-        cerr << "[FcmTokenRepository] FCM 토큰 삭제 실패: " << err.what() << endl;
+        LOG_ERROR("[FcmTokenRepository] FCM 토큰 삭제 실패: {}", err.what());
         return false;
     }
 }
@@ -236,11 +233,11 @@ bool FcmTokenRepository::DeleteTokenByDeviceId(const string& userId, const strin
             .bind("did", deviceId)
             .execute();
 
-        cout << "[FcmTokenRepository] FCM 토큰 삭제 (device_id): " << userId << ", " << deviceId << endl;
+        LOG_INFO("[FcmTokenRepository] FCM 토큰 삭제 (device_id): {}, {}", userId, deviceId);
         return true;
     }
     catch (const mysqlx::Error& err) {
-        cerr << "[FcmTokenRepository] FCM 토큰 삭제 실패: " << err.what() << endl;
+        LOG_ERROR("[FcmTokenRepository] FCM 토큰 삭제 실패: {}", err.what());
         return false;
     }
 }
@@ -260,11 +257,11 @@ bool FcmTokenRepository::DeleteAllUserTokens(const string& userId)
             .bind("uid", userId)
             .execute();
 
-        cout << "[FcmTokenRepository] 사용자의 모든 FCM 토큰 삭제: " << userId << endl;
+        LOG_INFO("[FcmTokenRepository] 사용자의 모든 FCM 토큰 삭제: {}", userId);
         return true;
     }
     catch (const mysqlx::Error& err) {
-        cerr << "[FcmTokenRepository] FCM 토큰 전체 삭제 실패: " << err.what() << endl;
+        LOG_ERROR("[FcmTokenRepository] FCM 토큰 전체 삭제 실패: {}", err.what());
         return false;
     }
 }
@@ -289,7 +286,7 @@ bool FcmTokenRepository::UpdateLastActive(const string& userId, const string& de
         return true;
     }
     catch (const mysqlx::Error& err) {
-        cerr << "[FcmTokenRepository] last_active 업데이트 실패: " << err.what() << endl;
+        LOG_ERROR("[FcmTokenRepository] last_active 업데이트 실패: {}", err.what());
         return false;
     }
 }
@@ -312,7 +309,7 @@ bool FcmTokenRepository::TokenExists(const string& fcmToken)
         return result.count() > 0;
     }
     catch (const mysqlx::Error& err) {
-        cerr << "[FcmTokenRepository] FCM 토큰 존재 확인 실패: " << err.what() << endl;
+        LOG_ERROR("[FcmTokenRepository] FCM 토큰 존재 확인 실패: {}", err.what());
         return false;
     }
 }

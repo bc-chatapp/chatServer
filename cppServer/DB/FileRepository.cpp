@@ -21,12 +21,11 @@ bool FileRepository::SaveFileMetadata(const FileInfo& fileInfo) {
                     fileInfo.expiresAt)
             .execute();
         
-        cout << "[FileRepository] 파일 메타데이터 저장 완료: fileId=" << fileInfo.fileId 
-             << ", userId=" << fileInfo.userId << endl;
+        LOG_INFO("[FileRepository] 파일 메타데이터 저장 완료: fileId={}, userId={}", fileInfo.fileId, fileInfo.userId);
         
         return true;
     } catch (const mysqlx::Error& err) {
-        cerr << "[FileRepository] 파일 메타데이터 저장 실패: " << err.what() << endl;
+        LOG_ERROR("[FileRepository] 파일 메타데이터 저장 실패: {}", err.what());
         return false;
     }
 }
@@ -129,7 +128,7 @@ bool FileRepository::GetFileMetadata(const string& fileId, FileInfo& fileInfo) {
         
         return true;
     } catch (const mysqlx::Error& err) {
-        cerr << "[FileRepository] 파일 메타데이터 조회 실패: " << err.what() << endl;
+        LOG_ERROR("[FileRepository] 파일 메타데이터 조회 실패: {}", err.what());
         return false;
     }
 }
@@ -145,11 +144,11 @@ vector<FileInfo> FileRepository::GetUserFiles(const string& userId, int limit) {
         // TODO: 사용자 파일 목록 조회
         // 현재는 뼈대만 구현
         
-        cout << "[FileRepository] 사용자 파일 목록 조회: userId=" << userId << endl;
+        LOG_INFO("[FileRepository] 사용자 파일 목록 조회: userId={}", userId);
         
         return result;
     } catch (const exception& e) {
-        cerr << "[FileRepository] 사용자 파일 목록 조회 실패: " << e.what() << endl;
+        LOG_ERROR("[FileRepository] 사용자 파일 목록 조회 실패: {}", e.what());
         return result;
     }
 }
@@ -173,12 +172,11 @@ bool FileRepository::UpdateUploadStatus(const string& fileId, const string& stat
             .bind("fid", fileId)
             .execute();
         
-        cout << "[FileRepository] 업로드 상태 업데이트 완료: fileId=" << fileId 
-             << ", status=" << status << endl;
+        LOG_INFO("[FileRepository] 업로드 상태 업데이트 완료: fileId={}, status={}", fileId, status);
         
         return true;
     } catch (const mysqlx::Error& err) {
-        cerr << "[FileRepository] 업로드 상태 업데이트 실패: " << err.what() << endl;
+        LOG_ERROR("[FileRepository] 업로드 상태 업데이트 실패: {}", err.what());
         return false;
     }
 }
@@ -195,11 +193,11 @@ bool FileRepository::DeleteFileMetadata(const string& fileId) {
             .bind("fid", fileId)
             .execute();
         
-        cout << "[FileRepository] 파일 메타데이터 삭제 완료: fileId=" << fileId << endl;
+        LOG_INFO("[FileRepository] 파일 메타데이터 삭제 완료: fileId={}", fileId);
         
         return true;
     } catch (const mysqlx::Error& err) {
-        cerr << "[FileRepository] 파일 메타데이터 삭제 실패: " << err.what() << endl;
+        LOG_ERROR("[FileRepository] 파일 메타데이터 삭제 실패: {}", err.what());
         return false;
     }
 }
@@ -244,10 +242,10 @@ vector<FileInfo> FileRepository::GetExpiredFiles(int64 currentTime) {
             result.push_back(fi);
         }
 
-        cout << "[FileRepository] 만료된 파일 " << result.size() << "개 조회 완료" << endl;
+        LOG_INFO("[FileRepository] 만료된 파일 {}개 조회 완료", result.size());
         return result;
     } catch (const exception& e) {
-        cerr << "[FileRepository] 만료된 파일 목록 조회 실패: " << e.what() << endl;
+        LOG_ERROR("[FileRepository] 만료된 파일 목록 조회 실패: {}", e.what());
         return result;
     }
 }
@@ -268,7 +266,7 @@ bool FileRepository::UpdateFileRetentionExpiry(const string& fileId, int64 expir
         }
         return true;
     } catch (const exception& e) {
-        cerr << "[FileRepository] UpdateFileRetentionExpiry 실패: " << e.what() << endl;
+        LOG_ERROR("[FileRepository] UpdateFileRetentionExpiry 실패: {}", e.what());
         return false;
     }
 }
@@ -294,11 +292,10 @@ bool FileRepository::UpdateUserFilesRetentionExpiry(const string& userId, int64 
                 .bind(expiresAt, userId, expiresAt).execute();
         }
 
-        cout << "[FileRepository] UpdateUserFilesRetentionExpiry: userId=" << userId
-             << ", expiresAt=" << expiresAt << endl;
+        LOG_INFO("[FileRepository] UpdateUserFilesRetentionExpiry: userId={}, expiresAt={}", userId, expiresAt);
         return true;
     } catch (const exception& e) {
-        cerr << "[FileRepository] UpdateUserFilesRetentionExpiry 실패: " << e.what() << endl;
+        LOG_ERROR("[FileRepository] UpdateUserFilesRetentionExpiry 실패: {}", e.what());
         return false;
     }
 }

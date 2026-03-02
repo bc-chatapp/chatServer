@@ -13,7 +13,7 @@ bool BlockRepository::BlockUser(const string& userId, const string& targetId)
         return true;
     }
     catch (const mysqlx::Error& e) {
-        cerr << "[BlockRepository] BlockUser error: " << e.what() << endl;
+        LOG_ERROR("[BlockRepository] BlockUser error: {}", e.what());
         return false;
     }
 }
@@ -31,7 +31,7 @@ bool BlockRepository::UnblockUser(const string& userId, const string& targetId)
         return true;
     }
     catch (const mysqlx::Error& e) {
-        cerr << "[BlockRepository] UnblockUser error: " << e.what() << endl;
+        LOG_ERROR("[BlockRepository] UnblockUser error: {}", e.what());
         return false;
     }
 }
@@ -49,7 +49,7 @@ bool BlockRepository::IsBlocked(const string& userId, const string& targetId)
         return (res.count() > 0);
     }
     catch (const mysqlx::Error& e) {
-        cerr << "[BlockRepository] IsBlocked error: " << e.what() << endl;
+        LOG_ERROR("[BlockRepository] IsBlocked error: {}", e.what());
         return false;
     }
 }
@@ -67,7 +67,7 @@ bool BlockRepository::IsBlockedEither(const string& a, const string& b)
         return (res.count() > 0);
     }
     catch (const mysqlx::Error& e) {
-        cerr << "[BlockRepository] IsBlockedEither error: " << e.what() << endl;
+        LOG_ERROR("[BlockRepository] IsBlockedEither error: {}", e.what());
         return false;
     }
 }
@@ -98,7 +98,7 @@ vector<BlockedUserEntry> BlockRepository::GetBlockedUsers(const string& userId)
         }
     }
     catch (const mysqlx::Error& e) {
-        cerr << "[BlockRepository] GetBlockedUsers error: " << e.what() << endl;
+        LOG_ERROR("[BlockRepository] GetBlockedUsers error: {}", e.what());
     }
     return result;
 }
@@ -115,7 +115,7 @@ bool BlockRepository::ReportUser(const string& reporterId, const string& reporte
         return true;
     }
     catch (const mysqlx::Error& e) {
-        cerr << "[BlockRepository] ReportUser error: " << e.what() << endl;
+        LOG_ERROR("[BlockRepository] ReportUser error: {}", e.what());
         return false;
     }
 }
@@ -133,7 +133,7 @@ bool BlockRepository::HasReported(const string& reporterId, const string& report
         return (res.count() > 0);
     }
     catch (const mysqlx::Error& e) {
-        cerr << "[BlockRepository] HasReported error: " << e.what() << endl;
+        LOG_ERROR("[BlockRepository] HasReported error: {}", e.what());
         return false;
     }
 }

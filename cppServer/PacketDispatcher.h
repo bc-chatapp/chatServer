@@ -83,6 +83,7 @@ protected:
     static bool Dispatch_C_CreateGroup(sessionPtr& session, uint64 reqId, const Protocol::C_CreateGroup& pkt);
     static bool Dispatch_C_GroupList(sessionPtr& session, uint64 reqId, const Protocol::C_GroupList& pkt);
     static bool Dispatch_C_JoinGroup(sessionPtr& session, uint64 reqId, const Protocol::C_JoinGroup& pkt);
+    static bool Dispatch_C_RefreshInviteCode(sessionPtr& session, uint64 reqId, const Protocol::C_RefreshInviteCode& pkt);
     static bool Dispatch_C_LeaveGroup(sessionPtr& session, uint64 reqId, const Protocol::C_LeaveGroup& pkt);
     static bool Dispatch_C_GroupMemberList(sessionPtr& session, uint64 reqId, const Protocol::C_GroupMemberList& pkt);
     static bool Dispatch_C_GroupInfo(sessionPtr& session, uint64 reqId, const Protocol::C_GroupInfo& pkt);
@@ -105,6 +106,10 @@ protected:
 
     // Logout Handler (로그아웃)
     static bool Dispatch_C_Logout(sessionPtr& session, uint64 reqId, const Protocol::C_Logout& pkt);
+
+    // Social Login Handlers (소셜 로그인)
+    static bool Dispatch_C_SocialLogin(sessionPtr& session, uint64 reqId, const Protocol::C_SocialLogin& pkt);
+    static bool Dispatch_C_CompleteSocialSignup(sessionPtr& session, uint64 reqId, const Protocol::C_CompleteSocialSignup& pkt);
 
     // Device Management Handlers (기기 관리)
     static bool Dispatch_C_GetMyDevices(sessionPtr& session, uint64 reqId, const Protocol::C_GetMyDevices& pkt);
@@ -132,6 +137,12 @@ protected:
 
     // Announcement Handler (공지)
     static bool Dispatch_C_SetAnnouncement(sessionPtr& session, uint64 reqId, const Protocol::C_SetAnnouncement& pkt);
+
+    // BallDrop Handler (숫자 뽑기)
+    static bool Dispatch_C_CreateBallDrop(sessionPtr& session, uint64 reqId, const Protocol::C_CreateBallDrop& pkt);
+
+    // PhotoSlide Handler (포토 슬라이드)
+    static bool Dispatch_C_CreatePhotoSlide(sessionPtr& session, uint64 reqId, const Protocol::C_CreatePhotoSlide& pkt);
 
 private:
 

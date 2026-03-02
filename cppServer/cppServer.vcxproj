@@ -248,6 +248,7 @@ copy /Y "$(SolutionDir)Libraries\mysql-connector-c++-9.5.0\lib64\libcrypto-3-x64
     </ClCompile>
     <ClCompile Include="ServerSession.cpp" />
     <ClCompile Include="Service\VerificationManager.cpp" />
+    <ClCompile Include="Logger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Libraries\Include\bcrypt\bcrypt_lib.h" />
@@ -281,6 +282,7 @@ copy /Y "$(SolutionDir)Libraries\mysql-connector-c++-9.5.0\lib64\libcrypto-3-x64
     <ClInclude Include="protocol.pb.h" />
     <ClInclude Include="ServerSession.h" />
     <ClInclude Include="Service\VerificationManager.h" />
+    <ClInclude Include="Logger.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Protobuf\GenPackets.bat" />

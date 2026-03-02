@@ -1,29 +1,11 @@
 #include "pch.h"
 #include "MessageRepository.h"
 
-#include <iostream>
 #include <algorithm>
 #include <sstream>
 #include <set>
 #include <vector>
-#include <fstream>
-#include <iomanip>
-#include <ctime>
-#include <mutex>
 #include <google/protobuf/util/json_util.h>
-
-#ifdef _WIN32
-    #include <direct.h>
-    #include <io.h>
-    #include <fcntl.h>
-    #include <windows.h>
-    #define mkdir _mkdir
-#else
-    #include <sys/stat.h>
-    #include <sys/types.h>
-    #include <fcntl.h>
-    #include <unistd.h>
-#endif
 
 
 /*======================
@@ -61,7 +43,7 @@ string MessageRepository::CreateOrGetConversation(const string& convId, const st
                 session.sql(queryPart).bind(convId, participant1, convId, participant2).execute();
             }
 
-            cout << "[MessageRepository] 대화방 생성 완료: " << convId << endl;
+            LOG_INFO("[MessageRepository] 대화방 생성 완료: {}", convId);
         }
         session.commit();
 
@@ -73,7 +55,7 @@ string MessageRepository::CreateOrGetConversation(const string& convId, const st
             db.GetSession().rollback();
         } catch (...) { /* 롤백 실패는 무시 */ }
 
-        cerr << "[MessageRepository] 대화방 생성 실패: " << err.what() << endl;
+        LOG_ERROR("[MessageRepository] 대화방 생성 실패: {}", err.what());
         return convId;  
     }
 }
@@ -90,7 +72,7 @@ bool MessageRepository::AddParticipant(const string& convId, const string& userI
         session.sql(query).bind(convId, userId).execute();
         return true;
     } catch (const mysqlx::Error& err) {
-        cerr << "[MessageRepository] AddParticipant 실패: " << err.what() << endl;
+        LOG_ERROR("[MessageRepository] AddParticipant 실패: {}", err.what());
         return false;
     }
 }
@@ -112,7 +94,7 @@ bool MessageRepository::AddParticipants(const string& convId, const vector<strin
         return true;
     }
     catch (const mysqlx::Error& err) {
-        cerr << "[MessageRepository] AddParticipants 실패: " << err.what() << endl;
+        LOG_ERROR("[MessageRepository] AddParticipants 실패: {}", err.what());
         return false;
     }
 }
@@ -219,7 +201,7 @@ int64 MessageRepository::SaveMessage(const string& convId, const string& senderI
         return nextSeq;
     }
     catch (const mysqlx::Error& err) {
-        cerr << "[MessageRepository] 메시지 저장 실패: " << err.what() << endl;
+        LOG_ERROR("[MessageRepository] 메시지 저장 실패: {}", err.what());
         return -1;
     }
 }
@@ -246,7 +228,7 @@ bool MessageRepository::UpdateFileStatusByGcsPath(const string& gcsPath, const s
         return true;
     }
     catch (const mysqlx::Error& err) {
-        cerr << "[MessageRepository] UpdateFileStatusByGcsPath 실패: " << err.what() << endl;
+        LOG_ERROR("[MessageRepository] UpdateFileStatusByGcsPath 실패: {}", err.what());
         return false;
     }
 }
@@ -278,7 +260,7 @@ int64 MessageRepository::GetNextMessageSeq(const string& convId)
         return 1; 
 
     } catch (const mysqlx::Error& err) {
-        cerr << "[MessageRepository] 메시지 순차 번호 조회 실패: " << err.what() << endl;
+        LOG_ERROR("[MessageRepository] 메시지 순차 번호 조회 실패: {}", err.what());
         return 1;  // 기본값
     }
 }
@@ -309,7 +291,7 @@ vector<string> MessageRepository::GetUserConversations(const string& userId)
         }
         
     } catch (const mysqlx::Error& err) {
-        cerr << "[MessageRepository] 대화방 목록 조회 실패: " << err.what() << endl;
+        LOG_ERROR("[MessageRepository] 대화방 목록 조회 실패: {}", err.what());
     }
     
     return result;
@@ -411,6 +393,12 @@ void MessageRepository::ParseChatPacket(Protocol::S_Chat& sChat, const mysqlx::R
     case 6: // AUDIO
         payload->mutable_audio()->set_url(row[5].isNull() ? "" : row[5].get<string>());
         break;
+    case 7: // GAME (ballDrop) — message 컬럼에 game JSON 저장, text payload로 전달
+        payload->mutable_text()->set_message(row[4].get<string>());
+        break;
+    case 8: // PHOTO_SLIDE — message 컬럼에 slide JSON 저장, text payload로 전달
+        payload->mutable_text()->set_message(row[4].get<string>());
+        break;
     }
 }
 
@@ -463,7 +451,7 @@ vector<MessageInfo> MessageRepository::GetRecentMessages(const string& convId, i
 
     }
     catch (const mysqlx::Error& err) {
-        cerr << "[MessageRepository] 오프라인 메시지 조회 실패: " << err.what() << endl;
+        LOG_ERROR("[MessageRepository] 오프라인 메시지 조회 실패: {}", err.what());
     }
     return result;
 }
@@ -511,7 +499,7 @@ vector<MessageInfo> MessageRepository::GetMessagesAfter(const string& convId, in
 
     }
     catch (const mysqlx::Error& err) {
-        cerr << "[MessageRepository] 메시지 조회 실패(After): " << err.what() << endl;
+        LOG_ERROR("[MessageRepository] 메시지 조회 실패(After): {}", err.what());
     }
     return result;
 }
@@ -562,7 +550,7 @@ vector<MessageInfo> MessageRepository::GetHistoryMessages(string convId, int64 l
 
     }
     catch (const mysqlx::Error& err) {
-        cerr << "[MessageRepository] 오프라인 메시지 조회 실패: " << err.what() << endl;
+        LOG_ERROR("[MessageRepository] 오프라인 메시지 조회 실패: {}", err.what());
     }
 
     return result;
@@ -584,7 +572,7 @@ bool MessageRepository::DeleteMessage(const string& convId, int64 msgSeq) {
         return true;
     }
     catch (const mysqlx::Error& err) {
-        cerr << "[MessageRepository] 메시지 삭제 실패: " << err.what() << endl;
+        LOG_ERROR("[MessageRepository] 메시지 삭제 실패: {}", err.what());
         return false;
     }
 }
@@ -599,11 +587,11 @@ bool MessageRepository::SoftDeleteMessage(const string& convId, int64 msgSeq, co
         // 본인 메시지인지 확인
         string checkSender = GetMessageSenderId(convId, msgSeq);
         if (checkSender.empty()) {
-            cerr << "[MessageRepository] SoftDelete: 메시지를 찾을 수 없음 (conv=" << convId << ", seq=" << msgSeq << ")" << endl;
+            LOG_ERROR("[MessageRepository] SoftDelete: 메시지를 찾을 수 없음 (conv={}, seq={})", convId, msgSeq);
             return false;
         }
         if (checkSender != senderId) {
-            cerr << "[MessageRepository] SoftDelete: 본인 메시지가 아님 (sender=" << senderId << ", actual=" << checkSender << ")" << endl;
+            LOG_ERROR("[MessageRepository] SoftDelete: 본인 메시지가 아님 (sender={}, actual={})", senderId, checkSender);
             return false;
         }
 
@@ -611,11 +599,11 @@ bool MessageRepository::SoftDeleteMessage(const string& convId, int64 msgSeq, co
             .bind(convId, msgSeq)
             .execute();
 
-        cout << "[MessageRepository] SoftDelete 완료: conv=" << convId << " seq=" << msgSeq << endl;
+        LOG_INFO("[MessageRepository] SoftDelete 완료: conv={} seq={}", convId, msgSeq);
         return true;
     }
     catch (const mysqlx::Error& err) {
-        cerr << "[MessageRepository] SoftDelete 실패: " << err.what() << endl;
+        LOG_ERROR("[MessageRepository] SoftDelete 실패: {}", err.what());
         return false;
     }
 }
@@ -630,11 +618,11 @@ bool MessageRepository::EditMessage(const string& convId, int64 msgSeq, const st
         // 본인 메시지인지 확인
         string checkSender = GetMessageSenderId(convId, msgSeq);
         if (checkSender.empty()) {
-            cerr << "[MessageRepository] EditMessage: 메시지를 찾을 수 없음" << endl;
+            LOG_ERROR("[MessageRepository] EditMessage: 메시지를 찾을 수 없음");
             return false;
         }
         if (checkSender != senderId) {
-            cerr << "[MessageRepository] EditMessage: 본인 메시지가 아님" << endl;
+            LOG_ERROR("[MessageRepository] EditMessage: 본인 메시지가 아님");
             return false;
         }
 
@@ -642,11 +630,11 @@ bool MessageRepository::EditMessage(const string& convId, int64 msgSeq, const st
             .bind(newText, editedAt, convId, msgSeq)
             .execute();
 
-        cout << "[MessageRepository] EditMessage 완료: conv=" << convId << " seq=" << msgSeq << endl;
+        LOG_INFO("[MessageRepository] EditMessage 완료: conv={} seq={}", convId, msgSeq);
         return true;
     }
     catch (const mysqlx::Error& err) {
-        cerr << "[MessageRepository] EditMessage 실패: " << err.what() << endl;
+        LOG_ERROR("[MessageRepository] EditMessage 실패: {}", err.what());
         return false;
     }
 }
@@ -676,7 +664,7 @@ MessageRepository::ReplyInfo MessageRepository::GetMessageBySeq(const string& co
         }
     }
     catch (const mysqlx::Error& err) {
-        cerr << "[MessageRepository] GetMessageBySeq 실패: " << err.what() << endl;
+        LOG_ERROR("[MessageRepository] GetMessageBySeq 실패: {}", err.what());
     }
     return info;
 }
@@ -698,7 +686,7 @@ string MessageRepository::GetMessageSenderId(const string& convId, int64 msgSeq)
         }
     }
     catch (const mysqlx::Error& err) {
-        cerr << "[MessageRepository] GetMessageSenderId 실패: " << err.what() << endl;
+        LOG_ERROR("[MessageRepository] GetMessageSenderId 실패: {}", err.what());
     }
     return "";
 }
@@ -734,7 +722,7 @@ int64 MessageRepository::GetLastReadSeq(const string& userId, const string& conv
         
         return 0;  // 기본값 (읽지 않음)
     } catch (const mysqlx::Error& err) {
-        cerr << "[MessageRepository] 읽음 상태 조회 실패: " << err.what() << endl;
+        LOG_ERROR("[MessageRepository] 읽음 상태 조회 실패: {}", err.what());
         return 0;
     }
 }
@@ -752,7 +740,7 @@ bool MessageRepository::UpdateReadStatus(const string& userId, const string& con
         return true;
 
     } catch (const mysqlx::Error& err) {
-        cerr << "[MessageRepository] 읽음 상태 업데이트 실패: " << err.what() << endl;
+        LOG_ERROR("[MessageRepository] 읽음 상태 업데이트 실패: {}", err.what());
         return false;
     }
 }
@@ -777,7 +765,7 @@ int MessageRepository::GetUnreadCount(const string& userId, const string& convId
         return 0;
     }
     catch (const mysqlx::Error& err) {
-        cerr << "[MessageRepository] 안 읽은 메세지 카운트 실패: " << err.what() << endl;
+        LOG_ERROR("[MessageRepository] 안 읽은 메세지 카운트 실패: {}", err.what());
         return 0;
     }
 }
@@ -807,7 +795,7 @@ int MessageRepository::GetMsgUnreadCount(const string& convId, int64 msgSeq)
         return unread > 0 ? unread : 0;
     }
     catch (const mysqlx::Error& err) {
-        cerr << "[MessageRepository] GetMsgUnreadCount 실패: " << err.what() << endl;
+        LOG_ERROR("[MessageRepository] GetMsgUnreadCount 실패: {}", err.what());
         return 0;
     }
 }
@@ -859,17 +847,13 @@ static string TimestampToDateTimeString(int64 timestamp) {
 
 
 // ============================================
-// 메시지를 메모장에 즉시 추가 (간단한 방식)
+// 메시지 아카이브 (spdlog 대화방별 daily rotation)
 // ============================================
 
 bool MessageRepository::AppendMessageToLog(const string& convId, const string& senderId, const Protocol::S_Chat& sChat)
 {
-    // 파일 잠금을 위한 전역 뮤텍스 (convId별로 잠금)
-    static mutex archiveMutex;
-    lock_guard<mutex> lock(archiveMutex);
-
     try {
-        string messageText = "";
+        string messageText;
 
         if (sChat.has_payload()) {
             const auto& payload = sChat.payload();
@@ -888,89 +872,35 @@ bool MessageRepository::AppendMessageToLog(const string& convId, const string& s
             else if (payload.has_system()) {
                 messageText = "[시스템] " + payload.system().message();
             }
+            else if (payload.has_audio()) {
+                messageText = "[음성]";
+            }
             else {
                 messageText = "UNKNOWN";
             }
         }
 
+        // 감사 로그 (날짜별 통합)
+        int msgType = 0;
+        if (sChat.has_payload()) {
+            const auto& pl = sChat.payload();
+            if (pl.has_text()) msgType = 1;
+            else if (pl.has_image()) msgType = 2;
+            else if (pl.has_file()) msgType = 3;
+            else if (pl.has_video()) msgType = 4;
+            else if (pl.has_system()) msgType = 5;
+            else if (pl.has_audio()) msgType = 6;
+        }
+        AUDIT_LOG("[MSG] conv={} sender={} type={} seq={} msg={}", convId, senderId, msgType, sChat.msg_seq(), messageText);
 
-        int64 timestamp = sChat.ts_server();
-        string timestampStr = TimestampToDateTimeString(timestamp);
-
-
-        // convId를 파일명으로 사용 (특수 문자 제거)
+        // 대화방별 아카이브 (대화방별 daily rotation, 365일 보관)
         string safeConvId = convId;
         replace(safeConvId.begin(), safeConvId.end(), ':', '_');
         replace(safeConvId.begin(), safeConvId.end(), '/', '_');
         replace(safeConvId.begin(), safeConvId.end(), '\\', '_');
-        replace(safeConvId.begin(), safeConvId.end(), '<', '_');
-        replace(safeConvId.begin(), safeConvId.end(), '>', '_');
-        replace(safeConvId.begin(), safeConvId.end(), '"', '_');
-        replace(safeConvId.begin(), safeConvId.end(), '|', '_');
-        replace(safeConvId.begin(), safeConvId.end(), '?', '_');
-        replace(safeConvId.begin(), safeConvId.end(), '*', '_');
 
-
-        string logDir = "../database/msg_logs";
-#ifdef _WIN32
-        string parentDir = "../database";
-        _mkdir(parentDir.c_str());
-        _mkdir(logDir.c_str());
-#else
-        string cmd = "mkdir -p " + logDir;
-        system(cmd.c_str());
-#endif
-
-        string filename = logDir + "/" + safeConvId + ".txt";
-
-        // 파일 열기 및 잠금 (플랫폼별)
-#ifdef _WIN32
-        HANDLE hFile = CreateFileA(filename.c_str(),
-            GENERIC_WRITE,
-            FILE_SHARE_READ,
-            NULL,
-            OPEN_ALWAYS,
-            FILE_ATTRIBUTE_NORMAL,
-            NULL);
-        if (hFile == INVALID_HANDLE_VALUE) return false;
-
-        // UTF-8 BOM 체크
-        DWORD fileSize = GetFileSize(hFile, NULL);
-        if (fileSize == 0) {
-            const unsigned char utf8Bom[] = { 0xEF, 0xBB, 0xBF };
-            DWORD bytesWritten = 0;
-            WriteFile(hFile, utf8Bom, 3, &bytesWritten, NULL);
-        }
-
-        SetFilePointer(hFile, 0, NULL, FILE_END);
-
-        string line = "[" + timestampStr + "] " + senderId + " : " + messageText + "\n";
-
-        DWORD bytesWritten = 0;
-        WriteFile(hFile, line.c_str(), static_cast<DWORD>(line.length()), &bytesWritten, NULL);
-        CloseHandle(hFile);
-#else
-        int fd = open(filename.c_str(), O_WRONLY | O_CREAT | O_APPEND, 0644);
-        if (fd == -1) return false;
-
-        if (flock(fd, LOCK_EX) != 0) {
-            close(fd);
-            return false;
-        }
-
-        FILE* filePtr = fdopen(fd, "a");
-        if (!filePtr) {
-            flock(fd, LOCK_UN);
-            close(fd);
-            return false;
-        }
-
-        string line = "[" + timestampStr + "] " + senderId + " : " + messageText + "\n";
-        fwrite(line.c_str(), 1, line.length(), filePtr);
-
-        fflush(filePtr);
-        fclose(filePtr);
-#endif
+        auto convLogger = Logger::GetConvLogger(safeConvId);
+        convLogger->info("{} : {}", senderId, messageText);
 
         return true;
     }
@@ -1011,7 +941,7 @@ bool MessageRepository::ToggleReaction(const string& convId, int64 msgSeq,
         }
         return true;
     } catch (const std::exception& e) {
-        cerr << "[MessageRepository] ToggleReaction 실패: " << e.what() << endl;
+        LOG_ERROR("[MessageRepository] ToggleReaction 실패: {}", e.what());
         return false;
     }
 }
@@ -1045,7 +975,7 @@ vector<MessageRepository::ReactionInfo> MessageRepository::GetAllReactionsForUse
             result.push_back(ri);
         }
     } catch (const std::exception& e) {
-        cerr << "[MessageRepository] GetAllReactionsForUser 실패: " << e.what() << endl;
+        LOG_ERROR("[MessageRepository] GetAllReactionsForUser 실패: {}", e.what());
     }
     return result;
 }
@@ -1073,7 +1003,7 @@ bool MessageRepository::SetAnnouncement(const string& convId, int64 msgSeq, cons
 
         return true;
     } catch (const std::exception& e) {
-        cerr << "[MessageRepository] SetAnnouncement 실패: " << e.what() << endl;
+        LOG_ERROR("[MessageRepository] SetAnnouncement 실패: {}", e.what());
         return false;
     }
 }
@@ -1086,7 +1016,7 @@ bool MessageRepository::ClearAnnouncement(const string& convId)
         session.sql("DELETE FROM announcements WHERE conv_id = ?").bind(convId).execute();
         return true;
     } catch (const std::exception& e) {
-        cerr << "[MessageRepository] ClearAnnouncement 실패: " << e.what() << endl;
+        LOG_ERROR("[MessageRepository] ClearAnnouncement 실패: {}", e.what());
         return false;
     }
 }
@@ -1112,7 +1042,7 @@ MessageRepository::AnnouncementInfo MessageRepository::GetAnnouncement(const str
             info.found      = true;
         }
     } catch (const std::exception& e) {
-        cerr << "[MessageRepository] GetAnnouncement 실패: " << e.what() << endl;
+        LOG_ERROR("[MessageRepository] GetAnnouncement 실패: {}", e.what());
     }
     return info;
 }
@@ -1145,7 +1075,7 @@ vector<MessageRepository::AnnouncementInfo> MessageRepository::GetAnnouncementsF
             result.push_back(info);
         }
     } catch (const std::exception& e) {
-        cerr << "[MessageRepository] GetAnnouncementsForUser 실패: " << e.what() << endl;
+        LOG_ERROR("[MessageRepository] GetAnnouncementsForUser 실패: {}", e.what());
     }
     return result;
 }

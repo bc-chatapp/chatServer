@@ -39,7 +39,9 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 		(envelope.payload_case() == Protocol::Envelope::kCLogin) ||
 		(envelope.payload_case() == Protocol::Envelope::kCCheckId) ||
 		(envelope.payload_case() == Protocol::Envelope::kCCheckEmail) ||
-		(envelope.payload_case() == Protocol::Envelope::kCHeartbeat);
+		(envelope.payload_case() == Protocol::Envelope::kCHeartbeat) ||
+		(envelope.payload_case() == Protocol::Envelope::kCSocialLogin) ||
+		(envelope.payload_case() == Protocol::Envelope::kCCompleteSocialSignup);
 
 	auto serverSession = static_pointer_cast<ServerSession>(session);
 	if (!passAuth) {
@@ -89,6 +91,12 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 		break;
 	case Protocol::Envelope::kCLogout:
 		Dispatch_C_Logout(session, envelope.request_id(), envelope.c_logout());
+		break;
+	case Protocol::Envelope::kCSocialLogin:
+		Dispatch_C_SocialLogin(session, envelope.request_id(), envelope.c_social_login());
+		break;
+	case Protocol::Envelope::kCCompleteSocialSignup:
+		Dispatch_C_CompleteSocialSignup(session, envelope.request_id(), envelope.c_complete_social_signup());
 		break;
 	case Protocol::Envelope::kCGetMyDevices:
 		Dispatch_C_GetMyDevices(session, envelope.request_id(), envelope.c_get_my_devices());
@@ -211,6 +219,15 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 		break;
 	case Protocol::Envelope::kCSetAnnouncement:
 		Dispatch_C_SetAnnouncement(session, envelope.request_id(), envelope.c_set_announcement());
+		break;
+	case Protocol::Envelope::kCCreateBallDrop:
+		Dispatch_C_CreateBallDrop(session, envelope.request_id(), envelope.c_create_ball_drop());
+		break;
+	case Protocol::Envelope::kCCreatePhotoSlide:
+		Dispatch_C_CreatePhotoSlide(session, envelope.request_id(), envelope.c_create_photo_slide());
+		break;
+	case Protocol::Envelope::kCRefreshInviteCode:
+		Dispatch_C_RefreshInviteCode(session, envelope.request_id(), envelope.c_refresh_invite_code());
 		break;
 
 		/* 친구 관련 */
@@ -365,7 +382,7 @@ void PacketDispatcher::DispatchError(sessionPtr& session, uint64 reqId, ErrorCod
 
 void PacketDispatcher::PushOfflineData(sessionPtr& session, uint64 reqId, const string& userId, int64_t since_ts)
 {
-	cout << "[PacketDispatcher] PushOfflineData: userId = " << userId << endl;
+	LOG_INFO("[PacketDispatcher] PushOfflineData: userId = {}", userId);
 
 	int totalMessages = 0;
 	const int INIT_LIMIT = 50;
@@ -447,7 +464,7 @@ void PacketDispatcher::PushOfflineData(sessionPtr& session, uint64 reqId, const 
 	*env.mutable_s_message_batch() = pkt_batch;
 
 	SendEnvelope(session, env);
-	cout << "[PacketDispatcher] PushOfflineData 완료: Messages = " << totalMessages << "개" << endl;
+	LOG_INFO("[PacketDispatcher] PushOfflineData 완료: Messages = {}개", totalMessages);
 
 	// 오프라인 중 누락된 이모지 반응 동기화
 	auto reactions = MessageRepository::GetAllReactionsForUser(userId);
@@ -466,7 +483,7 @@ void PacketDispatcher::PushOfflineData(sessionPtr& session, uint64 reqId, const 
 		SendEnvelope(session, env_r);
 	}
 	if (!reactions.empty()) {
-		cout << "[PacketDispatcher] 이모지 반응 동기화: " << reactions.size() << "개" << endl;
+		LOG_INFO("[PacketDispatcher] 이모지 반응 동기화: {}개", reactions.size());
 	}
 
 	// 공지 동기화 — 유저가 참여하는 모든 대화의 공지
@@ -486,7 +503,7 @@ void PacketDispatcher::PushOfflineData(sessionPtr& session, uint64 reqId, const 
 		SendEnvelope(session, env_a);
 	}
 	if (!announcements.empty()) {
-		cout << "[PacketDispatcher] 공지 동기화: " << announcements.size() << "개" << endl;
+		LOG_INFO("[PacketDispatcher] 공지 동기화: {}개", announcements.size());
 	}
 
 }
@@ -621,7 +638,7 @@ bool PacketDispatcher::Dispatch_C_Chat(sessionPtr& session, uint64 reqId, const 
 	if (pkt.has_payload() && pkt.payload().has_text()) {
 		msgText = pkt.payload().text().message();
 	}
-	cout << "[Server] C_Chat conv=" << pkt.conv_id() << " msg=\"" << msgText << "\"" << endl;
+	LOG_INFO("[Server] C_Chat conv={} msg=\"{}\"", pkt.conv_id(), msgText);
 
 
 	if (type == ConvType::Direct) {
@@ -650,7 +667,7 @@ bool PacketDispatcher::Dispatch_C_Ack(sessionPtr& session, uint64 reqId, const P
 	ConvType type = ParseConvId(pkt.conv_id(), targetId);
 
 	if (type == ConvType::Error || targetId.empty()) {
-		cout << "[Dispatcher] Ack 포맷 에러: " << pkt.conv_id() << endl;
+		LOG_INFO("[Dispatcher] Ack 포맷 에러: {}", pkt.conv_id());
 		DispatchError(session, reqId, ERR_INVALID_ACK);
 		return false;
 	}
@@ -793,6 +810,23 @@ bool PacketDispatcher::Dispatch_C_JoinGroup(sessionPtr& session, uint64 reqId, c
 	}
 
 	return GGroupService->JoinGroup(session, reqId, pkt.group_code());
+}
+
+bool PacketDispatcher::Dispatch_C_RefreshInviteCode(sessionPtr& session, uint64 reqId, const Protocol::C_RefreshInviteCode& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED, "인증이 필요합니다.");
+		return false;
+	}
+
+	if (pkt.group_id().empty()) {
+		DispatchError(session, reqId, ERR_INVALID_PACKET, "그룹 ID가 필요합니다.");
+		return false;
+	}
+
+	return GGroupService->RefreshInviteCode(session, reqId, pkt.group_id());
 }
 
 bool PacketDispatcher::Dispatch_C_LeaveGroup(sessionPtr& session, uint64 reqId, const Protocol::C_LeaveGroup& pkt)
@@ -967,6 +1001,18 @@ bool PacketDispatcher::Dispatch_C_Logout(sessionPtr& session, uint64 reqId, cons
 }
 
 
+bool PacketDispatcher::Dispatch_C_SocialLogin(sessionPtr& session, uint64 reqId, const Protocol::C_SocialLogin& pkt)
+{
+	return GAuthService->SocialLogin(session, reqId, pkt.provider(), pkt.id_token());
+}
+
+
+bool PacketDispatcher::Dispatch_C_CompleteSocialSignup(sessionPtr& session, uint64 reqId, const Protocol::C_CompleteSocialSignup& pkt)
+{
+	return GAuthService->CompleteSocialSignup(session, reqId, pkt.provider(), pkt.id_token(), pkt.user_id(), pkt.name());
+}
+
+
 /*---------------------------------
 	Device Management Handler
 -----------------------------------*/
@@ -1114,7 +1160,7 @@ bool PacketDispatcher::Dispatch_C_GetSubscription(sessionPtr& session, uint64 re
 		return true;
 	}
 	catch (const exception& e) {
-		cerr << "[PacketDispatcher] GetSubscription 실패: " << e.what() << endl;
+		LOG_ERROR("[PacketDispatcher] GetSubscription 실패: {}", e.what());
 		DispatchError(session, reqId, ERR_SERVER_INTERNAL, "구독 정보 조회 실패");
 		return false;
 	}
@@ -1234,5 +1280,29 @@ bool PacketDispatcher::Dispatch_C_SetAnnouncement(sessionPtr& session, uint64 re
     }
 
     return GChatService->HandleSetAnnouncement(session, reqId, pkt);
+}
+
+bool PacketDispatcher::Dispatch_C_CreateBallDrop(sessionPtr& session, uint64 reqId, const Protocol::C_CreateBallDrop& pkt)
+{
+    auto serverSession = static_pointer_cast<ServerSession>(session);
+    const string userId = serverSession->GetUserId();
+    if (userId.empty()) {
+        DispatchError(session, reqId, ERR_UNAUTHORIZED);
+        return false;
+    }
+
+    return GChatService->HandleCreateBallDrop(session, reqId, pkt);
+}
+
+bool PacketDispatcher::Dispatch_C_CreatePhotoSlide(sessionPtr& session, uint64 reqId, const Protocol::C_CreatePhotoSlide& pkt)
+{
+    auto serverSession = static_pointer_cast<ServerSession>(session);
+    const string userId = serverSession->GetUserId();
+    if (userId.empty()) {
+        DispatchError(session, reqId, ERR_UNAUTHORIZED);
+        return false;
+    }
+
+    return GChatService->HandleCreatePhotoSlide(session, reqId, pkt);
 }
 

@@ -29,7 +29,7 @@ CloudStorageGCS::CloudStorageGCS(const string& projectId, const string& bucketNa
 bool CloudStorageGCS::Initialize() 
 {
     try {
-        cout << "[CloudStorageGCS] Init: projectId=" << _projectId << ", bucketName=" << _bucketName << endl;
+        LOG_INFO("[CloudStorageGCS] Init: projectId={}, bucketName={}", _projectId, _bucketName);
 
         if (_bucketName.empty()) {
             HandleErr("Initialize", "bucket is empty");
@@ -55,7 +55,7 @@ bool CloudStorageGCS::Initialize()
 
         /* bucket check */
 
-        cout << "[CloudStorageGCS] Initailize (REST API)" << endl;
+        LOG_INFO("[CloudStorageGCS] Initailize (REST API)");
         return true;
     }
     catch (const exception& e) {
@@ -121,7 +121,7 @@ string CloudStorageGCS::GenerateUploadUrl(const string& fileId, const string& pa
         // 서명(signature)이 이제 Hex 문자열이므로 URL 인코딩이나 Base64 처리가 필요 없습니다.
         string signedUrl = "https://storage.googleapis.com/" + objectPath + "?" + canonicalQueryString + "&X-Goog-Signature=" + signature;
 
-        cout << "[CloudStorageGCS] Upload URL generated." << endl;
+        LOG_INFO("[CloudStorageGCS] Upload URL generated.");
         return signedUrl;
     }
     catch (const exception& e) {
@@ -140,7 +140,7 @@ string CloudStorageGCS::GenerateDownloadUrl(const string& path, int64 expiresInS
 
         string publicUrl = "https://storage.googleapis.com/" + objectPath;
 
-        cout << "[CloudStorageGCS] Public Download URL generated: " << publicUrl << endl;
+        LOG_INFO("[CloudStorageGCS] Public Download URL generated: {}", publicUrl);
 
         return publicUrl;
     }
@@ -180,7 +180,7 @@ bool CloudStorageGCS::UploadFile(const string& path, const vector<uint8>& data, 
         }
 
         if (res->status == 200 || res->status == 201) {
-            cout << "[CloudStorageGCS] File uploaded: " << path << endl;
+            LOG_INFO("[CloudStorageGCS] File uploaded: {}", path);
             return true;
         }
         else {
@@ -218,11 +218,11 @@ bool CloudStorageGCS::RemoveFile(const string& gcsPath)
         }
 
         if (res->status == 204 || res->status == 200) {
-            cout << "[CloudStorageGCS] File deleted: " << gcsPath << endl;
+            LOG_INFO("[CloudStorageGCS] File deleted: {}", gcsPath);
             return true;
         }
         else if (res->status == 404) {
-            cout << "[CloudStorageGCS] File not found: " << gcsPath << endl;
+            LOG_INFO("[CloudStorageGCS] File not found: {}", gcsPath);
             return false;
         }
         else {
@@ -314,7 +314,7 @@ bool CloudStorageGCS::LoadServiceAccountJson(const string& filePath)
             _privateKeyId = j["private_key_id"].get<string>();
         }
         else {
-            cout << "[CloudStorageGCS] Warning: private_key_id not found" << endl;
+            LOG_INFO("[CloudStorageGCS] Warning: private_key_id not found");
         }
 
         // 필수 필드 검증
@@ -323,7 +323,7 @@ bool CloudStorageGCS::LoadServiceAccountJson(const string& filePath)
             return false;
         }
 
-        cout << "[CloudStorageGCS] Service account loaded: " << _serviceAccountEmail << endl;
+        LOG_INFO("[CloudStorageGCS] Service account loaded: {}", _serviceAccountEmail);
         return true;
     } 
     catch (const json::parse_error& e) {
@@ -372,7 +372,7 @@ bool CloudStorageGCS::RefreshAccessToken()
             }
             _tokenExpiresTime = Nowts() + (expiresIn * 1000);  // 밀리초 단위
 
-            cout << "[CloudStorageGCS] Access token obtained, expires in " << expiresIn << " seconds" << endl;
+            LOG_INFO("[CloudStorageGCS] Access token obtained, expires in {} seconds", expiresIn);
             return true;
         }
         else {

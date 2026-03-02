@@ -46,11 +46,11 @@ private:
     string SignStringHex(const string& data);
 
     inline void HandleErr(const string& err) {
-        cerr << "[CloudStorageGCS] " << err << " Failed " << endl;
+        LOG_ERROR("[CloudStorageGCS] {} Failed ", err);
     }
 
     inline void HandleErr(const string& err, const string& msg) {
-        cerr << "[CloudStorageGCS] " << err << " Failed: " << msg << endl;
+        LOG_ERROR("[CloudStorageGCS] {} Failed: {}", err, msg);
     }
 
 private:

@@ -3,6 +3,7 @@
 #include "ServerSession.h"
 #include "Cloud/CloudStorage.h"
 #include "PacketDispatcher.h"
+#include "../CoreGlobal.h"
 #include "../DB/UserRepository.h"
 #include "../DB/GroupRepository.h"
 #include "../DB/FileRepository.h"
@@ -50,25 +51,46 @@ bool FileService::HandleUploadFileRequest(sessionPtr& session, uint64 reqId, con
         auto serverSession = static_pointer_cast<ServerSession>(session);
         string userId = serverSession->GetUserId();
 
-        // ─── 파일 크기 체크 (용량 쿼터와 무관한 단순 크기 제한) ───
-        // 정책: 사진/동영상/파일 메시지는 구독 상태와 무관하게 항상 전송 가능.
-        //       클라우드 저장 용량 관리(ERR_STORAGE_EXCEEDED)는 추후 구독 기능에서 처리.
-        if (pkt.upload_type() == Protocol::C_UploadFile_UploadType_DIRECT_CHAT ||
-            pkt.upload_type() == Protocol::C_UploadFile_UploadType_GROUP_CHAT) {
+        // ─── 공통: 파일 크기 제한 (CoreGlobal 상수 fallback) ───
+        int64 maxFileSize = DEFAULT_MAX_FILE_SIZE;
+        {
+            UserRepository::StorageInfo storageInfo;
+            if (UserRepository::GetStorageInfo(userId, storageInfo) && storageInfo.maxFileSize > 0) {
+                maxFileSize = storageInfo.maxFileSize;
+            }
+        }
+
+        if (pkt.size() > maxFileSize) {
+            HandleErr(session, reqId, ERR_FILE_TOO_LARGE, "파일 크기가 제한을 초과했습니다.");
+            return false;
+        }
+
+        // ─── 개인 채팅 파일: 누적 용량 체크 ───
+        if (pkt.upload_type() == Protocol::C_UploadFile_UploadType_DIRECT_CHAT) {
             UserRepository::StorageInfo storageInfo;
             if (UserRepository::GetStorageInfo(userId, storageInfo)) {
-                if (pkt.size() > storageInfo.maxFileSize) {
-                    HandleErr(session, reqId, ERR_FILE_TOO_LARGE, "파일 크기가 제한을 초과했습니다.");
+                int64 capacity = storageInfo.storageCapacity > 0 ? storageInfo.storageCapacity : DEFAULT_PERSONAL_STORAGE;
+                if (storageInfo.storageUsage + pkt.size() > capacity) {
+                    HandleErr(session, reqId, ERR_STORAGE_EXCEEDED, "저장 용량이 부족합니다.");
                     return false;
                 }
             }
         }
 
-        // 그룹 업로드 시 target_id 필수 검증
+        // ─── 그룹 채팅 파일: 그룹 누적 용량 체크 ───
         if (pkt.upload_type() == Protocol::C_UploadFile_UploadType_GROUP_CHAT) {
             if (pkt.target_id().empty()) {
                 HandleErr(session, reqId, ERR_INVALID_ARGUMENT, "Group ID (target_id) is required.");
                 return false;
+            }
+
+            cGroupInfo groupInfo;
+            if (GroupRepository::GetGroupInfoById(pkt.target_id(), groupInfo)) {
+                int64 groupLimit = groupInfo.storageLimit > 0 ? groupInfo.storageLimit : DEFAULT_GROUP_STORAGE;
+                if (groupInfo.storageUsage + pkt.size() > groupLimit) {
+                    HandleErr(session, reqId, ERR_STORAGE_EXCEEDED, "그룹 저장 용량이 부족합니다.");
+                    return false;
+                }
             }
         }
 
@@ -158,22 +180,14 @@ bool FileService::HandleUploadFileRequest(sessionPtr& session, uint64 reqId, con
 
         int64 urlExpiresAt = Nowts() + (expiresTime * 1000);
 
-        // ─── 파일 보관 만료 정책 결정 ───
-        // 채팅용 파일만 보관 정책 적용 (프로필/배경 이미지는 영구 보관)
-        int64 fileRetentionExpiresAt = 0; // 0 = 영구 보관 (NULL)
-        bool isChatFile = (pkt.upload_type() == Protocol::C_UploadFile_UploadType_DIRECT_CHAT ||
-                           pkt.upload_type() == Protocol::C_UploadFile_UploadType_GROUP_CHAT);
-
-        if (isChatFile) {
-            UserRepository::StorageInfo storageInfo;
-            if (UserRepository::GetStorageInfo(userId, storageInfo)) {
-                if (storageInfo.subGrade <= 0) {
-                    // 무료 플랜: 7일 후 삭제
-                    const int64 FREE_RETENTION_MS = 7LL * 24 * 3600 * 1000;
-                    fileRetentionExpiresAt = Nowts() + FREE_RETENTION_MS;
-                    cout << "[FileService] 무료 플랜: 파일 보관 7일 설정 userId=" << userId << endl;
-                }
-                // else: 구독 중 → 영구 (fileRetentionExpiresAt = 0)
+        // ─── 파일 보관 정책 ───
+        // 이메일 미인증 유저: 7일 후 만료 / 인증 유저: 영구 보관
+        int64 fileRetentionExpiresAt = 0; // 0 = 영구 보관
+        if (pkt.upload_type() == Protocol::C_UploadFile_UploadType_DIRECT_CHAT ||
+            pkt.upload_type() == Protocol::C_UploadFile_UploadType_GROUP_CHAT) {
+            cUserInfo userInfo;
+            if (UserRepository::GetUser(userId, userInfo) && !userInfo.isEmailVerified) {
+                fileRetentionExpiresAt = Nowts() + (7LL * 24 * 60 * 60 * 1000); // 7일
             }
         }
 
@@ -208,8 +222,7 @@ bool FileService::HandleUploadFileRequest(sessionPtr& session, uint64 reqId, con
         pkt_s_upload.set_file_retention_expires_at(fileRetentionExpiresAt);
 
         PushEnvelope(session, reqId, pkt_s_upload);
-        cout << "[FileService] Upload URL generated: fileId=" << fileId << ", path=" << path
-             << ", userId=" << userId << ", retentionExpires=" << fileRetentionExpiresAt << endl;
+        LOG_INFO("[FileService] Upload URL generated: fileId={}, path={}, userId={}, retentionExpires={}", fileId, path, userId, fileRetentionExpiresAt);
 
         return true;
     }
@@ -255,6 +268,6 @@ void FileService::PushEnvelope(sessionPtr& session, uint64 reqId, const Protocol
 
 void FileService::HandleErr(sessionPtr& session, uint64 reqId, ErrorCode errorCode, const string& errMessage)
 {
-    cerr << "[FileService] Error: " << errMessage << " (code: " << static_cast<int>(errorCode) << ")" << endl;
+    LOG_ERROR("[FileService] Error: {} (code: {})", errMessage, static_cast<int>(errorCode));
     PacketDispatcher::DispatchError(session, reqId, errorCode, errMessage);
 }
