@@ -94,6 +94,14 @@ bool PaymentService::HandleVerifyPurchase(sessionPtr& session, uint64 reqId,
     const string& transactionId = pkt.transaction_id();
     const string& purchaseToken = pkt.purchase_token();
 
+    // 입력값 길이/형식 검증
+    if (platform.length() > 10 || productId.length() > 200 ||
+        transactionId.length() > 500 || purchaseToken.length() > 5000) {
+        PacketDispatcher::DispatchError(session, reqId, Protocol::ERR_PAYMENT_FAILED,
+                                         "잘못된 결제 정보입니다.");
+        return false;
+    }
+
     LOG_INFO("[PaymentService] VerifyPurchase: user={} platform={} product={} txn={}", userId, platform, productId, transactionId);
 
     int planId = 0;

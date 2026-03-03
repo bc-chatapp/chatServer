@@ -17,6 +17,7 @@
 
 #include "bcrypt/bcrypt_lib.h"
 #include "curl/curl.h"
+#include "json.hpp"
 
 
 using namespace Protocol;
@@ -222,7 +223,8 @@ bool AuthService::TriggerEmailVerification(const string& userId, const string& e
     if (!curl) return false;
 
     string url = "http://localhost:8080/api/internal/v1/auth/send-verification";
-    string jsonPayload = "{\"userId\":\"" + userId + "\", \"email\":\"" + email + "\"}";
+    nlohmann::json payload = {{"userId", userId}, {"email", email}};
+    string jsonPayload = payload.dump();
 
     struct curl_slist* headers = nullptr;
     headers = curl_slist_append(headers, "Content-Type: application/json");
@@ -408,7 +410,8 @@ bool AuthService::HandleReqEmailVerify(sessionPtr& session, uint64 reqId, const 
     }
 
     string url = "http://localhost:8080/api/internal/v1/auth/send-verification";
-    string jsonPayload = "{\"userId\":\"" + userId + "\", \"email\":\"" + email + "\"}";
+    nlohmann::json payload = {{"userId", userId}, {"email", email}};
+    string jsonPayload = payload.dump();
 
     struct curl_slist* headers = nullptr;
     headers = curl_slist_append(headers, "Content-Type: application/json");
@@ -454,7 +457,7 @@ bool AuthService::HandleConfirmEmailVerify(sessionPtr& session, uint64 reqId, co
     auto serverSession = static_pointer_cast<ServerSession>(session);
     string userId = serverSession->GetUserId();
 
-    LOG_INFO("[AuthService] 이메일 인증 확인: userId={}, email={}, code={}", userId, email, code);
+    LOG_INFO("[AuthService] 이메일 인증 확인: userId={}, email={}, code=****", userId, email);
 
     // Java 서버에 인증 코드 확인 요청
     CURL* curl = curl_easy_init();
@@ -464,7 +467,8 @@ bool AuthService::HandleConfirmEmailVerify(sessionPtr& session, uint64 reqId, co
     }
 
     string url = "http://localhost:8080/api/internal/v1/auth/verify-code";
-    string jsonPayload = "{\"userId\":\"" + userId + "\", \"email\":\"" + email + "\", \"code\":\"" + code + "\"}";
+    nlohmann::json payload = {{"userId", userId}, {"email", email}, {"code", code}};
+    string jsonPayload = payload.dump();
 
     struct curl_slist* headers = nullptr;
     headers = curl_slist_append(headers, "Content-Type: application/json");
@@ -785,7 +789,8 @@ static OAuthVerifyResult VerifyOAuthToken(const string& provider, const string& 
     if (!curl) return result;
 
     string url = "http://localhost:8080/api/internal/v1/auth/verify-oauth";
-    string jsonPayload = "{\"provider\":\"" + provider + "\",\"idToken\":\"" + idToken + "\"}";
+    nlohmann::json payload = {{"provider", provider}, {"idToken", idToken}};
+    string jsonPayload = payload.dump();
 
     struct curl_slist* headers = nullptr;
     headers = curl_slist_append(headers, "Content-Type: application/json");
@@ -810,23 +815,18 @@ static OAuthVerifyResult VerifyOAuthToken(const string& provider, const string& 
         return result;
     }
 
-    // 간단한 JSON 파싱 (success, email, name, providerId, profileImageUrl)
-    auto findJsonValue = [&response](const string& key) -> string {
-        string searchKey = "\"" + key + "\":\"";
-        size_t pos = response.find(searchKey);
-        if (pos == string::npos) return "";
-        pos += searchKey.length();
-        size_t end = response.find("\"", pos);
-        if (end == string::npos) return "";
-        return response.substr(pos, end - pos);
-    };
-
-    if (response.find("\"success\":true") != string::npos) {
-        result.success = true;
-        result.email = findJsonValue("email");
-        result.name = findJsonValue("name");
-        result.providerId = findJsonValue("providerId");
-        result.profileImageUrl = findJsonValue("profileImageUrl");
+    // JSON 파싱 (nlohmann::json)
+    try {
+        auto json = nlohmann::json::parse(response);
+        if (json.contains("success") && json["success"].is_boolean() && json["success"].get<bool>()) {
+            result.success = true;
+            result.email = json.value("email", string(""));
+            result.name = json.value("name", string(""));
+            result.providerId = json.value("providerId", string(""));
+            result.profileImageUrl = json.value("profileImageUrl", string(""));
+        }
+    } catch (const std::exception& e) {
+        LOG_ERROR("[AuthService] OAuth JSON 파싱 실패: {}", e.what());
     }
 
     return result;

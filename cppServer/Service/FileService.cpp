@@ -101,6 +101,24 @@ bool FileService::HandleUploadFileRequest(sessionPtr& session, uint64 reqId, con
         if (dotPos != string::npos)
             extension = pkt.filename().substr(dotPos);
 
+        // 위험한 확장자 차단 (실행파일, 스크립트 등)
+        {
+            string extLower = extension;
+            for (auto& c : extLower) c = tolower(c);
+            static const vector<string> blockedExts = {
+                ".exe", ".bat", ".cmd", ".com", ".msi", ".scr", ".pif",
+                ".sh", ".bash", ".csh", ".ps1", ".vbs", ".js", ".wsf",
+                ".dll", ".sys", ".drv", ".app", ".dmg", ".pkg",
+                ".php", ".jsp", ".asp", ".aspx", ".cgi", ".py", ".rb", ".pl"
+            };
+            for (const auto& blocked : blockedExts) {
+                if (extLower == blocked) {
+                    HandleErr(session, reqId, ERR_INVALID_ARGUMENT, "허용되지 않는 파일 형식입니다.");
+                    return false;
+                }
+            }
+        }
+
         string ts = to_string(Nowts());
         string path;
         string thumbPath;
@@ -240,11 +258,10 @@ string FileService::GenerateFileId(const string& filename)
 {
     int64 timestamp = Nowts();
 
-    // [check] static -> thread_local로 변경 (멀티스레드 안전)
     static const char alphanum[] = "0123456789abcdefghijklmnopqrstuvwxyz";
-    static random_device rd;
-    static mt19937 gen(rd());
-    static uniform_int_distribution<> dis(0, sizeof(alphanum) - 2);
+    thread_local random_device rd;
+    thread_local mt19937 gen(rd());
+    thread_local uniform_int_distribution<> dis(0, sizeof(alphanum) - 2);
 
     string randomStr;
     for (int i = 0; i < 6; ++i) {

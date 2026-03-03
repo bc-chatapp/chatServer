@@ -13,6 +13,7 @@
 
 #include "../CoreGlobal.h"
 #include <random>
+#include "json.hpp"
 
 using namespace Protocol;
 
@@ -35,23 +36,38 @@ bool ChatService::SendDirect(sessionPtr& senderSession, uint64 reqId, const stri
     const string convId = MessageRepository::CreateConversationId(senderId, receiverId);
     MessageRepository::CreateOrGetConversation(convId, "direct", senderId, receiverId);
 
+    // GCS 경로 검증 (path traversal 방지)
+    string gcsPath = pkt.gcs_path();
+    if (!gcsPath.empty()) {
+        if (gcsPath.find("..") != string::npos || gcsPath.find("//") != string::npos ||
+            gcsPath.length() > 512) {
+            gcsPath = "";
+        }
+    }
+
     int64 fileSize = 0;
     string fileType;
     int64 fileRetentionExpiresAt = 0;
     auto pkt_s_chat = Build_S_Chat(convId, senderId, fileSize, fileType, fileRetentionExpiresAt, pkt);
-    // mentionedUserIds → JSON 배열 문자열
+    // mentionedUserIds → JSON 배열 문자열 (최대 50명, userId 100자 제한)
     string mentionJson;
-    if (pkt.mentioned_user_ids_size() > 0) {
+    int mentionCount = min(pkt.mentioned_user_ids_size(), 50);
+    if (mentionCount > 0) {
         mentionJson = "[";
-        for (int i = 0; i < pkt.mentioned_user_ids_size(); ++i) {
-            if (i > 0) mentionJson += ",";
-            mentionJson += "\"" + pkt.mentioned_user_ids(i) + "\"";
+        bool first = true;
+        for (int i = 0; i < mentionCount; ++i) {
+            const auto& uid = pkt.mentioned_user_ids(i);
+            if (uid.length() > 100) continue;
+            if (!first) mentionJson += ",";
+            nlohmann::json uidJson = uid;
+            mentionJson += uidJson.dump();
+            first = false;
         }
         mentionJson += "]";
     }
 
     int64 msgSeq = MessageRepository::SaveMessage(convId, senderId, pkt_s_chat,
-                                                   pkt.gcs_path(), fileRetentionExpiresAt, mentionJson);
+                                                   gcsPath, fileRetentionExpiresAt, mentionJson);
 
     // server_msg_id를 실제 msg_seq로 설정
     if (msgSeq >= 0) {
@@ -138,6 +154,15 @@ bool ChatService::SendGroup(sessionPtr& senderSession, uint64 reqId, const strin
     const string convId = "group:" + groupId;
     MessageRepository::CreateOrGetConversation(convId, "group");
 
+    // GCS 경로 검증 (path traversal 방지)
+    string gcsPath = pkt.gcs_path();
+    if (!gcsPath.empty()) {
+        if (gcsPath.find("..") != string::npos || gcsPath.find("//") != string::npos ||
+            gcsPath.length() > 512) {
+            gcsPath = "";
+        }
+    }
+
     int64 fileSize = 0;
     string fileType;
     int64 fileRetentionExpiresAt = 0;
@@ -146,19 +171,26 @@ bool ChatService::SendGroup(sessionPtr& senderSession, uint64 reqId, const strin
     /* To Group (멤버 목록 먼저 조회 — unread count 계산에도 활용) */
     auto members = GroupRepository::GetGroupMembers(groupId);
 
-    // mentionedUserIds → JSON 배열 문자열
+    // mentionedUserIds → JSON 배열 문자열 (최대 50명, userId 100자 제한)
     string mentionJsonGroup;
-    if (pkt.mentioned_user_ids_size() > 0) {
+    int mentionCountGroup = min(pkt.mentioned_user_ids_size(), 50);
+    if (mentionCountGroup > 0) {
         mentionJsonGroup = "[";
-        for (int i = 0; i < pkt.mentioned_user_ids_size(); ++i) {
-            if (i > 0) mentionJsonGroup += ",";
-            mentionJsonGroup += "\"" + pkt.mentioned_user_ids(i) + "\"";
+        bool first = true;
+        for (int i = 0; i < mentionCountGroup; ++i) {
+            const auto& uid = pkt.mentioned_user_ids(i);
+            if (uid.length() > 100) continue;
+            if (!first) mentionJsonGroup += ",";
+            // JSON 이스케이프: nlohmann::json으로 안전하게 직렬화
+            nlohmann::json uidJson = uid;
+            mentionJsonGroup += uidJson.dump();
+            first = false;
         }
         mentionJsonGroup += "]";
     }
 
     int64 msgSeq = MessageRepository::SaveMessage(convId, senderId, pkt_s_chat,
-                                                   pkt.gcs_path(), fileRetentionExpiresAt, mentionJsonGroup);
+                                                   gcsPath, fileRetentionExpiresAt, mentionJsonGroup);
     if (msgSeq >= 0) {
         pkt_s_chat.set_msg_seq(msgSeq);
 

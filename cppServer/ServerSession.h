@@ -25,6 +25,19 @@ public:
 	bool HasPushedOfflineData() const { return _hasPushedOfflineData; }
 	void SetHasPushedOfflineData(bool value) { _hasPushedOfflineData = value; }
 
+	// Rate Limiting (세션별 패킷 속도 제한)
+	bool CheckRateLimit() {
+		int64 now = Nowts();
+		if (now - _rateLimitWindowStart > 1000) {
+			// 1초 윈도우 리셋
+			_rateLimitWindowStart = now;
+			_rateLimitCount = 1;
+			return true;
+		}
+		_rateLimitCount++;
+		return _rateLimitCount <= 50; // 초당 최대 50패킷
+	}
+
 protected:
 	virtual void OnConnected() override;
 	virtual void OnDisconnected() override;
@@ -38,5 +51,9 @@ private:
 	bool _hasPushedOfflineData = false;
 
 	int64 _lastActiveTime = 0;
+
+	// Rate Limiting
+	int64 _rateLimitWindowStart = 0;
+	int32 _rateLimitCount = 0;
 };
 

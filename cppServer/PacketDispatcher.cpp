@@ -66,6 +66,12 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 		}
 	}
 
+	// Rate Limiting (세션당 초당 50패킷)
+	if (!serverSession->CheckRateLimit()) {
+		LOG_WARN("[PacketDispatcher] Rate limit exceeded: userId={}", serverSession->GetUserId());
+		return;
+	}
+
 	// HeartBeat 저장
 	serverSession->SetLastActiveTime();
 
