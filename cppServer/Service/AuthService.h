@@ -4,6 +4,7 @@
 #include "../protocol.pb.h"
 
 #include "UserManager.h"
+#include "../DB/UserRepository.h"
 
 using sessionPtr = shared_ptr<Session>;
 
@@ -44,7 +45,14 @@ public:
 	// 로그아웃
 	bool HandleLogout(sessionPtr& session, uint64 reqId, const string& fcmToken, const string& deviceId);
 
+	// 소셜 로그인
+	bool SocialLogin(sessionPtr& session, uint64 reqId, const string& provider, const string& idToken);
+	bool CompleteSocialSignup(sessionPtr& session, uint64 reqId, const string& provider,
+	                          const string& idToken, const string& userId, const string& name);
+
 private:
+	// 기존 유저 로그인 공통 로직
+	bool LoginExistingUser(sessionPtr& session, uint64 reqId, cUserInfo& userInfo);
 	UserManager& _userManager;
 	
 	// 비밀번호 해싱 (간단한 해시, 추후 bcrypt로 개선 가능)

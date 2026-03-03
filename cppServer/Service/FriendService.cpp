@@ -20,7 +20,7 @@ bool FriendService::SearchUser(sessionPtr& session, uint64 reqId, const string& 
 	const string userId = serverSession->GetUserId();
 	if (userId.empty()) return false;
 
-	cout << "[FriendService] 검색 요청: " << searchUserId << endl;
+	LOG_INFO("[FriendService] 검색 요청: {}", searchUserId);
 
 	cUserInfo userInfo;
 	bool found = UserRepository::GetUser(searchUserId, userInfo);
@@ -81,10 +81,7 @@ bool FriendService::FetchFriendData(sessionPtr& session, uint64 reqId)
 		*req = FriendRepository::ToProtocolFriendRequest(s, false);
 	}
 
-	cout << "[FetchFriendData] User: " << userId
-		<< " | Friends: " << friends.size()
-		<< " | Recv: " << received.size()
-		<< " | Sent: " << sent.size() << endl;
+	LOG_INFO("[FetchFriendData] User: {} | Friends: {} | Recv: {} | Sent: {}", userId, friends.size(), received.size(), sent.size());
 
 	// 응답 전송
 	Protocol::Envelope env;
@@ -206,7 +203,7 @@ void FriendService::PushFriendEvent(const string& targetUserId, Protocol::S_Frie
 
 
 	Protocol::S_FriendPush pkt;
-	pkt.set_type(type);
+	pkt.set_push_type(type);
 	if (info) {
 		*pkt.mutable_user_info() = *info;
 	}
@@ -229,7 +226,7 @@ void FriendService::PushFriendEvent(const string& targetUserId, Protocol::S_Frie
 
 void FriendService::HandleErr(sessionPtr& session, uint64 reqId, ErrorCode errorCode, const string& errMessage)
 {
-	cerr << "[FriendService] Error: " << errMessage << " (code: " << static_cast<int>(errorCode) << ")" << endl;
+	LOG_ERROR("[FriendService] Error: {} (code: {})", errMessage, static_cast<int>(errorCode));
 	PacketDispatcher::DispatchError(session, reqId, errorCode, errMessage);
 }
 

@@ -32,10 +32,7 @@ bool NotificationService::RegisterFcmToken(sessionPtr& session, uint64 reqId, co
         return false;
     }
 
-    cout << "[NotificationService] FCM 토큰 등록 요청: userId=" << userId
-         << ", platform=" << platform
-         << ", device=" << deviceName
-         << ", token=" << fcmToken.substr(0, 30) << "..." << endl;
+    LOG_INFO("[NotificationService] FCM 토큰 등록 요청: userId={}, platform={}, device={}, token={}...", userId, platform, deviceName, fcmToken.substr(0, 30));
 
     // DB에 토큰 저장
     bool success = FcmTokenRepository::UpsertFcmToken(userId, fcmToken, platform, deviceId, deviceName, appVersion);
@@ -46,11 +43,11 @@ bool NotificationService::RegisterFcmToken(sessionPtr& session, uint64 reqId, co
 
     if (success) {
         response.set_message("FCM token registered successfully");
-        cout << "[NotificationService] FCM 토큰 등록 성공: " << userId << endl;
+        LOG_INFO("[NotificationService] FCM 토큰 등록 성공: {}", userId);
     }
     else {
         response.set_message("Failed to register FCM token");
-        cerr << "[NotificationService] FCM 토큰 등록 실패: " << userId << endl;
+        LOG_ERROR("[NotificationService] FCM 토큰 등록 실패: {}", userId);
     }
 
     // Envelope로 감싸서 전송
@@ -80,7 +77,7 @@ bool NotificationService::UnregisterFcmToken(sessionPtr& session, uint64 reqId, 
         return false;
     }
 
-    cout << "[NotificationService] FCM 토큰 삭제 요청: userId=" << userId << endl;
+    LOG_INFO("[NotificationService] FCM 토큰 삭제 요청: userId={}", userId);
 
     bool success = FcmTokenRepository::DeleteToken(userId, fcmToken);
 
@@ -98,7 +95,7 @@ bool NotificationService::GetMyDevices(sessionPtr& session, uint64 reqId, const 
         return false;
     }
 
-    cout << "[NotificationService] 기기 목록 조회: userId=" << userId << endl;
+    LOG_INFO("[NotificationService] 기기 목록 조회: userId={}", userId);
 
     // 사용자의 모든 기기 조회
     auto tokens = FcmTokenRepository::GetUserTokens(userId);
@@ -123,7 +120,7 @@ bool NotificationService::GetMyDevices(sessionPtr& session, uint64 reqId, const 
 
     PacketDispatcher::SendEnvelope(session, env);
 
-    cout << "[NotificationService] 기기 목록 응답: " << tokens.size() << "개" << endl;
+    LOG_INFO("[NotificationService] 기기 목록 응답: {}개", tokens.size());
     return true;
 }
 
@@ -143,7 +140,7 @@ bool NotificationService::RemoveDevice(sessionPtr& session, uint64 reqId, const 
         return false;
     }
 
-    cout << "[NotificationService] 기기 삭제 요청: userId=" << userId << ", deviceId=" << deviceId << endl;
+    LOG_INFO("[NotificationService] 기기 삭제 요청: userId={}, deviceId={}", userId, deviceId);
 
     bool success = FcmTokenRepository::DeleteTokenByDeviceId(userId, deviceId);
 

@@ -14,12 +14,12 @@ struct cGroupInfo {
 
     string description;
     string groupImageUrl;
-    //string groupThumbUrl;
 
     int64 storageUsage = 0;
     int64 storageLimit = 0;
 
     int64 createdAt = 0;
+    int64 inviteCodeExpiresAt = 0;
 };
 
 struct cGroupMemberInfo {
@@ -44,10 +44,13 @@ public:
     static bool RemoveMember(const string& groupId, const string& userId);
     static bool SaveGroupAsset(const string& groupId, const string& userId, int64 msgSeq, int64 fileSize, const string& fileType);
     static bool UpdateGroupInfo(const string& groupId, const string& newName, const string& newImageUrl);
+    static bool RefreshInviteCode(const string& groupId, string& OUT newCode, int64& OUT expiresAt);
+    static bool DeleteGroup(const string& groupId);
 
     /* Query */
     static vector<cGroupInfo> GetUserGroups(const string& userId);
-    static bool GetGroupInfoById(const string& groupId, cGroupInfo& OUT Info);
+    static bool GetGroupInfoById(const string& groupId, cGroupInfo& OUT info);
+    static bool GetGroupInfoByCode(const string& groupCode, cGroupInfo& OUT info);
 
     static bool IsMember(const string& groupId, const string& userId);
     static string GetMemberRole(const string& groupId, const string& userId);

@@ -16,10 +16,12 @@ public:
 	bool CreateGroup(sessionPtr& session, uint64 reqId, Protocol::C_CreateGroup& pkt);
 	bool GetGroupList(sessionPtr& session, uint64 reqId);
 	bool JoinGroup(sessionPtr& session, uint64 reqId, const string& groupCode);
+	bool RefreshInviteCode(sessionPtr& session, uint64 reqId, const string& groupId);
 	bool LeaveGroup(sessionPtr& session, uint64 reqId, const string& groupId);
 
 	bool GetGroupInfo(sessionPtr& session, uint64 reqId, const string& groupId);
 	bool UpdateGroupInfo(sessionPtr& session, uint64 reqId, Protocol::C_EditGroup& pkt);
+	bool DeleteGroup(sessionPtr& session, uint64 reqId, const string& groupId);
 
 	bool InviteFriend(sessionPtr& session, const Protocol::C_InviteFriend& pkt);
 

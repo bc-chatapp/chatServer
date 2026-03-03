@@ -30,7 +30,7 @@ uint64 FriendRepository::ParseTimestamp(const mysqlx::Value& value)
 		}
 	}
 	catch (const mysqlx::Error& err) {
-		cerr << "[FriendRepository] Parse Err: " << err.what() << endl;
+		LOG_ERROR("[FriendRepository] Parse Err: {}", err.what());
 	}
 	return 0;
 }
@@ -54,7 +54,7 @@ bool FriendRepository::AddFriendRequest(const string& userId, const string& frie
 			.execute();
 
 		if (existing.count() > 0) {
-			cout << "[FriendRepository] 이미 존재하는 친구 요청: " << userId << " -> " << friendId << endl;
+			LOG_INFO("[FriendRepository] 이미 존재하는 친구 요청: {} -> {}", userId, friendId);
 			return false;
 		}
 
@@ -62,12 +62,12 @@ bool FriendRepository::AddFriendRequest(const string& userId, const string& frie
 		friends.insert("user_id", "friend_id", "status")
 			.values(friendId, userId, "pending").execute();
 
-		cout << "[FriendRepository] Add Friend Request: " << userId << " -> " << friendId << endl;
+		LOG_INFO("[FriendRepository] Add Friend Request: {} -> {}", userId, friendId);
 		return true;
 
 	}
 	catch (const mysqlx::Error& err) {
-		cerr << "[FriendRepository] Add Friend Request Failed : " << err.what() << endl;
+		LOG_ERROR("[FriendRepository] Add Friend Request Failed : {}", err.what());
 		return false;
 	}
 }
@@ -84,11 +84,11 @@ bool FriendRepository::CancelFriendRequest(const string& userId, const string& f
 			.bind("uid", userId)
 			.execute();
 
-		cout << "[FriendRepository] Cancel Friend Request: " << userId << " -> " << friendId << endl;
+		LOG_INFO("[FriendRepository] Cancel Friend Request: {} -> {}", userId, friendId);
 		return true;
 	}
 	catch (const mysqlx::Error& err) {
-		cerr << "[FriendRepository] Cancel Friend Request Failed: " << err.what() << endl;
+		LOG_ERROR("[FriendRepository] Cancel Friend Request Failed: {}", err.what());
 		return false;
 	}
 }
@@ -114,11 +114,11 @@ bool FriendRepository::AcceptFriendRequest(const string& userId, const string& r
 			.values(requesterId, userId, "accepted")
 			.execute();
 
-		cout << "[FriendRepository] Accept: " << userId << " <-> " << requesterId << endl;
+		LOG_INFO("[FriendRepository] Accept: {} <-> {}", userId, requesterId);
 		return true;
 	}
 	catch (const mysqlx::Error& err) {
-		cerr << "[FriendRepository] Accept Friend Request Failed: " << err.what() << endl;
+		LOG_ERROR("[FriendRepository] Accept Friend Request Failed: {}", err.what());
 		return false;
 	}
 }
@@ -136,11 +136,11 @@ bool FriendRepository::RejectFriendRequest(const string& userId, const string& r
 			.bind("rid", requesterId)
 			.execute();
 
-		cout << "[FriendRepository] 친구 요청 거절: " << userId << " <- " << requesterId << endl;
+		LOG_INFO("[FriendRepository] 친구 요청 거절: {} <- {}", userId, requesterId);
 		return true;
 	}
 	catch (const mysqlx::Error& err) {
-		cerr << "[FriendRepository] 친구 요청 거절 실패: " << err.what() << endl;
+		LOG_ERROR("[FriendRepository] 친구 요청 거절 실패: {}", err.what());
 		return false;
 	}
 }
@@ -158,11 +158,11 @@ bool FriendRepository::RemoveFriend(const string& userId, const string& friendId
 			.bind("fid", friendId)
 			.execute();
 
-		cout << "[FriendRepository] Remove Friend: " << userId << " <-> " << friendId << endl;
+		LOG_INFO("[FriendRepository] Remove Friend: {} <-> {}", userId, friendId);
 		return true;
 	}
 	catch (const mysqlx::Error& err) {
-		cerr << "[FriendRepository] Remove Friend Failed: " << err.what() << endl;
+		LOG_ERROR("[FriendRepository] Remove Friend Failed: {}", err.what());
 		return false;
 	}
 }
@@ -208,7 +208,7 @@ vector<cFriendInfo> FriendRepository::GetFriends(const string& userId)
 		return result;
 	}
 	catch (const mysqlx::Error& err) {
-		cerr << "[FriendRepository] Get Friends List Failed: " << err.what() << endl;
+		LOG_ERROR("[FriendRepository] Get Friends List Failed: {}", err.what());
 		return result;
 	}
 }
@@ -246,7 +246,7 @@ vector<FriendRequestInfo> FriendRepository::GetFriendRequests(const string& user
 		return result;
 	}
 	catch (const mysqlx::Error& err) {
-		cerr << "[FriendRepository] Get Friend Requests Failed: " << err.what() << endl;
+		LOG_ERROR("[FriendRepository] Get Friend Requests Failed: {}", err.what());
 		return result;
 	}
 }
@@ -289,7 +289,7 @@ vector<FriendRequestInfo> FriendRepository::GetSentFriendRequests(const string& 
 		return result;
 	}
 	catch (const mysqlx::Error& err) {
-		cerr << "[FriendRepository] 보낸 친구 요청 목록 조회 실패: " << err.what() << endl;
+		LOG_ERROR("[FriendRepository] 보낸 친구 요청 목록 조회 실패: {}", err.what());
 		return result;
 	}
 }
@@ -331,7 +331,7 @@ bool FriendRepository::MarkFriendRequestAsRead(const string& userId, const strin
 		return true;
 	}
 	catch (const mysqlx::Error& err) {
-		cerr << "[FriendRepository] 친구 요청 읽음 처리 실패: " << err.what() << endl;
+		LOG_ERROR("[FriendRepository] 친구 요청 읽음 처리 실패: {}", err.what());
 		return false;
 	}
 }
@@ -357,7 +357,7 @@ bool FriendRepository::IsFriend(const string& userId, const string& friendId)
 		return rows.count() > 0;
 	}
 	catch (const mysqlx::Error& err) {
-		cerr << "[FriendRepository] 친구 확인 실패: " << err.what() << endl;
+		LOG_ERROR("[FriendRepository] 친구 확인 실패: {}", err.what());
 		return false;
 	}
 }
@@ -377,7 +377,7 @@ bool FriendRepository::HasSentRequest(const string& userId, const string& reques
 		return rows.count() > 0;
 	}
 	catch (const mysqlx::Error& err) {
-		cerr << "[FriendRepository] 친구 요청 확인 실패: " << err.what() << endl;
+		LOG_ERROR("[FriendRepository] 친구 요청 확인 실패: {}", err.what());
 		return false;
 	}
 }

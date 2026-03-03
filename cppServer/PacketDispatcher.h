@@ -63,6 +63,9 @@ protected:
     static bool Dispatch_C_Chat(sessionPtr& session, uint64 reqId, const Protocol::C_Chat& pkt);
     static bool Dispatch_C_Ack(sessionPtr& session, uint64 reqId, const Protocol::C_Ack& pkt);
     static bool Dispatch_C_ReqHistory(sessionPtr& session, uint64 reqId, const Protocol::C_ReqHistory& pkt);
+    static bool Dispatch_C_DeleteMessage(sessionPtr& session, uint64 reqId, const Protocol::C_DeleteMessage& pkt);
+    static bool Dispatch_C_EditMessage(sessionPtr& session, uint64 reqId, const Protocol::C_EditMessage& pkt);
+    static bool Dispatch_C_ReadReceipt(sessionPtr& session, uint64 reqId, const Protocol::C_ReadReceipt& pkt);
 
     //static bool Dispatch_C_Heartbeat(sessionPtr& session, uint64 reqId, const Protocol::C_Heartbeat& pkt);
 
@@ -80,10 +83,12 @@ protected:
     static bool Dispatch_C_CreateGroup(sessionPtr& session, uint64 reqId, const Protocol::C_CreateGroup& pkt);
     static bool Dispatch_C_GroupList(sessionPtr& session, uint64 reqId, const Protocol::C_GroupList& pkt);
     static bool Dispatch_C_JoinGroup(sessionPtr& session, uint64 reqId, const Protocol::C_JoinGroup& pkt);
+    static bool Dispatch_C_RefreshInviteCode(sessionPtr& session, uint64 reqId, const Protocol::C_RefreshInviteCode& pkt);
     static bool Dispatch_C_LeaveGroup(sessionPtr& session, uint64 reqId, const Protocol::C_LeaveGroup& pkt);
     static bool Dispatch_C_GroupMemberList(sessionPtr& session, uint64 reqId, const Protocol::C_GroupMemberList& pkt);
     static bool Dispatch_C_GroupInfo(sessionPtr& session, uint64 reqId, const Protocol::C_GroupInfo& pkt);
     static bool Dispatch_C_EditGroup(sessionPtr& session, uint64 reqId, const Protocol::C_EditGroup& pkt);
+    static bool Dispatch_C_DeleteGroup(sessionPtr& session, uint64 reqId, const Protocol::C_DeleteGroup& pkt);
 
     // FCM Token Handler
     static bool Dispatch_C_RegisterFcmToken(sessionPtr& session, uint64 reqId, const Protocol::C_RegisterFcmToken& pkt);
@@ -102,9 +107,42 @@ protected:
     // Logout Handler (로그아웃)
     static bool Dispatch_C_Logout(sessionPtr& session, uint64 reqId, const Protocol::C_Logout& pkt);
 
+    // Social Login Handlers (소셜 로그인)
+    static bool Dispatch_C_SocialLogin(sessionPtr& session, uint64 reqId, const Protocol::C_SocialLogin& pkt);
+    static bool Dispatch_C_CompleteSocialSignup(sessionPtr& session, uint64 reqId, const Protocol::C_CompleteSocialSignup& pkt);
+
     // Device Management Handlers (기기 관리)
     static bool Dispatch_C_GetMyDevices(sessionPtr& session, uint64 reqId, const Protocol::C_GetMyDevices& pkt);
     static bool Dispatch_C_RemoveDevice(sessionPtr& session, uint64 reqId, const Protocol::C_RemoveDevice& pkt);
+
+    // Subscription Handler (구독 관리)
+    static bool Dispatch_C_GetSubscription(sessionPtr& session, uint64 reqId, const Protocol::C_GetSubscription& pkt);
+
+    // Payment Handler (결제 검증)
+    static bool Dispatch_C_VerifyPurchase(sessionPtr& session, uint64 reqId, const Protocol::C_VerifyPurchase& pkt);
+
+    // Block / Report Handlers (차단/신고)
+    static bool Dispatch_C_BlockUser     (sessionPtr& session, uint64 reqId, const Protocol::C_BlockUser&      pkt);
+    static bool Dispatch_C_UnblockUser   (sessionPtr& session, uint64 reqId, const Protocol::C_UnblockUser&    pkt);
+    static bool Dispatch_C_GetBlockedList(sessionPtr& session, uint64 reqId, const Protocol::C_GetBlockedList& pkt);
+    static bool Dispatch_C_ReportUser    (sessionPtr& session, uint64 reqId, const Protocol::C_ReportUser&     pkt);
+
+    // Reaction Handler (이모지 반응)
+    static bool Dispatch_C_AddReaction(sessionPtr& session, uint64 reqId, const Protocol::C_AddReaction& pkt);
+
+    // Poll Handlers (투표)
+    static bool Dispatch_C_CreatePoll(sessionPtr& session, uint64 reqId, const Protocol::C_CreatePoll& pkt);
+    static bool Dispatch_C_Vote(sessionPtr& session, uint64 reqId, const Protocol::C_Vote& pkt);
+    static bool Dispatch_C_ClosePoll(sessionPtr& session, uint64 reqId, const Protocol::C_ClosePoll& pkt);
+
+    // Announcement Handler (공지)
+    static bool Dispatch_C_SetAnnouncement(sessionPtr& session, uint64 reqId, const Protocol::C_SetAnnouncement& pkt);
+
+    // BallDrop Handler (숫자 뽑기)
+    static bool Dispatch_C_CreateBallDrop(sessionPtr& session, uint64 reqId, const Protocol::C_CreateBallDrop& pkt);
+
+    // PhotoSlide Handler (포토 슬라이드)
+    static bool Dispatch_C_CreatePhotoSlide(sessionPtr& session, uint64 reqId, const Protocol::C_CreatePhotoSlide& pkt);
 
 private:
 

@@ -9,6 +9,8 @@
 #include "Service/FileService.h"
 #include "Service/GroupService.h"
 #include "Service/NotificationService.h"
+#include "Service/PaymentService.h"
+#include "Service/BlockService.h"
 
 
 #include "DB/UserRepository.h"
@@ -16,6 +18,8 @@
 #include "DB/MessageRepository.h"
 #include "DB/GroupRepository.h"
 #include "DB/FcmTokenRepository.h"
+#include "DB/SubscriptionRepository.h"
+#include "DB/DBManager.h"
 
 
 using namespace Protocol;
@@ -31,11 +35,13 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 
 	/* Auth Token Check */
 	const bool passAuth =
-		(envelope.body_case() == Protocol::Envelope::kCSignup) ||
-		(envelope.body_case() == Protocol::Envelope::kCLogin) ||
-		(envelope.body_case() == Protocol::Envelope::kCCheckId) ||
-		(envelope.body_case() == Protocol::Envelope::kCCheckEmail) ||
-		(envelope.body_case() == Protocol::Envelope::kCHeartbeat);
+		(envelope.payload_case() == Protocol::Envelope::kCSignup) ||
+		(envelope.payload_case() == Protocol::Envelope::kCLogin) ||
+		(envelope.payload_case() == Protocol::Envelope::kCCheckId) ||
+		(envelope.payload_case() == Protocol::Envelope::kCCheckEmail) ||
+		(envelope.payload_case() == Protocol::Envelope::kCHeartbeat) ||
+		(envelope.payload_case() == Protocol::Envelope::kCSocialLogin) ||
+		(envelope.payload_case() == Protocol::Envelope::kCCompleteSocialSignup);
 
 	auto serverSession = static_pointer_cast<ServerSession>(session);
 	if (!passAuth) {
@@ -60,11 +66,17 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 		}
 	}
 
+	// Rate Limiting (세션당 초당 50패킷)
+	if (!serverSession->CheckRateLimit()) {
+		LOG_WARN("[PacketDispatcher] Rate limit exceeded: userId={}", serverSession->GetUserId());
+		return;
+	}
+
 	// HeartBeat 저장
 	serverSession->SetLastActiveTime();
 
 	/* Pkt */
-	switch (envelope.body_case())
+	switch (envelope.payload_case())
 	{
 		/* 회원가입 관련*/
 	case Protocol::Envelope::kCCheckId:
@@ -85,6 +97,12 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 		break;
 	case Protocol::Envelope::kCLogout:
 		Dispatch_C_Logout(session, envelope.request_id(), envelope.c_logout());
+		break;
+	case Protocol::Envelope::kCSocialLogin:
+		Dispatch_C_SocialLogin(session, envelope.request_id(), envelope.c_social_login());
+		break;
+	case Protocol::Envelope::kCCompleteSocialSignup:
+		Dispatch_C_CompleteSocialSignup(session, envelope.request_id(), envelope.c_complete_social_signup());
 		break;
 	case Protocol::Envelope::kCGetMyDevices:
 		Dispatch_C_GetMyDevices(session, envelope.request_id(), envelope.c_get_my_devices());
@@ -142,14 +160,82 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 		Dispatch_C_ReqHistory(session, envelope.request_id(), envelope.c_req_history());
 		break;
 
+	case Protocol::Envelope::kCDeleteMessage:
+		Dispatch_C_DeleteMessage(session, envelope.request_id(), envelope.c_delete_message());
+		break;
+
+	case Protocol::Envelope::kCEditMessage:
+		Dispatch_C_EditMessage(session, envelope.request_id(), envelope.c_edit_message());
+		break;
+
+	case Protocol::Envelope::kCReadReceipt:
+		Dispatch_C_ReadReceipt(session, envelope.request_id(), envelope.c_read_receipt());
+		break;
+
+	case Protocol::Envelope::kCGetSubscription:
+		Dispatch_C_GetSubscription(session, envelope.request_id(), envelope.c_get_subscription());
+		break;
+
+	case Protocol::Envelope::kCVerifyPurchase:
+		Dispatch_C_VerifyPurchase(session, envelope.request_id(), envelope.c_verify_purchase());
+		break;
+
+	case Protocol::Envelope::kCCancelSubscription:
+		if (GPaymentService) GPaymentService->HandleCancelSubscription(session, envelope.request_id());
+		break;
+
 	case Protocol::Envelope::kCUploadFile:
 		Dispatch_C_UploadFile(session, envelope.request_id(), envelope.c_upload_file());
 		break;
 
 	case Protocol::Envelope::kCHeartbeat:
+	{
+		Protocol::Envelope res;
+		res.set_request_id(envelope.request_id());
+		res.mutable_s_heartbeat();
+		SendEnvelope(session, res);
 		break;
+	}
 
 	
+		/* 차단 / 신고 */
+	case Protocol::Envelope::kCBlockUser:
+		Dispatch_C_BlockUser(session, envelope.request_id(), envelope.c_block_user());
+		break;
+	case Protocol::Envelope::kCUnblockUser:
+		Dispatch_C_UnblockUser(session, envelope.request_id(), envelope.c_unblock_user());
+		break;
+	case Protocol::Envelope::kCGetBlockedList:
+		Dispatch_C_GetBlockedList(session, envelope.request_id(), envelope.c_get_blocked_list());
+		break;
+	case Protocol::Envelope::kCReportUser:
+		Dispatch_C_ReportUser(session, envelope.request_id(), envelope.c_report_user());
+		break;
+	case Protocol::Envelope::kCAddReaction:
+		Dispatch_C_AddReaction(session, envelope.request_id(), envelope.c_add_reaction());
+		break;
+	case Protocol::Envelope::kCCreatePoll:
+		Dispatch_C_CreatePoll(session, envelope.request_id(), envelope.c_create_poll());
+		break;
+	case Protocol::Envelope::kCVote:
+		Dispatch_C_Vote(session, envelope.request_id(), envelope.c_vote());
+		break;
+	case Protocol::Envelope::kCClosePoll:
+		Dispatch_C_ClosePoll(session, envelope.request_id(), envelope.c_close_poll());
+		break;
+	case Protocol::Envelope::kCSetAnnouncement:
+		Dispatch_C_SetAnnouncement(session, envelope.request_id(), envelope.c_set_announcement());
+		break;
+	case Protocol::Envelope::kCCreateBallDrop:
+		Dispatch_C_CreateBallDrop(session, envelope.request_id(), envelope.c_create_ball_drop());
+		break;
+	case Protocol::Envelope::kCCreatePhotoSlide:
+		Dispatch_C_CreatePhotoSlide(session, envelope.request_id(), envelope.c_create_photo_slide());
+		break;
+	case Protocol::Envelope::kCRefreshInviteCode:
+		Dispatch_C_RefreshInviteCode(session, envelope.request_id(), envelope.c_refresh_invite_code());
+		break;
+
 		/* 친구 관련 */
 	case Protocol::Envelope::kCFriendAction:
 		Dispatch_C_FriendAction(session, envelope.request_id(), envelope.c_friend_action());
@@ -183,6 +269,9 @@ void PacketDispatcher::DispatchPacket(sessionPtr& session, Protocol::Envelope& e
 		break;
 	case Protocol::Envelope::kCEditGroup:
 		Dispatch_C_EditGroup(session, envelope.request_id(), envelope.c_edit_group());
+		break;
+	case Protocol::Envelope::kCDeleteGroup:
+		Dispatch_C_DeleteGroup(session, envelope.request_id(), envelope.c_delete_group());
 		break;
 
 	default:
@@ -299,7 +388,7 @@ void PacketDispatcher::DispatchError(sessionPtr& session, uint64 reqId, ErrorCod
 
 void PacketDispatcher::PushOfflineData(sessionPtr& session, uint64 reqId, const string& userId, int64_t since_ts)
 {
-	cout << "[PacketDispatcher] PushOfflineData: userId = " << userId << endl;
+	LOG_INFO("[PacketDispatcher] PushOfflineData: userId = {}", userId);
 
 	int totalMessages = 0;
 	const int INIT_LIMIT = 50;
@@ -320,11 +409,13 @@ void PacketDispatcher::PushOfflineData(sessionPtr& session, uint64 reqId, const 
 		}
 
 		int unreadCount = MessageRepository::GetUnreadCount(userId, convId);
+		int64 lastReadSeq = MessageRepository::GetLastReadSeq(userId, convId);
 
 		if (!messages.empty() || unreadCount > 0) {
 			auto* convBatch = pkt_batch.add_batches();
 			convBatch->set_conv_id(convId);
 			convBatch->set_unread_count(unreadCount);
+			convBatch->set_last_read_seq(lastReadSeq);
 
 			for (const auto& msgInfo : messages) {
 				auto* sChat = convBatch->add_messages();
@@ -347,17 +438,19 @@ void PacketDispatcher::PushOfflineData(sessionPtr& session, uint64 reqId, const 
 
 		vector<MessageInfo> messages;
 
-		if (since_ts > 0) 
+		if (since_ts > 0)
 			messages = MessageRepository::GetMessagesAfter(convId, since_ts, OFFLINE_LIMIT);
-		else 
+		else
 			messages = MessageRepository::GetRecentMessages(convId, INIT_LIMIT);
-		
+
 		int unreadCount = MessageRepository::GetUnreadCount(userId, convId);
+		int64 lastReadSeq = MessageRepository::GetLastReadSeq(userId, convId);
 
 		if (!messages.empty() || unreadCount > 0) {
 			auto* convBatch = pkt_batch.add_batches();
 			convBatch->set_conv_id(convId);
 			convBatch->set_unread_count(unreadCount);
+			convBatch->set_last_read_seq(lastReadSeq);
 
 			for (const auto& msgInfo : messages) {
 				auto* sChat = convBatch->add_messages();
@@ -377,7 +470,47 @@ void PacketDispatcher::PushOfflineData(sessionPtr& session, uint64 reqId, const 
 	*env.mutable_s_message_batch() = pkt_batch;
 
 	SendEnvelope(session, env);
-	cout << "[PacketDispatcher] PushOfflineData 완료: Messages = " << totalMessages << "개" << endl;
+	LOG_INFO("[PacketDispatcher] PushOfflineData 완료: Messages = {}개", totalMessages);
+
+	// 오프라인 중 누락된 이모지 반응 동기화
+	auto reactions = MessageRepository::GetAllReactionsForUser(userId);
+	for (const auto& ri : reactions) {
+		Protocol::S_AddReaction pkt_reaction;
+		pkt_reaction.set_conv_id(ri.convId);
+		pkt_reaction.set_msg_seq(ri.msgSeq);
+		pkt_reaction.set_user_id(ri.userId);
+		pkt_reaction.set_emoji(ri.emoji);
+		pkt_reaction.set_removed(false);
+
+		Protocol::Envelope env_r;
+		env_r.set_version(GProtoVersion);
+		env_r.set_request_id(0);
+		*env_r.mutable_s_add_reaction() = pkt_reaction;
+		SendEnvelope(session, env_r);
+	}
+	if (!reactions.empty()) {
+		LOG_INFO("[PacketDispatcher] 이모지 반응 동기화: {}개", reactions.size());
+	}
+
+	// 공지 동기화 — 유저가 참여하는 모든 대화의 공지
+	auto announcements = MessageRepository::GetAnnouncementsForUser(userId);
+	for (const auto& ann : announcements) {
+		Protocol::S_SetAnnouncement pkt_ann;
+		pkt_ann.set_conv_id(ann.convId);
+		pkt_ann.set_msg_seq(ann.msgSeq);
+		pkt_ann.set_text(ann.text);
+		pkt_ann.set_sender_name(ann.senderName);
+		pkt_ann.set_setter_id(ann.setterId);
+
+		Protocol::Envelope env_a;
+		env_a.set_version(GProtoVersion);
+		env_a.set_request_id(0);
+		*env_a.mutable_s_set_announcement() = pkt_ann;
+		SendEnvelope(session, env_a);
+	}
+	if (!announcements.empty()) {
+		LOG_INFO("[PacketDispatcher] 공지 동기화: {}개", announcements.size());
+	}
 
 }
 
@@ -511,7 +644,7 @@ bool PacketDispatcher::Dispatch_C_Chat(sessionPtr& session, uint64 reqId, const 
 	if (pkt.has_payload() && pkt.payload().has_text()) {
 		msgText = pkt.payload().text().message();
 	}
-	cout << "[Server] C_Chat conv=" << pkt.conv_id() << " msg=\"" << msgText << "\"" << endl;
+	LOG_INFO("[Server] C_Chat conv={} msg=\"{}\"", pkt.conv_id(), msgText);
 
 
 	if (type == ConvType::Direct) {
@@ -540,7 +673,7 @@ bool PacketDispatcher::Dispatch_C_Ack(sessionPtr& session, uint64 reqId, const P
 	ConvType type = ParseConvId(pkt.conv_id(), targetId);
 
 	if (type == ConvType::Error || targetId.empty()) {
-		cout << "[Dispatcher] Ack 포맷 에러: " << pkt.conv_id() << endl;
+		LOG_INFO("[Dispatcher] Ack 포맷 에러: {}", pkt.conv_id());
 		DispatchError(session, reqId, ERR_INVALID_ACK);
 		return false;
 	}
@@ -685,6 +818,23 @@ bool PacketDispatcher::Dispatch_C_JoinGroup(sessionPtr& session, uint64 reqId, c
 	return GGroupService->JoinGroup(session, reqId, pkt.group_code());
 }
 
+bool PacketDispatcher::Dispatch_C_RefreshInviteCode(sessionPtr& session, uint64 reqId, const Protocol::C_RefreshInviteCode& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED, "인증이 필요합니다.");
+		return false;
+	}
+
+	if (pkt.group_id().empty()) {
+		DispatchError(session, reqId, ERR_INVALID_PACKET, "그룹 ID가 필요합니다.");
+		return false;
+	}
+
+	return GGroupService->RefreshInviteCode(session, reqId, pkt.group_id());
+}
+
 bool PacketDispatcher::Dispatch_C_LeaveGroup(sessionPtr& session, uint64 reqId, const Protocol::C_LeaveGroup& pkt)
 {
 	auto serverSession = static_pointer_cast<ServerSession>(session);
@@ -733,6 +883,18 @@ bool PacketDispatcher::Dispatch_C_EditGroup(sessionPtr& session, uint64 reqId, c
 	}
 
 	return GGroupService->UpdateGroupInfo(session, reqId, const_cast<Protocol::C_EditGroup&>(pkt));
+}
+
+bool PacketDispatcher::Dispatch_C_DeleteGroup(sessionPtr& session, uint64 reqId, const Protocol::C_DeleteGroup& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED, "인증이 필요합니다.");
+		return false;
+	}
+
+	return GGroupService->DeleteGroup(session, reqId, pkt.group_id());
 }
 
 
@@ -845,6 +1007,18 @@ bool PacketDispatcher::Dispatch_C_Logout(sessionPtr& session, uint64 reqId, cons
 }
 
 
+bool PacketDispatcher::Dispatch_C_SocialLogin(sessionPtr& session, uint64 reqId, const Protocol::C_SocialLogin& pkt)
+{
+	return GAuthService->SocialLogin(session, reqId, pkt.provider(), pkt.id_token());
+}
+
+
+bool PacketDispatcher::Dispatch_C_CompleteSocialSignup(sessionPtr& session, uint64 reqId, const Protocol::C_CompleteSocialSignup& pkt)
+{
+	return GAuthService->CompleteSocialSignup(session, reqId, pkt.provider(), pkt.id_token(), pkt.user_id(), pkt.name());
+}
+
+
 /*---------------------------------
 	Device Management Handler
 -----------------------------------*/
@@ -874,5 +1048,267 @@ bool PacketDispatcher::Dispatch_C_RemoveDevice(sessionPtr& session, uint64 reqId
 	}
 
 	return GNotificationService->RemoveDevice(session, reqId, pkt.device_id());
+}
+
+
+/*---------------------------------
+	Message Delete/Edit Handler
+-----------------------------------*/
+
+bool PacketDispatcher::Dispatch_C_DeleteMessage(sessionPtr& session, uint64 reqId, const Protocol::C_DeleteMessage& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED);
+		return false;
+	}
+
+	return GChatService->HandleDeleteMessage(session, reqId, pkt);
+}
+
+bool PacketDispatcher::Dispatch_C_EditMessage(sessionPtr& session, uint64 reqId, const Protocol::C_EditMessage& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED);
+		return false;
+	}
+
+	return GChatService->HandleEditMessage(session, reqId, pkt);
+}
+
+bool PacketDispatcher::Dispatch_C_ReadReceipt(sessionPtr& session, uint64 reqId, const Protocol::C_ReadReceipt& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED);
+		return false;
+	}
+
+	return GChatService->HandleReadReceipt(session, reqId, pkt);
+}
+
+
+
+
+/*---------------------------------
+	Subscription Handler (구독 관리)
+-----------------------------------*/
+
+bool PacketDispatcher::Dispatch_C_GetSubscription(sessionPtr& session, uint64 reqId, const Protocol::C_GetSubscription& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED);
+		return false;
+	}
+
+	try {
+		// 1) 사용자 정보 조회
+		cUserInfo userInfo;
+		if (!UserRepository::GetUser(userId, userInfo)) {
+			DispatchError(session, reqId, ERR_USER_NOT_FOUND);
+			return false;
+		}
+
+		Protocol::S_GetSubscription response;
+		response.set_success(true);
+		response.set_current_grade(static_cast<int32>(userInfo.subGrade));
+		response.set_storage_capacity_bytes(userInfo.storageCapacity);
+		response.set_storage_usage_bytes(userInfo.storageUsage);
+
+		// 2) 현재 구독 정보 조회 (SubscriptionRepository)
+		cSubscriptionInfo subInfo;
+		if (SubscriptionRepository::GetActiveSubscription(userId, subInfo)) {
+			if (subInfo.expiresAt > 0) {
+				response.set_expires_at(subInfo.expiresAt);
+			}
+			response.set_auto_renew(subInfo.autoRenew);
+		}
+
+		// 3) 이용 가능한 플랜 목록 조회 (SubscriptionRepository)
+		auto plans = SubscriptionRepository::GetAvailablePlans("personal");
+		for (const auto& planInfo : plans) {
+			auto* plan = response.add_available_plans();
+			plan->set_plan_id(planInfo.planId);
+			plan->set_plan_type(planInfo.planType);
+			plan->set_name(planInfo.name);
+			plan->set_grade(planInfo.grade);
+			plan->set_storage_bytes(planInfo.storageBytes);
+			plan->set_max_file_size(planInfo.maxFileSize);
+			plan->set_monthly_price(planInfo.monthlyPrice);
+
+			for (const auto& feature : planInfo.features) {
+				plan->add_features(feature);
+			}
+
+			// 현재 플랜 이름 매칭
+			if (planInfo.grade == static_cast<int>(userInfo.subGrade)) {
+				response.set_current_plan_name(planInfo.name);
+			}
+		}
+
+		// 무료 플랜인 경우 기본 이름
+		if (response.current_plan_name().empty()) {
+			response.set_current_plan_name("무료");
+		}
+
+		Protocol::Envelope env;
+		env.set_version(GProtoVersion);
+		env.set_request_id(reqId);
+		*env.mutable_s_get_subscription() = response;
+		SendEnvelope(session, env);
+
+		return true;
+	}
+	catch (const exception& e) {
+		LOG_ERROR("[PacketDispatcher] GetSubscription 실패: {}", e.what());
+		DispatchError(session, reqId, ERR_SERVER_INTERNAL, "구독 정보 조회 실패");
+		return false;
+	}
+}
+
+
+/*---------------------------------
+	Payment Handler (결제 검증)
+-----------------------------------*/
+
+bool PacketDispatcher::Dispatch_C_VerifyPurchase(sessionPtr& session, uint64 reqId, const Protocol::C_VerifyPurchase& pkt)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) {
+		DispatchError(session, reqId, ERR_UNAUTHORIZED);
+		return false;
+	}
+
+	if (!GPaymentService) {
+		DispatchError(session, reqId, ERR_SERVER_INTERNAL, "결제 서비스가 초기화되지 않았습니다.");
+		return false;
+	}
+
+	return GPaymentService->HandleVerifyPurchase(session, reqId, pkt);
+}
+
+
+/*-----------------------------------
+    Block / Report (차단/신고)
+-----------------------------------*/
+
+bool PacketDispatcher::Dispatch_C_BlockUser(sessionPtr& session, uint64 reqId, const Protocol::C_BlockUser& pkt)
+{
+    if (!GBlockService) { DispatchError(session, reqId, ERR_SERVER_INTERNAL); return false; }
+    return GBlockService->HandleBlockUser(session, reqId, pkt);
+}
+
+bool PacketDispatcher::Dispatch_C_UnblockUser(sessionPtr& session, uint64 reqId, const Protocol::C_UnblockUser& pkt)
+{
+    if (!GBlockService) { DispatchError(session, reqId, ERR_SERVER_INTERNAL); return false; }
+    return GBlockService->HandleUnblockUser(session, reqId, pkt);
+}
+
+bool PacketDispatcher::Dispatch_C_GetBlockedList(sessionPtr& session, uint64 reqId, const Protocol::C_GetBlockedList& pkt)
+{
+    if (!GBlockService) { DispatchError(session, reqId, ERR_SERVER_INTERNAL); return false; }
+    return GBlockService->HandleGetBlockedList(session, reqId, pkt);
+}
+
+bool PacketDispatcher::Dispatch_C_ReportUser(sessionPtr& session, uint64 reqId, const Protocol::C_ReportUser& pkt)
+{
+    if (!GBlockService) { DispatchError(session, reqId, ERR_SERVER_INTERNAL); return false; }
+    return GBlockService->HandleReportUser(session, reqId, pkt);
+}
+
+
+/*---------------------------------
+    Reaction Handler (이모지 반응)
+-----------------------------------*/
+
+bool PacketDispatcher::Dispatch_C_AddReaction(sessionPtr& session, uint64 reqId, const Protocol::C_AddReaction& pkt)
+{
+    auto serverSession = static_pointer_cast<ServerSession>(session);
+    const string userId = serverSession->GetUserId();
+    if (userId.empty()) {
+        DispatchError(session, reqId, ERR_UNAUTHORIZED);
+        return false;
+    }
+
+    return GChatService->HandleAddReaction(session, reqId, pkt);
+}
+
+bool PacketDispatcher::Dispatch_C_CreatePoll(sessionPtr& session, uint64 reqId, const Protocol::C_CreatePoll& pkt)
+{
+    auto serverSession = static_pointer_cast<ServerSession>(session);
+    const string userId = serverSession->GetUserId();
+    if (userId.empty()) {
+        DispatchError(session, reqId, ERR_UNAUTHORIZED);
+        return false;
+    }
+
+    return GChatService->HandleCreatePoll(session, reqId, pkt);
+}
+
+bool PacketDispatcher::Dispatch_C_Vote(sessionPtr& session, uint64 reqId, const Protocol::C_Vote& pkt)
+{
+    auto serverSession = static_pointer_cast<ServerSession>(session);
+    const string userId = serverSession->GetUserId();
+    if (userId.empty()) {
+        DispatchError(session, reqId, ERR_UNAUTHORIZED);
+        return false;
+    }
+
+    return GChatService->HandleVote(session, reqId, pkt);
+}
+
+bool PacketDispatcher::Dispatch_C_ClosePoll(sessionPtr& session, uint64 reqId, const Protocol::C_ClosePoll& pkt)
+{
+    auto serverSession = static_pointer_cast<ServerSession>(session);
+    const string userId = serverSession->GetUserId();
+    if (userId.empty()) {
+        DispatchError(session, reqId, ERR_UNAUTHORIZED);
+        return false;
+    }
+
+    return GChatService->HandleClosePoll(session, reqId, pkt);
+}
+
+bool PacketDispatcher::Dispatch_C_SetAnnouncement(sessionPtr& session, uint64 reqId, const Protocol::C_SetAnnouncement& pkt)
+{
+    auto serverSession = static_pointer_cast<ServerSession>(session);
+    const string userId = serverSession->GetUserId();
+    if (userId.empty()) {
+        DispatchError(session, reqId, ERR_UNAUTHORIZED);
+        return false;
+    }
+
+    return GChatService->HandleSetAnnouncement(session, reqId, pkt);
+}
+
+bool PacketDispatcher::Dispatch_C_CreateBallDrop(sessionPtr& session, uint64 reqId, const Protocol::C_CreateBallDrop& pkt)
+{
+    auto serverSession = static_pointer_cast<ServerSession>(session);
+    const string userId = serverSession->GetUserId();
+    if (userId.empty()) {
+        DispatchError(session, reqId, ERR_UNAUTHORIZED);
+        return false;
+    }
+
+    return GChatService->HandleCreateBallDrop(session, reqId, pkt);
+}
+
+bool PacketDispatcher::Dispatch_C_CreatePhotoSlide(sessionPtr& session, uint64 reqId, const Protocol::C_CreatePhotoSlide& pkt)
+{
+    auto serverSession = static_pointer_cast<ServerSession>(session);
+    const string userId = serverSession->GetUserId();
+    if (userId.empty()) {
+        DispatchError(session, reqId, ERR_UNAUTHORIZED);
+        return false;
+    }
+
+    return GChatService->HandleCreatePhotoSlide(session, reqId, pkt);
 }
 

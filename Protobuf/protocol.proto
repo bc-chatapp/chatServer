@@ -1,189 +1,237 @@
 syntax = "proto3";
+
 package Protocol;
 
-
-
+/*=================================================
+    Envelope
+=================================================*/
 message Envelope {
-  uint32 version         = 1; // 버전
-  uint64 request_id      = 2; // 요청-응답 매칭(0이면 서버푸시)
-  string auth_token      = 3; // JWT 인증 토큰
+  uint32 version    = 1;
+  uint32 request_id = 2;
+  string auth_token = 3;
 
+  oneof payload {
 
+    // AUTH / LOGIN (10 ~ 29)
+    C_CheckId               c_check_id                = 10;
+    S_CheckId               s_check_id                = 11;
+    C_CheckEmail            c_check_email             = 12;
+    S_CheckEmail            s_check_email             = 13;
+    C_RequestEmailVerify    c_req_email_verify        = 14;
+    S_RequestEmailVerify    s_req_email_verify        = 15;
+    C_ConfirmEmailVerify    c_confirm_email_verify    = 16;
+    S_ConfirmEmailVerify    s_confirm_email_verify    = 17;
+    C_SignUp                c_signup                  = 18;
+    S_SignUp                s_signup                  = 19;
+    C_Login                 c_login                   = 20;
+    S_Login                 s_login                   = 21;
+    C_Logout                c_logout                  = 22;
+    S_Logout                s_logout                  = 23;
+    C_GetMyDevices          c_get_my_devices          = 24;
+    S_GetMyDevices          s_get_my_devices          = 25;
+    C_RemoveDevice          c_remove_device           = 26;
+    S_RemoveDevice          s_remove_device           = 27;
 
-  oneof body {
-      // ─── AUTH / LOGIN (10 ~ 29) ───
-      C_CheckId               c_check_id                = 10;
-      S_CheckId               s_check_id                = 11;
-      C_CheckEmail            c_check_email             = 12;
-      S_CheckEmail            s_check_email             = 13;
-      C_RequestEmailVerify    c_req_email_verify        = 14;
-      S_RequestEmailVerify    s_req_email_verify        = 15;
-      C_ConfirmEmailVerify    c_confirm_email_verify    = 16;
-      S_ConfirmEmailVerify    s_confirm_email_verify    = 17;
-      C_SignUp                c_signup                  = 18;
-      S_SignUp                s_signup                  = 19;
-      C_Login                 c_login                   = 20;
-      S_Login                 s_login                   = 21;
-      C_Logout                c_logout                  = 22;
-      S_Logout                s_logout                  = 23;
-      C_GetMyDevices          c_get_my_devices          = 24;
-      S_GetMyDevices          s_get_my_devices          = 25;
-      C_RemoveDevice          c_remove_device           = 26;
-      S_RemoveDevice          s_remove_device           = 27;
+    // MY INFO / SETTINGS (30 ~ 39)
+    C_FetchMyInfo           c_fetch_my_info           = 30;
+    S_FetchMyInfo           s_fetch_my_info           = 31;
+    C_EditMyInfo            c_edit_my_info            = 32;
+    S_EditMyInfo            s_edit_my_info            = 33;
+    C_RegisterFcmToken      c_register_fcm_token      = 34;
+    S_RegisterFcmToken      s_register_fcm_token      = 35;
+    C_ChangeEmail           c_change_email            = 36;
+    S_ChangeEmail           s_change_email            = 37;
+    C_ChangePassword        c_change_password         = 38;
+    S_ChangePassword        s_change_password         = 39;
 
-      // ─── MY INFO / SETTINGS (30 ~ 39) ───
-      C_FetchMyInfo           c_fetch_my_info           = 30;
-      S_FetchMyInfo           s_fetch_my_info           = 31;
-      C_EditMyInfo            c_edit_my_info            = 32;
-      S_EditMyInfo            s_edit_my_info            = 33;
-      C_RegisterFcmToken      c_register_fcm_token      = 34;
-      S_RegisterFcmToken      s_register_fcm_token      = 35;
-      C_ChangeEmail           c_change_email            = 36;
-      S_ChangeEmail           s_change_email            = 37;
-      C_ChangePassword        c_change_password         = 38;
-      S_ChangePassword        s_change_password         = 39;
+    // CHAT / DATA / FILE (40 ~ 59)
+    C_Chat                  c_chat                    = 40;
+    S_Chat                  s_chat                    = 41;
+    C_Ack                   c_ack                     = 42;
+    C_ReqHistory            c_req_history             = 43;
+    S_ReqHistory            s_req_history             = 44;
+    C_FetchOffline          c_fetch_offline           = 45;
+    S_MessageBatch          s_message_batch           = 46;
+    C_UploadFile            c_upload_file             = 47;
+    S_UploadFile            s_upload_file             = 48;
+    C_DeleteMessage         c_delete_message          = 49;
+    S_DeleteMessage         s_delete_message          = 50;
+    C_EditMessage           c_edit_message            = 51;
+    S_EditMessage           s_edit_message            = 52;
+    C_GetSubscription       c_get_subscription        = 53;
+    S_GetSubscription       s_get_subscription        = 54;
+    C_VerifyPurchase        c_verify_purchase         = 55;
+    S_VerifyPurchase        s_verify_purchase         = 56;
+    C_ReadReceipt           c_read_receipt            = 57;
+    S_ReadReceipt           s_read_receipt            = 58;
+    C_CancelSubscription    c_cancel_subscription     = 59;
+    S_CancelSubscription    s_cancel_subscription     = 103;
 
+    // FRIENDS (60 ~ 79)
+    C_SearchUser            c_search_user             = 60;
+    S_SearchUser            s_search_user             = 61;
+    C_FriendAction          c_friend_action           = 62;
+    S_FriendAction          s_friend_action           = 63;
+    C_FetchFriendData       c_fetch_friend_data       = 64;
+    S_FetchFriendData       s_fetch_friend_data       = 65;
+    S_FriendPush            s_friend_push             = 66;
 
+    // BLOCK / REPORT (67 ~ 74)
+    C_BlockUser             c_block_user              = 67;
+    S_BlockUser             s_block_user              = 68;
+    C_UnblockUser           c_unblock_user            = 69;
+    S_UnblockUser           s_unblock_user            = 70;
+    C_GetBlockedList        c_get_blocked_list        = 71;
+    S_GetBlockedList        s_get_blocked_list        = 72;
+    C_ReportUser            c_report_user             = 73;
+    S_ReportUser            s_report_user             = 74;
+    C_AddReaction           c_add_reaction            = 75;
+    C_CreatePoll            c_create_poll             = 76;
+    C_Vote                  c_vote                    = 77;
+    C_ClosePoll             c_close_poll              = 78;
+    C_SetAnnouncement       c_set_announcement        = 79;
+    S_AddReaction           s_add_reaction            = 104;
+    S_CreatePoll            s_create_poll             = 105;
+    S_Vote                  s_vote                    = 106;
+    S_ClosePoll             s_close_poll              = 107;
+    S_SetAnnouncement       s_set_announcement        = 108;
+    C_CreateBallDrop        c_create_ball_drop        = 109;
+    S_CreateBallDrop        s_create_ball_drop        = 110;
+    C_CreatePhotoSlide      c_create_photo_slide      = 111;
+    S_CreatePhotoSlide      s_create_photo_slide      = 112;
+    C_RefreshInviteCode     c_refresh_invite_code     = 113;
+    S_RefreshInviteCode     s_refresh_invite_code     = 114;
+    C_SocialLogin           c_social_login            = 115;
+    S_SocialLogin           s_social_login            = 116;
+    C_CompleteSocialSignup  c_complete_social_signup   = 117;
 
-      // ─── CHAT / DATA / FILE (40 ~ 59) ───
-      C_Chat                  c_chat                    = 40;
-      S_Chat                  s_chat                    = 41;
-      C_Ack                   c_ack                     = 42;
-      C_ReqHistory            c_req_history             = 43;
-      S_ReqHistory            s_req_history             = 44;
-      C_FetchOffline          c_fetch_offline           = 45;
-      S_MessageBatch          s_message_batch           = 46;
-      C_UploadFile            c_upload_file             = 47; 
-      S_UploadFile            s_upload_file             = 48;
+    // GROUPS (80 ~ 99)
+    C_CreateGroup           c_create_group            = 80;
+    S_CreateGroup           s_create_group            = 81;
+    C_GroupList             c_group_list              = 82;
+    S_GroupList             s_group_list              = 83;
+    C_JoinGroup             c_join_group              = 84;
+    S_JoinGroup             s_join_group              = 85;
+    C_InviteFriend          c_invite_friend           = 86;
+    S_InviteFriend          s_invite_friend           = 87;
+    C_LeaveGroup            c_leave_group             = 88;
+    S_LeaveGroup            s_leave_group             = 89;
+    C_GroupMemberList       c_group_member_list       = 90;
+    S_GroupMemberList       s_group_member_list       = 91;
+    C_GroupInfo             c_group_info              = 92;
+    S_GroupInfo             s_group_info              = 93;
+    C_EditGroup             c_edit_group              = 94;
+    S_EditGroup             s_edit_group              = 95;
+    C_Withdraw              c_withdraw                = 96;
+    S_Withdraw              s_withdraw                = 97;
+    C_DeleteGroup           c_delete_group            = 98;
+    S_DeleteGroup           s_delete_group            = 99;
 
-
-      // ─── FRIENDS (60 ~ 79) ───
-      C_SearchUser            c_search_user             = 60;
-      S_SearchUser            s_search_user             = 61;
-      C_FriendAction          c_friend_action           = 62;
-      S_FriendAction          s_friend_action           = 63;
-      C_FetchFriendData       c_fetch_friend_data       = 64;
-      S_FetchFriendData       s_fetch_friend_data       = 65;
-      S_FriendPush            s_friend_push             = 66;
-
-
-      // ─── GROUPS (80 ~ 99) ───
-      C_CreateGroup           c_create_group            = 80;
-      S_CreateGroup           s_create_group            = 81;
-      C_GroupList             c_group_list              = 82;
-      S_GroupList             s_group_list              = 83;
-      C_JoinGroup             c_join_group              = 84;
-      S_JoinGroup             s_join_group              = 85;
-      C_InviteFriend          c_invite_friend           = 86;
-      S_InviteFriend          s_invite_friend           = 87;
-      C_LeaveGroup            c_leave_group             = 88;
-      S_LeaveGroup            s_leave_group             = 89;
-      C_GroupMemberList       c_group_member_list       = 90;
-      S_GroupMemberList       s_group_member_list       = 91;
-      C_GroupInfo             c_group_info              = 92;
-      S_GroupInfo             s_group_info              = 93;
-      C_EditGroup             c_edit_group              = 94;
-      S_EditGroup             s_edit_group              = 95;
-      C_Withdraw              c_withdraw                = 96;
-      S_Withdraw              s_withdraw                = 97;
-
-      // ─── SYSTEM (100 ~ ) ───
-      S_Error                 s_error                   = 100;
-      C_Heartbeat             c_heartbeat               = 101;
-      S_Heartbeat             s_heartbeat               = 102;
+    // SYSTEM (100 ~ )
+    S_Error                 s_error                   = 100;
+    C_Heartbeat             c_heartbeat               = 101;
+    S_Heartbeat             s_heartbeat               = 102;
   }
 }
 
 
-
-
-// 통합 사용자 정보 (본인, 친구, 그룹원 공통 사용)
+// UserInfo
 message UserInfo {
     string user_id              = 1;
     string name                 = 2;
     string status_message       = 3;
     string profile_image_url    = 4;
     string background_image_url = 5;
-
-
     string email                = 6;
     string phone                = 7;
-    int64  sub_grade            = 8; // 구독 등급 (0: 일반, 1: 프로 등)
+    uint32 sub_grade            = 8;
     int64  storage_capacity_bytes = 9;
-    int64  storage_usage_bytes    = 10;
+    int64  storage_usage_bytes  = 10;
     int64  last_seen            = 11;
-    string status               = 12; // "online", "offline"
+    string status               = 12;
+    bool   is_email_verified    = 13;
+    string oauth_provider       = 14;
 }
 
+message DeviceInfo {
+    string device_id     = 1;
+    string device_name   = 2;
+    string platform      = 3;
+    int64  last_active   = 4;
+    int64  registered_at = 5;
+    string app_version   = 6;
+    bool   is_current    = 7;
+}
 
+/*-------------
+    AUTH
+---------------*/
 
-
-
-
-
-
-/*-----------------------------
-      회원가입 및 인증
------------------------------*/
-
-message C_CheckId { string user_id = 1; }
-message S_CheckId { bool is_available = 1; }
+message C_CheckId    { string user_id = 1; }
+message S_CheckId    { bool is_available = 1; }
 
 message C_CheckEmail { string email = 1; }
 message S_CheckEmail { bool is_available = 1; }
 
 message C_RequestEmailVerify { string email = 1; }
-message S_RequestEmailVerify { bool success = 1; string message = 2; }
+message S_RequestEmailVerify {
+    bool   success = 1;
+    string message = 2;
+}
 
-message C_ConfirmEmailVerify { string email = 1; string code = 2; }
+message C_ConfirmEmailVerify {
+    string email = 1;
+    string code  = 2;
+}
 message S_ConfirmEmailVerify { bool success = 1; }
 
 message C_SignUp {
-    string user_id = 1;        
-    string password = 2;       
-    string name = 3;           
-    string email = 4; 
+    string user_id  = 1;
+    string password = 2;
+    string name     = 3;
+    string email    = 4;
 }
-
 message S_SignUp {
-    bool success = 1;
+    bool   success = 1;
     string message = 2;
-    string user_id = 3;       
+    string user_id = 3;
 }
 
-
-
-/*-------------
-      로그인
----------------*/
-
-message C_Login { string user_id = 1; string password = 2; }
+message C_Login {
+    string user_id  = 1;
+    string password = 2;
+}
 message S_Login {
     bool     success    = 1;
     string   auth_token = 2;
-    UserInfo my_info    = 3; // 로그인 시 내 정보를 한꺼번에 동기화
+    UserInfo my_info    = 3;
 }
 
 message C_Logout {
-    string fcm_token = 1;   // 삭제할 FCM 토큰 (현재 기기)
-    string device_id = 2;   // 디바이스 ID (선택)
+    string fcm_token = 1;
+    string device_id = 2;
 }
-message S_Logout {
-    bool success = 1;
+message S_Logout { bool success = 1; }
+
+message C_GetMyDevices {}
+message S_GetMyDevices { repeated DeviceInfo devices = 1; }
+
+message C_RemoveDevice {
+    string device_id = 1;
+}
+message S_RemoveDevice {
+    bool   success = 1;
+    string message = 2;
 }
 
-
-
-
-/*-----------------------------
-      내 정보 관리 (UserInfo)
------------------------------*/
+/*-------------
+    MY INFO
+---------------*/
 
 message C_FetchMyInfo {}
 message S_FetchMyInfo { UserInfo my_info = 1; }
 
 message C_EditMyInfo {
-    // 수정하고 싶은 필드만 담아서 전송 (서버에서 Optional 처리)
     string name                 = 1;
     string status_message       = 2;
     string profile_image_url    = 3;
@@ -191,421 +239,638 @@ message C_EditMyInfo {
     string phone                = 5;
 }
 message S_EditMyInfo {
-    bool success = 1;
-    string message = 2;
+    bool     success      = 1;
+    string   message      = 2;
     UserInfo updated_info = 3;
 }
 
-
-/*-----------------------------
-      FCM 푸시 알림 토큰 등록
------------------------------*/
-
 message C_RegisterFcmToken {
-    string fcm_token = 1;       // FCM 디바이스 토큰
-    string platform = 2;        // "android" 또는 "ios"
-    string device_id = 3;       // 디바이스 고유 ID (선택)
-    string device_name = 4;     // 기기 이름 (예: "Galaxy S24", "iPad Pro")
-    string app_version = 5;     // 앱 버전
+    string fcm_token   = 1;
+    string platform    = 2;
+    string device_id   = 3;
+    string device_name = 4;
+    string app_version = 5;
 }
-
 message S_RegisterFcmToken {
-    bool success = 1;
+    bool   success = 1;
     string message = 2;
 }
 
-
-/*-----------------------------
-      기기 관리 (Device Management)
------------------------------*/
-
-message DeviceInfo {
-    string device_id = 1;       // 기기 고유 ID
-    string device_name = 2;     // 기기 이름
-    string platform = 3;        // android/ios
-    int64 last_active = 4;      // 마지막 활동 시간 (Unix timestamp ms)
-    int64 registered_at = 5;    // 등록 시간
-    string app_version = 6;     // 앱 버전
-    bool is_current = 7;        // 현재 요청한 기기인지
-}
-
-message C_GetMyDevices { }
-message S_GetMyDevices {
-    repeated DeviceInfo devices = 1;
-}
-
-message C_RemoveDevice {
-    string device_id = 1;       // 삭제할 기기의 device_id
-}
-message S_RemoveDevice {
-    bool success = 1;
-    string message = 2;
-}
-
-
-/*-----------------------------
-      이메일 / 비밀번호 변경
------------------------------*/
-
-// 이메일 변경 (인증 완료 후 호출)
 message C_ChangeEmail {
-    string new_email = 1;       // 인증 완료된 새 이메일
+    string new_email = 1;
 }
 message S_ChangeEmail {
-    bool success = 1;
-    string message = 2;
-    UserInfo updated_info = 3;  // 변경된 사용자 정보
+    bool     success      = 1;
+    string   message      = 2;
+    UserInfo updated_info = 3;
 }
 
-// 비밀번호 변경
 message C_ChangePassword {
     string current_password = 1;
-    string new_password = 2;
+    string new_password     = 2;
 }
 message S_ChangePassword {
-    bool success = 1;
+    bool   success = 1;
     string message = 2;
+}
+
+/*-------------
+    CHAT
+---------------*/
+
+message Text      { string message = 1; }
+message Image     {
+    string url       = 1;
+    string thumbnail = 2;
+    int64  size      = 3;
+}
+message Video     {
+    string url          = 1;
+    string thumbnail    = 2;
+    int32  duration_sec = 3;
+    int64  size         = 4;
+}
+message File      {
+    string url       = 1;
+    string filename  = 2;
+    int64  size      = 3;
+    string mime_type = 4;
+}
+message SystemMsg {
+    string message         = 1;
+    int32  type            = 2;
+    string invite_group_id = 3;
+}
+message Audio {
+    string url          = 1;
+    int32  duration_sec = 2;
+    int64  size         = 3;
+}
+
+message ChatPayload {
+    oneof content {
+        Text      text   = 1;
+        Image     image  = 2;
+        Video     video  = 3;
+        File      file   = 4;
+        SystemMsg system = 5;
+        Audio     audio  = 6;
+    }
+}
+
+message C_Chat {
+    string      conv_id              = 1;
+    int32       client_msg_id        = 2;
+    ChatPayload payload              = 3;
+    int64       ts_client            = 4;
+    int64       reply_to_seq         = 5;
+    string      gcs_path             = 6;
+    repeated string mentioned_user_ids = 7;
+}
+
+message S_Chat {
+    string      conv_id              = 1;
+    int32       client_msg_id        = 2;
+    int64       msg_seq              = 3;
+    string      sender_id            = 4;
+    string      sender_name          = 5;
+    ChatPayload payload              = 6;
+    int64       ts_server            = 7;
+    int64       reply_to_seq         = 8;
+    string      reply_to_sender_name = 9;
+    string      reply_to_text        = 10;
+    bool        is_deleted           = 11;
+    bool        is_edited            = 12;
+    int32       unread_count         = 13;
+    int64       file_expires_at      = 14;
+    string      file_status          = 15;
+    repeated string mentioned_user_ids = 16;
+}
+
+message C_ReadReceipt {
+    string conv_id       = 1;
+    int64  last_read_seq = 2;
+}
+
+message S_ReadReceipt {
+    string conv_id       = 1;
+    string reader_id     = 2;
+    int64  last_read_seq = 3;
+}
+
+message C_DeleteMessage {
+    string conv_id = 1;
+    int64  msg_seq = 2;
+}
+message S_DeleteMessage {
+    bool   success = 1;
+    string conv_id = 2;
+    int64  msg_seq = 3;
+}
+
+message C_EditMessage {
+    string conv_id  = 1;
+    int64  msg_seq  = 2;
+    string new_text = 3;
+}
+message S_EditMessage {
+    bool   success   = 1;
+    string conv_id   = 2;
+    int64  msg_seq   = 3;
+    string new_text  = 4;
+    int64  edited_at = 5;
+}
+
+message C_ReqHistory {
+    string conv_id      = 1;
+    int64  last_msg_seq = 2;
+    int32  limit        = 3;
+}
+message S_ReqHistory {
+    string          conv_id  = 1;
+    repeated S_Chat messages = 2;
+    bool            is_end   = 3;
+}
+
+message C_UploadFile {
+    enum UploadType {
+        DIRECT_CHAT       = 0;
+        GROUP_CHAT        = 1;
+        PROFILE_IMG       = 2;
+        GROUP_PROFILE_IMG = 3;
+        BACKGROUND_IMG    = 4;
+    }
+    string     filename    = 1;
+    int64      size        = 2;
+    string     mime_type   = 3;
+    bool       is_image    = 4;
+    UploadType upload_type = 5;
+    string     target_id   = 6;
+}
+message S_UploadFile {
+    bool   success                   = 1;
+    string message                   = 2;
+    string file_id                   = 3;
+    string upload_url                = 4;
+    string download_url              = 5;
+    string thumb_upload_url          = 6;
+    string thumbnail_url             = 7;
+    int64  expires_at                = 8;
+    string path                      = 9;
+    int64  file_retention_expires_at = 10;
+}
+
+message C_Ack {
+    string conv_id = 1;
+    int64  msg_seq = 2;
+}
+
+message C_FetchOffline { int64 since_ts = 1; }
+
+message S_MessageBatch {
+    message ConversationBatch {
+        string          conv_id       = 1;
+        repeated S_Chat messages      = 2;
+        int32           unread_count  = 3;
+        int64           last_read_seq = 4;
+    }
+    repeated ConversationBatch batches = 1;
+}
+
+/*-------------
+    SUBSCRIPTION
+---------------*/
+
+message C_GetSubscription {}
+
+message SubscriptionPlan {
+    int32            plan_id       = 1;
+    string           plan_type     = 2;
+    string           name          = 3;
+    int32            grade         = 4;
+    int64            storage_bytes = 5;
+    int64            max_file_size = 6;
+    int64            monthly_price = 7;
+    repeated string  features      = 8;
+}
+
+message S_GetSubscription {
+    bool                      success                = 1;
+    int32                     current_grade          = 2;
+    string                    current_plan_name      = 3;
+    int64                     storage_capacity_bytes = 4;
+    int64                     storage_usage_bytes    = 5;
+    int64                     expires_at             = 6;
+    bool                      auto_renew             = 7;
+    repeated SubscriptionPlan available_plans        = 8;
+}
+
+message C_VerifyPurchase {
+    string platform       = 1;
+    string product_id     = 2;
+    string transaction_id = 3;
+    string purchase_token = 4;
+}
+message S_VerifyPurchase {
+    bool   success          = 1;
+    string message          = 2;
+    int32  new_grade        = 3;
+    int64  expires_at       = 4;
+    int64  storage_capacity = 5;
+}
+
+message C_CancelSubscription {}
+message S_CancelSubscription {
+    bool   success          = 1;
+    string message          = 2;
+    int64  grace_expires_at = 3;
+}
+
+/*-------------
+    WITHDRAW
+---------------*/
+
+message C_Withdraw {
+    string password = 1;
+    string reason   = 2;
+}
+message S_Withdraw {
+    bool   success = 1;
+    string message = 2;
+}
+
+/*-------------
+    FRIENDS
+---------------*/
+
+message C_SearchUser { string user_id = 1; }
+message S_SearchUser {
+    bool     success          = 1;
+    UserInfo user_info        = 2;
+    bool     is_friend        = 3;
+    bool     has_sent_request = 4;
+}
+
+message FriendRequest {
+    UserInfo requester    = 1;
+    int64    requested_at = 2;
+    bool     is_received  = 3;
+}
+
+message C_FriendAction {
+    enum ActionType {
+        SEND_REQUEST   = 0;
+        CANCEL_REQUEST = 1;
+        ACCEPT_REQUEST = 2;
+        REJECT_REQUEST = 3;
+        DELETE_FRIEND  = 4;
+    }
+    ActionType action         = 1;
+    string     target_user_id = 2;
+}
+message S_FriendAction {
+    bool     success        = 1;
+    string   message        = 2;
+    UserInfo updated_friend = 3;
+}
+
+message C_FetchFriendData {}
+message S_FetchFriendData {
+    repeated UserInfo      friends           = 1;
+    repeated FriendRequest received_requests = 2;
+    repeated FriendRequest sent_requests     = 3;
+}
+
+message S_FriendPush {
+    enum PushType {
+        NEW_REQUEST = 0;
+        ACCEPTED    = 1;
+        DELETED     = 2;
+    }
+    PushType push_type = 1;
+    UserInfo user_info = 2;
+}
+
+/*-------------
+    GROUPS
+---------------*/
+
+enum GroupRole {
+    MEMBER = 0;
+    ADMIN  = 1;
+    OWNER  = 2;
+}
+
+message GroupMemberInfo {
+    UserInfo  user_info = 1;
+    GroupRole role      = 2;
+    int64     joined_at = 3;
+}
+
+message GroupInfo {
+    string group_id               = 1;
+    string group_name             = 2;
+    string group_code             = 3;
+    string description            = 4;
+    string group_image_url        = 5;
+    int32  member_count           = 6;
+    int64  storage_capacity_bytes = 7;
+    int64  storage_usage_bytes    = 8;
+    int64  invite_code_expires_at = 9;
+}
+
+message C_CreateGroup    { string group_name = 1; }
+message S_CreateGroup    { bool success = 1; GroupInfo group = 2; }
+
+message C_GroupList      {}
+message S_GroupList      { repeated GroupInfo groups = 1; }
+
+message C_GroupInfo      { string group_id = 1; }
+message S_GroupInfo      { GroupInfo group = 1; GroupRole my_role = 2; }
+
+message C_InviteFriend {
+    string          group_id        = 1;
+    repeated string friend_user_ids = 2;
+}
+message S_InviteFriend { bool success = 1; }
+
+message C_JoinGroup   { string group_code = 1; }
+message S_JoinGroup   { bool success = 1; GroupInfo group = 2; }
+
+message C_RefreshInviteCode { string group_id = 1; }
+message S_RefreshInviteCode { bool success = 1; string group_code = 2; int64 expires_at = 3; }
+
+message C_GroupMemberList { string group_id = 1; }
+message S_GroupMemberList {
+    string                   group_id = 1;
+    repeated GroupMemberInfo members  = 2;
+}
+
+message C_LeaveGroup  { string group_id = 1; }
+message S_LeaveGroup  { bool success = 1; }
+
+message C_EditGroup {
+    string group_id        = 1;
+    string new_name        = 2;
+    string new_description = 3;
+    string new_image_url   = 4;
+}
+message S_EditGroup { bool success = 1; GroupInfo group = 2; }
+
+message C_DeleteGroup { string group_id = 1; }
+message S_DeleteGroup { bool success = 1; }
+
+/*-------------
+    BLOCK / REPORT
+---------------*/
+
+message BlockedUserInfo {
+    string user_id     = 1;
+    string name        = 2;
+    string profile_img = 3;
+    int64  blocked_at  = 4;
+}
+
+message C_BlockUser   { string target_user_id = 1; }
+message S_BlockUser   { bool success = 1; string message = 2; }
+
+message C_UnblockUser { string target_user_id = 1; }
+message S_UnblockUser { bool success = 1; }
+
+message C_GetBlockedList {}
+message S_GetBlockedList { repeated BlockedUserInfo blocked_users = 1; }
+
+message C_ReportUser {
+    string target_user_id = 1;
+    string reason         = 2;
+    string detail         = 3;
+}
+message S_ReportUser { bool success = 1; }
+
+/*-------------
+    REACTIONS
+---------------*/
+
+message C_AddReaction {
+    string conv_id = 1;
+    int64  msg_seq = 2;
+    string emoji   = 3;
+}
+
+message S_AddReaction {
+    string conv_id = 1;
+    int64  msg_seq = 2;
+    string user_id = 3;
+    string emoji   = 4;
+    bool   removed = 5;
+}
+
+/*-------------
+    POLLS
+---------------*/
+
+message C_CreatePoll {
+    string          conv_id         = 1;
+    string          question        = 2;
+    repeated string options         = 3;
+    bool            is_multi_select = 4;
+    bool            is_anonymous    = 5;
+    int64           expires_at      = 6;
+}
+
+message S_CreatePoll {
+    string          conv_id         = 1;
+    string          poll_id         = 2;
+    int64           msg_seq         = 3;
+    string          creator_id      = 4;
+    string          creator_name    = 5;
+    string          question        = 6;
+    repeated string options         = 7;
+    bool            is_multi_select = 8;
+    bool            is_anonymous    = 9;
+    int64           expires_at      = 10;
+    int64           ts_server       = 11;
+}
+
+message C_Vote {
+    string         conv_id          = 1;
+    string         poll_id          = 2;
+    int64          msg_seq          = 3;
+    repeated int32 selected_options = 4;
+}
+
+message S_Vote {
+    string         conv_id          = 1;
+    string         poll_id          = 2;
+    int64          msg_seq          = 3;
+    string         voter_id         = 4;
+    string         voter_name       = 5;
+    repeated int32 selected_options = 6;
+    string         votes_json       = 7;
+}
+
+message C_ClosePoll {
+    string conv_id = 1;
+    string poll_id = 2;
+    int64  msg_seq = 3;
+}
+
+message S_ClosePoll {
+    string conv_id = 1;
+    string poll_id = 2;
+    int64  msg_seq = 3;
+}
+
+/*-------------
+    ANNOUNCEMENT (공지)
+---------------*/
+message C_SetAnnouncement {
+    string conv_id     = 1;   // "group:xxx" 또는 "direct:targetId"
+    int64  msg_seq     = 2;   // 0이면 공지 삭제
+    string text        = 3;
+    string sender_name = 4;
+}
+
+message S_SetAnnouncement {
+    string conv_id     = 1;
+    int64  msg_seq     = 2;   // 0이면 공지 삭제됨
+    string text        = 3;
+    string sender_name = 4;
+    string setter_id   = 5;   // 공지 설정한 사람
 }
 
 
 /*-------------
-      채팅
+    BALL DROP (숫자 뽑기)
 ---------------*/
 
-message Text { string message = 1; }
-message Image { string url = 1; string thumbnail = 2; int64 size = 3; }
-message Video { string url = 1; string thumbnail = 2; int64 duration_sec = 3; int64 size = 4; }
-message File { string url = 1; string filename = 2; int64 size = 3; string mime_type = 4; }
-
-message SystemMsg {
-  string message = 1;
-  int64  type    = 2; // 0: 일반, 1: 초대장
-  string invite_group_id = 3;
+message C_CreateBallDrop {
+    string conv_id                  = 1;
+    repeated string participant_ids = 2;  // 비워두면 그룹 전체
+    repeated int32  ball_counts     = 3;  // participant_ids와 병렬 배열
 }
 
-message ChatPayload {
-  oneof data {
-    Text text = 1; 
-    Image image = 2; 
-    Video video = 3; 
-    File file = 4; 
-    SystemMsg system = 5;
-  }
+message S_CreateBallDrop {
+    string conv_id     = 1;
+    int64  msg_seq     = 2;
+    string game_json   = 3;   // 전체 게임 데이터 JSON
 }
 
-message C_Chat {
-  string      conv_id       = 1;
-  int64       client_msg_id = 2;
-  ChatPayload payload       = 3;
-  int64       ts_client     = 4;
-  int64       reply_to_seq  = 5; // 답장 대상 seq
+/*-------------
+    PHOTO SLIDE (포토 슬라이드)
+---------------*/
+
+message C_CreatePhotoSlide {
+    string conv_id                  = 1;
+    repeated string image_urls      = 2;  // GCS URLs (사전 업로드)
+    repeated string thumbnail_urls  = 3;  // 썸네일 URLs
+    string message                  = 4;  // 슬라이드 메시지 (사진 위 누적 표시)
+    string font_style               = 5;  // handwriting | elegant | casual
+    string text_position            = 6;  // (deprecated) 하위호환용
+    string bg_theme                 = 7;  // dark | light | gradient
+    string ending_message           = 8;  // 마무리 메시지 (엔딩 화면)
+    int32  font_size                = 9;  // 글꼴 크기 (18~40, 기본 26)
 }
 
-message S_Chat {
-  string      conv_id       = 1;
-  int64       client_msg_id = 2;
-  int64       msg_seq       = 3;
-  string      sender_id     = 4;
-  string      sender_name   = 5;
-  ChatPayload payload       = 6;
-  int64       ts_server     = 7;
-  int64       reply_to_seq  = 8;
+message S_CreatePhotoSlide {
+    string conv_id     = 1;
+    int64  msg_seq     = 2;
+    string slide_json  = 3;   // PhotoSlideData JSON 전체
 }
 
 
+/*-------------
+    SOCIAL LOGIN (OAuth)
+---------------*/
 
-message C_ReqHistory {
-  string conv_id = 1;
-  int64 last_msg_seq = 2; // 클라가 가지고 있는 가장 오래된 메시지 번호
-  int64 limit = 3;        // 30~50개
+message C_SocialLogin {
+    string provider = 1;   // "google" | "apple"
+    string id_token = 2;
 }
 
-message S_ReqHistory {
-  string conv_id = 1;
-  repeated S_Chat messages = 2;
-  bool is_end = 3;                 // 더 옛날 게 남아있는지 여부
+message S_SocialLogin {
+    bool   needs_registration  = 1;
+    string email               = 2;
+    string name                = 3;
+    string profile_image_url   = 4;
 }
 
-
-/*-----------------------------
-            File Upload
------------------------------*/
-
-// 파일 업로드 요청
-message C_UploadFile {
-    string filename = 1;      // 원본 파일명
-    int64 size = 2;          // 파일 크기 (bytes)
-    string mime_type = 3;    // MIME 타입 (image/jpeg, application/pdf 등)
-
-    bool is_image = 4;       // 이미지 여부 (썸네일 생성 여부 결정)
-
-    enum UploadType {
-        DIRECT_CHAT = 0;       // 개인 채팅
-        GROUP_CHAT = 1;        // 그룹 채팅
-        PROFILE_IMG = 2;       // 프로필 이미지
-        GROUP_PROFILE_IMG = 3; // 그룹 프로필 이미지
-        BACKGROUND_IMG = 4;    // 배경 이미지
-    }
-    UploadType upload_type = 5; 
-
-    string target_id = 6;     // 그룹일 경우 groupId
+message C_CompleteSocialSignup {
+    string provider = 1;
+    string id_token = 2;
+    string user_id  = 3;
+    string name     = 4;
 }
-
-message S_UploadFile {
-    bool success = 1;
-    string message          = 2;
-    string file_id          = 3;      // 생성된 파일 ID
-    string upload_url       = 4;      // GCS Signed Upload URL (PUT)
-    string download_url     = 5;      // GCS Signed Download URL (GET)
-    string thumb_upload_url = 6;      // 썸네일 다운로드 URL (이미지인 경우)
-    string thumbnail_url    = 7;      // 썸네일 다운로드용 (GET) 이름 유지
-
-    int64 expires_at        = 8;      // URL 만료 시간 (Unix timestamp)
-    string path             = 9;      // GCS 경로 (gs://bucket/path)
-}
-
-
-
-
-message C_Ack { 
-    string conv_id  = 1; 
-    int64 msg_seq   = 2; 
-} // 수신확인/중복제거
-
-message C_FetchOffline {
-    int64 since_ts = 1; 
-} // 오프라인 메시지 동기화
-
-
-message S_MessageBatch {
-  message ConversationBatch {
-      string conv_id = 1;
-      repeated S_Chat messages = 2; // 최신 50개
-      int64 unread_count = 3;       // 안 읽은 전체 개수 (배지 표시용)
-  }
-  repeated ConversationBatch batches = 1;
-}
-
-
-
-
-
-
-
-
-
-
-/*-----------------------------
-            Friends 
------------------------------*/
-message FriendRequest {
-  UserInfo requester      = 1;
-  int64    requested_at   = 2;
-  bool     is_received    = 3; // true: 받은거, false: 보낸거
-}
-
-
-
-message C_SearchUser { string user_id = 1; }
-message S_SearchUser {
-  bool success = 1;
-  UserInfo user_info = 2;
-  bool is_friend = 3;
-  bool has_sent_request = 4;
-}
-
-
-// --- 친구 관리 액션 (요청, 수락, 거절, 삭제) ---
-message C_FriendAction {
-  enum ActionType {
-    SEND_REQUEST = 0;
-    CANCEL_REQUEST = 1;
-    ACCEPT_REQUEST = 2;
-    REJECT_REQUEST = 3;
-    DELETE_FRIEND = 4;
-  }
-  ActionType action = 1;
-  string target_user_id = 2;
-}
-
-message S_FriendAction { 
-    bool success = 1; 
-    string message = 2; 
-    UserInfo updated_friend = 3; 
-}
-
-message C_FetchFriendData {}
-message S_FetchFriendData { 
-    repeated UserInfo friends = 1; 
-    repeated FriendRequest received_requests = 2; 
-    repeated FriendRequest sent_requests = 3; 
-}
-message S_FriendPush {
-    enum PushType { 
-        NEW_REQUEST = 0; 
-        ACCEPTED = 1; 
-        DELETED = 2; 
-    } 
-    PushType type = 1; 
-    UserInfo user_info = 2; 
-}
-
-
-
-
-
-
-
-/*-----------------------------
-            Groups 
------------------------------*/
-
-enum GroupRole { MEMBER = 0; ADMIN = 1; OWNER = 2; }
-
-// [그룹 멤버 상세 정보]
-message GroupMemberInfo {
-    UserInfo  user_info = 1; // 유저 기본 정보 포함
-    GroupRole role      = 2; // 멤버 권한
-    int64     joined_at = 3; // 가입 타임스탬프
-}
-
-// [그룹 정보]
-message GroupInfo {
-  string group_id             = 1;
-  string group_name           = 2;
-  string group_code           = 3;
-  string description          = 4;
-  string group_image_url      = 5;
-  int32  member_count         = 6;
-
-  int64  storage_capacity_bytes = 7;        // 총 용량 (예: 10GB = 10737418240)
-  int64  storage_usage_bytes    = 8;        // 현재 사용량
-}
-
-
-
-
- 
-
-message C_CreateGroup { string group_name = 1; }
-message S_CreateGroup { bool success = 1; GroupInfo group = 2; }
-
-message C_GroupList {}
-message S_GroupList { repeated GroupInfo groups = 1; }
-
-message C_GroupInfo { string group_id = 1; }
-message S_GroupInfo { GroupInfo group = 1; GroupRole my_role = 2; }
-
-
-message C_InviteFriend { string group_id = 1; repeated string friend_user_ids = 2; }
-message S_InviteFriend { bool success = 1; }
-
-
-message C_JoinGroup { string group_code = 1; }
-message S_JoinGroup { bool success = 1; GroupInfo group = 2; }
-
-
-
-message C_GroupMemberList { string group_id = 1; }
-message S_GroupMemberList { string group_id = 1; repeated GroupMemberInfo members = 2; }
-
-
-message C_LeaveGroup { string group_id = 1; }
-message S_LeaveGroup { bool success = 1; }
-
-
-
-message C_EditGroup {
-    string group_id = 1;
-    string new_name = 2;
-    string new_description = 3;
-    string new_image_url = 4;
-}
-
-message S_EditGroup { bool success = 1; GroupInfo group = 2; }
-
-
-/*-----------------------------
-      회원 탈퇴
------------------------------*/
-message C_Withdraw {
-    string password = 1;    // 본인 확인용
-    string reason = 2;      // 탈퇴 사유 (선택)
-}
-
-message S_Withdraw {
-    bool success = 1;
-    string message = 2;
-}
-
-
-
-
-
-
-
-
 
 /*-------------
     SYSTEM
 ---------------*/
 
-
-// 에러 코드 enum (클라이언트-서버 공통)
 enum ErrorCode {
-    ERR_SUCCESS = 0;              // 성공
-    
-    // 1~99: 공용/시스템 에러
-    ERR_UNKNOWN = 1;              // 알 수 없는 오류
-    ERR_SERVER_INTERNAL = 2;      // 서버 내부 로직 에러 (DB 등)
-    ERR_INVALID_PACKET = 3;       // 패킷 변조 의심
-    ERR_VERSION_MISMATCH = 4;     // 프로토콜 버전 불일치
-    ERR_UNAUTHORIZED = 5;         // 인증 실패
-    ERR_INVALID_TOKEN = 6;        // 토큰이 유효하지 않음
-    
-    // 100~199: 인증/사용자 관련
-    ERR_USER_ID_EMPTY = 100;      // 사용자 ID가 비어있음
-    ERR_USER_ID_REQUIRED = 101;   // 사용자 ID가 필요함
-    ERR_PASSWORD_REQUIRED = 102;  // 비밀번호가 필요함
-    ERR_NAME_REQUIRED = 103;      // 이름이 필요함
-    ERR_EMAIL_REQUIRED = 104;      // 이메일이 필요함
-    ERR_USER_NOT_FOUND = 105;     // 사용자를 찾을 수 없음
-    ERR_INVALID_PASSWORD = 106;   // 비밀번호가 올바르지 않음
-    ERR_USER_ALREADY_EXISTS = 107; // 사용자가 이미 존재함
-    ERR_EMAIL_ALREADY_EXISTS = 108; // 사용자가 이미 존재함
-    
-    // 200~299: 채팅 관련
-    ERR_PAYLOAD_EMPTY = 200;      // 페이로드가 비어있음
-    ERR_INVALID_CONV_ID = 201;    // 대화방 ID가 유효하지 않음
-    ERR_INVALID_RECEIVER_ID = 202; // 수신자 ID가 유효하지 않음
-    ERR_INVALID_ACK = 203;        // ACK 정보가 유효하지 않음
-    
-    // 300~399: 친구 요청 관련
-    ERR_INVALID_FRIEND_USER_ID = 300; // 친구 사용자 ID가 유효하지 않음
-    ERR_CANNOT_ADD_SELF = 301;    // 자신을 친구로 추가할 수 없음
-    ERR_NOT_A_FRIEND = 302;       // 친구가 아님
-    ERR_FRIEND_REQUEST_NOT_FOUND = 303; // 친구 요청을 찾을 수 없음
-    
-    // 400~499: 파일 업로드 관련
-    ERR_FILE_SERVICE_NOT_INITIALIZED = 400; // 파일 서비스가 초기화되지 않음
-    ERR_CLOUD_STORAGE_NOT_INITIALIZED = 401; // 클라우드 스토리지가 초기화되지 않음
-    ERR_FILENAME_REQUIRED = 402;      // 파일명이 필요함
-    ERR_INVALID_FILE_SIZE = 403;      // 파일 크기가 유효하지 않음
-    ERR_MIME_TYPE_REQUIRED = 404;     // MIME 타입이 필요함
-    ERR_FAILED_TO_GENERATE_URL = 405; // URL 생성 실패
-    ERR_INVALID_FILE_URL = 406;       // 파일 URL이 유효하지 않음
-    ERR_INVALID_ARGUMENT = 407;       // 잘못된 인자 (예: Group ID 누락)
+    ERR_SUCCESS = 0;
 
+    ERR_UNKNOWN = 1;
+    ERR_SERVER_INTERNAL = 2;
+    ERR_INVALID_PACKET = 3;
+    ERR_VERSION_MISMATCH = 4;
+    ERR_UNAUTHORIZED = 5;
+    ERR_INVALID_TOKEN = 6;
 
-    //500 그룹관련
-    ERR_NO_PERMISSION =500;
+    ERR_USER_ID_EMPTY = 100;
+    ERR_USER_ID_REQUIRED = 101;
+    ERR_PASSWORD_REQUIRED = 102;
+    ERR_NAME_REQUIRED = 103;
+    ERR_EMAIL_REQUIRED = 104;
+    ERR_USER_NOT_FOUND = 105;
+    ERR_INVALID_PASSWORD = 106;
+    ERR_USER_ALREADY_EXISTS = 107;
+    ERR_EMAIL_ALREADY_EXISTS = 108;
+    ERR_EMAIL_NOT_VERIFIED = 109;
 
+    ERR_PAYLOAD_EMPTY = 200;
+    ERR_INVALID_CONV_ID = 201;
+    ERR_INVALID_RECEIVER_ID = 202;
+    ERR_INVALID_ACK = 203;
+
+    ERR_INVALID_FRIEND_USER_ID = 300;
+    ERR_CANNOT_ADD_SELF = 301;
+    ERR_NOT_A_FRIEND = 302;
+    ERR_FRIEND_REQUEST_NOT_FOUND = 303;
+
+    ERR_FILE_SERVICE_NOT_INITIALIZED = 400;
+    ERR_CLOUD_STORAGE_NOT_INITIALIZED = 401;
+    ERR_FILENAME_REQUIRED = 402;
+    ERR_INVALID_FILE_SIZE = 403;
+    ERR_MIME_TYPE_REQUIRED = 404;
+    ERR_FAILED_TO_GENERATE_URL = 405;
+    ERR_INVALID_FILE_URL = 406;
+    ERR_INVALID_ARGUMENT = 407;
+    ERR_STORAGE_EXCEEDED = 408;
+    ERR_FILE_TOO_LARGE = 409;
+    ERR_PAYMENT_FAILED = 410;
+    ERR_RECEIPT_INVALID = 411;
+
+    ERR_NO_PERMISSION = 500;
+
+    ERR_ALREADY_BLOCKED = 600;
+    ERR_NOT_BLOCKED = 601;
+    ERR_CANNOT_BLOCK_SELF = 602;
+    ERR_REPORT_DUPLICATE = 610;
+
+    ERR_POLL_NOT_FOUND = 700;
+    ERR_POLL_CLOSED = 701;
+    ERR_POLL_INVALID_OPTION = 702;
+
+    ERR_INVITE_EXPIRED = 800;
+
+    ERR_OAUTH_VERIFICATION_FAILED = 120;
+    ERR_OAUTH_PROVIDER_INVALID    = 121;
 }
 
 message S_Error {
-    ErrorCode error_code = 1;      // 에러 코드 (enum)
-    uint32 code = 2;                // HTTP 스타일 코드 (하위 호환성)
-    string message = 3;             // 에러 메시지
+    ErrorCode error_code = 1;
+    uint32    code       = 2;
+    string    message    = 3;
 }
 
 message C_Heartbeat {}

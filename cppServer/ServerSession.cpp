@@ -7,12 +7,12 @@
 
 void ServerSession::OnConnected()
 {
-	cout << "OnConnected.." << endl;
+	LOG_INFO("OnConnected..");
 }
 
 void ServerSession::OnDisconnected()
 {
-	cout << "OnDisconnected.." << endl;
+	LOG_INFO("OnDisconnected..");
 
 	if (!_userId.empty() && GUserManager) {
 		// 자기 자신을 인자로 넘김
@@ -40,7 +40,7 @@ void ServerSession::OnRecv(BYTE* buffer, int32 len)
 	Protocol::Envelope envelope;
 	if (envelope.ParseFromArray(buffer + 4, bodyLen) == false)
 	{
-		cout << "[Error] Envelope Parse Failed!" << endl;
+		LOG_INFO("[Error] Envelope Parse Failed!");
 		Disconnect();
 		return;
 	}
@@ -52,5 +52,5 @@ void ServerSession::OnRecv(BYTE* buffer, int32 len)
 
 void ServerSession::OnSend(int32 len)
 {
-	wcout << "ServerSession::OnSendPacket Size : " << len << endl;
+	LOG_INFO("ServerSession::OnSendPacket Size : {}", len);
 }

@@ -45,6 +45,8 @@ bool GroupService::CreateGroup(sessionPtr& session, uint64 reqId, Protocol::C_Cr
 	info->set_member_count(1);
 	info->set_storage_capacity_bytes(groupInfo.storageLimit); // 10GB 예시
 	info->set_storage_usage_bytes(groupInfo.storageUsage);
+	if (groupInfo.inviteCodeExpiresAt > 0)
+		info->set_invite_code_expires_at(groupInfo.inviteCodeExpiresAt);
 
 	Protocol::Envelope env;
 	env.set_version(GProtoVersion);
@@ -52,7 +54,7 @@ bool GroupService::CreateGroup(sessionPtr& session, uint64 reqId, Protocol::C_Cr
 	*env.mutable_s_create_group() = pkt_s_createGroup;
 	PacketDispatcher::SendEnvelope(session, env);
 
-	cout << "[GroupService] Created: " << pkt.group_name() << " (" << groupInfo.groupName << ")" << endl;
+	LOG_INFO("[GroupService] Created: {} ({})", pkt.group_name(), groupInfo.groupName);
 	return true;
 }
 
@@ -77,6 +79,8 @@ bool GroupService::GetGroupList(sessionPtr& session, uint64 reqId)
 		info->set_storage_capacity_bytes(g.storageLimit);
 		info->set_storage_usage_bytes(g.storageUsage);
 		info->set_member_count(g.memberCount);
+		if (g.inviteCodeExpiresAt > 0)
+			info->set_invite_code_expires_at(g.inviteCodeExpiresAt);
 	}
 	Protocol::Envelope env;
 	env.set_version(GProtoVersion);
@@ -97,8 +101,24 @@ bool GroupService::JoinGroup(sessionPtr& session, uint64 reqId, const string& gr
 	if (userId.empty()) return false;
 
 	cGroupInfo groupInfo;
-	if (!GroupRepository::GetGroupInfoById(groupCode, groupInfo)) {
+	if (!GroupRepository::GetGroupInfoByCode(groupCode, groupInfo)) {
 		HandleErr(session, reqId, Protocol::ERR_INVALID_PACKET, "유효하지 않은 초대 코드입니다.");
+		return false;
+	}
+
+	// 초대 코드 만료 체크
+	if (groupInfo.inviteCodeExpiresAt > 0) {
+		int64_t nowMs = ::time(nullptr) * 1000LL;
+		if (nowMs > groupInfo.inviteCodeExpiresAt) {
+			HandleErr(session, reqId, Protocol::ERR_INVITE_EXPIRED, "초대 코드가 만료되었습니다. 새 코드를 요청하세요.");
+			return false;
+		}
+	}
+
+	// 그룹 인원 제한 체크
+	if (groupInfo.memberCount >= MAX_GROUP_MEMBERS) {
+		HandleErr(session, reqId, Protocol::ERR_INVALID_PACKET,
+			"그룹 인원이 가득 찼습니다. (최대 " + to_string(MAX_GROUP_MEMBERS) + "명)");
 		return false;
 	}
 
@@ -112,6 +132,9 @@ bool GroupService::JoinGroup(sessionPtr& session, uint64 reqId, const string& gr
 		return false;
 	}
 
+	// 최신 그룹 정보 다시 조회 (member_count 반영)
+	GroupRepository::GetGroupInfoById(groupInfo.groupId, groupInfo);
+
 	Protocol::S_JoinGroup pkt_s_join;
 	pkt_s_join.set_success(true);
 
@@ -121,8 +144,11 @@ bool GroupService::JoinGroup(sessionPtr& session, uint64 reqId, const string& gr
 	info->set_group_code(groupInfo.groupCode);
 	info->set_description(groupInfo.description);
 	info->set_group_image_url(groupInfo.groupImageUrl);
+	info->set_member_count(groupInfo.memberCount);
 	info->set_storage_capacity_bytes(groupInfo.storageLimit);
 	info->set_storage_usage_bytes(groupInfo.storageUsage);
+	if (groupInfo.inviteCodeExpiresAt > 0)
+		info->set_invite_code_expires_at(groupInfo.inviteCodeExpiresAt);
 
 	Protocol::Envelope env;
 	env.set_version(GProtoVersion);
@@ -130,13 +156,47 @@ bool GroupService::JoinGroup(sessionPtr& session, uint64 reqId, const string& gr
 	*env.mutable_s_join_group() = pkt_s_join;
 	PacketDispatcher::SendEnvelope(session, env);
 
-	cout << "[GroupService] User(" << userId << ") Joined Group(" << groupInfo.groupId << ")" << endl;
+	LOG_INFO("[GroupService] User({}) Joined Group({})", userId, groupInfo.groupId);
 
 	GChatService->SendSystemMessage(groupInfo.groupId, userId + " 님이 입장하셨습니다.");
 
 	return true;
 }
 
+
+bool GroupService::RefreshInviteCode(sessionPtr& session, uint64 reqId, const string& groupId)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) return false;
+
+	// 멤버인지 확인
+	if (!GroupRepository::IsMember(groupId, userId)) {
+		HandleErr(session, reqId, Protocol::ERR_INVALID_PACKET, "그룹 멤버가 아닙니다.");
+		return false;
+	}
+
+	string newCode;
+	int64 expiresAt;
+	if (!GroupRepository::RefreshInviteCode(groupId, newCode, expiresAt)) {
+		HandleErr(session, reqId, Protocol::ERR_SERVER_INTERNAL, "초대 코드 갱신 실패");
+		return false;
+	}
+
+	Protocol::S_RefreshInviteCode pkt;
+	pkt.set_success(true);
+	pkt.set_group_code(newCode);
+	pkt.set_expires_at(expiresAt);
+
+	Protocol::Envelope env;
+	env.set_version(GProtoVersion);
+	env.set_request_id(reqId);
+	*env.mutable_s_refresh_invite_code() = pkt;
+	PacketDispatcher::SendEnvelope(session, env);
+
+	LOG_INFO("[GroupService] Invite code refreshed for group({}) -> {}", groupId, newCode);
+	return true;
+}
 
 
 bool GroupService::LeaveGroup(sessionPtr& session, uint64 reqId, const string& groupId)
@@ -203,7 +263,8 @@ bool GroupService::GetGroupInfo(sessionPtr& session, uint64 reqId, const string&
 
 	info->set_storage_capacity_bytes(dbInfo.storageLimit);
 	info->set_storage_usage_bytes(dbInfo.storageUsage);
-
+	if (dbInfo.inviteCodeExpiresAt > 0)
+		info->set_invite_code_expires_at(dbInfo.inviteCodeExpiresAt);
 
 	Protocol::Envelope env;
 	env.set_version(GProtoVersion);
@@ -228,8 +289,8 @@ bool GroupService::UpdateGroupInfo(sessionPtr& session, uint64 reqId, Protocol::
 		return false;
 	}
 
-	cout << "[GroupService] Update : " << pkt.new_name() << endl;
-	cout << "[GroupService] Update : " << pkt.new_image_url() << endl;
+	LOG_INFO("[GroupService] Update : {}", pkt.new_name());
+	LOG_INFO("[GroupService] Update : {}", pkt.new_image_url());
 
 	if (GroupRepository::UpdateGroupInfo(pkt.group_id(), pkt.new_name(), pkt.new_image_url()))
 	{
@@ -260,6 +321,39 @@ bool GroupService::UpdateGroupInfo(sessionPtr& session, uint64 reqId, Protocol::
 }
 
 
+
+
+
+bool GroupService::DeleteGroup(sessionPtr& session, uint64 reqId, const string& groupId)
+{
+	auto serverSession = static_pointer_cast<ServerSession>(session);
+	const string userId = serverSession->GetUserId();
+	if (userId.empty()) return false;
+
+	// 방장만 삭제 가능
+	string role = GroupRepository::GetMemberRole(groupId, userId);
+	if (role != "owner") {
+		HandleErr(session, reqId, Protocol::ERR_UNAUTHORIZED, "방장만 그룹을 삭제할 수 있습니다.");
+		return false;
+	}
+
+	if (!GroupRepository::DeleteGroup(groupId)) {
+		HandleErr(session, reqId, Protocol::ERR_SERVER_INTERNAL, "그룹 삭제에 실패했습니다.");
+		return false;
+	}
+
+	Protocol::S_DeleteGroup res;
+	res.set_success(true);
+
+	Protocol::Envelope env;
+	env.set_version(GProtoVersion);
+	env.set_request_id(reqId);
+	*env.mutable_s_delete_group() = res;
+	PacketDispatcher::SendEnvelope(session, env);
+
+	LOG_INFO("[GroupService] 그룹 삭제: {} by {}", groupId, userId);
+	return true;
+}
 
 
 
@@ -326,6 +420,6 @@ bool GroupService::GetGroupMemberList(sessionPtr& session, uint64 reqId, const s
 
 void GroupService::HandleErr(sessionPtr& session, uint64 reqId, Protocol::ErrorCode errorCode, const string& errMessage)
 {
-	cerr << "[GroupService] Error: " << errMessage << " (code: " << static_cast<int>(errorCode) << ")" << endl;
+	LOG_ERROR("[GroupService] Error: {} (code: {})", errMessage, static_cast<int>(errorCode));
 	PacketDispatcher::DispatchError(session, reqId, errorCode, errMessage);
 }

@@ -27,7 +27,7 @@ FcmClient::FcmClient(const string& projectId, const string& credentialsPath)
 bool FcmClient::Initialize()
 {
     try {
-        cout << "[FcmClient] Initializing: projectId=" << _projectId << endl;
+        LOG_INFO("[FcmClient] Initializing: projectId={}", _projectId);
 
         if (_projectId.empty()) {
             HandleErr("Initialize", "projectId is empty");
@@ -50,7 +50,7 @@ bool FcmClient::Initialize()
             return false;
         }
 
-        cout << "[FcmClient] Initialized successfully" << endl;
+        LOG_INFO("[FcmClient] Initialized successfully");
         return true;
     }
     catch (const exception& e) {
@@ -61,7 +61,7 @@ bool FcmClient::Initialize()
 
 
 bool FcmClient::SendPush(const string& fcmToken, const string& title, const string& body,
-                         const map<string, string>& data)
+                         const map<string, string>& data, bool* outInvalidToken)
 {
     if (!CheckValidToken()) {
         HandleErr("SendPush", "Token validation failed");
@@ -122,11 +122,31 @@ bool FcmClient::SendPush(const string& fcmToken, const string& title, const stri
         }
 
         if (res->status == 200) {
-            cout << "[FcmClient] Push sent successfully to: " << fcmToken.substr(0, 20) << "..." << endl;
+            LOG_INFO("[FcmClient] Push sent successfully to: {}...", fcmToken.substr(0, 20));
             return true;
         }
         else {
             HandleErr("SendPush", "HTTP " + to_string(res->status) + ": " + res->body);
+
+            // UNREGISTERED 토큰 감지 (404 응답의 errorCode 파싱)
+            if (outInvalidToken) {
+                try {
+                    json errJson = json::parse(res->body);
+                    if (errJson.contains("error")) {
+                        auto& errObj = errJson["error"];
+                        if (errObj.contains("details")) {
+                            for (auto& detail : errObj["details"]) {
+                                if (detail.contains("errorCode") &&
+                                    detail["errorCode"].get<string>() == "UNREGISTERED") {
+                                    *outInvalidToken = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                } catch (...) {}
+            }
+
             return false;
         }
     }
@@ -192,7 +212,7 @@ bool FcmClient::LoadServiceAccountJson(const string& filePath)
             return false;
         }
 
-        cout << "[FcmClient] Service account loaded: " << _serviceAccountEmail << endl;
+        LOG_INFO("[FcmClient] Service account loaded: {}", _serviceAccountEmail);
         return true;
     }
     catch (const json::parse_error& e) {
@@ -239,7 +259,7 @@ bool FcmClient::RefreshAccessToken()
             }
             _tokenExpiresTime = Nowts() + (expiresIn * 1000);
 
-            cout << "[FcmClient] Access token obtained, expires in " << expiresIn << " seconds" << endl;
+            LOG_INFO("[FcmClient] Access token obtained, expires in {} seconds", expiresIn);
             return true;
         }
         else {

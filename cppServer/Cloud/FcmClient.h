@@ -15,8 +15,9 @@ public:
     bool Initialize();
 
     // 단일 디바이스에 푸시 발송
+    // outInvalidToken: 토큰이 만료/미등록(UNREGISTERED)이면 true로 설정됨
     bool SendPush(const string& fcmToken, const string& title, const string& body,
-                  const map<string, string>& data = {});
+                  const map<string, string>& data = {}, bool* outInvalidToken = nullptr);
 
     // 여러 디바이스에 푸시 발송
     bool SendPushToMultiple(const vector<string>& fcmTokens, const string& title,
@@ -33,9 +34,9 @@ private:
 
     inline void HandleErr(const string& func, const string& msg = "") {
         if (msg.empty())
-            cerr << "[FcmClient] " << func << " Failed" << endl;
+            LOG_ERROR("[FcmClient] {} Failed", func);
         else
-            cerr << "[FcmClient] " << func << " Failed: " << msg << endl;
+            LOG_ERROR("[FcmClient] {} Failed: {}", func, msg);
     }
 
 private:

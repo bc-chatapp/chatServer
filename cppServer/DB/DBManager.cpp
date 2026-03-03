@@ -25,11 +25,11 @@ bool DBManager::Initialize(const string& host, int port,
         _session = make_unique<mysqlx::Session>(settings);
         _database = database;
 
-        cout << "[DBManager] MySQL 연결 성공: " << host << ":" << port << endl;
+        LOG_INFO("[DBManager] MySQL 연결 성공: {}:{}", host, port);
         return true;
     }
     catch (const mysqlx::Error& err) {
-        cerr << "[DBManager] 연결 실패: " << err.what() << endl;
+        LOG_ERROR("[DBManager] 연결 실패: {}", err.what());
         return false;
     }
 }
