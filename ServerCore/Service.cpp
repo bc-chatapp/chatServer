@@ -12,7 +12,7 @@ bool Service::Start()
 	if (_type == ServiceType::Server)
 	{
 		_listener = make_shared<Listener>();
-		if (_listener->Start(shared_from_this()) == false)  // ← 체크
+		if (_listener->Start(shared_from_this()) == false) 
 		{
 			_listener.reset();
 			// TODO: 로그
@@ -22,7 +22,6 @@ bool Service::Start()
 	else
 	{
 		
-
 	}
 	return true;
 }
@@ -32,7 +31,7 @@ void Service::Stop()
 {
 	WRITE_LOCK;
 
-	// 모든 세션 정리ㅌ
+	// 모든 세션 정리
 	for (auto& session : _sessions)
 	{
 		if (session) session->Disconnect();
