@@ -31,22 +31,23 @@ bool IocpCore::Dispatch(DWORD ms)
 		if (overlapped == nullptr) return false;
 
 		IocpEvent* iocpEvent = reinterpret_cast<IocpEvent*>(overlapped);
-		iocpEvent->owner->Dispatch(iocpEvent, bytes);	// iocpObejct -> dispatch
-
+		auto owner = iocpEvent->owner;
+		if (owner)
+			owner->Dispatch(iocpEvent, bytes);
 	}
 	else
 	{
 		const int32 errCode = ::WSAGetLastError();
-		switch (errCode)
-		{
-		case WAIT_TIMEOUT:
+		if (errCode == WAIT_TIMEOUT)
 			return false;
-		default:
-			/* TODO */
-			break;
-		}
-		
 
+		if (overlapped != nullptr)
+		{
+			IocpEvent* iocpEvent = reinterpret_cast<IocpEvent*>(overlapped);
+			auto owner = iocpEvent->owner;
+			if (owner)
+				owner->Dispatch(iocpEvent, 0);
+		}
 	}
 	return true;
 }
@@ -58,7 +59,7 @@ void IocpCore::PostQuitStatus(int32 threadCount)
 {
 	for (int32 i = 0; i < threadCount; ++i)
 	{
-		// lpOverlapped를 nullptr로 보내서 Dispatch가 false를 반환하게 만듭니다.
+
 		::PostQueuedCompletionStatus(_iocpHandle, 0, 0, nullptr);
 	}
 }

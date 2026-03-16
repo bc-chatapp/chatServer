@@ -20,8 +20,10 @@ Session::Session() : _recvBuffer(BUFFER_SIZE)
 
 Session::~Session()
 {
-	::closesocket(_socket);
+	if (_socket != INVALID_SOCKET)
+		::closesocket(_socket);
 }
+
 
 void Session::Init()
 {
@@ -102,7 +104,6 @@ void Session::Dispatch(IocpEvent* iocpEvent, int32 Bytes)
 	default:
 		break;
 	}
-
 }
 
 bool Session::RegisterConnect()
@@ -144,7 +145,7 @@ bool Session::RegisterDisconnect()
 	_disconnectEvent.Init();
 	_disconnectEvent.owner = shared_from_this();
 
-	if (false == DisconnectEx(_socket, &_disconnectEvent, TF_REUSE_SOCKET, 0))
+	if (false == DisconnectEx(_socket, &_disconnectEvent, 0, 0))
 	{
 		const int32 errCode = ::WSAGetLastError();
 		if (errCode != WSA_IO_PENDING) 
@@ -255,11 +256,29 @@ void Session::ProcessDisconnect()
 		service->ReleaseSession(GetSession());
 }
 
+void Session::CleanupAndRelease()
+{
+	if (_connected.exchange(false) == false)
+		return;
+
+	OnDisconnected();
+
+	// closesocket → pending IOCP 작업들이 에러(0 bytes)로 완료됨
+	// IOCP 완료 통지에서 자연 정리
+	if (_socket != INVALID_SOCKET) {
+		::closesocket(_socket);
+		_socket = INVALID_SOCKET;
+	}
+
+	if (auto service = _service.lock())
+		service->ReleaseSession(GetSession());
+}
+
 void Session::ProcessRecv(int32 Bytes)
 {
 	_recvEvent.owner = nullptr;
 	if (Bytes == 0) {
-		Disconnect();
+		CleanupAndRelease();
 		return;
 	}
 
