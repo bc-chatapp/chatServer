@@ -30,8 +30,8 @@ bool AuthService::CheckIdAvailable(sessionPtr& session, uint64 reqId, const stri
     bool exists = UserRepository::UserExists(userId);
 
 
-    if (exists) LOG_INFO("[AuthService] : {} is exists.", userId);
-    else LOG_INFO("[AuthService] : {} can use.", userId);
+    if (exists) LOG_INFO("[AuthService] ID 중복: {}", userId);
+    else LOG_INFO("[AuthService] ID 사용가능: {}", userId);
 
     Protocol::S_CheckId pkt;
     pkt.set_is_available(!exists); // 존재하지 않아야 사용 가능
@@ -53,8 +53,8 @@ bool AuthService::CheckEmailAvailable(sessionPtr& session, uint64 reqId, const s
 {
     bool exists = UserRepository::EmailExists(email);
 
-    if (exists) LOG_INFO("[AuthService] : {} is exists.", email);
-    else LOG_INFO("[AuthService] : {} can use.", email);
+    if (exists) LOG_INFO("[AuthService] 이메일 중복: {}", email);
+    else LOG_INFO("[AuthService] 이메일 사용가능: {}", email);
 
     Protocol::S_CheckEmail pkt;
     pkt.set_is_available(!exists); // 없어야 사용 가능(true)

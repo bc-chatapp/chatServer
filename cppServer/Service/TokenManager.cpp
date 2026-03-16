@@ -17,7 +17,7 @@ bool TokenManager::LoadSecret(const string& filePath)
 	ifstream file(filePath);
 	if (!file.is_open())
 	{
-		LOG_INFO("[TokenManager] Error: 키 파일을 찾을 수 없습니다: {}", filePath);
+		LOG_ERROR("[TokenManager] 키 파일 없음: {}", filePath);
 		return false;
 	}
 
@@ -32,7 +32,7 @@ bool TokenManager::LoadSecret(const string& filePath)
 
 	if (SECRET_KEY.empty())
 	{
-		LOG_INFO("[TokenManager] Error: key empty");
+		LOG_ERROR("[TokenManager] 키 비어있음");
 		return false;
 	}
 
@@ -50,7 +50,7 @@ string TokenManager::GenerateToken(const string& userId)
 
 	if (SECRET_KEY.empty())
 	{
-		LOG_INFO("[TokenManager] Error: SECRET_KEY is empty, cannot generate token");
+		LOG_ERROR("[TokenManager] SECRET_KEY 비어있음");
 		return "";
 	}
 

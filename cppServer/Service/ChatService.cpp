@@ -331,7 +331,7 @@ bool ChatService::HandleAck(sessionPtr& session, uint64 reqId, bool bDirect, con
 
     bool success = MessageRepository::UpdateReadStatus(userId, dbConvId, msg_seq);
     if (!success) {
-        LOG_INFO("[ChatService] DB Update 실패");
+        LOG_ERROR("[ChatService] DB Update 실패");
         return false;
     }
     /* TODO 상대가 읽음 처리 */
@@ -449,27 +449,15 @@ Protocol::S_Chat ChatService::Build_S_Chat(const string& convId, const string& s
         }
     }
 
-    // 파일 보관 만료 정보 설정 (미디어 메시지이고 gcs_path가 있는 경우)
-    // FileService에서 이미 계산한 만료 시각을 클라이언트가 gcs_path와 함께 전달
-    // 현재는 gcs_path 기반으로 file_uploads 테이블에서 조회 가능하지만,
-    // 클라이언트가 S_UploadFile.file_retention_expires_at을 저장해두고 C_Chat에는 없으므로
-    // DB에서 gcs_path로 조회
+    // 파일 보관 만료: subGrade 기반 재계산
     if (!pkt.gcs_path().empty() && fileSize > 0) {
-        // gcs_path로 file_uploads에서 retention 만료 시각 조회
-        // (이 정보는 FileService가 DB에 저장)
-        // TODO: FileRepository::GetFileMetadataByPath(gcsPath, fileInfo) 구현 시 사용
-        // 현재는 pkt에 file_retention_expires_at 필드가 없으므로
-        // FileService 저장값을 GetStorageInfo의 subGrade로 재계산
         UserRepository::StorageInfo storInfo;
         if (UserRepository::GetStorageInfo(senderId, storInfo)) {
             if (storInfo.subGrade <= 0) {
                 const int64 FREE_RETENTION_MS = 7LL * 24 * 3600 * 1000;
                 fileRetentionExpiresAt = pkt_s_chat.ts_server() + FREE_RETENTION_MS;
             }
-            // subGrade > 0: 영구 (fileRetentionExpiresAt = 0)
         }
-
-        // S_Chat에 파일 만료 정보 포함
         pkt_s_chat.set_file_expires_at(fileRetentionExpiresAt);
         pkt_s_chat.set_file_status("active");
     }

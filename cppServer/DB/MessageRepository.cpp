@@ -155,9 +155,7 @@ int64 MessageRepository::SaveMessage(const string& convId, const string& senderI
         msg_type = msgTypeOverride;
     }
 
-    // 파일 상태 결정
     string fileStatus = "active";
-    // (만료 시각이 있고 이미 지났으면 expired — 일반적으로 발생하지 않음)
 
     try {
         auto& db = DBManager::GetInstance();
@@ -171,7 +169,6 @@ int64 MessageRepository::SaveMessage(const string& convId, const string& senderI
 
         int64 replyToSeq = pkt.reply_to_seq();
 
-        // gcs_path, file_retention_expires_at, file_status, mentioned_user_ids 포함 INSERT
         string mentionVal = mentionedUserIds.empty() ? "" : mentionedUserIds;
         if (fileRetentionExpiresAt > 0) {
             session.sql(
@@ -183,7 +180,6 @@ int64 MessageRepository::SaveMessage(const string& convId, const string& senderI
                       mentionVal.empty() ? mysqlx::Value() : mysqlx::Value(mentionVal))
                 .execute();
         } else {
-            // file_retention_expires_at = NULL (영구)
             session.sql(
                 "INSERT INTO messages (conv_id, msg_seq, sender_id, msg_type, message, media_url, thumbnail_url, "
                 "file_name, timestamp, reply_to_seq, gcs_path, file_retention_expires_at, file_status, mentioned_user_ids) "
@@ -214,7 +210,7 @@ bool MessageRepository::UpdateFileStatusByGcsPath(const string& gcsPath, const s
         auto& db = DBManager::GetInstance();
         auto& session = db.GetSession();
 
-        // 파일 status 업데이트 (만료된 경우 URL도 비움)
+        // 만료 시 URL도 비움
         if (fileStatus == "expired") {
             session.sql(
                 "UPDATE messages SET file_status = ?, media_url = '', thumbnail_url = '' "
@@ -299,11 +295,7 @@ vector<string> MessageRepository::GetUserConversations(const string& userId)
 
 void MessageRepository::ParseChatPacket(Protocol::S_Chat& sChat, const mysqlx::Row& row)
 {
-    // SELECT 순서:
-    // 0:conv_id, 1:msg_seq, 2:sender_id, 3:msg_type, 4:message, 5:media_url, 6:thumbnail_url, 7:timestamp, 8:name(option)
-    // 9:reply_to_seq, 10:is_deleted, 11:is_edited, 12:edited_at
-    // 13:file_retention_expires_at (optional), 14:file_status (optional)
-    // 15:mentioned_user_ids (optional)
+    // cols: 0~8 기본, 9~12 reply/delete/edit, 13~14 file expiry, 15 mentions
 
     sChat.set_conv_id(row[0].get<string>());
     sChat.set_msg_seq(row[1].get<int64>());
@@ -328,22 +320,18 @@ void MessageRepository::ParseChatPacket(Protocol::S_Chat& sChat, const mysqlx::R
         }
     }
 
-    // 파일 만료 정보 (13번, 14번 컬럼이 있는 경우)
+    // 파일 만료 정보
     try {
         int64 fileRetentionExpiresAt = (!row[13].isNull()) ? row[13].get<int64>() : 0;
         string fileStatus = (!row[14].isNull()) ? row[14].get<string>() : "active";
         sChat.set_file_expires_at(fileRetentionExpiresAt);
         sChat.set_file_status(fileStatus);
-    } catch (...) {
-        // 컬럼이 없는 경우 (구버전 쿼리) 무시
-    }
+    } catch (...) {}
 
-    // 멘션 정보 (15번 컬럼)
+    // 멘션 정보
     try {
         if (!row[15].isNull()) {
             string mentionJson = row[15].get<string>();
-            // JSON 배열 파싱: '["userId1","userId2"]'
-            // 간단한 파싱: 따옴표 사이의 문자열 추출
             size_t pos = 0;
             while ((pos = mentionJson.find('"', pos)) != string::npos) {
                 size_t end = mentionJson.find('"', pos + 1);
@@ -355,14 +343,11 @@ void MessageRepository::ParseChatPacket(Protocol::S_Chat& sChat, const mysqlx::R
                 pos = end + 1;
             }
         }
-    } catch (...) {
-        // 컬럼이 없는 경우 무시
-    }
+    } catch (...) {}
 
     int8_t msgType = static_cast<int8_t>(row[3].get<int>());
     auto* payload = sChat.mutable_payload();
 
-    // 삭제된 메시지는 payload를 '[삭제된 메시지입니다]'로 대체
     if (isDeleted) {
         payload->mutable_text()->set_message("[삭제된 메시지입니다]");
         return;
@@ -413,7 +398,6 @@ vector<MessageInfo> MessageRepository::GetRecentMessages(const string& convId, i
         auto& db = DBManager::GetInstance();
         auto& session = db.GetSession();
 
-        // 핵심: msg_seq 역순(DESC)으로 최신 거 limit개 가져옴
         string query =
             "SELECT m.conv_id, m.msg_seq, m.sender_id, m.msg_type, m.message, m.media_url, m.thumbnail_url, m.timestamp, u.name, m.reply_to_seq, m.is_deleted, m.is_edited, m.edited_at, m.file_retention_expires_at, m.file_status, m.mentioned_user_ids "
             "FROM messages m "
@@ -442,7 +426,6 @@ vector<MessageInfo> MessageRepository::GetRecentMessages(const string& convId, i
                 sChat.set_sender_name(senderName);
             }
 
-            // SerializeMessage 대신 직접 직렬화
             sChat.SerializeToString(&info.messageData);
 
             result.push_back(info);
@@ -765,13 +748,12 @@ int MessageRepository::GetUnreadCount(const string& userId, const string& convId
         return 0;
     }
     catch (const mysqlx::Error& err) {
-        LOG_ERROR("[MessageRepository] 안 읽은 메세지 카운트 실패: {}", err.what());
+        LOG_ERROR("[MessageRepository] 안 읽은 메시지 카운트 실패: {}", err.what());
         return 0;
     }
 }
 
-// 특정 메시지의 읽지 않은 참여자 수
-// = 해당 conv 참여자 수 - (read_status에서 last_read_seq >= msgSeq인 사람 수)
+// 특정 메시지의 안읽은 참여자 수
 int MessageRepository::GetMsgUnreadCount(const string& convId, int64 msgSeq)
 {
     try {
@@ -813,9 +795,7 @@ int MessageRepository::GetMsgUnreadCount(const string& convId, int64 msgSeq)
 * Utility
 ---------------------*/
 
-// 직렬화 관련 함수들 제거됨 (더 이상 사용 안함)
-
-// 타임스탬프를 날짜/시간 문자열로 변환
+// 타임스탬프 → 날짜 문자열
 static string TimestampToDateTimeString(int64 timestamp) {
     if (timestamp <= 0) {
         return "N/A";
@@ -954,7 +934,6 @@ vector<MessageRepository::ReactionInfo> MessageRepository::GetAllReactionsForUse
         auto& db = DBManager::GetInstance();
         auto& session = db.GetSession();
 
-        // 유저가 참여하는 1:1 및 그룹 대화의 모든 현재 반응 조회
         auto rows = session.sql(
             "SELECT mr.conv_id, mr.msg_seq, mr.user_id, mr.emoji "
             "FROM message_reactions mr "

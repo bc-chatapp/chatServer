@@ -244,12 +244,8 @@ bool UserRepository::UpdateMyInfo(const string& userId, const Protocol::C_EditMy
         auto schema = db.GetSchema();
         auto users = schema.getTable("users");
 
-        // 업데이트 쿼리 준비
         auto query = users.update();
-
         bool hasChanges = false;
-
-        // 2. set() 메서드들을 먼저 호출합니다. (순서 중요!)
         if (!pkt.name().empty()) {
             query.set("name", pkt.name());
             hasChanges = true;
@@ -299,7 +295,6 @@ bool UserRepository::UpdateLastSeen(const string& userId) {
         auto schema = db.GetSchema();
         auto users = schema.getTable("users");
         
-        // 현재 시간을 TIMESTAMP로 업데이트
         users.update()
              .set("last_seen", mysqlx::expr("NOW()"))
              .where("user_id = :uid")
@@ -481,7 +476,6 @@ bool UserRepository::GetStorageInfo(const string& userId, StorageInfo& OUT info)
         auto& db = DBManager::GetInstance();
         auto schema = db.GetSchema();
 
-        // 1) users 테이블에서 capacity, usage 조회
         auto users = schema.getTable("users");
         auto result = users.select("storage_capacity_bytes", "storage_usage_bytes", "sub_grade")
             .where("user_id = :uid")
@@ -496,7 +490,7 @@ bool UserRepository::GetStorageInfo(const string& userId, StorageInfo& OUT info)
         int grade = static_cast<int>(row[2].get<int64>());
         info.subGrade = grade;
 
-        // 2) subscription_plans에서 max_file_size 조회
+        // max_file_size 조회
         auto plans = schema.getTable("subscription_plans");
         auto planResult = plans.select("max_file_size")
             .where("plan_type = 'personal' AND grade = :grade AND is_active = 1")
@@ -521,13 +515,12 @@ bool UserRepository::SaveUserAsset(const string& userId, int64 msgSeq, int64 fil
         auto& db = DBManager::GetInstance();
         auto schema = db.GetSchema();
 
-        // 1) user_assets에 파일 기록 INSERT
         auto assets = schema.getTable("user_assets");
         assets.insert("user_id", "msg_seq", "file_size", "file_type")
             .values(userId, msgSeq, fileSize, fileType)
             .execute();
 
-        // 2) users.storage_usage_bytes 직접 증가 (트리거 대체)
+        // storage_usage_bytes 증가
         auto users = schema.getTable("users");
         users.update()
             .set("storage_usage_bytes", mysqlx::expr("storage_usage_bytes + " + to_string(fileSize)))
@@ -680,7 +673,7 @@ void UserRepository::ConvertToProto(const cUserInfo& dbUser, Protocol::UserInfo*
 
     outProto->set_user_id(dbUser.userId);
     outProto->set_name(dbUser.name);
-    outProto->set_email(dbUser.email); // 필요 시에만 세팅하거나, 호출하는 쪽에서 제어
+    outProto->set_email(dbUser.email);
     outProto->set_phone(dbUser.phone);
     outProto->set_status_message(dbUser.status_message);
     outProto->set_profile_image_url(dbUser.profileImageUrl);
@@ -693,6 +686,6 @@ void UserRepository::ConvertToProto(const cUserInfo& dbUser, Protocol::UserInfo*
     if (!dbUser.oauthProvider.empty())
         outProto->set_oauth_provider(dbUser.oauthProvider);
 
-    // passwordHash나 authToken은 절대 넣지 않음!
+    // passwordHash, authToken은 포함 금지
 }
 

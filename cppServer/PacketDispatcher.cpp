@@ -644,7 +644,7 @@ bool PacketDispatcher::Dispatch_C_Chat(sessionPtr& session, uint64 reqId, const 
 	if (pkt.has_payload() && pkt.payload().has_text()) {
 		msgText = pkt.payload().text().message();
 	}
-	LOG_INFO("[Server] C_Chat conv={} msg=\"{}\"", pkt.conv_id(), msgText);
+	LOG_INFO("[PacketDispatcher] C_Chat conv={} msg=\"{}\"", pkt.conv_id(), msgText);
 
 
 	if (type == ConvType::Direct) {
@@ -673,7 +673,7 @@ bool PacketDispatcher::Dispatch_C_Ack(sessionPtr& session, uint64 reqId, const P
 	ConvType type = ParseConvId(pkt.conv_id(), targetId);
 
 	if (type == ConvType::Error || targetId.empty()) {
-		LOG_INFO("[Dispatcher] Ack 포맷 에러: {}", pkt.conv_id());
+		LOG_WARN("[PacketDispatcher] Ack 포맷 에러: {}", pkt.conv_id());
 		DispatchError(session, reqId, ERR_INVALID_ACK);
 		return false;
 	}

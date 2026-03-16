@@ -81,7 +81,7 @@ bool FriendService::FetchFriendData(sessionPtr& session, uint64 reqId)
 		*req = FriendRepository::ToProtocolFriendRequest(s, false);
 	}
 
-	LOG_INFO("[FetchFriendData] User: {} | Friends: {} | Recv: {} | Sent: {}", userId, friends.size(), received.size(), sent.size());
+	LOG_INFO("[FriendService] User: {} | Friends: {} | Recv: {} | Sent: {}", userId, friends.size(), received.size(), sent.size());
 
 	// 응답 전송
 	Protocol::Envelope env;

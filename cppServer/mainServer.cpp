@@ -10,10 +10,36 @@
 #include "DB/DBManager.h"
 
 #include <curl/curl.h> // 전역 초기화용
-
-
+#include <fstream>
+#include <sstream>
+#include <map>
 
 bool GKeepRunning = true;
+
+// config/server_config.txt 파싱
+static map<string, string> LoadServerConfig(const string& path)
+{
+	map<string, string> config;
+	ifstream file(path);
+	if (!file.is_open()) return config;
+
+	string line;
+	while (getline(file, line)) {
+		if (line.empty() || line[0] == '#') continue;
+		auto pos = line.find('=');
+		if (pos == string::npos) continue;
+		string key = line.substr(0, pos);
+		string value = line.substr(pos + 1);
+		// trim
+		while (!key.empty() && key.back() == ' ') key.pop_back();
+		while (!value.empty() && value.front() == ' ') value.erase(value.begin());
+		config[key] = value;
+	}
+	return config;
+}
+
+
+
 
 
 int main()
@@ -22,8 +48,19 @@ int main()
 
 	Logger::Init();
 
-	LOG_INFO("[Server] MySQL 연결 시도 중... (localhost:33060)");
-	if (!DBManager::GetInstance().Initialize("localhost", 33060, "chat_server", "hoje1095", "chat_server"))
+	// 서버 설정 로드
+	auto config = LoadServerConfig("config/server_config.txt");
+	string dbHost = config.count("db_host") ? config["db_host"] : "localhost";
+	int dbPort = config.count("db_port") ? stoi(config["db_port"]) : 33060;
+	string dbUser = config.count("db_user") ? config["db_user"] : "chat_server";
+	string dbPass = config.count("db_password") ? config["db_password"] : "";
+	string dbName = config.count("db_name") ? config["db_name"] : "chat_server";
+	int listenPort = config.count("listen_port") ? stoi(config["listen_port"]) : 3000;
+
+	LOG_INFO("[Server] Config loaded: db={}:{}/{}, listen_port={}", dbHost, dbPort, dbName, listenPort);
+
+	LOG_INFO("[Server] MySQL 연결 시도 중... ({}:{})", dbHost, dbPort);
+	if (!DBManager::GetInstance().Initialize(dbHost, dbPort, dbUser, dbPass, dbName))
 	{
 		LOG_ERROR("[Server] Database connection failed!");
 		return 1;
@@ -36,12 +73,10 @@ int main()
 	WSADATA wsa;
 	if (::WSAStartup(MAKEWORD(2, 2), &wsa) != 0) return 0;
 
-
-
 	auto iocpCore = make_shared<IocpCore>();
 	auto service = make_shared<Service>(
 		ServiceType::Server,
-		NetAddress(L"127.0.0.1", 3000), // 리스닝할 주소
+		NetAddress(L"127.0.0.1", static_cast<uint16>(listenPort)),
 		iocpCore,
 		[]() { return make_shared<ServerSession>(); }
 	);
@@ -53,7 +88,7 @@ int main()
 		LOG_ERROR("[Server] Service 시작 실패");
 		return 0;
 	}
-	LOG_INFO("[Server] Listening on 127.0.0.1:3000...");
+	LOG_INFO("[Server] Listening on 127.0.0.1:{}...", listenPort);
 
 
 	// 워커 스레드 생성 (CPU 코어 수만큼)

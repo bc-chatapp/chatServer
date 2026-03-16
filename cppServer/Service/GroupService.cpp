@@ -289,8 +289,8 @@ bool GroupService::UpdateGroupInfo(sessionPtr& session, uint64 reqId, Protocol::
 		return false;
 	}
 
-	LOG_INFO("[GroupService] Update : {}", pkt.new_name());
-	LOG_INFO("[GroupService] Update : {}", pkt.new_image_url());
+	LOG_INFO("[GroupService] 이름 변경: {}", pkt.new_name());
+	LOG_INFO("[GroupService] 이미지 변경: {}", pkt.new_image_url());
 
 	if (GroupRepository::UpdateGroupInfo(pkt.group_id(), pkt.new_name(), pkt.new_image_url()))
 	{
