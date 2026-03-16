@@ -88,8 +88,7 @@ void UserManager::CheckDeadSessions()
 		auto serverSession = static_pointer_cast<ServerSession>(s);
 		LOG_INFO("[UserManager] 유저 ({}) 타임아웃! 강제 종료.", serverSession->GetUserId());
 
-
-		s->Disconnect();
+		s->CleanupAndRelease();
 	}
 
 }

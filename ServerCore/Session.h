@@ -8,7 +8,6 @@
 
 class Session : public IocpObject
 {
-
 	friend class Listener;
 	friend class Service;
 
@@ -32,6 +31,7 @@ public:
 	void Send(shared_ptr<SendBuffer> sendBuffer);
 	bool Connect();
 	void Disconnect();
+	void CleanupAndRelease();
 
 	shared_ptr<Service>	GetService() { return _service.lock(); }
 	void				SetService(shared_ptr<Service> service) { _service = service; }
@@ -44,7 +44,6 @@ public:
 	bool				IsConnected() { return _connected; }
 	shared_ptr<Session> GetSession() { return static_pointer_cast<Session>(shared_from_this()); }
 	
-
 	char* GetAcceptBuffer() { return _acceptBuffer; }
 
 private:

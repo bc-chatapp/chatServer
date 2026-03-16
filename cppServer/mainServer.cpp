@@ -40,8 +40,6 @@ static map<string, string> LoadServerConfig(const string& path)
 
 
 
-
-
 int main()
 {
 	SetConsoleOutputCP(65001);

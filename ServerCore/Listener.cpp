@@ -105,7 +105,7 @@ void Listener::ProcessAccept(AcceptEvent* acceptEvent)
 	}
 	session->SetAddress(address);
 
-	// _connecteㅇ 체킹
+	// _connected 체킹
 	session->ProcessConnect();
 
 	_service->AddSession(session);
