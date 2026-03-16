@@ -7,12 +7,12 @@
 
 void ServerSession::OnConnected()
 {
-	LOG_INFO("OnConnected..");
+	LOG_INFO("[ServerSession] Connected");
 }
 
 void ServerSession::OnDisconnected()
 {
-	LOG_INFO("OnDisconnected..");
+	LOG_INFO("[ServerSession] Disconnected");
 
 	if (!_userId.empty() && GUserManager) {
 		// 자기 자신을 인자로 넘김
@@ -40,7 +40,7 @@ void ServerSession::OnRecv(BYTE* buffer, int32 len)
 	Protocol::Envelope envelope;
 	if (envelope.ParseFromArray(buffer + 4, bodyLen) == false)
 	{
-		LOG_INFO("[Error] Envelope Parse Failed!");
+		LOG_ERROR("[ServerSession] Envelope 파싱 실패");
 		Disconnect();
 		return;
 	}
@@ -52,5 +52,5 @@ void ServerSession::OnRecv(BYTE* buffer, int32 len)
 
 void ServerSession::OnSend(int32 len)
 {
-	LOG_INFO("ServerSession::OnSendPacket Size : {}", len);
+	LOG_INFO("[ServerSession] Send: {} bytes", len);
 }

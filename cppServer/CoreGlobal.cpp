@@ -71,7 +71,7 @@ static bool LoadGCPConfig(string& projectId, string& bucketName, string& credent
         }
 
         if (!getline(file, projectId) || !getline(file, bucketName)) {
-            LOG_ERROR("[CoreGlobal] file is lacking");
+            LOG_ERROR("[CoreGlobal] 파일 비어있음");
             return false;
         }
         file.close();

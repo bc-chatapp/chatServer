@@ -94,7 +94,7 @@ bool PaymentService::HandleVerifyPurchase(sessionPtr& session, uint64 reqId,
     const string& transactionId = pkt.transaction_id();
     const string& purchaseToken = pkt.purchase_token();
 
-    // 입력값 길이/형식 검증
+    // 입력값 검증
     if (platform.length() > 10 || productId.length() > 200 ||
         transactionId.length() > 500 || purchaseToken.length() > 5000) {
         PacketDispatcher::DispatchError(session, reqId, Protocol::ERR_PAYMENT_FAILED,
@@ -300,8 +300,7 @@ bool PaymentService::UpdateSubscription(const string& userId, int planId,
         auto& db = DBManager::GetInstance();
         auto schema = db.GetSchema();
 
-        // 1) payment_transactions INSERT
-        // insert().values()에서는 mysqlx::expr() 사용 불가 → 현재 시간 문자열 생성
+        // payment_transactions INSERT
         time_t now = ::time(nullptr);
         struct tm tmNow = {};
         localtime_s(&tmNow, &now);
@@ -316,7 +315,7 @@ bool PaymentService::UpdateSubscription(const string& userId, int planId,
                     string(nowStr))
             .execute();
 
-        // 2) subscription_plans에서 등급/용량 조회
+        // 등급/용량 조회
         auto planTable = schema.getTable("subscription_plans");
         auto planResult = planTable.select("grade", "storage_bytes")
             .where("plan_id = :pid")
@@ -332,8 +331,7 @@ bool PaymentService::UpdateSubscription(const string& userId, int planId,
         int grade = planRow[0].get<int>();
         int64 storageBytes = planRow[1].get<int64>();
 
-        // 3) subscriptions UPSERT
-        // 기존 active 구독 확인
+        // subscriptions UPSERT
         auto subsTable = schema.getTable("subscriptions");
         auto existResult = subsTable.select("id")
             .where("user_id = :uid AND status = 'active'")
@@ -346,7 +344,6 @@ bool PaymentService::UpdateSubscription(const string& userId, int planId,
             // UPDATE
             int existId = existRow[0].get<int>();
 
-            // expires_at을 타임스탬프 문자열로 변환
             time_t expSecUpd = static_cast<time_t>(expiresAt / 1000);
             struct tm tmExpUpd = {};
             gmtime_s(&tmExpUpd, &expSecUpd);
@@ -363,7 +360,6 @@ bool PaymentService::UpdateSubscription(const string& userId, int planId,
                 .execute();
         }
         else {
-            // INSERT — expires_at을 타임스탬프 문자열로 변환
             time_t expSec = static_cast<time_t>(expiresAt / 1000);
             struct tm tmExp = {};
             gmtime_s(&tmExp, &expSec);
@@ -375,7 +371,7 @@ bool PaymentService::UpdateSubscription(const string& userId, int planId,
                 .execute();
         }
 
-        // 4) users 테이블 업데이트 (sub_grade, storage_capacity_bytes)
+        // users 등급/용량 업데이트
         auto usersTable = schema.getTable("users");
         usersTable.update()
             .set("sub_grade", grade)
@@ -386,12 +382,10 @@ bool PaymentService::UpdateSubscription(const string& userId, int planId,
 
         LOG_INFO("[PaymentService] DB 업데이트 완료: user={} grade={} storage={}", userId, grade, storageBytes);
 
-        // 5) 파일 보관 정책 전환: 구독 시작 → 모든 파일 영구 보관으로 전환
+        // 구독 시작 → 파일 영구 보관 전환
         if (grade > 0) {
-            // expires_at = NULL (영구)
             FileRepository::UpdateUserFilesRetentionExpiry(userId, 0);
 
-            // messages 테이블도 동기화
             auto& sess2 = db.GetSession();
             sess2.sql(
                 "UPDATE messages SET file_retention_expires_at = NULL, file_status = 'active' "
@@ -509,7 +503,7 @@ int PaymentService::GetPlanIdFromProductId(const string& productId)
         auto& db = DBManager::GetInstance();
         auto schema = db.GetSchema();
 
-        // product_id → plan_id 매핑 (subscription_plans 테이블에 product_id 컬럼이 없으므로 하드코딩)
+        // product_id → plan_id 매핑
         if (productId == "moa_pro_monthly") return 2;        // Pro
         if (productId == "moa_premium_monthly") return 3;    // Premium
 
@@ -712,7 +706,7 @@ string PaymentService::LoadAppleSharedSecret()
     try {
         ::filesystem::path secretFile = ::filesystem::path("config") / "apple_iap_secret.txt";
         if (!::filesystem::exists(secretFile)) {
-            LOG_INFO("[PaymentService] Apple shared secret file not found (iOS IAP will not work)");
+            LOG_WARN("[PaymentService] Apple shared secret 파일 없음");
             return "";
         }
 

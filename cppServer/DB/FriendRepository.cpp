@@ -62,12 +62,12 @@ bool FriendRepository::AddFriendRequest(const string& userId, const string& frie
 		friends.insert("user_id", "friend_id", "status")
 			.values(friendId, userId, "pending").execute();
 
-		LOG_INFO("[FriendRepository] Add Friend Request: {} -> {}", userId, friendId);
+		LOG_INFO("[FriendRepository] 친구 요청: {} -> {}", userId, friendId);
 		return true;
 
 	}
 	catch (const mysqlx::Error& err) {
-		LOG_ERROR("[FriendRepository] Add Friend Request Failed : {}", err.what());
+		LOG_ERROR("[FriendRepository] 친구 요청 추가 실패: {}", err.what());
 		return false;
 	}
 }
@@ -84,11 +84,11 @@ bool FriendRepository::CancelFriendRequest(const string& userId, const string& f
 			.bind("uid", userId)
 			.execute();
 
-		LOG_INFO("[FriendRepository] Cancel Friend Request: {} -> {}", userId, friendId);
+		LOG_INFO("[FriendRepository] 친구 요청 취소: {} -> {}", userId, friendId);
 		return true;
 	}
 	catch (const mysqlx::Error& err) {
-		LOG_ERROR("[FriendRepository] Cancel Friend Request Failed: {}", err.what());
+		LOG_ERROR("[FriendRepository] 친구 요청 취소 실패: {}", err.what());
 		return false;
 	}
 }
@@ -114,11 +114,11 @@ bool FriendRepository::AcceptFriendRequest(const string& userId, const string& r
 			.values(requesterId, userId, "accepted")
 			.execute();
 
-		LOG_INFO("[FriendRepository] Accept: {} <-> {}", userId, requesterId);
+		LOG_INFO("[FriendRepository] 친구 수락: {} <-> {}", userId, requesterId);
 		return true;
 	}
 	catch (const mysqlx::Error& err) {
-		LOG_ERROR("[FriendRepository] Accept Friend Request Failed: {}", err.what());
+		LOG_ERROR("[FriendRepository] 친구 수락 실패: {}", err.what());
 		return false;
 	}
 }
@@ -158,11 +158,11 @@ bool FriendRepository::RemoveFriend(const string& userId, const string& friendId
 			.bind("fid", friendId)
 			.execute();
 
-		LOG_INFO("[FriendRepository] Remove Friend: {} <-> {}", userId, friendId);
+		LOG_INFO("[FriendRepository] 친구 삭제: {} <-> {}", userId, friendId);
 		return true;
 	}
 	catch (const mysqlx::Error& err) {
-		LOG_ERROR("[FriendRepository] Remove Friend Failed: {}", err.what());
+		LOG_ERROR("[FriendRepository] 친구 삭제 실패: {}", err.what());
 		return false;
 	}
 }
@@ -182,8 +182,7 @@ vector<cFriendInfo> FriendRepository::GetFriends(const string& userId)
 		auto& db = DBManager::GetInstance();
 		auto& session = db.GetSession();
 
-		// JOIN을 통해 친구 정보 한 번에 가져오기
-		string query = "SELECT f.friend_id, u.name, u.status_message, u.profile_image_url "
+			string query = "SELECT f.friend_id, u.name, u.status_message, u.profile_image_url "
 			"FROM friends f "
 			"JOIN users u ON f.friend_id = u.user_id "
 			"WHERE f.user_id = ? AND f.status = 'accepted'";
@@ -208,7 +207,7 @@ vector<cFriendInfo> FriendRepository::GetFriends(const string& userId)
 		return result;
 	}
 	catch (const mysqlx::Error& err) {
-		LOG_ERROR("[FriendRepository] Get Friends List Failed: {}", err.what());
+		LOG_ERROR("[FriendRepository] 친구 목록 조회 실패: {}", err.what());
 		return result;
 	}
 }
@@ -246,7 +245,7 @@ vector<FriendRequestInfo> FriendRepository::GetFriendRequests(const string& user
 		return result;
 	}
 	catch (const mysqlx::Error& err) {
-		LOG_ERROR("[FriendRepository] Get Friend Requests Failed: {}", err.what());
+		LOG_ERROR("[FriendRepository] 받은 요청 조회 실패: {}", err.what());
 		return result;
 	}
 }

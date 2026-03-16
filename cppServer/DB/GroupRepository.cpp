@@ -188,7 +188,7 @@ bool GroupRepository::SaveGroupAsset(const string& groupId, const string& userId
             .bind(groupId, userId, msgSeq, fileSize, fileType)
             .execute();
 
-        LOG_INFO("[DB] Group Asset 저장 완료: Group={}, Size={} bytes", groupId, fileSize);
+        LOG_INFO("[GroupRepository] Group Asset 저장 완료: Group={}, Size={} bytes", groupId, fileSize);
         return true;
     }
     catch (const mysqlx::Error& err) {
@@ -211,11 +211,11 @@ bool GroupRepository::UpdateGroupInfo(const string& groupId, const string& newNa
 
 
         if (result.getAffectedItemsCount() > 0) {
-            LOG_INFO("[DB] 그룹 정보 업데이트 성공: {}", groupId);
+            LOG_INFO("[GroupRepository] 그룹 정보 업데이트 성공: {}", groupId);
             return true;
         }
         else {
-            LOG_INFO("[DB] 그룹 정보 업데이트: 변경사항 없음 또는 대상 없음 (ID: {})", groupId);
+            LOG_INFO("[GroupRepository] 그룹 정보 업데이트: 변경사항 없음 또는 대상 없음 (ID: {})", groupId);
             return false;
         }
     }
@@ -294,7 +294,7 @@ bool GroupRepository::DeleteGroup(const string& groupId)
             .execute();
 
         session.commit();
-        LOG_INFO("[DB] 그룹 영구 삭제 완료: {}", groupId);
+        LOG_INFO("[GroupRepository] 그룹 영구 삭제 완료: {}", groupId);
         return true;
     }
     catch (const mysqlx::Error& err) {
@@ -591,7 +591,7 @@ uint64 GroupRepository::ParseTimestamp(const mysqlx::Value& value)
         }
     }
     catch (const mysqlx::Error& err) {
-        LOG_ERROR("[FriendRepository] Parse Err: {}", err.what());
+        LOG_ERROR("[GroupRepository] Parse Err: {}", err.what());
     }
     return 0;
 }
