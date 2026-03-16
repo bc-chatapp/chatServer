@@ -249,11 +249,3 @@ void Session::CleanupAndRelease() {
 | 5000명 후 메모리 | 503MB → **503MB** | 497MB → **24MB** |
 | 소멸자 호출 | 안 불림 | **전부 불림** |
 
----
-
-## 관련 프로젝트
-
-| 프로젝트 | 설명 |
-|----------|------|
-| MOA Chat Client | React Native 클라이언트 |
-| MOA Web Server | Java Spring Boot — OAuth 검증, 이메일 인증, 파일 관리 API |
