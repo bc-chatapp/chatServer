@@ -36,18 +36,18 @@
 
 **인증 / 보안**
 - 이메일 + 비밀번호 로그인 (bcrypt)
-- 소셜 로그인 — Google, Apple OAuth
+- 소셜 로그인 - Google, Apple OAuth
 - 세션 토큰 (JWT) + 레이트 리밋 (50 pkt/sec)
 - 차단 / 신고
 
 **파일**
-- GCS Signed URL 기반 파일 업로드 (서버 대역폭 사용 없음)
+- GCS Signed URL 기반 파일 업로드
 - 구독 등급별 용량 제한 + 파일 보관 정책
 - 만료 파일 자동 삭제 (6시간 주기 백그라운드 배치)
 
 **기타**
 - FCM 푸시 알림 (오프라인 수신자, 만료 토큰 자동 삭제)
-- 공 뽑기 게임 (seed 기반 결정론적 시뮬레이션)
+- 공 뽑기 게임 
 - 포토 슬라이드 (사진 + 텍스트 오버레이)
 
 ---
@@ -82,7 +82,7 @@ nginx (stream proxy — TLS 종료)
 ### 패킷 처리 흐름
 
 ```
-TCP 수신 → RecvBuffer 누적 → Length-Prefixed Framing (4B 헤더 + protobuf)
+TCP 수신 → RecvBuffer 누적 → Length-Prefixed Framing (4Byte 헤더 + protobuf)
   → PacketDispatcher::DispatchPacket()
     → Version Check → Auth Token Check → Rate Limit Check
     → switch(payload_case) → Service 호출 → DB 조회/저장 → 응답 패킷 전송
@@ -111,11 +111,11 @@ cppServer/
 │   └── SendBuffer         # 전송 큐
 │
 ├── cppServer/             # 메인 애플리케이션
-│   ├── mainServer.cpp     # 엔트리포인트
+│   ├── mainServer.cpp     # entry
 │   ├── ServerSession      # 인증, 레이트리밋, 하트비트
 │   ├── PacketDispatcher   # protobuf 패킷 라우팅
 │   ├── CoreGlobal         # 전역 서비스 관리
-│   ├── Logger             # spdlog 래퍼
+│   ├── Logger             # spdlog
 │   │
 │   ├── Service/           # 비즈니스 로직
 │   │   ├── AuthService           로그인 / 회원가입 / 소셜로그인 / 탈퇴
@@ -129,7 +129,7 @@ cppServer/
 │   │   └── ExpirationBatchJob    만료 파일 삭제 배치
 │   │
 │   ├── DB/                # 데이터 접근 계층
-│   │   ├── DBManager             MySQL 연결 (thread_local 스레드별 세션)
+│   │   ├── DBManager             MySQL 연결
 │   │   ├── UserRepository        사용자 CRUD
 │   │   ├── MessageRepository     메시지 저장/조회, 읽음상태, 반응
 │   │   ├── GroupRepository       그룹/멤버 CRUD
@@ -247,5 +247,5 @@ void Session::CleanupAndRelease() {
 |------|--------|-------|
 | 5000명 후 핸들 | 5206 → **5206** | 5205 → **202** |
 | 5000명 후 메모리 | 503MB → **503MB** | 497MB → **24MB** |
-| 소멸자 호출 | 안 불림 | **전부 불림** |
+| 소멸자 호출 | X | **호출** |
 
