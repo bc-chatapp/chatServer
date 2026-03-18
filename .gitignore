@@ -99,3 +99,4 @@ cppServer/logs/
 # Internal Docs (포트폴리오용, public에 포함하지 않음)
 # ============================================
 docs/
+DummyClient/
